@@ -36,7 +36,7 @@
     <link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
 
     
-    <title>Index &#8212; Deepchecks f356f7e documentation</title>
+    <title>Index &#8212; Deepchecks e9e42a2 documentation</title>
     
     <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -152,6 +152,88 @@
     </div>
 
     <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        None  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables genindex and {'json_url': 'https://deepchecks.github.io/dev/_static/switcher.json'}.
+-->
+
+<script type="text/javascript">
+// Construct the target URL from the JSON components
+function buildURL(entry) {
+    var template = "None";  // supplied by jinja
+    template = template.replace("{version}", entry.version);
+    return template;
+}
+
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "genindex.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://deepchecks.github.io/dev/_static/switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "genindex.html";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            // get the base URL for that doc version, add the current page's
+            // path to it, and set as `href`
+            entry.url = buildURL(entry);
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.6.0.dev1 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "None") {
+                node.classList.add("active");
+                $("#version_switcher_button").text(entry.name);
+            }
+        });
+    });
+})();
+</script>
+      </div>
       
       <div class="navbar-end-item">
         <form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -312,6 +394,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
         <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData.__init__">(COCOData method)</a>
 </li>
+        <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.html#deepchecks.vision.datasets.detection.coco.CocoDataset.__init__">(CocoDataset method)</a>
+</li>
         <li><a href="api/generated/deepchecks.tabular.checks.overview.ColumnsInfo.html#deepchecks.tabular.checks.overview.ColumnsInfo.__init__">(ColumnsInfo method)</a>
 </li>
         <li><a href="api/generated/deepchecks.core.Condition.html#deepchecks.core.Condition.__init__">(Condition method)</a>
@@ -414,6 +498,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
         <li><a href="api/generated/deepchecks.tabular.checks.performance.SegmentPerformance.html#deepchecks.tabular.checks.performance.SegmentPerformance.__init__">(SegmentPerformance method)</a>
 </li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.__init__">(SimpleClassificationDataset method)</a>
+</li>
         <li><a href="api/generated/deepchecks.tabular.checks.performance.SimpleModelComparison.html#deepchecks.tabular.checks.performance.SimpleModelComparison.__init__">(SimpleModelComparison method)</a>, <a href="api/generated/deepchecks.vision.checks.performance.SimpleModelComparison.html#deepchecks.vision.checks.performance.SimpleModelComparison.__init__">[1]</a>
 </li>
         <li><a href="api/generated/deepchecks.tabular.SingleDatasetCheck.html#deepchecks.tabular.SingleDatasetCheck.__init__">(SingleDatasetCheck method)</a>, <a href="api/generated/deepchecks.vision.SingleDatasetCheck.html#deepchecks.vision.SingleDatasetCheck.__init__">[1]</a>
@@ -485,6 +571,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.vision.checks.performance.ClassPerformance.html#deepchecks.vision.checks.performance.ClassPerformance.__new__">(ClassPerformance method)</a>
 </li>
         <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData.__new__">(COCOData method)</a>
+</li>
+        <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.html#deepchecks.vision.datasets.detection.coco.CocoDataset.__new__">(CocoDataset method)</a>
 </li>
         <li><a href="api/generated/deepchecks.tabular.checks.overview.ColumnsInfo.html#deepchecks.tabular.checks.overview.ColumnsInfo.__new__">(ColumnsInfo method)</a>
 </li>
@@ -587,6 +675,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.tabular.checks.performance.RocReport.html#deepchecks.tabular.checks.performance.RocReport.__new__">(RocReport method)</a>
 </li>
         <li><a href="api/generated/deepchecks.tabular.checks.performance.SegmentPerformance.html#deepchecks.tabular.checks.performance.SegmentPerformance.__new__">(SegmentPerformance method)</a>
+</li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.__new__">(SimpleClassificationDataset method)</a>
 </li>
         <li><a href="api/generated/deepchecks.tabular.checks.performance.SimpleModelComparison.html#deepchecks.tabular.checks.performance.SimpleModelComparison.__new__">(SimpleModelComparison method)</a>, <a href="api/generated/deepchecks.vision.checks.performance.SimpleModelComparison.html#deepchecks.vision.checks.performance.SimpleModelComparison.__new__">[1]</a>
 </li>
@@ -771,8 +861,6 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       <li><a href="api/generated/deepchecks.tabular.checks.integrity.MixedNulls.add_condition_different_nulls_not_more_than.html#deepchecks.tabular.checks.integrity.MixedNulls.add_condition_different_nulls_not_more_than">add_condition_different_nulls_not_more_than() (MixedNulls method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/deepchecks.vision.checks.distribution.ImagePropertyDrift.add_condition_drift_score_not_greater_than.html#deepchecks.vision.checks.distribution.ImagePropertyDrift.add_condition_drift_score_not_greater_than">add_condition_drift_score_not_greater_than() (ImagePropertyDrift method)</a>
 
       <ul>
@@ -783,6 +871,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.vision.checks.distribution.TrainTestPredictionDrift.add_condition_drift_score_not_greater_than.html#deepchecks.vision.checks.distribution.TrainTestPredictionDrift.add_condition_drift_score_not_greater_than">(TrainTestPredictionDrift method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/deepchecks.tabular.checks.methodology.TrainTestSamplesMix.add_condition_duplicates_ratio_not_greater_than.html#deepchecks.tabular.checks.methodology.TrainTestSamplesMix.add_condition_duplicates_ratio_not_greater_than">add_condition_duplicates_ratio_not_greater_than() (TrainTestSamplesMix method)</a>
 </li>
       <li><a href="api/generated/deepchecks.tabular.checks.methodology.SingleFeatureContributionTrainTest.add_condition_feature_pps_difference_not_greater_than.html#deepchecks.tabular.checks.methodology.SingleFeatureContributionTrainTest.add_condition_feature_pps_difference_not_greater_than">add_condition_feature_pps_difference_not_greater_than() (SingleFeatureContributionTrainTest method)</a>
@@ -884,6 +974,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.add_module.html#deepchecks.vision.datasets.classification.mnist.MNistNet.add_module">add_module() (MNistNet method)</a>
 </li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.apply.html#deepchecks.vision.datasets.classification.mnist.MNistNet.apply">apply() (MNistNet method)</a>
+</li>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.apply_transform.html#deepchecks.vision.datasets.detection.coco.CocoDataset.apply_transform">apply_transform() (CocoDataset method)</a>
 </li>
       <li><a href="api/generated/deepchecks.tabular.Context.assert_classification_task.html#deepchecks.tabular.Context.assert_classification_task">assert_classification_task() (Context method)</a>
 </li>
@@ -1130,6 +1222,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       </ul></li>
       <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData">COCOData (class in deepchecks.vision.datasets.detection.coco)</a>
+</li>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.html#deepchecks.vision.datasets.detection.coco.CocoDataset">CocoDataset (class in deepchecks.vision.datasets.detection.coco)</a>
 </li>
       <li><a href="api/generated/deepchecks.utils.features.column_importance_sorter_df.html#deepchecks.utils.features.column_importance_sorter_df">column_importance_sorter_df() (in module deepchecks.utils.features)</a>
 </li>
@@ -1500,8 +1594,6 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.tabular.suites.html#module-deepchecks.tabular.suites">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepchecks.utils
 
@@ -1509,6 +1601,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/deepchecks.utils.html#module-0">module</a>, <a href="api/deepchecks.utils.html#module-deepchecks.utils">[1]</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepchecks.utils.dataframes
 
@@ -1615,6 +1709,13 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       </ul></li>
       <li>
+    deepchecks.vision.datasets.classification.simple
+
+      <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.html#module-deepchecks.vision.datasets.classification.simple">module</a>
+</li>
+      </ul></li>
+      <li>
     deepchecks.vision.datasets.detection
 
       <ul>
@@ -1677,6 +1778,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.download.html#deepchecks.vision.datasets.classification.mnist.MNIST.download">download() (MNIST method)</a>
 </li>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.download_coco128.html#deepchecks.vision.datasets.detection.coco.CocoDataset.download_coco128">download_coco128() (CocoDataset class method)</a>
+</li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.dump_patches.html#deepchecks.vision.datasets.classification.mnist.MNistNet.dump_patches">dump_patches (MNistNet attribute)</a>
 </li>
   </ul></td>
@@ -1691,14 +1794,18 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       <li><a href="api/generated/deepchecks.tabular.Dataset.ensure_not_empty_dataset.html#deepchecks.tabular.Dataset.ensure_not_empty_dataset">ensure_not_empty_dataset() (Dataset class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.eval.html#deepchecks.vision.datasets.classification.mnist.MNistNet.eval">eval() (MNistNet method)</a>
 </li>
-      <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.extra_repr.html#deepchecks.vision.datasets.classification.mnist.MNIST.extra_repr">extra_repr() (MNIST method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.extra_repr.html#deepchecks.vision.datasets.detection.coco.CocoDataset.extra_repr">extra_repr() (CocoDataset method)</a>
 
       <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.extra_repr.html#deepchecks.vision.datasets.classification.mnist.MNIST.extra_repr">(MNIST method)</a>
+</li>
         <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.extra_repr.html#deepchecks.vision.datasets.classification.mnist.MNistNet.extra_repr">(MNistNet method)</a>
+</li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.extra_repr.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.extra_repr">(SimpleClassificationDataset method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1853,8 +1960,14 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
       </ul></li>
       <li><a href="api/generated/deepchecks.core.Condition.function.html#deepchecks.core.Condition.function">function (Condition attribute)</a>
 </li>
-      <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.functions.html#deepchecks.vision.datasets.classification.mnist.MNIST.functions">functions (MNIST attribute)</a>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.functions.html#deepchecks.vision.datasets.detection.coco.CocoDataset.functions">functions (CocoDataset attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.functions.html#deepchecks.vision.datasets.classification.mnist.MNIST.functions">(MNIST attribute)</a>
 </li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.functions.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.functions">(SimpleClassificationDataset attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -2110,6 +2223,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.load_dataset.html#deepchecks.vision.datasets.classification.mnist.load_dataset">load_dataset() (in module deepchecks.vision.datasets.classification.mnist)</a>
 
       <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.load_dataset.html#deepchecks.vision.datasets.classification.simple.load_dataset">(in module deepchecks.vision.datasets.classification.simple)</a>
+</li>
         <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.load_dataset.html#deepchecks.vision.datasets.detection.coco.load_dataset">(in module deepchecks.vision.datasets.detection.coco)</a>
 </li>
       </ul></li>
@@ -2262,6 +2377,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.vision.datasets.classification.html#module-deepchecks.vision.datasets.classification">deepchecks.vision.datasets.classification</a>
 </li>
         <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.html#module-deepchecks.vision.datasets.classification.mnist">deepchecks.vision.datasets.classification.mnist</a>
+</li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.html#module-deepchecks.vision.datasets.classification.simple">deepchecks.vision.datasets.classification.simple</a>
 </li>
         <li><a href="api/generated/deepchecks.vision.datasets.detection.html#module-deepchecks.vision.datasets.detection">deepchecks.vision.datasets.detection</a>
 </li>
@@ -2606,16 +2723,28 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
 </li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.register_buffer.html#deepchecks.vision.datasets.classification.mnist.MNistNet.register_buffer">register_buffer() (MNistNet method)</a>
 </li>
-      <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.register_datapipe_as_function.html#deepchecks.vision.datasets.classification.mnist.MNIST.register_datapipe_as_function">register_datapipe_as_function() (MNIST class method)</a>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.register_datapipe_as_function.html#deepchecks.vision.datasets.detection.coco.CocoDataset.register_datapipe_as_function">register_datapipe_as_function() (CocoDataset class method)</a>
+
+      <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.register_datapipe_as_function.html#deepchecks.vision.datasets.classification.mnist.MNIST.register_datapipe_as_function">(MNIST class method)</a>
 </li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.register_datapipe_as_function.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.register_datapipe_as_function">(SimpleClassificationDataset class method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.register_forward_hook.html#deepchecks.vision.datasets.classification.mnist.MNistNet.register_forward_hook">register_forward_hook() (MNistNet method)</a>
 </li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.register_forward_pre_hook.html#deepchecks.vision.datasets.classification.mnist.MNistNet.register_forward_pre_hook">register_forward_pre_hook() (MNistNet method)</a>
 </li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.register_full_backward_hook.html#deepchecks.vision.datasets.classification.mnist.MNistNet.register_full_backward_hook">register_full_backward_hook() (MNistNet method)</a>
 </li>
-      <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.register_function.html#deepchecks.vision.datasets.classification.mnist.MNIST.register_function">register_function() (MNIST class method)</a>
+      <li><a href="api/generated/deepchecks.vision.datasets.detection.coco.CocoDataset.register_function.html#deepchecks.vision.datasets.detection.coco.CocoDataset.register_function">register_function() (CocoDataset class method)</a>
+
+      <ul>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNIST.register_function.html#deepchecks.vision.datasets.classification.mnist.MNIST.register_function">(MNIST class method)</a>
 </li>
+        <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.register_function.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.register_function">(SimpleClassificationDataset class method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/deepchecks.vision.datasets.classification.mnist.MNistNet.register_parameter.html#deepchecks.vision.datasets.classification.mnist.MNistNet.register_parameter">register_parameter() (MNistNet method)</a>
 </li>
       <li><a href="api/generated/deepchecks.tabular.checks.performance.RegressionErrorDistribution.html#deepchecks.tabular.checks.performance.RegressionErrorDistribution">RegressionErrorDistribution (class in deepchecks.tabular.checks.performance)</a>
@@ -2986,6 +3115,8 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
         <li><a href="api/generated/deepchecks.core.SuiteResult.show.html#deepchecks.core.SuiteResult.show">(SuiteResult method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset.html#deepchecks.vision.datasets.classification.simple.SimpleClassificationDataset">SimpleClassificationDataset (class in deepchecks.vision.datasets.classification.simple)</a>
+</li>
       <li><a href="api/generated/deepchecks.tabular.checks.performance.SimpleModelComparison.html#deepchecks.tabular.checks.performance.SimpleModelComparison">SimpleModelComparison (class in deepchecks.tabular.checks.performance)</a>
 
       <ul>
@@ -2994,14 +3125,14 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
       </ul></li>
       <li><a href="api/generated/deepchecks.tabular.suites.single_dataset_integrity.html#deepchecks.tabular.suites.single_dataset_integrity">single_dataset_integrity() (in module deepchecks.tabular.suites)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/deepchecks.tabular.SingleDatasetCheck.html#deepchecks.tabular.SingleDatasetCheck">SingleDatasetCheck (class in deepchecks.tabular)</a>
 
       <ul>
         <li><a href="api/generated/deepchecks.vision.SingleDatasetCheck.html#deepchecks.vision.SingleDatasetCheck">(class in deepchecks.vision)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/deepchecks.tabular.checks.methodology.SingleFeatureContribution.html#deepchecks.tabular.checks.methodology.SingleFeatureContribution">SingleFeatureContribution (class in deepchecks.tabular.checks.methodology)</a>
 </li>
       <li><a href="api/generated/deepchecks.tabular.checks.methodology.SingleFeatureContributionTrainTest.html#deepchecks.tabular.checks.methodology.SingleFeatureContributionTrainTest">SingleFeatureContributionTrainTest (class in deepchecks.tabular.checks.methodology)</a>
@@ -3362,7 +3493,7 @@ Page: genindex&labels=labels=chore/documentation" target="_blank" rel="noopener 
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/f356f7e.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/e9e42a2.<br>
 </p>
     </div>
     
