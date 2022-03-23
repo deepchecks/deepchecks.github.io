@@ -38,7 +38,7 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Data Properties &#8212; Deepchecks 191ae90 documentation</title>
+    <title>Data Properties &#8212; Deepchecks a68b10a documentation</title>
     
     <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -504,6 +504,11 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
      The Method’s Input
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-method-s-output">
+     The Method’s Output
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -630,13 +635,22 @@ corresponding class labels.</p></li>
 <h3>The Method’s Input<a class="headerlink" href="#the-method-s-input" title="Permalink to this headline">¶</a></h3>
 <p>Each property is built for the specific data type that it runs on, and receives its deepchecks-expected format,
 as demonstrated in <a class="reference internal" href="data-classes/index.html"><span class="doc">Deepchecks’ format</span></a>.
-Note that prediction and label-based properties are not interchangeable due to their slightly different format, even if they calculate similar values.</p>
+Note that prediction and label-based properties are not interchangeable due to their slightly different format, even if
+they calculate similar values.</p>
+</section>
+<section id="the-method-s-output">
+<h3>The Method’s Output<a class="headerlink" href="#the-method-s-output" title="Permalink to this headline">¶</a></h3>
+<p>Each property function must return a sequence in the same length as the length of the input object. This is used later
+in order to couple each sample to its right properties values. In image properties we expect each image to generate a
+single property value, which results in a list of primitives types in the same length as the number of images. On the
+other hand for label &amp; predictions we allow each one to have multiple primitive values (for example area of bounding
+box), which means the returned list may contain either primitives values or a lists of primitive values per
+label/prediction.</p>
 </section>
 </section>
 <section id="properties-demonstration">
 <h2>Properties Demonstration<a class="headerlink" href="#properties-demonstration" title="Permalink to this headline">¶</a></h2>
-<p>We will demonstrate the 3 drift checks (for
-each property type) and implement the properties to pass to it.</p>
+<p>We will demonstrate the 3 drift checks (for each property type) and implement the properties to pass to it.</p>
 <section id="image-property">
 <h3>Image Property<a class="headerlink" href="#image-property" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">ImagePropertyDrift</span>
@@ -671,18 +685,15 @@ each property type) and implement the properties to pass to it.</p>
 <p>For label property the input varies according to the task type you are running. In this example we implement
 properties which apply to the Detection task type.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">TrainTestLabelDrift</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="kn">import</span> <span class="nn">torch</span>
-
 
 <span class="k">def</span> <span class="nf">number_of_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
   <span class="sd">&quot;&quot;&quot;Return a list containing the number of detections per sample in batch.&quot;&quot;&quot;</span>
   <span class="k">return</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">classes_in_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">classes_in_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
   <span class="sd">&quot;&quot;&quot;Return a list containing the classes in batch.&quot;&quot;&quot;</span>
-  <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]</span>
-  <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">classes</span><span class="p">))</span>
+  <span class="k">return</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]</span>
 
 
   <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span>
@@ -699,19 +710,16 @@ properties which apply to the Detection task type.</p>
 <p>Prediction property’s input, like label property, also varies by the task type you are running. In this example we
 implement properties which apply to the Detection task type.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">TrainTestPredictionDrift</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
-<span class="k">def</span> <span class="nf">classes_of_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">classes_of_predictions</span><span class="p">(</span><span class="n">predictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
   <span class="sd">&quot;&quot;&quot;Return a list containing the classes in batch.&quot;&quot;&quot;</span>
-  <span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">tensor</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="n">predictions</span><span class="p">]</span>
-  <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">classes</span><span class="p">))</span>
+  <span class="k">return</span> <span class="p">[</span><span class="n">tensor</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="n">predictions</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">bbox_area</span><span class="p">(</span><span class="n">predictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">bbox_area</span><span class="p">(</span><span class="n">predictions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
   <span class="sd">&quot;&quot;&quot;Return a list containing the area of bboxes per image in batch.&quot;&quot;&quot;</span>
-  <span class="n">areas</span> <span class="o">=</span> <span class="p">[(</span><span class="n">prediction</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">prediction</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+  <span class="k">return</span> <span class="p">[(</span><span class="n">prediction</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">prediction</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))[:,</span> <span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
            <span class="k">for</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="n">predictions</span><span class="p">]</span>
-  <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">areas</span><span class="p">))</span>
 
 
 <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span>
@@ -766,7 +774,7 @@ implement properties which apply to the Detection task type.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/191ae90.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/a68b10a.<br>
 </p>
     </div>
     
