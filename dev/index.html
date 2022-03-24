@@ -35,9 +35,10 @@
     -->
     <link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="32x32">
     <link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Welcome to Deepchecks! &#8212; Deepchecks f356f7e documentation</title>
+    <title>Welcome to Deepchecks! &#8212; Deepchecks e95572e documentation</title>
     
     <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -58,20 +59,19 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
     
     <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
   
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/js/rtd_sphinx_search.min.js"></script>
-    <script crossorigin="anonymous" integrity="sha512-VCK7oF67GXNc+J7zsu5o57jtxhLA75nSMHGaq8Q8TCOxDj4nMDw5dhQZvm9Cd9RN+3zgcodqbKcRc9gyPP8a2w==" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
+    crossorigin="anonymous"></script>
+
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -137,7 +137,7 @@
 
 <li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="examples/index.html">
-  Checks Gallery
+  Examples
  </a>
 </li>
 
@@ -156,10 +156,85 @@
     <div id="navbar-end">
       
       <div class="navbar-end-item">
-        <form class="bd-search d-flex align-items-center" action="search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form>
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables index and {'json_url': 'https://docs.deepchecks.com/dev/_static/switcher.json', 'version_match': 'dev', 'url_template': 'https://docs.deepchecks.com/{version}/'}.
+-->
+
+<script type="text/javascript">
+// Construct the target URL from the JSON components
+function buildURL(entry) {
+    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
+    template = template.replace("{version}", entry.version);
+    return template;
+}
+
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "index.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://docs.deepchecks.com/dev/_static/switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "index.html";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            // get the base URL for that doc version, add the current page's
+            // path to it, and set as `href`
+            entry.url = buildURL(entry);
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's dev variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "dev") {
+                node.classList.add("active");
+                $("#version_switcher_button").text(entry.name);
+            }
+        });
+    });
+})();
+</script>
       </div>
       
       <div class="navbar-end-item">
@@ -191,7 +266,7 @@
             <i class="fas fa-bars"></i>
     </a>
     <div class="dropdown-menu" aria-labelledby="topright-dropdown-menu-link" x-placement="bottom-start">
-        <a class="dropdown-item" href="https://github.com/deepchecks/deepchecks/issues/new?title=[Docs] Documentation contains a mistake.&body=Package Version: 0.6.0.dev1;
+        <a class="dropdown-item" href="https://github.com/deepchecks/deepchecks/issues/new?title=[Docs] Documentation contains a mistake.&body=Package Version: dev;
 Page: index&labels=labels=chore/documentation" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-pencil-alt"></i> Report a problem
         </a>
@@ -223,7 +298,10 @@ Page: index&labels=labels=chore/documentation" target="_blank" rel="noopener nor
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar">
-              <div class="sidebar-start-items"><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     
   </div>
@@ -248,9 +326,21 @@ Page: index&labels=labels=chore/documentation" target="_blank" rel="noopener nor
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#get-started">
-   Get Started
+  <a class="reference internal nav-link" href="#see-it-in-action">
+   See It in Action
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#viewing-check-and-suite-results">
+     Viewing Check and Suite Results
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#installation">
+     Installation
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#when-should-you-use-deepchecks">
@@ -266,13 +356,6 @@ Page: index&labels=labels=chore/documentation" target="_blank" rel="noopener nor
   <a class="reference internal nav-link" href="#what-do-you-need-in-order-to-start">
    What Do You Need in Order to Start?
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#supported-data-types">
-     Supported Data Types
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#see-more">
@@ -309,29 +392,45 @@ Page: index&labels=labels=chore/documentation" target="_blank" rel="noopener nor
 and data, and it enables doing so with minimal effort. Deepchecks accompanies you through
 various validation needs such as verifying your data’s integrity, inspecting its distributions,
 validating data splits, evaluating your model and comparing between different models.</p>
-<p>Deepchecks currently supports Tabular Data (<a class="reference internal" href="api/deepchecks.tabular.html#module-deepchecks.tabular" title="deepchecks.tabular"><code class="xref py py-mod docutils literal notranslate"><span class="pre">deepchecks.tabular</span></code></a>) and is in alpha version for Computer Vision (<a class="reference internal" href="api/deepchecks.vision.html#module-deepchecks.vision" title="deepchecks.vision"><code class="xref py py-mod docutils literal notranslate"><span class="pre">deepchecks.vision</span></code></a>).</p>
-<section id="get-started">
-<h2>Get Started<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h2>
-<p>Head over to our quickstart tutorial notebook:</p>
+<p>Deepchecks currently supports Tabular Data (<a class="reference internal" href="api/deepchecks.tabular.html#module-deepchecks.tabular" title="deepchecks.tabular"><code class="xref py py-mod docutils literal notranslate"><span class="pre">deepchecks.tabular</span></code></a>) and is in beta release for Computer Vision (<a class="reference internal" href="api/deepchecks.vision.html#module-deepchecks.vision" title="deepchecks.vision"><code class="xref py py-mod docutils literal notranslate"><span class="pre">deepchecks.vision</span></code></a>).</p>
+<section id="see-it-in-action">
+<h2>See It in Action<a class="headerlink" href="#see-it-in-action" title="Permalink to this headline">¶</a></h2>
+<p>For a quickstart, check out the following in the tutorials section:</p>
+<p><strong>Tabular Data</strong>:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="tutorials/tabular/quickstart_in_5_minutes.html"><span class="doc">Quickstart for Tabular Data</span></a></p></li>
-<li><p><a class="reference internal" href="tutorials/vision/classification_tutorial.html"><span class="doc">Quickstart for Classification Computer Vision</span></a></p></li>
+<li><p><a class="reference internal" href="tutorials/tabular/examples/plot_quickstart_in_5_minutes.html"><span class="doc">Quickstart in 5 minutes</span></a></p></li>
 </ul>
-<p>and click on  <a class="reference external" href="tutorials/tabular/quickstart_in_5_minutes.html"><img alt="binder badge" src="_images/binder-badge.svg" /></a>  or on  <a class="reference external" href="tutorials/tabular/quickstart_in_5_minutes.html"><img alt="colab badge" src="_images/colab-badge.svg" /></a>  to launch it and see it in action,
-or see our <a class="reference internal" href="getting-started/index.html"><span class="doc">Installation</span></a> to install it locally and continue from there.</p>
+<p><strong>Computer Vision</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The package’s output is suited for running in any Python environment.
-The output can be conveniently viewed inline in Jupyter Notebooks (or JupyterLab),
-and it can also be <a class="reference internal" href="user-guide/general/exporting_results/save_suite_result_as_html.html"><span class="doc">exported as an HTML report</span></a>,
-to run it from any IDE.</p>
+<p>Deepchecks’ Computer Vision subpackage is in beta release.
+It is <a class="reference internal" href="getting-started/index.html"><span class="doc">available for installation</span></a> from PyPi, use at your own discretion.
+<a class="reference external" href="https://github.com/deepchecks/deepchecks/issues">Github Issues</a> are welcome!</p>
 </div>
+<ul class="simple">
+<li><p><a class="reference internal" href="tutorials/vision/classification_tutorial.html"><span class="doc">Tutorial for Classification</span></a></p></li>
+<li><p><a class="reference internal" href="tutorials/vision/detection_tutorial.html"><span class="doc">Tutorial for Object Detection</span></a></p></li>
+</ul>
+<section id="viewing-check-and-suite-results">
+<h3>Viewing Check and Suite Results<a class="headerlink" href="#viewing-check-and-suite-results" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>The package’s output can be consumed in various formats:</dt><dd><ul class="simple">
+<li><p>Viewed inline in Jupyter (default behavior)</p></li>
+<li><p><a class="reference internal" href="user-guide/general/exporting_results/index.html"><span class="doc">Exported as an HTML Report / JSON / Sent to W&amp;B</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Check out our <a class="reference internal" href="getting-started/index.html"><span class="doc">Installation Instructions</span></a> to install it locally and continue from there.</p>
+</section>
 </section>
 <section id="when-should-you-use-deepchecks">
 <h2>When Should You Use Deepchecks?<a class="headerlink" href="#when-should-you-use-deepchecks" title="Permalink to this headline">¶</a></h2>
 <p>While you’re in the research phase, and want to validate your data, find potential methodological
 problems, and/or validate your model and evaluate it.</p>
-<img alt="When To Validate - ML Pipeline Schema" class="align-center" src="_images/pipeline_when_to_validate.svg" /><p>See the <a class="reference internal" href="getting-started/when_should_you_use.html"><span class="doc">When Should You Use</span></a> Section in the User Guide for an elaborate explanation of the typical scenarios.</p>
+<img alt="When To Validate - ML Pipeline Schema" class="align-center" src="_images/pipeline_when_to_validate.svg" /><p>See the <a class="reference internal" href="getting-started/when_should_you_use.html"><span class="doc">When Should You Use</span></a> Section for an elaborate explanation of the typical scenarios.</p>
 </section>
 <section id="how-does-it-work">
 <h2>How Does it Work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline">¶</a></h2>
@@ -350,14 +449,10 @@ etc.), with optional labels</p></li>
 <li><div class="line-block">
 <div class="line">A <strong>supported model</strong> that you wish to validate.</div>
 <div class="line">For tabular data, see <a class="reference internal" href="user-guide/tabular/supported_models.html"><span class="doc">supported models</span></a>.</div>
-<div class="line">For computer vision, we currently support the pytorch framework. See <a class="reference internal" href="user-guide/vision/data-classes/index.html"><span class="doc">formatters</span></a> to understand how to integrate with a custom prediciton and label format.</div>
+<div class="line">For computer vision, we currently support the pytorch framework. See <a class="reference internal" href="user-guide/vision/data-classes/index.html"><span class="doc">Data Classes</span></a> to understand how to integrate your data.</div>
 </div>
 </li>
 </ul>
-<section id="supported-data-types">
-<h3>Supported Data Types<a class="headerlink" href="#supported-data-types" title="Permalink to this headline">¶</a></h3>
-<p>Currently the package supports Tabular Data, and is in alpha version for Computer Vision support.</p>
-</section>
 </section>
 <section id="see-more">
 <h2>See More<a class="headerlink" href="#see-more" title="Permalink to this headline">¶</a></h2>
@@ -381,15 +476,15 @@ or to post a issue or start a discussion on <a class="reference external" href="
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/tabular/index.html">Tabular Tutorials</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/quickstart_in_5_minutes.html">Quickstart in 5 minutes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/add_a_custom_check.html">Add a Custom Check</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/use-cases/index.html">Use Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/examples/index.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/examples/index.html#use-cases">Use Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/tabular/examples/use-cases/plot_phishing_urls.html">Classifying Malicious URLs</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/vision/index.html">Computer Vision Tutorials</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tutorials/vision/classification_tutorial.html">Classification Model Validation Tutorial</a></li>
 <li class="toctree-l3"><a class="reference internal" href="tutorials/vision/detection_tutorial.html">Object Detection Tutorial</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials/vision/extractors_validating.html">Test Your Extractors In Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorials/vision/examples/index.html">Notebooks</a></li>
 </ul>
 </li>
 </ul>
@@ -421,13 +516,12 @@ or to post a issue or start a discussion on <a class="reference external" href="
 </div>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Checks Gallery</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#tabular-checks">Tabular Checks</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html#tabular-examples">Tabular Examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/tabular/checks/index.html">Checks Demonstrations</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#computer-vision-checks">Computer Vision Checks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/vision/guides/index.html">How-to Guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/index.html#computer-vision-examples">Computer Vision Examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/vision/checks/index.html">Checks Demonstrations</a></li>
 </ul>
 </li>
@@ -472,13 +566,13 @@ as this package is in active development!</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021, Deepchecks.<br>
+    &copy; Copyright 2021-2022, Deepchecks.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/f356f7e.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/e95572e.<br>
 </p>
     </div>
     
