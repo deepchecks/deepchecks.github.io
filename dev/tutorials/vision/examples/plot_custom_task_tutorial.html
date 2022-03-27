@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Custom Task Tutorial &#8212; Deepchecks b2b149f documentation</title>
+    <title>Custom Task Tutorial &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -398,7 +392,7 @@ Page: tutorials/vision/examples/plot_custom_task_tutorial&labels=labels=chore/do
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -442,7 +436,7 @@ Page: tutorials/vision/examples/plot_custom_task_tutorial&labels=labels=chore/do
 to download the full example code</p>
 </div>
 <span class="target" id="sphx-glr-tutorials-vision-examples-plot-custom-task-tutorial-py"></span><section class="sphx-glr-example-title" id="custom-task-tutorial">
-<h1>Custom Task Tutorial<a class="headerlink" href="#custom-task-tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>Custom Task Tutorial<a class="headerlink" href="#custom-task-tutorial" title="Permalink to this headline">#</a></h1>
 <p>Computer vision is an umbrella term for a wide spectrum of objectives models are trained for. These objective reflect
 on the structure of the data and the possible actions on it.</p>
 <p>The first step before running any Deepchecks checks is to create an implementation of
@@ -462,7 +456,7 @@ the exact bounding box format in order to run, while other checks that uses
 <li><p><a href="#id7"><span class="problematic" id="id8">:ref:`Implement Custom Metric`_</span></a></p></li>
 </ol>
 <section id="defining-the-data">
-<h2>Defining the Data<a class="headerlink" href="#defining-the-data" title="Permalink to this headline">¶</a></h2>
+<h2>Defining the Data<a class="headerlink" href="#defining-the-data" title="Permalink to this headline">#</a></h2>
 <p>First we will define a <a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/data_tutorial.html">PyTorch Dataset</a>.
 of COCO-128 segmentation task. This part represents your own code, and is not yet Deepchecks related.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -619,7 +613,8 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/7115649 [00:00&lt;?, ?it/s]
-7115776it [00:00, 82374399.67it/s]
+ 98%|#########7| 6947840/7115649 [00:00&lt;00:00, 69472834.63it/s]
+7115776it [00:00, 70015853.15it/s]
 </pre></div>
 </div>
 <p>Visualizing that we loaded our datasets correctly:</p>
@@ -642,7 +637,7 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 </div>
 </section>
 <section id="implement-custom-task">
-<h2>Implement Custom Task<a class="headerlink" href="#implement-custom-task" title="Permalink to this headline">¶</a></h2>
+<h2>Implement Custom Task<a class="headerlink" href="#implement-custom-task" title="Permalink to this headline">#</a></h2>
 <p>With our data and model ready we can write the task class.</p>
 <p>With the built-in base classes, the checks are accessing directly the values which return from the functions
 <cite>infer_on_batch</cite> and <cite>batch_to_labels</cite> and therefore they require a standard format. But with custom task, these
@@ -733,12 +728,12 @@ Let’s run SimpleFeatureContribution check with our task</p>
 </div>
 </section>
 <section id="implement-custom-metric">
-<h2>Implement Custom Metric<a class="headerlink" href="#implement-custom-metric" title="Permalink to this headline">¶</a></h2>
+<h2>Implement Custom Metric<a class="headerlink" href="#implement-custom-metric" title="Permalink to this headline">#</a></h2>
 <p>Some checks test the model performance and requires a metric in order to run. When using a custom task you will also
 have to create a custom metric in order for those checks to work, since the built-in metrics don’t know to handle
 your data structure. The metrics need to conform to the API of
 <a class="reference external" href="https://pytorch.org/ignite/metrics.html">pytorch-ignite</a>.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  57.695 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  49.589 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-vision-examples-plot-custom-task-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/0d523a31a96ad83c350a65c65a9f4aa0/plot_custom_task_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_task_tutorial.py</span></code></a></p>
@@ -779,8 +774,9 @@ your data structure. The metrics need to conform to the API of
       </div>
     </div>
   
-    <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -791,7 +787,7 @@ your data structure. The metrics need to conform to the API of
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

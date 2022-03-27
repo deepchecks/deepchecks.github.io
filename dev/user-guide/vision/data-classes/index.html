@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Data Classes &#8212; Deepchecks b2b149f documentation</title>
+    <title>Data Classes &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -478,7 +472,7 @@ Page: user-guide/vision/data-classes/index&labels=labels=chore/documentation" ta
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -517,7 +511,7 @@ Page: user-guide/vision/data-classes/index&labels=labels=chore/documentation" ta
               <div>
                 
   <section id="data-classes">
-<span id="id1"></span><h1>Data Classes<a class="headerlink" href="#data-classes" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Data Classes<a class="headerlink" href="#data-classes" title="Permalink to this headline">#</a></h1>
 <p>The different data classes in the deepchecks.vision module were designed to enable access to the data in a unified
 format, while making the formatting code easy and maintainable. They are responsible for converting the data (whether
 these are images, labels, or predictions) to a format deepchecks can work with.</p>
@@ -545,7 +539,7 @@ these are images, labels, or predictions) to a format deepchecks can work with.<
 </ul>
 </div>
 <section id="why-is-this-important">
-<h2>Why Is This Important?<a class="headerlink" href="#why-is-this-important" title="Permalink to this headline">¶</a></h2>
+<h2>Why Is This Important?<a class="headerlink" href="#why-is-this-important" title="Permalink to this headline">#</a></h2>
 <p>There is no standard when it comes to data formats in computer vision. Each model can have its own supported data format
 for the output predictions, and each new benchmark dataset can propose a new labeling format. Even the images formats
 can be different from each other (PIL, OpenCV, etc.).</p>
@@ -554,7 +548,7 @@ checks can work with. The data class objects provide a structured and repeatable
 part of the vision module.</p>
 </section>
 <section id="what-do-you-need-to-implement">
-<h2>What Do You Need to Implement?<a class="headerlink" href="#what-do-you-need-to-implement" title="Permalink to this headline">¶</a></h2>
+<h2>What Do You Need to Implement?<a class="headerlink" href="#what-do-you-need-to-implement" title="Permalink to this headline">#</a></h2>
 <p>Generally, all you need to do is to implement a data class that inherits from one of the supported classes in the
 vision module, and just implement there 3 functions:</p>
 <blockquote>
@@ -568,7 +562,7 @@ vision module, and just implement there 3 functions:</p>
 and <a class="reference external" href="DetectionData.rst">DetectionData</a> classes.</p>
 </section>
 <section id="validating-your-data-class-implementation">
-<h2>Validating Your Data Class Implementation<a class="headerlink" href="#validating-your-data-class-implementation" title="Permalink to this headline">¶</a></h2>
+<h2>Validating Your Data Class Implementation<a class="headerlink" href="#validating-your-data-class-implementation" title="Permalink to this headline">#</a></h2>
 <p>While implementing the data class, you may need a way to test your work is correct.
 For this purpose, deepchecks contains an helper function which tests your implementation and prints its outputs,
 which you can inspect to make sure everything works correctly.
@@ -611,8 +605,9 @@ Use this function like so:</p>
       </div>
     </div>
   
-    <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -623,7 +618,7 @@ Use this function like so:</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

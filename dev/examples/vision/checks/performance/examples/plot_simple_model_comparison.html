@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Simple Model Comparison &#8212; Deepchecks b2b149f documentation</title>
+    <title>Simple Model Comparison &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -741,7 +735,7 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="simple-model-comparison">
-<span id="sphx-glr-examples-vision-checks-performance-examples-plot-simple-model-comparison-py"></span><h1>Simple Model Comparison<a class="headerlink" href="#simple-model-comparison" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-vision-checks-performance-examples-plot-simple-model-comparison-py"></span><h1>Simple Model Comparison<a class="headerlink" href="#simple-model-comparison" title="Permalink to this headline">#</a></h1>
 <p>This notebooks provides an overview for using and understanding simple model comparison check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
@@ -750,7 +744,7 @@ to download the full example code</p>
 <li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
 </ul>
 <section id="what-is-the-purpose-of-the-check">
-<h2>What Is the Purpose of the Check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">¶</a></h2>
+<h2>What Is the Purpose of the Check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
 <p>This check compares your current model to a “simple model”, which is a model designed to produce the best performance
 achievable using very simple rules, such as “always predict the most common class”.
 The simple model is used as a <strong>baseline</strong> model; If your model achieves less or similar score to the simple model,
@@ -791,7 +785,7 @@ to compare to, and you may experiment with the different types and see how it pe
 on your data.</p>
 <p>This checks applies only to classification datasets.</p>
 <section id="generate-data-and-model">
-<h3>Generate data and model<a class="headerlink" href="#generate-data-and-model" title="Permalink to this headline">¶</a></h3>
+<h3>Generate data and model<a class="headerlink" href="#generate-data-and-model" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.performance</span> <span class="kn">import</span> <span class="n">SimpleModelComparison</span>
 </pre></div>
 </div>
@@ -804,7 +798,7 @@ on your data.</p>
 </div>
 </section>
 <section id="run-the-check">
-<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">¶</a></h3>
+<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h3>
 <p>We will run the check with the prior model type. The check will use the default
 classification metrics - precision and recall. This can be overridden by
 providing an alternative scorer using the <code class="docutils literal notranslate"><span class="pre">alternative_metrics`</span></code> parameter.</p>
@@ -830,44 +824,44 @@ providing an alternative scorer using the <code class="docutils literal notransl
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "76f30d0fa15747b686b3eb886c76f38f": {
+    "b04628ce643d47b0b0616dae1a27b261": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_65ccd73b4e6f4501871d7c953f373302",
-          "IPY_MODEL_d37cc01939d64d90a0dc7e3101404d56",
-          "IPY_MODEL_132218c2cffb48f3bb71c18720cfa8e8"
+          "IPY_MODEL_e05cccede3214a41a929be35d5e3e789",
+          "IPY_MODEL_095f79f0ce2147488d509f6b76add729",
+          "IPY_MODEL_eb87adb7cd384b97a00da350b4426d33"
         ],
-        "layout": "IPY_MODEL_0378d36f4dad4a4490596104270a5f48"
+        "layout": "IPY_MODEL_795091712bb242d9853acd9b85b1035e"
       }
     },
-    "65ccd73b4e6f4501871d7c953f373302": {
+    "e05cccede3214a41a929be35d5e3e789": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_93fa96cb7b884f1599f683bd460afa94",
-        "style": "IPY_MODEL_bb45818aae434018a17d2fff44f32726",
+        "layout": "IPY_MODEL_9ca0228982fc41f2b025c38107e75a87",
+        "style": "IPY_MODEL_48edc136c21848e4b01016035e9f604d",
         "value": "<h4>Simple Model Comparison</h4><p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/vision/checks/performance/simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "93fa96cb7b884f1599f683bd460afa94": {
+    "9ca0228982fc41f2b025c38107e75a87": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "bb45818aae434018a17d2fff44f32726": {
+    "48edc136c21848e4b01016035e9f604d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d37cc01939d64d90a0dc7e3101404d56": {
+    "095f79f0ce2147488d509f6b76add729": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -913,7 +907,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "facfa407-5162-4a90-b904-fb4bd6b4c3c4"
+            "uid": "6380e48d-902d-44fd-86e0-f059b66936cd"
           },
           {
             "alignmentgroup": "True",
@@ -952,7 +946,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "5abc8d02-6cc3-4edb-b2be-5dddf9cccd11"
+            "uid": "418e059a-c50b-46d2-a707-01fa6daa6fe7"
           },
           {
             "alignmentgroup": "True",
@@ -973,12 +967,12 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "x": [
               "1",
               "0",
-              "6",
-              "2",
-              "3",
-              "4",
               "5",
+              "2",
               "7",
+              "3",
+              "6",
+              "4",
               "9",
               "8"
             ],
@@ -991,7 +985,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "e3f7e508-bd38-4636-9cea-a8effcc22df7"
+            "uid": "1a04da67-8ab7-4020-b84b-74ceddbbc0f1"
           },
           {
             "alignmentgroup": "True",
@@ -1010,15 +1004,15 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "orientation": "v",
             "showlegend": false,
             "x": [
-              "4",
               "8",
               "1",
               "6",
-              "5",
               "3",
-              "0",
-              "9",
               "2",
+              "4",
+              "0",
+              "5",
+              "9",
               "7"
             ],
             "xaxis": "x2",
@@ -1030,7 +1024,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "15e84264-a277-4c14-a11b-8a4516d57881"
+            "uid": "6c36bd52-53da-4837-b606-0b4ec76f65be"
           }
         ],
         "_dom_classes": [],
@@ -1964,7 +1958,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "l03YT0LG7z9YfMVXfMXvPzuPjCcKs+8/5ow5Y86Y7z8IcPuQco7vP5qIboSGeu8/aPt77A5t7z+nWKdYp1jvP0BVsNkGNe8/WRFJQ4AU7z8="
+          "data": "MTriu7HU7z+JaU9kIL3vP9g8lUL6mu8/5ow5Y86Y7z9omGeYZ5jvPywxV/SOlu8/B21Mr0iI7z8RoCcc3oLvP7MvhGfoLO8/Z2SXIO6N7j8="
         },
         {
           "encoding": "base64",
@@ -1974,33 +1968,33 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "qI9WkxDF7z8LDwjy08PvP5GuXMLQsO8/exAWz+eI7z/ip0H8NIjvP4LpVPCFdu8/HpqKTFRz7z/4l1EQ0FzvP8Mn6mJ/Q+8/GlwOxxYq7z8="
+          "data": "qN/4nurc7z+JoCdQXMbvP9/Qk+orme8/LDFX9I6W7z+SovDN+ZDvP5e9GEepeu8/vXv/PfBi7z9BbxT0RkHvP7MvhGfoLO8/B9rurdIU7z8="
         }
       ]
     },
-    "132218c2cffb48f3bb71c18720cfa8e8": {
+    "eb87adb7cd384b97a00da350b4426d33": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_244b88d3e4494b88b172ed6328969436",
-        "style": "IPY_MODEL_8c440c6ea5514834bb43140877064c41"
+        "layout": "IPY_MODEL_aeaa36a4b9f84449a8eacc85abdb2da9",
+        "style": "IPY_MODEL_78b2414d05074674b906cc3727f25985"
       }
     },
-    "244b88d3e4494b88b172ed6328969436": {
+    "aeaa36a4b9f84449a8eacc85abdb2da9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8c440c6ea5514834bb43140877064c41": {
+    "78b2414d05074674b906cc3727f25985": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0378d36f4dad4a4490596104270a5f48": {
+    "795091712bb242d9853acd9b85b1035e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2010,7 +2004,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "76f30d0fa15747b686b3eb886c76f38f"}
+{"version_major": 2, "version_minor": 0, "model_id": "b04628ce643d47b0b0616dae1a27b261"}
 </script>
 
 </body>
@@ -2020,7 +2014,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
 <br />
 <br /></section>
 <section id="observe-the-check-s-output">
-<h3>Observe the check’s output<a class="headerlink" href="#observe-the-check-s-output" title="Permalink to this headline">¶</a></h3>
+<h3>Observe the check’s output<a class="headerlink" href="#observe-the-check-s-output" title="Permalink to this headline">#</a></h3>
 <p>We can see in the results that the check calculates the score for each class
 in the dataset, and compares the scores between our model and the simple model.</p>
 <p>In addition to the graphic output, the check also returns a value which includes
@@ -2076,13 +2070,13 @@ all of the information that is needed for defining the conditions for validation
       <td>1.000000</td>
     </tr>
     <tr>
-      <th>52</th>
+      <th>54</th>
       <td>Given Model</td>
       <td>Precision</td>
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.982828</td>
+      <td>0.980827</td>
     </tr>
     <tr>
       <th>14</th>
@@ -2103,13 +2097,13 @@ all of the information that is needed for defining the conditions for validation
       <td>1.000000</td>
     </tr>
     <tr>
-      <th>41</th>
+      <th>43</th>
       <td>Given Model</td>
       <td>Recall</td>
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.992857</td>
+      <td>0.991837</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2130,13 +2124,13 @@ all of the information that is needed for defining the conditions for validation
       <td>1.000000</td>
     </tr>
     <tr>
-      <th>45</th>
+      <th>42</th>
       <td>Given Model</td>
       <td>Precision</td>
       <td>1</td>
       <td>1</td>
       <td>1135</td>
-      <td>0.990334</td>
+      <td>0.992964</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2152,7 +2146,7 @@ all of the information that is needed for defining the conditions for validation
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.788 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.283 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-vision-checks-performance-examples-plot-simple-model-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/1e6c4f0bc8c9ac576a9059cddcc111a9/plot_simple_model_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_simple_model_comparison.py</span></code></a></p>
@@ -2194,8 +2188,9 @@ all of the information that is needed for defining the conditions for validation
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -2206,7 +2201,7 @@ all of the information that is needed for defining the conditions for validation
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Add a Custom Check &#8212; Deepchecks b2b149f documentation</title>
+    <title>Add a Custom Check &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -398,7 +392,7 @@ Page: tutorials/tabular/examples/plot_add_a_custom_check&labels=labels=chore/doc
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -454,7 +448,7 @@ Page: tutorials/tabular/examples/plot_add_a_custom_check&labels=labels=chore/doc
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="add-a-custom-check">
-<span id="sphx-glr-tutorials-tabular-examples-plot-add-a-custom-check-py"></span><h1>Add a Custom Check<a class="headerlink" href="#add-a-custom-check" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-tutorials-tabular-examples-plot-add-a-custom-check-py"></span><h1>Add a Custom Check<a class="headerlink" href="#add-a-custom-check" title="Permalink to this headline">#</a></h1>
 <p>It is possible to extend deepchecks by implementing custom checks. This
 enables you to have your own logic of metrics or validation, or even just
 to display your own graph using deepchecks’ suite.</p>
@@ -464,7 +458,7 @@ to display your own graph using deepchecks’ suite.</p>
 <li><p><a class="reference external" href="#check-display">Check Display</a></p></li>
 </ul>
 <section id="check-structure">
-<h2>Check Structure<a class="headerlink" href="#check-structure" title="Permalink to this headline">¶</a></h2>
+<h2>Check Structure<a class="headerlink" href="#check-structure" title="Permalink to this headline">#</a></h2>
 <p>Each check consists of 3 main parts:</p>
 <ul class="simple">
 <li><p>Return Value</p></li>
@@ -475,7 +469,7 @@ to display your own graph using deepchecks’ suite.</p>
 display, for addding a condition see working with conditions (LINK)</p>
 </section>
 <section id="write-a-basic-check">
-<h2>Write a Basic Check<a class="headerlink" href="#write-a-basic-check" title="Permalink to this headline">¶</a></h2>
+<h2>Write a Basic Check<a class="headerlink" href="#write-a-basic-check" title="Permalink to this headline">#</a></h2>
 <p>Let’s implement a check for comparing the sizes of the test and the train datasets.</p>
 <p>The first step is to create check class, which inherits from a base check class.
 Each base check is differed by its run method signature, read more about all
@@ -528,42 +522,42 @@ dictionary, string, etc…</em></p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "fb8e1c90a69e4ab191a0e662b0d03f8e": {
+    "7c39fbc2356d45ecbf396cebd2a5f8e5": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_ba7481e6c631495aaa9cf10250863457"
+          "IPY_MODEL_13e4c8a12bb34e6e8f1a89f686335e9a"
         ],
-        "layout": "IPY_MODEL_6fa1f302b4eb4248836bdbd1fa8f36fa"
+        "layout": "IPY_MODEL_358a47bb2fe04bd6acfad71f1530de79"
       }
     },
-    "ba7481e6c631495aaa9cf10250863457": {
+    "13e4c8a12bb34e6e8f1a89f686335e9a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_375f24bbfa244c42923f3a16eb706fe5",
-        "style": "IPY_MODEL_2d0b3058dd0d4a0a84fe954f6bad6897",
+        "layout": "IPY_MODEL_071f1780f08a47889a16a75db267ab05",
+        "style": "IPY_MODEL_9319415a07744178b87394ce2192b0a1",
         "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "375f24bbfa244c42923f3a16eb706fe5": {
+    "071f1780f08a47889a16a75db267ab05": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2d0b3058dd0d4a0a84fe954f6bad6897": {
+    "9319415a07744178b87394ce2192b0a1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6fa1f302b4eb4248836bdbd1fa8f36fa": {
+    "358a47bb2fe04bd6acfad71f1530de79": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -573,7 +567,7 @@ dictionary, string, etc…</em></p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "fb8e1c90a69e4ab191a0e662b0d03f8e"}
+{"version_major": 2, "version_minor": 0, "model_id": "7c39fbc2356d45ecbf396cebd2a5f8e5"}
 </script>
 
 </body>
@@ -596,7 +590,7 @@ we have defined earlier we can use the “value” property on the result.</p>
 etc.), check out any of your favorite checks from our API Reference (LINK).</p>
 </section>
 <section id="check-display">
-<h2>Check Display<a class="headerlink" href="#check-display" title="Permalink to this headline">¶</a></h2>
+<h2>Check Display<a class="headerlink" href="#check-display" title="Permalink to this headline">#</a></h2>
 <p>Most of the times we will want our checks to have a visual display that will
 quickly summarize the check result. We can pass objects for display to the
 <code class="docutils literal notranslate"><span class="pre">CheckResult</span></code>. Objects for display should be of type: html string, dataframe
@@ -650,82 +644,82 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "3f3a73497f9e4c3eb64f332c1a18e0d8": {
+    "24fdb3f4d4aa4de09d94673ca3e861b7": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_0c41433ce70945109f993ecd82359d19",
-          "IPY_MODEL_6a64f7788c8943628e734868348fa14e",
-          "IPY_MODEL_494428d59bdf478e81044d9f5e9985f0"
+          "IPY_MODEL_f7035368374549568ff0a6bbd96c2997",
+          "IPY_MODEL_a7d5b7c8b3064ccea04c989cbd5fac97",
+          "IPY_MODEL_1ad9b73fcbef49a69ffa191cfb81d58e"
         ],
-        "layout": "IPY_MODEL_0ce11f18b588460aa141a7a65efca74a"
+        "layout": "IPY_MODEL_454b49ea1ebc480087e3a4659b085742"
       }
     },
-    "0c41433ce70945109f993ecd82359d19": {
+    "f7035368374549568ff0a6bbd96c2997": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_467ab16b492c4e9d9e6286f7858d6b6b",
-        "style": "IPY_MODEL_2d1c02a3c8ec495ba79a83ff6ccfe2ab",
-        "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_bad8e table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bad8e thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bad8e tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bad8e th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bad8e td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_bad8e\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_bad8e_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_bad8e_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_bad8e_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_bad8e_row0_col0\" class=\"data row0 col0\" >9</td>\n      <td id=\"T_bad8e_row0_col1\" class=\"data row0 col1\" >3</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_5c952e8a0a5b450c9e6ef6afb7c49cb9",
+        "style": "IPY_MODEL_e9f9757b904a488492868c76cef66593",
+        "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_40c22 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_40c22 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_40c22 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_40c22 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_40c22 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_40c22\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_40c22_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_40c22_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_40c22_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_40c22_row0_col0\" class=\"data row0 col0\" >9</td>\n      <td id=\"T_40c22_row0_col1\" class=\"data row0 col1\" >3</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "467ab16b492c4e9d9e6286f7858d6b6b": {
+    "5c952e8a0a5b450c9e6ef6afb7c49cb9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2d1c02a3c8ec495ba79a83ff6ccfe2ab": {
+    "e9f9757b904a488492868c76cef66593": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6a64f7788c8943628e734868348fa14e": {
+    "a7d5b7c8b3064ccea04c989cbd5fac97": {
       "model_name": "OutputModel",
       "model_module": "@jupyter-widgets/output",
       "model_module_version": "1.0.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_10008c53e9f4403bbe5c725b3c5fccce",
+        "layout": "IPY_MODEL_f520d6ffe05b401787fd283a37c5ed66",
         "outputs": []
       }
     },
-    "10008c53e9f4403bbe5c725b3c5fccce": {
+    "f520d6ffe05b401787fd283a37c5ed66": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "494428d59bdf478e81044d9f5e9985f0": {
+    "1ad9b73fcbef49a69ffa191cfb81d58e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_985185af832e42e396214113991a1198",
-        "style": "IPY_MODEL_7ecb91ab444d49cb9a5b6617693b090a"
+        "layout": "IPY_MODEL_820e1e68463244058c815a7103f28563",
+        "style": "IPY_MODEL_6110b70b5cb24fb985ee15b1fe0d78f0"
       }
     },
-    "985185af832e42e396214113991a1198": {
+    "820e1e68463244058c815a7103f28563": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7ecb91ab444d49cb9a5b6617693b090a": {
+    "6110b70b5cb24fb985ee15b1fe0d78f0": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0ce11f18b588460aa141a7a65efca74a": {
+    "454b49ea1ebc480087e3a4659b085742": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -735,7 +729,7 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "3f3a73497f9e4c3eb64f332c1a18e0d8"}
+{"version_major": 2, "version_minor": 0, "model_id": "24fdb3f4d4aa4de09d94673ca3e861b7"}
 </script>
 
 </body>
@@ -744,7 +738,7 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
 </div>
 <br />
 <br /><section id="voila">
-<h3>Voila!<a class="headerlink" href="#voila" title="Permalink to this headline">¶</a></h3>
+<h3>Voila!<a class="headerlink" href="#voila" title="Permalink to this headline">#</a></h3>
 <p>Now we have a check that prints a graph and has a value. We can add this
 check to any Suite and it will run within it.</p>
 <p>The next possible step is to implement a condition, which will allow us
@@ -752,7 +746,7 @@ to give the check result a pass / fail mark. To do so, check out the
 following guide (LINK)</p>
 </section>
 <section id="base-checks-types">
-<h3>Base Checks Types<a class="headerlink" href="#base-checks-types" title="Permalink to this headline">¶</a></h3>
+<h3>Base Checks Types<a class="headerlink" href="#base-checks-types" title="Permalink to this headline">#</a></h3>
 <p>There are a number of different <code class="docutils literal notranslate"><span class="pre">BaseCheck</span></code> Classes to inherit from.
 Each base check is differed by the objects it requires in order to run,
 and their sole difference is the <code class="docutils literal notranslate"><span class="pre">run</span></code> method’s signature.</p>
@@ -783,7 +777,7 @@ and their sole difference is the <code class="docutils literal notranslate"><spa
 </tr>
 </tbody>
 </table>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.060 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.049 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tabular-examples-plot-add-a-custom-check-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/c381aeacc08b9b6a350e0b7b258093ef/plot_add_a_custom_check.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_add_a_custom_check.py</span></code></a></p>
@@ -825,8 +819,9 @@ and their sole difference is the <code class="docutils literal notranslate"><spa
       </div>
     </div>
   
-    <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -837,7 +832,7 @@ and their sole difference is the <code class="docutils literal notranslate"><spa
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

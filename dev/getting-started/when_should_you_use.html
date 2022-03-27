@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>When Should You Validate &amp; Built-In Suites &#8212; Deepchecks b2b149f documentation</title>
+    <title>When Should You Validate &amp; Built-In Suites &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -327,7 +321,7 @@ Page: getting-started/when_should_you_use&labels=labels=chore/documentation" tar
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -393,18 +387,18 @@ Page: getting-started/when_should_you_use&labels=labels=chore/documentation" tar
               <div>
                 
   <section id="when-should-you-validate-built-in-suites">
-<h1>When Should You Validate &amp; Built-In Suites<a class="headerlink" href="#when-should-you-validate-built-in-suites" title="Permalink to this headline">¶</a></h1>
+<h1>When Should You Validate &amp; Built-In Suites<a class="headerlink" href="#when-should-you-validate-built-in-suites" title="Permalink to this headline">#</a></h1>
 <p>Deepchecks has many built-in checks and suites that can help validating various points throughout the research phase.
 Of course, every research process has its unique steps and challenges, and therefore all checks and suites can easily customized.
 Alongside that, we have identified that there are several recurring scenarios, that each have their own needs and characteristics.</p>
 <img alt="When To Validate - ML Pipeline Schema" class="align-center" src="../_images/pipeline_when_to_validate.svg" /><p>Here we explain them shortly and note the specific pre-defined suites that are built
 with the purpose of efficiently giving value and initiating a quick start for each of these validation-requiring scenarios.</p>
 <section id="built-in-suites-api-reference">
-<h2>Built-In Suites - API Reference<a class="headerlink" href="#built-in-suites-api-reference" title="Permalink to this headline">¶</a></h2>
+<h2>Built-In Suites - API Reference<a class="headerlink" href="#built-in-suites-api-reference" title="Permalink to this headline">#</a></h2>
 <p>Check the <code class="xref py py-mod docutils literal notranslate"><span class="pre">deepchecks.tabular.suites.default_suites</span></code> in the API reference for a list of all of the built-in suites for tabular data.</p>
 </section>
 <section id="typical-validation-scenarios">
-<h2>Typical Validation Scenarios<a class="headerlink" href="#typical-validation-scenarios" title="Permalink to this headline">¶</a></h2>
+<h2>Typical Validation Scenarios<a class="headerlink" href="#typical-validation-scenarios" title="Permalink to this headline">#</a></h2>
 <ol class="arabic simple">
 <li><p>When you <strong>start working with a new dataset</strong>: <a class="reference internal" href="#when-should-you-use-new-data"><span class="std std-ref">Validate New Data</span></a>.</p></li>
 <li><p>When you <strong>split the data</strong> (before training / various cross-validation split / hold-out test set/ …): <a class="reference internal" href="#when-should-you-use-split-data"><span class="std std-ref">Validate the Split</span></a>.</p></li>
@@ -418,7 +412,7 @@ the information organized together: <a class="reference internal" href="#when-sh
 <p>Of course, for each of these phases your needs and the availabe assets are different. Let’s have a look at them.</p>
 </section>
 <section id="new-data-single-dataset-validation">
-<span id="when-should-you-use-new-data"></span><h2><em>New Data</em>: Single Dataset Validation<a class="headerlink" href="#new-data-single-dataset-validation" title="Permalink to this headline">¶</a></h2>
+<span id="when-should-you-use-new-data"></span><h2><em>New Data</em>: Single Dataset Validation<a class="headerlink" href="#new-data-single-dataset-validation" title="Permalink to this headline">#</a></h2>
 <p>When you start working with a new dataset, you have only a single dataset (no train-test split),
 and you probably don’t have a model.
 As part of your EDA you want to ensure your data’s integrity, and have it ready for your needs.
@@ -427,7 +421,7 @@ significant outliers, inconsistent labels, etc.</p>
 <p>For these purposes you can use the <a class="reference internal" href="../api/generated/deepchecks.tabular.suites.single_dataset_integrity.html#deepchecks.tabular.suites.single_dataset_integrity" title="deepchecks.tabular.suites.single_dataset_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">deepchecks.tabular.suites.single_dataset_integrity()</span></code></a> suite.</p>
 </section>
 <section id="after-splitting-the-data-train-test-validation">
-<span id="when-should-you-use-split-data"></span><h2><em>After Splitting the Data</em>: Train-Test Validation<a class="headerlink" href="#after-splitting-the-data-train-test-validation" title="Permalink to this headline">¶</a></h2>
+<span id="when-should-you-use-split-data"></span><h2><em>After Splitting the Data</em>: Train-Test Validation<a class="headerlink" href="#after-splitting-the-data-train-test-validation" title="Permalink to this headline">#</a></h2>
 <p>When you split your data (for whichever purpose and manner), you have two or more separate datasets, however you might not have a model yet.
 Just before you continue working with your data you want to ensure that the splits are indeed representative as you want them to be.
 For example, you want to verify that the classes are balanced similarly, that there is no significant change in distributions between the features or labels in each of the classes,
@@ -435,14 +429,14 @@ that there is no potential data leakage that may contaminate your model or perce
 <p>For these purposes you can use the <a class="reference internal" href="../api/generated/deepchecks.tabular.suites.train_test_validation.html#deepchecks.tabular.suites.train_test_validation" title="deepchecks.tabular.suites.train_test_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">deepchecks.tabular.suites.train_test_validation()</span></code></a> suite.</p>
 </section>
 <section id="after-training-a-model-analysis-validation">
-<span id="when-should-you-use-evaluate-model"></span><h2><em>After Training a Model</em>: Analysis &amp; Validation<a class="headerlink" href="#after-training-a-model-analysis-validation" title="Permalink to this headline">¶</a></h2>
+<span id="when-should-you-use-evaluate-model"></span><h2><em>After Training a Model</em>: Analysis &amp; Validation<a class="headerlink" href="#after-training-a-model-analysis-validation" title="Permalink to this headline">#</a></h2>
 <p>At this phase you have a trained model which you want to evaluate.
 Thus, you probably want to look at examine several performance metrics, compare it to various benchmarks and be able to construct a clear picture about the model’s performance.
 you may also want to try identify where it under-performs, and investigate to see if you discover any insights that you may use to improve its performance.</p>
 <p>For these purposes you can use the <a class="reference internal" href="../api/generated/deepchecks.tabular.suites.model_evaluation.html#deepchecks.tabular.suites.model_evaluation" title="deepchecks.tabular.suites.model_evaluation"><code class="xref py py-func docutils literal notranslate"><span class="pre">deepchecks.tabular.suites.model_evaluation()</span></code></a> suite.</p>
 </section>
 <section id="general-overview-full-suite">
-<span id="when-should-you-use-general-overview"></span><h2><em>General Overview</em>: Full Suite<a class="headerlink" href="#general-overview-full-suite" title="Permalink to this headline">¶</a></h2>
+<span id="when-should-you-use-general-overview"></span><h2><em>General Overview</em>: Full Suite<a class="headerlink" href="#general-overview-full-suite" title="Permalink to this headline">#</a></h2>
 <p>Here you want to have a quick overview of the project, and receive all of the insights that you can get, given a specific state of the model and the data.</p>
 <p>For this purpose you can use the <a class="reference internal" href="../api/generated/deepchecks.tabular.suites.full_suite.html#deepchecks.tabular.suites.full_suite" title="deepchecks.tabular.suites.full_suite"><code class="xref py py-func docutils literal notranslate"><span class="pre">deepchecks.tabular.suites.full_suite()</span></code></a>.</p>
 </section>
@@ -476,8 +470,9 @@ you may also want to try identify where it under-performs, and investigate to se
       </div>
     </div>
   
-    <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -488,7 +483,7 @@ you may also want to try identify where it under-performs, and investigate to se
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

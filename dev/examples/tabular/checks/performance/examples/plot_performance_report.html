@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Performance Report &#8212; Deepchecks b2b149f documentation</title>
+    <title>Performance Report &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/performance/examples/plot_performance_report&label
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -744,9 +738,9 @@ Page: examples/tabular/checks/performance/examples/plot_performance_report&label
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="performance-report">
-<span id="sphx-glr-examples-tabular-checks-performance-examples-plot-performance-report-py"></span><h1>Performance Report<a class="headerlink" href="#performance-report" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-performance-examples-plot-performance-report-py"></span><h1>Performance Report<a class="headerlink" href="#performance-report" title="Permalink to this headline">#</a></h1>
 <section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h2>
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span><span class="p">,</span> <span class="n">AdaBoostRegressor</span>
@@ -758,7 +752,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="generating-data">
-<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">¶</a></h2>
+<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">()</span>
 <span class="n">frame</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">frame</span>
@@ -777,7 +771,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="running-peformance-report-on-classification">
-<h2>Running peformance report on classification<a class="headerlink" href="#running-peformance-report-on-classification" title="Permalink to this headline">¶</a></h2>
+<h2>Running peformance report on classification<a class="headerlink" href="#running-peformance-report-on-classification" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
 <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
@@ -797,44 +791,44 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "456ba1783ef24c409f0f2df45d9a86e8": {
+    "87b8b6c92f524f9aaab4da91c2178c7b": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_a0c90fa1382a4c5fa10afa62abccc9c7",
-          "IPY_MODEL_e15368aa2997421092f078cde38d3eea",
-          "IPY_MODEL_e234694b63a64310be5ff82aaeac73e0"
+          "IPY_MODEL_362055dfe28c4b9b855d4948f5e9f8cd",
+          "IPY_MODEL_bcc763b0160542ef91a114a84297f36d",
+          "IPY_MODEL_08e7dfb8526f4b7b9ddc5c82de5e60c0"
         ],
-        "layout": "IPY_MODEL_f6ca132477004cbf819690b9746d6a67"
+        "layout": "IPY_MODEL_f7ce6af66fad413a8179886453ab7e0f"
       }
     },
-    "a0c90fa1382a4c5fa10afa62abccc9c7": {
+    "362055dfe28c4b9b855d4948f5e9f8cd": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_acff86807330479ab1e58f6b3681f77b",
-        "style": "IPY_MODEL_d3c664f7f7e24dcf99d2712750e21a70",
+        "layout": "IPY_MODEL_d9b5d0490a6d4ec9827b4c072e4999c2",
+        "style": "IPY_MODEL_6893aade13d34c9387573be89f273765",
         "value": "<h4>Performance Report</h4><p>Summarize given scores on a dataset and model. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/performance_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "acff86807330479ab1e58f6b3681f77b": {
+    "d9b5d0490a6d4ec9827b4c072e4999c2": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d3c664f7f7e24dcf99d2712750e21a70": {
+    "6893aade13d34c9387573be89f273765": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e15368aa2997421092f078cde38d3eea": {
+    "bcc763b0160542ef91a114a84297f36d": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -873,7 +867,7 @@ to download the full example code</p>
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "25bfc99a-a6ab-4a91-8fc9-449df834fdf4"
+            "uid": "dca3883b-5716-445a-95be-f07c3f345015"
           },
           {
             "alignmentgroup": "True",
@@ -905,7 +899,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "10185095-5085-4974-993a-7e89ed1e583b"
+            "uid": "29031782-5036-4a1d-acc8-5ec429cb74aa"
           },
           {
             "alignmentgroup": "True",
@@ -937,7 +931,7 @@ to download the full example code</p>
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "98f84c1e-dd5a-48cf-8602-6de2d0060179"
+            "uid": "45cd03a1-1716-468a-99c8-f953051ad484"
           },
           {
             "alignmentgroup": "True",
@@ -969,7 +963,7 @@ to download the full example code</p>
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "4999b8a2-7431-427c-a199-83ef414b6088"
+            "uid": "79365c5d-ca25-44da-a5d0-64402d92dac3"
           },
           {
             "alignmentgroup": "True",
@@ -1001,7 +995,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "15116e66-e841-4d38-9e7e-64568c00bf92"
+            "uid": "8d87e73c-8293-4503-83d9-56b508f6f17d"
           },
           {
             "alignmentgroup": "True",
@@ -1033,7 +1027,7 @@ to download the full example code</p>
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "c16175bb-f2e0-4b69-94d4-39eff78a62ef"
+            "uid": "5b9f07e3-4c67-4895-8ef6-f26990d71972"
           }
         ],
         "_dom_classes": [],
@@ -2034,29 +2028,29 @@ to download the full example code</p>
         }
       ]
     },
-    "e234694b63a64310be5ff82aaeac73e0": {
+    "08e7dfb8526f4b7b9ddc5c82de5e60c0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_177eb59c99c34ac2a54ff400f0972116",
-        "style": "IPY_MODEL_2340a30cb70e45349c36183b1a3b72e3"
+        "layout": "IPY_MODEL_a5edca55aaac4403a95b55494b101233",
+        "style": "IPY_MODEL_4a4dba517875480db91a32c055674ff8"
       }
     },
-    "177eb59c99c34ac2a54ff400f0972116": {
+    "a5edca55aaac4403a95b55494b101233": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2340a30cb70e45349c36183b1a3b72e3": {
+    "4a4dba517875480db91a32c055674ff8": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "f6ca132477004cbf819690b9746d6a67": {
+    "f7ce6af66fad413a8179886453ab7e0f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2066,7 +2060,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "456ba1783ef24c409f0f2df45d9a86e8"}
+{"version_major": 2, "version_minor": 0, "model_id": "87b8b6c92f524f9aaab4da91c2178c7b"}
 </script>
 
 </body>
@@ -2076,7 +2070,7 @@ to download the full example code</p>
 <br />
 <br /></section>
 <section id="generate-regression-data">
-<h2>Generate regression data<a class="headerlink" href="#generate-regression-data" title="Permalink to this headline">¶</a></h2>
+<h2>Generate regression data<a class="headerlink" href="#generate-regression-data" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
 
 <span class="n">diabetes</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2098,7 +2092,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="run-performance-report-on-regression">
-<h2>Run performance report on regression<a class="headerlink" href="#run-performance-report-on-regression" title="Permalink to this headline">¶</a></h2>
+<h2>Run performance report on regression<a class="headerlink" href="#run-performance-report-on-regression" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
 <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
@@ -2118,44 +2112,44 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "1af86f5cb66c451289d9c63a12c54c02": {
+    "e7ee69646d4c450c99e843d92c52d056": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_c6ebe9766eb54d328ede5bc63cbf13d2",
-          "IPY_MODEL_593ada71e8aa45e7addba96c2c08d84f",
-          "IPY_MODEL_2fbb246b8b2b45f7ae3c425535affba8"
+          "IPY_MODEL_9203c4f2573d4b0cbb6327079970543a",
+          "IPY_MODEL_2bb15cb961c14a7ab3793af370aefa74",
+          "IPY_MODEL_52bf86d951234f3d8a9eb6abe1d4fe54"
         ],
-        "layout": "IPY_MODEL_9d6843c88c8b4dbaa02240a5bdca925b"
+        "layout": "IPY_MODEL_44c32d846da948c0a9991a503ff3ebdf"
       }
     },
-    "c6ebe9766eb54d328ede5bc63cbf13d2": {
+    "9203c4f2573d4b0cbb6327079970543a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e6cc73d098c1460db9ca72e9fd74ce6f",
-        "style": "IPY_MODEL_28e8b918de9b4c91858e5e2aab0cc6b1",
+        "layout": "IPY_MODEL_127bfc2a8597493a909798cb4a0df0f4",
+        "style": "IPY_MODEL_082acc23c58a4065952fb2f4d0d7c37e",
         "value": "<h4>Performance Report</h4><p>Summarize given scores on a dataset and model. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/performance_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "e6cc73d098c1460db9ca72e9fd74ce6f": {
+    "127bfc2a8597493a909798cb4a0df0f4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "28e8b918de9b4c91858e5e2aab0cc6b1": {
+    "082acc23c58a4065952fb2f4d0d7c37e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "593ada71e8aa45e7addba96c2c08d84f": {
+    "2bb15cb961c14a7ab3793af370aefa74": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2192,7 +2186,7 @@ to download the full example code</p>
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "899320f9-cd33-4c57-9b02-8b5c1e85b004"
+            "uid": "1b1d0963-fc61-409d-b142-01409ebceb6e"
           },
           {
             "alignmentgroup": "True",
@@ -2222,7 +2216,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "c96a8b85-534c-43ec-9c6e-82b3dd5cbb3f"
+            "uid": "65498d4d-f8f3-47f6-bbe6-5a7d510ac3b4"
           },
           {
             "alignmentgroup": "True",
@@ -2252,7 +2246,7 @@ to download the full example code</p>
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "6d22df27-3bc1-4b1f-ac7f-ef97cd4a7731"
+            "uid": "7dd4de22-9681-45f9-bc90-6935134519c5"
           },
           {
             "alignmentgroup": "True",
@@ -2282,7 +2276,7 @@ to download the full example code</p>
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "1e44a5d1-1b6c-485c-8f2e-aba7960b142d"
+            "uid": "519c1093-730c-4593-bfe3-3acc5d5f3ab4"
           },
           {
             "alignmentgroup": "True",
@@ -2312,7 +2306,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "3e506c9c-c5db-41c7-bb2f-0a4af89d973e"
+            "uid": "665216bd-d5f8-4241-b87a-6d000474b392"
           },
           {
             "alignmentgroup": "True",
@@ -2342,7 +2336,7 @@ to download the full example code</p>
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "51f15251-6c90-41cb-a4a3-be5fccd2716f"
+            "uid": "bf211166-42fd-4e92-b42f-e95e1d99341c"
           }
         ],
         "_dom_classes": [],
@@ -3352,29 +3346,29 @@ to download the full example code</p>
         }
       ]
     },
-    "2fbb246b8b2b45f7ae3c425535affba8": {
+    "52bf86d951234f3d8a9eb6abe1d4fe54": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_590fd1ad690240dabb533cd7fe466f14",
-        "style": "IPY_MODEL_ff0bfbbe80a6414cb4a890920d944d1b"
+        "layout": "IPY_MODEL_63b6fb99743f4a1880a823d679028d2e",
+        "style": "IPY_MODEL_b3d18fc2f0dc4b5ab9057b8071f0ff7e"
       }
     },
-    "590fd1ad690240dabb533cd7fe466f14": {
+    "63b6fb99743f4a1880a823d679028d2e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ff0bfbbe80a6414cb4a890920d944d1b": {
+    "b3d18fc2f0dc4b5ab9057b8071f0ff7e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9d6843c88c8b4dbaa02240a5bdca925b": {
+    "44c32d846da948c0a9991a503ff3ebdf": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3384,7 +3378,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "1af86f5cb66c451289d9c63a12c54c02"}
+{"version_major": 2, "version_minor": 0, "model_id": "e7ee69646d4c450c99e843d92c52d056"}
 </script>
 
 </body>
@@ -3392,7 +3386,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.696 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.614 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-performance-examples-plot-performance-report-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/faa27971044768154e095b125c291334/plot_performance_report.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_performance_report.py</span></code></a></p>
@@ -3433,8 +3427,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -3445,7 +3440,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

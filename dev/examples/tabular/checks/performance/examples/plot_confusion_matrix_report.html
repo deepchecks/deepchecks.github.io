@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Confusion Matrix Report &#8212; Deepchecks b2b149f documentation</title>
+    <title>Confusion Matrix Report &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/performance/examples/plot_confusion_matrix_report&
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -740,9 +734,9 @@ Page: examples/tabular/checks/performance/examples/plot_confusion_matrix_report&
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="confusion-matrix-report">
-<span id="sphx-glr-examples-tabular-checks-performance-examples-plot-confusion-matrix-report-py"></span><h1>Confusion Matrix Report<a class="headerlink" href="#confusion-matrix-report" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-performance-examples-plot-confusion-matrix-report-py"></span><h1>Confusion Matrix Report<a class="headerlink" href="#confusion-matrix-report" title="Permalink to this headline">#</a></h1>
 <section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h2>
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
@@ -753,7 +747,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="generating-data">
-<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">¶</a></h2>
+<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">()</span>
 <span class="n">frame</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">frame</span>
@@ -768,7 +762,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="running-confusion-matrix-report-check">
-<h2>Running <code class="docutils literal notranslate"><span class="pre">confusion_matrix_report</span></code> check<a class="headerlink" href="#running-confusion-matrix-report-check" title="Permalink to this headline">¶</a></h2>
+<h2>Running <code class="docutils literal notranslate"><span class="pre">confusion_matrix_report</span></code> check<a class="headerlink" href="#running-confusion-matrix-report-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">ConfusionMatrixReport</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -790,44 +784,44 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "4b61bb12e0c5403a829c22fa7359a457": {
+    "92e4db288eb04de9acb975f00df482a0": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_06a838c69f154823b61581fc9bd50008",
-          "IPY_MODEL_e6e8fe6af188449ab88261e6cb01f33e",
-          "IPY_MODEL_d5133b0d54db46138333d2da7603a090"
+          "IPY_MODEL_80068760a63a409b96496c07ab53d093",
+          "IPY_MODEL_548789f942ab4d1dbc13af373fd1b14d",
+          "IPY_MODEL_25a92b604c3145e8b0920374e30fa2e6"
         ],
-        "layout": "IPY_MODEL_6180e1c8660a4c8595380c7066680d36"
+        "layout": "IPY_MODEL_f0937889e47c4ad1800344e78257f779"
       }
     },
-    "06a838c69f154823b61581fc9bd50008": {
+    "80068760a63a409b96496c07ab53d093": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_4620fd56a438466598f738dd3578a7eb",
-        "style": "IPY_MODEL_7ac88d123a9949d8af75ca14cdd5c247",
+        "layout": "IPY_MODEL_e8710e2dfd88420fa767cea9a518d276",
+        "style": "IPY_MODEL_e8aae92e7234419b970217b4eec1faa8",
         "value": "<h4>Confusion Matrix Report</h4><p>Calculate the confusion matrix of the model on the given dataset. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/confusion_matrix_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "4620fd56a438466598f738dd3578a7eb": {
+    "e8710e2dfd88420fa767cea9a518d276": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7ac88d123a9949d8af75ca14cdd5c247": {
+    "e8aae92e7234419b970217b4eec1faa8": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e6e8fe6af188449ab88261e6cb01f33e": {
+    "548789f942ab4d1dbc13af373fd1b14d": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -871,7 +865,7 @@ to download the full example code</p>
               ]
             ],
             "type": "heatmap",
-            "uid": "a595febe-1d64-42f7-a7c9-0cda39e9e1db"
+            "uid": "a5bcfaf5-23f2-4499-a136-1b2fbd9aa2f2"
           }
         ],
         "_dom_classes": [],
@@ -1787,29 +1781,29 @@ to download the full example code</p>
         "_view_count": 0
       }
     },
-    "d5133b0d54db46138333d2da7603a090": {
+    "25a92b604c3145e8b0920374e30fa2e6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3998cb56c4764e3eac6a013f61994f5b",
-        "style": "IPY_MODEL_17892d8dcfa6439c97272cecd7653107"
+        "layout": "IPY_MODEL_ed4a79693cd346f5a45e82f170c3ae7d",
+        "style": "IPY_MODEL_c21ad71e1efe405f8966d325fa5bafb1"
       }
     },
-    "3998cb56c4764e3eac6a013f61994f5b": {
+    "ed4a79693cd346f5a45e82f170c3ae7d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "17892d8dcfa6439c97272cecd7653107": {
+    "c21ad71e1efe405f8966d325fa5bafb1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6180e1c8660a4c8595380c7066680d36": {
+    "f0937889e47c4ad1800344e78257f779": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1819,7 +1813,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "4b61bb12e0c5403a829c22fa7359a457"}
+{"version_major": 2, "version_minor": 0, "model_id": "92e4db288eb04de9acb975f00df482a0"}
 </script>
 
 </body>
@@ -1827,7 +1821,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.197 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.170 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-performance-examples-plot-confusion-matrix-report-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/64b94bff493fc9a373bca0a6f2125ed5/plot_confusion_matrix_report.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confusion_matrix_report.py</span></code></a></p>
@@ -1868,8 +1862,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -1880,7 +1875,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

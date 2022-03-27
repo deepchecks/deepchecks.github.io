@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Datasets Size Comparison &#8212; Deepchecks b2b149f documentation</title>
+    <title>Datasets Size Comparison &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -714,7 +708,7 @@ Page: examples/tabular/checks/methodology/examples/plot_datasets_size_comparison
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="datasets-size-comparison">
-<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-datasets-size-comparison-py"></span><h1>Datasets Size Comparison<a class="headerlink" href="#datasets-size-comparison" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-datasets-size-comparison-py"></span><h1>Datasets Size Comparison<a class="headerlink" href="#datasets-size-comparison" title="Permalink to this headline">#</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
@@ -755,42 +749,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "2ecc2064ba3b4165bfdc0b4dd986337c": {
+    "bcae9158089a437d80265a9e938322bc": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_b0b54589d45f4b79af1b184f6b79b08b"
+          "IPY_MODEL_729497933eca4197b3352da7e714eab6"
         ],
-        "layout": "IPY_MODEL_17ebe5b6c73f49e9849d2e2a7f26cc5a"
+        "layout": "IPY_MODEL_c55c07b440894db7b368bd11391182bd"
       }
     },
-    "b0b54589d45f4b79af1b184f6b79b08b": {
+    "729497933eca4197b3352da7e714eab6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_055a9c6e89b7400798347dbfd116e9d1",
-        "style": "IPY_MODEL_53f375834e01406aae2f3096f765ecb8",
-        "value": "<h4>Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_cde88 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cde88 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cde88 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cde88 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cde88 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_cde88\">\n  <thead>\n    <tr>\n      <th id=\"T_cde88_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_cde88_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_cde88_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_cde88_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_cde88_row0_col1\" class=\"data row0 col1\" >Train dataset is not smaller than test dataset</td>\n      <td id=\"T_cde88_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_cde88_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_cde88_row1_col1\" class=\"data row1 col1\" >Test dataset size is not smaller than 100</td>\n      <td id=\"T_cde88_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_cde88_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_cde88_row2_col1\" class=\"data row2 col1\" >Test-Train size ratio is not smaller than 0.2</td>\n      <td id=\"T_cde88_row2_col2\" class=\"data row2 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_f077a table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f077a thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f077a tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f077a th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f077a td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f077a\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_f077a_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_f077a_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_f077a_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_f077a_row0_col0\" class=\"data row0 col0\" >600</td>\n      <td id=\"T_f077a_row0_col1\" class=\"data row0 col1\" >400</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_366d5756b2f74912b0f1329bc2474c8f",
+        "style": "IPY_MODEL_94360e6a697a4daf94c70540d46a2c1a",
+        "value": "<h4>Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_9792a table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9792a thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9792a tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9792a th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9792a td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_9792a\">\n  <thead>\n    <tr>\n      <th id=\"T_9792a_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_9792a_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_9792a_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_9792a_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_9792a_row0_col1\" class=\"data row0 col1\" >Train dataset is not smaller than test dataset</td>\n      <td id=\"T_9792a_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_9792a_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_9792a_row1_col1\" class=\"data row1 col1\" >Test dataset size is not smaller than 100</td>\n      <td id=\"T_9792a_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_9792a_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_9792a_row2_col1\" class=\"data row2 col1\" >Test-Train size ratio is not smaller than 0.2</td>\n      <td id=\"T_9792a_row2_col2\" class=\"data row2 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_f8e66 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f8e66 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f8e66 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f8e66 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f8e66 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f8e66\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_f8e66_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_f8e66_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_f8e66_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_f8e66_row0_col0\" class=\"data row0 col0\" >600</td>\n      <td id=\"T_f8e66_row0_col1\" class=\"data row0 col1\" >400</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "055a9c6e89b7400798347dbfd116e9d1": {
+    "366d5756b2f74912b0f1329bc2474c8f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "53f375834e01406aae2f3096f765ecb8": {
+    "94360e6a697a4daf94c70540d46a2c1a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "17ebe5b6c73f49e9849d2e2a7f26cc5a": {
+    "c55c07b440894db7b368bd11391182bd": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -800,7 +794,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "2ecc2064ba3b4165bfdc0b4dd986337c"}
+{"version_major": 2, "version_minor": 0, "model_id": "bcae9158089a437d80265a9e938322bc"}
 </script>
 
 </body>
@@ -808,7 +802,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.032 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.024 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-methodology-examples-plot-datasets-size-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/24e2718aaa0166ff803b091f5acdfcb6/plot_datasets_size_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_datasets_size_comparison.py</span></code></a></p>
@@ -848,8 +842,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -860,7 +855,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Confusion Matrix &#8212; Deepchecks b2b149f documentation</title>
+    <title>Confusion Matrix &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/vision/checks/performance/examples/plot_confusion_matrix&labels=l
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -736,7 +730,7 @@ Page: examples/vision/checks/performance/examples/plot_confusion_matrix&labels=l
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="confusion-matrix">
-<span id="sphx-glr-examples-vision-checks-performance-examples-plot-confusion-matrix-py"></span><h1>Confusion Matrix<a class="headerlink" href="#confusion-matrix" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-vision-checks-performance-examples-plot-confusion-matrix-py"></span><h1>Confusion Matrix<a class="headerlink" href="#confusion-matrix" title="Permalink to this headline">#</a></h1>
 <p>This notebooks provides an overview for using and understanding the confusion matrix check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
@@ -745,12 +739,12 @@ to download the full example code</p>
 <li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
 </ul>
 <section id="what-is-the-purpose-of-the-check">
-<h2>What is the purpose of the check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">¶</a></h2>
+<h2>What is the purpose of the check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
 <p>The confusion matrix check outputs a confusion matrix for both classification problems
 and object detection problems. In object detection problems, some predictions do not
 overlap on any label and can be classified as not found in the confusion matrix.</p>
 <section id="genearate-data-and-model">
-<h3>Genearate Data and Model<a class="headerlink" href="#genearate-data-and-model" title="Permalink to this headline">¶</a></h3>
+<h3>Genearate Data and Model<a class="headerlink" href="#genearate-data-and-model" title="Permalink to this headline">#</a></h3>
 <p>We generate a sample dataset of 128 images from the <a class="reference external" href="https://cocodataset.org/#home">COCO dataset</a>,
 and using the <a class="reference external" href="https://github.com/ultralytics/yolov5">YOLOv5 model</a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.datasets.detection</span> <span class="kn">import</span> <span class="n">coco</span>
@@ -763,12 +757,12 @@ and using the <a class="reference external" href="https://github.com/ultralytics
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt to yolov5s.pt...
 
   0%|          | 0.00/14.1M [00:00&lt;?, ?B/s]
-100%|##########| 14.1M/14.1M [00:00&lt;00:00, 173MB/s]
+100%|##########| 14.1M/14.1M [00:00&lt;00:00, 192MB/s]
 </pre></div>
 </div>
 </section>
 <section id="run-the-check">
-<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">¶</a></h3>
+<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.performance</span> <span class="kn">import</span> <span class="n">ConfusionMatrixReport</span>
 
 <span class="n">check</span> <span class="o">=</span> <span class="n">ConfusionMatrixReport</span><span class="p">(</span><span class="n">categories_to_display</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -790,44 +784,44 @@ and using the <a class="reference external" href="https://github.com/ultralytics
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "1a2fcc26bfdc4f119be1e550a57b0ec3": {
+    "88f5e184bc904460a6103310cd873fd3": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_1bb2a66b1cc64c2390fa382548add249",
-          "IPY_MODEL_149e768f1b5c4b359dde94bb632322b5",
-          "IPY_MODEL_5d092b0036174015a2ac16b9445e4a11"
+          "IPY_MODEL_9ce5a4bb1268434fae1680c30989e968",
+          "IPY_MODEL_a09c6d5a89cb4cf3812d27a29350c094",
+          "IPY_MODEL_c3d138a2859e4ce18649baaf3dccb8ee"
         ],
-        "layout": "IPY_MODEL_74e389344dd2465a956dd858afeb7994"
+        "layout": "IPY_MODEL_e4582cf2a7734887ac83d44e38e08f73"
       }
     },
-    "1bb2a66b1cc64c2390fa382548add249": {
+    "9ce5a4bb1268434fae1680c30989e968": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2d6b3691d08c4750893facef8a6a1347",
-        "style": "IPY_MODEL_0aea966975184bbaab8a8413a8e408cb",
+        "layout": "IPY_MODEL_a327ab686cde42b3a31dab31215e2094",
+        "style": "IPY_MODEL_0e48072da6064ad48edbbd3018c09055",
         "value": "<h4>Confusion Matrix</h4><p>Calculate the confusion matrix of the model on the given dataset. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/vision/checks/performance/confusion_matrix_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Showing 20 of 80 classes:</div><div>\"No overlapping\" categories are labels and prediction which did not have a matching label/prediction. For example a predictions that did not have a sufficiently overlapping label bounding box will appear under the \"No overlapping label\" category</div>"
       }
     },
-    "2d6b3691d08c4750893facef8a6a1347": {
+    "a327ab686cde42b3a31dab31215e2094": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0aea966975184bbaab8a8413a8e408cb": {
+    "0e48072da6064ad48edbbd3018c09055": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "149e768f1b5c4b359dde94bb632322b5": {
+    "a09c6d5a89cb4cf3812d27a29350c094": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1330,7 +1324,7 @@ and using the <a class="reference external" href="https://github.com/ultralytics
               ]
             ],
             "type": "heatmap",
-            "uid": "521f28fc-f004-4d3c-a799-218897c25199"
+            "uid": "c71bf4a9-edfb-473b-86ef-c2661cd36c45"
           }
         ],
         "_dom_classes": [],
@@ -2246,29 +2240,29 @@ and using the <a class="reference external" href="https://github.com/ultralytics
         "_view_count": 0
       }
     },
-    "5d092b0036174015a2ac16b9445e4a11": {
+    "c3d138a2859e4ce18649baaf3dccb8ee": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_926464ac1077436ba3fba54484264185",
-        "style": "IPY_MODEL_4b4c06f7c11942d0b966c81603e40574"
+        "layout": "IPY_MODEL_00c04fdbc5794a878de47d5d14d9d3e6",
+        "style": "IPY_MODEL_232073aa84bd4e968ffe744f4debf99c"
       }
     },
-    "926464ac1077436ba3fba54484264185": {
+    "00c04fdbc5794a878de47d5d14d9d3e6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4b4c06f7c11942d0b966c81603e40574": {
+    "232073aa84bd4e968ffe744f4debf99c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "74e389344dd2465a956dd858afeb7994": {
+    "e4582cf2a7734887ac83d44e38e08f73": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2278,7 +2272,7 @@ and using the <a class="reference external" href="https://github.com/ultralytics
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "1a2fcc26bfdc4f119be1e550a57b0ec3"}
+{"version_major": 2, "version_minor": 0, "model_id": "88f5e184bc904460a6103310cd873fd3"}
 </script>
 
 </body>
@@ -2286,7 +2280,7 @@ and using the <a class="reference external" href="https://github.com/ultralytics
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  29.284 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  25.048 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-vision-checks-performance-examples-plot-confusion-matrix-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/f16f32278666a370ef68603c06212e52/plot_confusion_matrix.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confusion_matrix.py</span></code></a></p>
@@ -2328,8 +2322,9 @@ and using the <a class="reference external" href="https://github.com/ultralytics
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -2340,7 +2335,7 @@ and using the <a class="reference external" href="https://github.com/ultralytics
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Mean Average Precision Report &#8212; Deepchecks b2b149f documentation</title>
+    <title>Mean Average Precision Report &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/vision/checks/performance/examples/plot_mean_average_precision_re
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -751,7 +745,7 @@ Page: examples/vision/checks/performance/examples/plot_mean_average_precision_re
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="mean-average-precision-report">
-<span id="sphx-glr-examples-vision-checks-performance-examples-plot-mean-average-precision-report-py"></span><h1>Mean Average Precision Report<a class="headerlink" href="#mean-average-precision-report" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-vision-checks-performance-examples-plot-mean-average-precision-report-py"></span><h1>Mean Average Precision Report<a class="headerlink" href="#mean-average-precision-report" title="Permalink to this headline">#</a></h1>
 <p>This notebooks provides an overview for using and understanding the mean average precision report check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
@@ -761,14 +755,14 @@ to download the full example code</p>
 <li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
 </ul>
 <section id="what-is-the-purpose-of-the-check">
-<h2>What Is the Purpose of the Check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">¶</a></h2>
+<h2>What Is the Purpose of the Check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
 <p>The Mean Average Precision Report evaluates the
 <a class="reference external" href="https://manalelaidouni.github.io/Evaluating-Object-Detection-Models-Guide-to-Performance-Metrics.html">mAP metric</a>
 on the given model and data, plots the AP on graph, and returns the mAP values per bounding box size category
 (small, medium, large).
 This check only works on the Object Detection task.</p>
 <section id="imports">
-<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h3>
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">deepchecks.vision.checks.performance</span> <span class="kn">import</span> <span class="n">MeanAveragePrecisionReport</span>
@@ -777,7 +771,7 @@ This check only works on the Object Detection task.</p>
 </div>
 </section>
 <section id="generate-data-and-model">
-<h3>Generate Data and Model<a class="headerlink" href="#generate-data-and-model" title="Permalink to this headline">¶</a></h3>
+<h3>Generate Data and Model<a class="headerlink" href="#generate-data-and-model" title="Permalink to this headline">#</a></h3>
 <p>We generate a sample dataset of 128 images from the <a class="reference external" href="https://cocodataset.org/#home">COCO dataset</a>,
 and using the <a class="reference external" href="https://github.com/ultralytics/yolov5">YOLOv5 model</a>.</p>
 <p>For the label formatter - our dataset returns exactly the accepted format, so our
@@ -789,7 +783,7 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
 </div>
 </section>
 <section id="run-the-check">
-<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">¶</a></h3>
+<h3>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">MeanAveragePrecisionReport</span><span class="p">()</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="n">yolo</span><span class="p">)</span>
 <span class="n">result</span>
@@ -810,44 +804,44 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "2f52f1a63e3840a2b40c70236f3ce882": {
+    "7d11a82e415f48629578f02a457c9764": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_8513a3d972a14ba08e2341c09fb14615",
-          "IPY_MODEL_84bd6c37af4249f3b67aa3a284bb62da",
-          "IPY_MODEL_8f723585fe5946f5a2e2bda49604e960"
+          "IPY_MODEL_42f000fde6144b95bd781940747baa23",
+          "IPY_MODEL_b77d5c8afdcd4173bd270cfc09b1db82",
+          "IPY_MODEL_3412e63f123e4f36b49ccdfd7bf3778b"
         ],
-        "layout": "IPY_MODEL_657f1623a8a543b5b1ca00435cadf16f"
+        "layout": "IPY_MODEL_af6bedc421434600ac4fb44eb43bb497"
       }
     },
-    "8513a3d972a14ba08e2341c09fb14615": {
+    "42f000fde6144b95bd781940747baa23": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3f1f9c8bf51240e080fc3cf7aba8259c",
-        "style": "IPY_MODEL_81fec65dd9f54ca8af3ed8efe298003e",
-        "value": "<h4>Mean Average Precision Report</h4><p>Summarize mean average precision metrics on a dataset and model per IoU and area range. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/vision/checks/performance/mean_average_precision_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_e4413 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e4413 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e4413 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e4413 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e4413 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_e4413\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_e4413_level0_col0\" class=\"col_heading level0 col0\" >mAP@0.5..0.95 (%)</th>\n      <th id=\"T_e4413_level0_col1\" class=\"col_heading level0 col1\" >AP@.50 (%)</th>\n      <th id=\"T_e4413_level0_col2\" class=\"col_heading level0 col2\" >AP@.75 (%)</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Area size</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_e4413_level0_row0\" class=\"row_heading level0 row0\" >All</th>\n      <td id=\"T_e4413_row0_col0\" class=\"data row0 col0\" >0.41</td>\n      <td id=\"T_e4413_row0_col1\" class=\"data row0 col1\" >0.57</td>\n      <td id=\"T_e4413_row0_col2\" class=\"data row0 col2\" >0.43</td>\n    </tr>\n    <tr>\n      <th id=\"T_e4413_level0_row1\" class=\"row_heading level0 row1\" >Small (area < 32^2)</th>\n      <td id=\"T_e4413_row1_col0\" class=\"data row1 col0\" >0.21</td>\n      <td id=\"T_e4413_row1_col1\" class=\"data row1 col1\" >0.34</td>\n      <td id=\"T_e4413_row1_col2\" class=\"data row1 col2\" >0.21</td>\n    </tr>\n    <tr>\n      <th id=\"T_e4413_level0_row2\" class=\"row_heading level0 row2\" >Medium (32^2 < area < 96^2)</th>\n      <td id=\"T_e4413_row2_col0\" class=\"data row2 col0\" >0.38</td>\n      <td id=\"T_e4413_row2_col1\" class=\"data row2 col1\" >0.60</td>\n      <td id=\"T_e4413_row2_col2\" class=\"data row2 col2\" >0.35</td>\n    </tr>\n    <tr>\n      <th id=\"T_e4413_level0_row3\" class=\"row_heading level0 row3\" >Large (area < 96^2)</th>\n      <td id=\"T_e4413_row3_col0\" class=\"data row3 col0\" >0.54</td>\n      <td id=\"T_e4413_row3_col1\" class=\"data row3 col1\" >0.67</td>\n      <td id=\"T_e4413_row3_col2\" class=\"data row3 col2\" >0.59</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_48345ecbc4ac4764872cf6cec3f3fbdb",
+        "style": "IPY_MODEL_76dc39ad9a17467fbe5c0d16f289c896",
+        "value": "<h4>Mean Average Precision Report</h4><p>Summarize mean average precision metrics on a dataset and model per IoU and area range. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/vision/checks/performance/mean_average_precision_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_9c6bd table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9c6bd thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9c6bd tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9c6bd th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9c6bd td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_9c6bd\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_9c6bd_level0_col0\" class=\"col_heading level0 col0\" >mAP@0.5..0.95 (%)</th>\n      <th id=\"T_9c6bd_level0_col1\" class=\"col_heading level0 col1\" >AP@.50 (%)</th>\n      <th id=\"T_9c6bd_level0_col2\" class=\"col_heading level0 col2\" >AP@.75 (%)</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Area size</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_9c6bd_level0_row0\" class=\"row_heading level0 row0\" >All</th>\n      <td id=\"T_9c6bd_row0_col0\" class=\"data row0 col0\" >0.41</td>\n      <td id=\"T_9c6bd_row0_col1\" class=\"data row0 col1\" >0.57</td>\n      <td id=\"T_9c6bd_row0_col2\" class=\"data row0 col2\" >0.43</td>\n    </tr>\n    <tr>\n      <th id=\"T_9c6bd_level0_row1\" class=\"row_heading level0 row1\" >Small (area < 32^2)</th>\n      <td id=\"T_9c6bd_row1_col0\" class=\"data row1 col0\" >0.21</td>\n      <td id=\"T_9c6bd_row1_col1\" class=\"data row1 col1\" >0.34</td>\n      <td id=\"T_9c6bd_row1_col2\" class=\"data row1 col2\" >0.21</td>\n    </tr>\n    <tr>\n      <th id=\"T_9c6bd_level0_row2\" class=\"row_heading level0 row2\" >Medium (32^2 < area < 96^2)</th>\n      <td id=\"T_9c6bd_row2_col0\" class=\"data row2 col0\" >0.38</td>\n      <td id=\"T_9c6bd_row2_col1\" class=\"data row2 col1\" >0.60</td>\n      <td id=\"T_9c6bd_row2_col2\" class=\"data row2 col2\" >0.35</td>\n    </tr>\n    <tr>\n      <th id=\"T_9c6bd_level0_row3\" class=\"row_heading level0 row3\" >Large (area < 96^2)</th>\n      <td id=\"T_9c6bd_row3_col0\" class=\"data row3 col0\" >0.54</td>\n      <td id=\"T_9c6bd_row3_col1\" class=\"data row3 col1\" >0.67</td>\n      <td id=\"T_9c6bd_row3_col2\" class=\"data row3 col2\" >0.59</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "3f1f9c8bf51240e080fc3cf7aba8259c": {
+    "48345ecbc4ac4764872cf6cec3f3fbdb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "81fec65dd9f54ca8af3ed8efe298003e": {
+    "76dc39ad9a17467fbe5c0d16f289c896": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "84bd6c37af4249f3b67aa3a284bb62da": {
+    "b77d5c8afdcd4173bd270cfc09b1db82": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -885,7 +879,7 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
             },
             "yaxis": "y",
             "type": "scatter",
-            "uid": "f1213649-ba5f-41b5-8a62-c7d9466ad887"
+            "uid": "4ae0fb3a-999e-4483-bddf-3a9df5c05ddb"
           }
         ],
         "_dom_classes": [],
@@ -1774,29 +1768,29 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
         }
       ]
     },
-    "8f723585fe5946f5a2e2bda49604e960": {
+    "3412e63f123e4f36b49ccdfd7bf3778b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_20402d727c2e40668dc4926a788b31db",
-        "style": "IPY_MODEL_48b5c188f4e4404a8757b4b761a670f5"
+        "layout": "IPY_MODEL_d3200635d0454ffebc4adb2967cc1a29",
+        "style": "IPY_MODEL_a5bafc2e667c435eb194e89760d04b7a"
       }
     },
-    "20402d727c2e40668dc4926a788b31db": {
+    "d3200635d0454ffebc4adb2967cc1a29": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "48b5c188f4e4404a8757b4b761a670f5": {
+    "a5bafc2e667c435eb194e89760d04b7a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "657f1623a8a543b5b1ca00435cadf16f": {
+    "af6bedc421434600ac4fb44eb43bb497": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1806,7 +1800,7 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "2f52f1a63e3840a2b40c70236f3ce882"}
+{"version_major": 2, "version_minor": 0, "model_id": "7d11a82e415f48629578f02a457c9764"}
 </script>
 
 </body>
@@ -1816,7 +1810,7 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
 <br />
 <br /></section>
 <section id="observe-the-checks-output">
-<h3>Observe the check’s output<a class="headerlink" href="#observe-the-checks-output" title="Permalink to this headline">¶</a></h3>
+<h3>Observe the check’s output<a class="headerlink" href="#observe-the-checks-output" title="Permalink to this headline">#</a></h3>
 <p>The result value is a dataframe that has the average precision score per each area range and IoU.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
@@ -1884,7 +1878,7 @@ formatting function is the simple <cite>lambda x: x</cite> function.</p>
 <br /></section>
 </section>
 <section id="define-a-condition">
-<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">¶</a></h2>
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
 <p>We can define a condition that checks whether our model’s average precision score is not less than
 a given threshold</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">MeanAveragePrecisionReport</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_test_average_precision_not_less_than</span><span class="p">(</span><span class="mf">0.4</span><span class="p">)</span>
@@ -1898,7 +1892,7 @@ a given threshold</p>
 You are running in a non-interactive python shell. in order to show result you have to use an IPython shell (etc Jupyter)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  0.132 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  48.829 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-vision-checks-performance-examples-plot-mean-average-precision-report-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/0c7ff9919abe40083c2ff4670cfd2086/plot_mean_average_precision_report.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mean_average_precision_report.py</span></code></a></p>
@@ -1939,8 +1933,9 @@ You are running in a non-interactive python shell. in order to show result you h
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -1951,7 +1946,7 @@ You are running in a non-interactive python shell. in order to show result you h
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

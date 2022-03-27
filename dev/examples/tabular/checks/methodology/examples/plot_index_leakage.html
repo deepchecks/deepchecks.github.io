@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Index Leakage &#8212; Deepchecks b2b149f documentation</title>
+    <title>Index Leakage &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/methodology/examples/plot_index_leakage&labels=lab
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -729,7 +723,7 @@ Page: examples/tabular/checks/methodology/examples/plot_index_leakage&labels=lab
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="index-leakage">
-<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-index-leakage-py"></span><h1>Index Leakage<a class="headerlink" href="#index-leakage" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-index-leakage-py"></span><h1>Index Leakage<a class="headerlink" href="#index-leakage" title="Permalink to this headline">#</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">IndexTrainTestLeakage</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -741,7 +735,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <section id="synthetic-example-with-index-leakage">
-<h2>Synthetic example with index leakage<a class="headerlink" href="#synthetic-example-with-index-leakage" title="Permalink to this headline">¶</a></h2>
+<h2>Synthetic example with index leakage<a class="headerlink" href="#synthetic-example-with-index-leakage" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">]},</span> <span class="s1">&#39;col1&#39;</span><span class="p">)</span>
 <span class="n">test_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]},</span> <span class="s1">&#39;col1&#39;</span><span class="p">)</span>
 <span class="n">check_obj</span> <span class="o">=</span> <span class="n">IndexTrainTestLeakage</span><span class="p">()</span>
@@ -763,42 +757,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "7127b6711caf407382a95ce8f910187a": {
+    "b07a8a13edc34d4b9e894c7adad551e4": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_36b42009ab3d4fa2bd1ddd58c120f12e"
+          "IPY_MODEL_9025e90cfbe947aa8b64bbc4497dd0c1"
         ],
-        "layout": "IPY_MODEL_31e7d20609ab4e9eb73145a5946ae345"
+        "layout": "IPY_MODEL_0848fa53712844a29bc84f8fe66a208c"
       }
     },
-    "36b42009ab3d4fa2bd1ddd58c120f12e": {
+    "9025e90cfbe947aa8b64bbc4497dd0c1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_efee8b3ce0394ce0ae45eca71ff2dec0",
-        "style": "IPY_MODEL_de53947db78d482aa718177663e9e412",
-        "value": "<h4>Index Train-Test Leakage</h4><p>Check if test indexes are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/index_train_test_leakage.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>40.0% of test data indexes appear in training data</div><style type=\"text/css\">\n#T_06d11 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_06d11 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_06d11 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_06d11 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_06d11 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_06d11\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_06d11_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_06d11_level0_row0\" class=\"row_heading level0 row0\" >Sample of test indexes in train:</th>\n      <td id=\"T_06d11_row0_col0\" class=\"data row0 col0\" >[3, 4]</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_1b822346e20a4a669a100c825887f0af",
+        "style": "IPY_MODEL_138d12c276424ebfb245b2cf7799139b",
+        "value": "<h4>Index Train-Test Leakage</h4><p>Check if test indexes are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/index_train_test_leakage.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>40.0% of test data indexes appear in training data</div><style type=\"text/css\">\n#T_a6a16 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a6a16 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a6a16 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a6a16 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a6a16 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_a6a16\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_a6a16_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_a6a16_level0_row0\" class=\"row_heading level0 row0\" >Sample of test indexes in train:</th>\n      <td id=\"T_a6a16_row0_col0\" class=\"data row0 col0\" >[3, 4]</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "efee8b3ce0394ce0ae45eca71ff2dec0": {
+    "1b822346e20a4a669a100c825887f0af": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "de53947db78d482aa718177663e9e412": {
+    "138d12c276424ebfb245b2cf7799139b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "31e7d20609ab4e9eb73145a5946ae345": {
+    "0848fa53712844a29bc84f8fe66a208c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -808,7 +802,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "7127b6711caf407382a95ce8f910187a"}
+{"version_major": 2, "version_minor": 0, "model_id": "b07a8a13edc34d4b9e894c7adad551e4"}
 </script>
 
 </body>
@@ -837,42 +831,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "e0bc87dad5ef42279e7ca3c867310233": {
+    "d9c46761b4a249a98849851cab897488": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_976f4a745a1147e18e92b6c8ae90c257"
+          "IPY_MODEL_1ae78f2a99814f509ed22990746e00d7"
         ],
-        "layout": "IPY_MODEL_e5d90b4aa5a74a55925e856d16238296"
+        "layout": "IPY_MODEL_73badfd0b64d404298ebe2d06fce6808"
       }
     },
-    "976f4a745a1147e18e92b6c8ae90c257": {
+    "1ae78f2a99814f509ed22990746e00d7": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_61c76e71792642bab7f14c39022c837f",
-        "style": "IPY_MODEL_88329f40d4fb44ceb08cef8375ed88f9",
-        "value": "<h4>Index Train-Test Leakage</h4><p>Check if test indexes are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/index_train_test_leakage.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>40.0% of test data indexes appear in training data</div><style type=\"text/css\">\n#T_e5238 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5238 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5238 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5238 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5238 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_e5238\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_e5238_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_e5238_level0_row0\" class=\"row_heading level0 row0\" >Sample of test indexes in train:</th>\n      <td id=\"T_e5238_row0_col0\" class=\"data row0 col0\" >[3]</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_1cbf0e9a146b48ba9251a2ab7b818c4a",
+        "style": "IPY_MODEL_76aadd2920774990a5d642b0ad035026",
+        "value": "<h4>Index Train-Test Leakage</h4><p>Check if test indexes are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/index_train_test_leakage.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>40.0% of test data indexes appear in training data</div><style type=\"text/css\">\n#T_05795 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_05795 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_05795 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_05795 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_05795 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_05795\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_05795_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_05795_level0_row0\" class=\"row_heading level0 row0\" >Sample of test indexes in train:</th>\n      <td id=\"T_05795_row0_col0\" class=\"data row0 col0\" >[3]</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "61c76e71792642bab7f14c39022c837f": {
+    "1cbf0e9a146b48ba9251a2ab7b818c4a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "88329f40d4fb44ceb08cef8375ed88f9": {
+    "76aadd2920774990a5d642b0ad035026": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e5d90b4aa5a74a55925e856d16238296": {
+    "73badfd0b64d404298ebe2d06fce6808": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -882,7 +876,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "e0bc87dad5ef42279e7ca3c867310233"}
+{"version_major": 2, "version_minor": 0, "model_id": "d9c46761b4a249a98849851cab897488"}
 </script>
 
 </body>
@@ -892,7 +886,7 @@ to download the full example code</p>
 <br />
 <br /></section>
 <section id="synthetic-example-without-index-leakage">
-<h2>Synthetic example without index leakage<a class="headerlink" href="#synthetic-example-without-index-leakage" title="Permalink to this headline">¶</a></h2>
+<h2>Synthetic example without index leakage<a class="headerlink" href="#synthetic-example-without-index-leakage" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">]},</span> <span class="s1">&#39;col1&#39;</span><span class="p">)</span>
 <span class="n">test_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]},</span> <span class="s1">&#39;col1&#39;</span><span class="p">)</span>
 <span class="n">check_obj</span> <span class="o">=</span> <span class="n">IndexTrainTestLeakage</span><span class="p">()</span>
@@ -914,42 +908,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "9670b497296545f6b0330496e0be0090": {
+    "21c663ba0e534e87a36c5c78001095f7": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_a57f5f7f047442ba92260436988b9e9e"
+          "IPY_MODEL_68369163b2cd439baf8e0916022737c4"
         ],
-        "layout": "IPY_MODEL_7116c62478f848568f62e1a5f6d14791"
+        "layout": "IPY_MODEL_894ef8fb69dd4177b0229eb072813f8c"
       }
     },
-    "a57f5f7f047442ba92260436988b9e9e": {
+    "68369163b2cd439baf8e0916022737c4": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_eef7ca39234a45198192563643d88de1",
-        "style": "IPY_MODEL_df0e1266e5d6479ebe691721158b255c",
+        "layout": "IPY_MODEL_c340ea7e2d664289accf6f7b2f1fdbde",
+        "style": "IPY_MODEL_b2fa4bc291184ab9839b9159de13921c",
         "value": "<h4>Index Train-Test Leakage</h4><p>Check if test indexes are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/index_train_test_leakage.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "eef7ca39234a45198192563643d88de1": {
+    "c340ea7e2d664289accf6f7b2f1fdbde": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "df0e1266e5d6479ebe691721158b255c": {
+    "b2fa4bc291184ab9839b9159de13921c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7116c62478f848568f62e1a5f6d14791": {
+    "894ef8fb69dd4177b0229eb072813f8c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -959,7 +953,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "9670b497296545f6b0330496e0be0090"}
+{"version_major": 2, "version_minor": 0, "model_id": "21c663ba0e534e87a36c5c78001095f7"}
 </script>
 
 </body>
@@ -967,7 +961,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.041 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.042 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-methodology-examples-plot-index-leakage-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/7694edf03f6a54dab2d973e62a63cc89/plot_index_leakage.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_index_leakage.py</span></code></a></p>
@@ -1008,8 +1002,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -1020,7 +1015,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Supported Models &#8212; Deepchecks b2b149f documentation</title>
+    <title>Supported Models &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -478,7 +472,7 @@ Page: user-guide/tabular/supported_models&labels=labels=chore/documentation" tar
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -536,7 +530,7 @@ Page: user-guide/tabular/supported_models&labels=labels=chore/documentation" tar
               <div>
                 
   <section id="supported-models">
-<span id="id1"></span><h1>Supported Models<a class="headerlink" href="#supported-models" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Supported Models<a class="headerlink" href="#supported-models" title="Permalink to this headline">#</a></h1>
 <p>Many checks require passing a model object. These include all model-evaluation related checks,
 and in general any check that requires the model’s predictions for its analysis.</p>
 <div class="admonition note">
@@ -555,9 +549,9 @@ for more information see <a class="reference internal" href="#supported-models-o
 along with many additional popular models types (e.g. XGBoost, LightGBM, CatBoost etc.) implement these methods
 and are thus supported.</p>
 <section id="required-model-interface">
-<h2>Required Model Interface<a class="headerlink" href="#required-model-interface" title="Permalink to this headline">¶</a></h2>
+<h2>Required Model Interface<a class="headerlink" href="#required-model-interface" title="Permalink to this headline">#</a></h2>
 <section id="regression">
-<h3>Regression<a class="headerlink" href="#regression" title="Permalink to this headline">¶</a></h3>
+<h3>Regression<a class="headerlink" href="#regression" title="Permalink to this headline">#</a></h3>
 <p>All that is necessary for a regression model is the <code class="docutils literal notranslate"><span class="pre">predict</span></code> function.
 The predict function should expect an <a href="https://scikit-learn.org/stable/glossary.html#term-array-like" target="_blank">array-like</a>  of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_features)</span></code>
 and is expected to return an <cite>ndarray</cite> of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,)</span></code>, a vector containing the predicted value for each sample.</p>
@@ -569,7 +563,7 @@ and is expected to return an <cite>ndarray</cite> of shape <code class="docutils
 </div>
 </section>
 <section id="classification">
-<h3>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h3>
+<h3>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">#</a></h3>
 <p>For classification models, we require both the  the <code class="docutils literal notranslate"><span class="pre">predict</span></code> and the <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> function.
 They both should expect an <a href="https://scikit-learn.org/stable/glossary.html#term-array-like" target="_blank">array-like</a> of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_features)</span></code>, but <code class="docutils literal notranslate"><span class="pre">predict</span></code>
 is expected to return an <cite>ndarray</cite> of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,)</span></code>, a vector containing the predicted class label for each sample, and <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>
@@ -584,9 +578,9 @@ is expected to return an <cite>ndarray</cite> of shape <code class="docutils lit
 </section>
 </section>
 <section id="optional-model-interface">
-<span id="supported-models-optional-model-interface"></span><h2>Optional Model Interface<a class="headerlink" href="#optional-model-interface" title="Permalink to this headline">¶</a></h2>
+<span id="supported-models-optional-model-interface"></span><h2>Optional Model Interface<a class="headerlink" href="#optional-model-interface" title="Permalink to this headline">#</a></h2>
 <section id="feature-importance">
-<h3>Feature Importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">¶</a></h3>
+<h3>Feature Importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">#</a></h3>
 <p>Deepchecks can calculate feature importance using <a href="https://scikit-learn.org/stable/modules/permutation_importance.html" target="_blank">sklearn permutation_importance</a>, and it also supports the builtin feature importance property: <code class="docutils literal notranslate"><span class="pre">feature_importances_</span></code> or <code class="docutils literal notranslate"><span class="pre">coef_</span></code> for a linear model.
 The default behavior is to use the builtin feature importance property if it exists, and if it doesn’t, we calculate the feature importance using permutation importance.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">simple_importance_model</span><span class="p">:</span>
@@ -599,7 +593,7 @@ The default behavior is to use the builtin feature importance property if it exi
 </div>
 </section>
 <section id="check-specific-model-interfaces">
-<h3>Check-Specific Model Interfaces<a class="headerlink" href="#check-specific-model-interfaces" title="Permalink to this headline">¶</a></h3>
+<h3>Check-Specific Model Interfaces<a class="headerlink" href="#check-specific-model-interfaces" title="Permalink to this headline">#</a></h3>
 <p>Some checks require specific apis to run. For example, <a class="reference internal" href="../../api/generated/deepchecks.tabular.checks.methodology.BoostingOverfit.html"><span class="doc">BoostingOverfit</span></a>
 requires model to be a supported boosting model type. Examples for such models include XGBoost, LightGBM, CatBoost and additional GBM implementations.</p>
 </section>
@@ -634,8 +628,9 @@ requires model to be a supported boosting model type. Examples for such models i
       </div>
     </div>
   
-    <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -646,7 +641,7 @@ requires model to be a supported boosting model type. Examples for such models i
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Date Train Validation Leakage Duplicates &#8212; Deepchecks b2b149f documentation</title>
+    <title>Date Train Validation Leakage Duplicates &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/methodology/examples/plot_date_train_test_leakage_
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -729,7 +723,7 @@ Page: examples/tabular/checks/methodology/examples/plot_date_train_test_leakage_
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="date-train-validation-leakage-duplicates">
-<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-date-train-test-leakage-duplicates-py"></span><h1>Date Train Validation Leakage Duplicates<a class="headerlink" href="#date-train-validation-leakage-duplicates" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-date-train-test-leakage-duplicates-py"></span><h1>Date Train Validation Leakage Duplicates<a class="headerlink" href="#date-train-validation-leakage-duplicates" title="Permalink to this headline">#</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.methodology</span> <span class="kn">import</span> <span class="n">DateTrainTestLeakageDuplicates</span>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Suite</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
@@ -741,7 +735,7 @@ to download the full example code</p>
 </pre></div>
 </div>
 <section id="synthetic-example-with-date-leakage">
-<h2>Synthetic example with date leakage<a class="headerlink" href="#synthetic-example-with-date-leakage" title="Permalink to this headline">¶</a></h2>
+<h2>Synthetic example with date leakage<a class="headerlink" href="#synthetic-example-with-date-leakage" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span>
         <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -790,42 +784,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "a8bce286316249568ddbf1eddf865cdf": {
+    "814d484e09934c8189e8d1c923b26b50": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_2b300b9194e94fb49a901c19c667b18f"
+          "IPY_MODEL_4567ab1cf8334bc8a73711d07096a3c9"
         ],
-        "layout": "IPY_MODEL_3c774bff1e1846079298f5c4978bac5e"
+        "layout": "IPY_MODEL_02fc7a33595147fe860d0af3fba46db6"
       }
     },
-    "2b300b9194e94fb49a901c19c667b18f": {
+    "4567ab1cf8334bc8a73711d07096a3c9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2611a5eb312e41269662ea716ca30c66",
-        "style": "IPY_MODEL_a10d7b7e257040da99d55be575780239",
-        "value": "<h4>Date Train-Test Leakage (duplicates)</h4><p>Check if test dates are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/date_train_test_leakage_duplicates.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>18.18% of test data dates appear in training data</div><style type=\"text/css\">\n#T_a1f67 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a1f67 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a1f67 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a1f67 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a1f67 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_a1f67\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_a1f67_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_a1f67_level0_row0\" class=\"row_heading level0 row0\" >Sample of test dates in train:</th>\n      <td id=\"T_a1f67_row0_col0\" class=\"data row0 col0\" >['2021/10/05 00:00:00.000000 ', '2021/10/04 00:00:00.000000 ']</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_fd4e6df4c95a4da78144eaa1a1d52b70",
+        "style": "IPY_MODEL_e299afb42b6347e68cce691da2fd1e2b",
+        "value": "<h4>Date Train-Test Leakage (duplicates)</h4><p>Check if test dates are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/date_train_test_leakage_duplicates.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>18.18% of test data dates appear in training data</div><style type=\"text/css\">\n#T_65f41 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_65f41 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_65f41 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_65f41 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_65f41 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_65f41\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_65f41_level0_col0\" class=\"col_heading level0 col0\" >0</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_65f41_level0_row0\" class=\"row_heading level0 row0\" >Sample of test dates in train:</th>\n      <td id=\"T_65f41_row0_col0\" class=\"data row0 col0\" >['2021/10/05 00:00:00.000000 ', '2021/10/04 00:00:00.000000 ']</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "2611a5eb312e41269662ea716ca30c66": {
+    "fd4e6df4c95a4da78144eaa1a1d52b70": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a10d7b7e257040da99d55be575780239": {
+    "e299afb42b6347e68cce691da2fd1e2b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3c774bff1e1846079298f5c4978bac5e": {
+    "02fc7a33595147fe860d0af3fba46db6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -835,7 +829,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "a8bce286316249568ddbf1eddf865cdf"}
+{"version_major": 2, "version_minor": 0, "model_id": "814d484e09934c8189e8d1c923b26b50"}
 </script>
 
 </body>
@@ -845,7 +839,7 @@ to download the full example code</p>
 <br />
 <br /></section>
 <section id="synthetic-example-no-date-leakage">
-<h2>Synthetic example no date leakage<a class="headerlink" href="#synthetic-example-no-date-leakage" title="Permalink to this headline">¶</a></h2>
+<h2>Synthetic example no date leakage<a class="headerlink" href="#synthetic-example-no-date-leakage" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">dataset_from_dict</span><span class="p">({</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span>
         <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
         <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -881,42 +875,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "8657fdbc504d4754baf90155a9061811": {
+    "0ca4e6e9ae4c4a90be65888600bdc1aa": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_58169106490640ef9def8d2ab0988659"
+          "IPY_MODEL_f6107f8c930740f38b9b5c937146839f"
         ],
-        "layout": "IPY_MODEL_22d584b4a0064acc99c7c0a1353b541b"
+        "layout": "IPY_MODEL_f60f7c231e1f4fc8a7b2a366cba9536e"
       }
     },
-    "58169106490640ef9def8d2ab0988659": {
+    "f6107f8c930740f38b9b5c937146839f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b797e303937c42afa15409118cb96688",
-        "style": "IPY_MODEL_77eefd000f974cff81e76eea02aab3bc",
+        "layout": "IPY_MODEL_1c107d515a1847f592768cf065fa38e0",
+        "style": "IPY_MODEL_8d5fc66bcccd4962b563dfa82b10bcf7",
         "value": "<h4>Date Train-Test Leakage (duplicates)</h4><p>Check if test dates are present in train data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/date_train_test_leakage_duplicates.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "b797e303937c42afa15409118cb96688": {
+    "1c107d515a1847f592768cf065fa38e0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "77eefd000f974cff81e76eea02aab3bc": {
+    "8d5fc66bcccd4962b563dfa82b10bcf7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "22d584b4a0064acc99c7c0a1353b541b": {
+    "f60f7c231e1f4fc8a7b2a366cba9536e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -926,7 +920,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "8657fdbc504d4754baf90155a9061811"}
+{"version_major": 2, "version_minor": 0, "model_id": "0ca4e6e9ae4c4a90be65888600bdc1aa"}
 </script>
 
 </body>
@@ -934,7 +928,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.032 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.029 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-methodology-examples-plot-date-train-test-leakage-duplicates-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/7e95c375ec2d9d44fc6173504ff2f597/plot_date_train_test_leakage_duplicates.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_date_train_test_leakage_duplicates.py</span></code></a></p>
@@ -975,8 +969,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -987,7 +982,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

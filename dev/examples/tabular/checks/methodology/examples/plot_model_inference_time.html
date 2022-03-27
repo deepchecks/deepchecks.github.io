@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Model Inference Time &#8212; Deepchecks b2b149f documentation</title>
+    <title>Model Inference Time &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/methodology/examples/plot_model_inference_time&lab
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -724,7 +718,7 @@ Page: examples/tabular/checks/methodology/examples/plot_model_inference_time&lab
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="model-inference-time">
-<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-model-inference-time-py"></span><h1>Model Inference Time<a class="headerlink" href="#model-inference-time" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-model-inference-time-py"></span><h1>Model Inference Time<a class="headerlink" href="#model-inference-time" title="Permalink to this headline">#</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
@@ -761,42 +755,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "da602b2599c145dfa69341bdc213c6f6": {
+    "72d764e2f6024ebd8530efe13eb20b09": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_712c0d81dd1543308deec6b0ea69ce5c"
+          "IPY_MODEL_5288ceb336f54ccd918a082d4c493fbe"
         ],
-        "layout": "IPY_MODEL_d9a9932ade1b4403a5c3898fe4abdb37"
+        "layout": "IPY_MODEL_ec611a2019dd4aa582b02ac6e9851de9"
       }
     },
-    "712c0d81dd1543308deec6b0ea69ce5c": {
+    "5288ceb336f54ccd918a082d4c493fbe": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2aa2d4af38e5496baefd01fdda91397f",
-        "style": "IPY_MODEL_5a67ab298f1e48fbb64494cae88b7659",
-        "value": "<h4>Model Inference Time</h4><p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Average model inference time for one sample (in seconds): 0.00022634</div>"
+        "layout": "IPY_MODEL_e2a80a368f424838a19ba6fae8114eae",
+        "style": "IPY_MODEL_07691fb6b76e4b3bb7bc8732f773dc8d",
+        "value": "<h4>Model Inference Time</h4><p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Average model inference time for one sample (in seconds): 0.00020556</div>"
       }
     },
-    "2aa2d4af38e5496baefd01fdda91397f": {
+    "e2a80a368f424838a19ba6fae8114eae": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5a67ab298f1e48fbb64494cae88b7659": {
+    "07691fb6b76e4b3bb7bc8732f773dc8d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d9a9932ade1b4403a5c3898fe4abdb37": {
+    "ec611a2019dd4aa582b02ac6e9851de9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -806,7 +800,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "da602b2599c145dfa69341bdc213c6f6"}
+{"version_major": 2, "version_minor": 0, "model_id": "72d764e2f6024ebd8530efe13eb20b09"}
 </script>
 
 </body>
@@ -815,7 +809,7 @@ to download the full example code</p>
 </div>
 <br />
 <br /><section id="instantiating-check-instance-with-condition">
-<h2>Instantiating check instance with condition<a class="headerlink" href="#instantiating-check-instance-with-condition" title="Permalink to this headline">¶</a></h2>
+<h2>Instantiating check instance with condition<a class="headerlink" href="#instantiating-check-instance-with-condition" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">ModelInferenceTime</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_inference_time_is_not_greater_than</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">)</span>
 <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
@@ -835,42 +829,42 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c815c1d9b0fe4cc7bdda8135d4df83b6": {
+    "6023d5bd767f4961b4d1af8c5cc10e09": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_c0b6ad1a3c404198a83f5613692e9651"
+          "IPY_MODEL_a6b5e9b445ec4b97abde6721bcc1d320"
         ],
-        "layout": "IPY_MODEL_2e254c59f06a4326b6cbc206535d3549"
+        "layout": "IPY_MODEL_404f8c4d1b4548daaaf0edaf314fcd9c"
       }
     },
-    "c0b6ad1a3c404198a83f5613692e9651": {
+    "a6b5e9b445ec4b97abde6721bcc1d320": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ac413da73ec14fa4b940ebdb9bd4ecb1",
-        "style": "IPY_MODEL_f5933e79bb7c4229a7612ed50644083d",
-        "value": "<h4>Model Inference Time</h4><p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_7c8cf table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7c8cf thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7c8cf tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7c8cf th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7c8cf td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_7c8cf\">\n  <thead>\n    <tr>\n      <th id=\"T_7c8cf_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_7c8cf_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_7c8cf_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_7c8cf_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_7c8cf_row0_col1\" class=\"data row0 col1\" >Average model inference time for one sample is not greater than 1e-05</td>\n      <td id=\"T_7c8cf_row0_col2\" class=\"data row0 col2\" >Found average inference time (in seconds) above threshold: 0.00023062</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>Average model inference time for one sample (in seconds): 0.00023062</div>"
+        "layout": "IPY_MODEL_738f0fafbb75464cacff61434d93cf66",
+        "style": "IPY_MODEL_6cd239d723464f808654e0c38cb237ff",
+        "value": "<h4>Model Inference Time</h4><p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_86e61 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_86e61 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_86e61 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_86e61 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_86e61 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_86e61\">\n  <thead>\n    <tr>\n      <th id=\"T_86e61_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_86e61_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_86e61_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_86e61_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_86e61_row0_col1\" class=\"data row0 col1\" >Average model inference time for one sample is not greater than 1e-05</td>\n      <td id=\"T_86e61_row0_col2\" class=\"data row0 col2\" >Found average inference time (in seconds) above threshold: 0.00019925</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>Average model inference time for one sample (in seconds): 0.00019925</div>"
       }
     },
-    "ac413da73ec14fa4b940ebdb9bd4ecb1": {
+    "738f0fafbb75464cacff61434d93cf66": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f5933e79bb7c4229a7612ed50644083d": {
+    "6cd239d723464f808654e0c38cb237ff": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "2e254c59f06a4326b6cbc206535d3549": {
+    "404f8c4d1b4548daaaf0edaf314fcd9c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -880,7 +874,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c815c1d9b0fe4cc7bdda8135d4df83b6"}
+{"version_major": 2, "version_minor": 0, "model_id": "6023d5bd767f4961b4d1af8c5cc10e09"}
 </script>
 
 </body>
@@ -888,7 +882,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.176 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.146 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-methodology-examples-plot-model-inference-time-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/9ec1c6a78573bf406bfb6de89f429b63/plot_model_inference_time.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_model_inference_time.py</span></code></a></p>
@@ -929,8 +923,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -941,7 +936,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

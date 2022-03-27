@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>The Classification Data Class &#8212; Deepchecks b2b149f documentation</title>
+    <title>The Classification Data Class &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -478,7 +472,7 @@ Page: user-guide/vision/data-classes/ClassificationData&labels=labels=chore/docu
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -522,7 +516,7 @@ Page: user-guide/vision/data-classes/ClassificationData&labels=labels=chore/docu
               <div>
                 
   <section id="the-classification-data-class">
-<span id="classification-data-class"></span><h1>The Classification Data Class<a class="headerlink" href="#the-classification-data-class" title="Permalink to this headline">¶</a></h1>
+<span id="classification-data-class"></span><h1>The Classification Data Class<a class="headerlink" href="#the-classification-data-class" title="Permalink to this headline">#</a></h1>
 <p>The ClassificationData <a class="reference internal" href="index.html"><span class="doc">data class</span></a> represents a CV classification task in deepchecks.
 It is a subclass of the <a class="reference internal" href="../../../api/generated/deepchecks.vision.VisionData.html#deepchecks.vision.VisionData" title="deepchecks.vision.VisionData"><code class="xref py py-class docutils literal notranslate"><span class="pre">VisionData</span></code></a> class and is used to load and preprocess data for a
 classification task.
@@ -530,27 +524,27 @@ The ClassificationData class contains additional data and general methods intend
 for classification ML models validation.</p>
 <p>For more info, please visit the API reference page: <a class="reference internal" href="../../../api/generated/deepchecks.vision.ClassificationData.html#deepchecks.vision.ClassificationData" title="deepchecks.vision.ClassificationData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClassificationData</span></code></a></p>
 <section id="accepted-image-format">
-<h2>Accepted Image Format<a class="headerlink" href="#accepted-image-format" title="Permalink to this headline">¶</a></h2>
+<h2>Accepted Image Format<a class="headerlink" href="#accepted-image-format" title="Permalink to this headline">#</a></h2>
 <p>All checks in deepchecks require images in the same format. They use the <a class="reference internal" href="../../../api/generated/deepchecks.vision.VisionData.batch_to_images.html#deepchecks.vision.VisionData.batch_to_images" title="deepchecks.vision.VisionData.batch_to_images"><code class="xref py py-func docutils literal notranslate"><span class="pre">batch_to_images()</span></code></a> function in order to get
 the images in the correct format. For more info on the accepted formats, please visit the
 <a class="reference external" href="VisionData.rst">VisionData User Guide</a>.</p>
 </section>
 <section id="accepted-label-format">
-<h2>Accepted Label Format<a class="headerlink" href="#accepted-label-format" title="Permalink to this headline">¶</a></h2>
+<h2>Accepted Label Format<a class="headerlink" href="#accepted-label-format" title="Permalink to this headline">#</a></h2>
 <p>Deepchecks’ checks use the <a class="reference internal" href="../../../api/generated/deepchecks.vision.ClassificationData.batch_to_labels.html#deepchecks.vision.ClassificationData.batch_to_labels" title="deepchecks.vision.ClassificationData.batch_to_labels"><code class="xref py py-func docutils literal notranslate"><span class="pre">batch_to_labels()</span></code></a> function in order to get the labels in the correct format.
 The accepted label format for the ClassificationData is a tensor of shape (N,), when N is the number of samples.
 Each element is an integer representing the class index. For example, for a task with 3 different classes, the label
 tensor could be: <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></code>.</p>
 </section>
 <section id="accepted-prediction-format">
-<h2>Accepted Prediction Format<a class="headerlink" href="#accepted-prediction-format" title="Permalink to this headline">¶</a></h2>
+<h2>Accepted Prediction Format<a class="headerlink" href="#accepted-prediction-format" title="Permalink to this headline">#</a></h2>
 <p>Deepchecks’ checks use the <a class="reference internal" href="../../../api/generated/deepchecks.vision.ClassificationData.infer_on_batch.html#deepchecks.vision.ClassificationData.infer_on_batch" title="deepchecks.vision.ClassificationData.infer_on_batch"><code class="xref py py-func docutils literal notranslate"><span class="pre">infer_on_batch()</span></code></a> function in order to get the predictions of the model in the correct format.
 The accepted prediction format for classification is a tensor of shape (N, n_classes), where N is the number of
 samples. Each element is an array of length n_classes that represent the probability of each class. For example, for a
 task with 3 different classes, the prediction tensor could be: <code class="docutils literal notranslate"><span class="pre">[[0.1,</span> <span class="pre">0.2,</span> <span class="pre">0.7],</span> <span class="pre">[0.2,</span> <span class="pre">0.3,</span> <span class="pre">0.5],</span> <span class="pre">[0.3,</span> <span class="pre">0.4,</span> <span class="pre">0.1]]</span></code>.</p>
 </section>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision</span> <span class="kn">import</span> <span class="n">ClassificationData</span>
 <span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 
@@ -660,8 +654,9 @@ task with 3 different classes, the prediction tensor could be: <code class="docu
       </div>
     </div>
   
-    <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -672,7 +667,7 @@ task with 3 different classes, the prediction tensor could be: <code class="docu
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

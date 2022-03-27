@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Single Feature Contribution &#8212; Deepchecks b2b149f documentation</title>
+    <title>Single Feature Contribution &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/methodology/examples/plot_single_feature_congttrib
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -739,9 +733,9 @@ Page: examples/tabular/checks/methodology/examples/plot_single_feature_congttrib
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="single-feature-contribution">
-<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-single-feature-congttribution-py"></span><h1>Single Feature Contribution<a class="headerlink" href="#single-feature-contribution" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-methodology-examples-plot-single-feature-congttribution-py"></span><h1>Single Feature Contribution<a class="headerlink" href="#single-feature-contribution" title="Permalink to this headline">#</a></h1>
 <section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">¶</a></h2>
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -752,7 +746,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="generating-data">
-<h2>Generating Data<a class="headerlink" href="#generating-data" title="Permalink to this headline">¶</a></h2>
+<h2>Generating Data<a class="headerlink" href="#generating-data" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">,</span> <span class="s1">&#39;x2&#39;</span><span class="p">,</span> <span class="s1">&#39;x3&#39;</span><span class="p">])</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x4&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x2&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">]</span>
@@ -764,7 +758,7 @@ to download the full example code</p>
 </div>
 </section>
 <section id="running-single-feature-contribution-check">
-<h2>Running single_feature_contribution check<a class="headerlink" href="#running-single-feature-contribution-check" title="Permalink to this headline">¶</a></h2>
+<h2>Running single_feature_contribution check<a class="headerlink" href="#running-single-feature-contribution-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SingleFeatureContribution</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -783,83 +777,83 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "d952c3e7d0dd4b0ba5937b1a7ed662cc": {
+    "5c71865e7e244dbc8386f56f4a5eb3b4": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_9601a0f01d2e4de9a483fc8b9f4f94ba",
-          "IPY_MODEL_373126cd5cd94837802b3a574b362295",
-          "IPY_MODEL_e8d5136c5c074e76a1aad59c53e47be7"
+          "IPY_MODEL_b433a766e3ca4dfda2a2d6a10054ea56",
+          "IPY_MODEL_52516788848348dca275f6ad8fc0e2d0",
+          "IPY_MODEL_180c1587141542ada504131261788912"
         ],
-        "layout": "IPY_MODEL_d239cea122184d3c97142a453c8c99eb"
+        "layout": "IPY_MODEL_8c2b1457b6dc4e9393a6647d0e482149"
       }
     },
-    "9601a0f01d2e4de9a483fc8b9f4f94ba": {
+    "b433a766e3ca4dfda2a2d6a10054ea56": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b6531ffb70a24ae88731ea35da6750ae",
-        "style": "IPY_MODEL_7d546df411414c8c90a8257dc070f291",
+        "layout": "IPY_MODEL_39d5663ff6114a1a8628d091ef369f0b",
+        "style": "IPY_MODEL_ee8582d97a05406dae94055abfe97e8f",
         "value": "<h4>Single Feature Contribution</h4><p>Return the PPS (Predictive Power Score) of all features in relation to the label. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/single_feature_contribution.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "b6531ffb70a24ae88731ea35da6750ae": {
+    "39d5663ff6114a1a8628d091ef369f0b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7d546df411414c8c90a8257dc070f291": {
+    "ee8582d97a05406dae94055abfe97e8f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "373126cd5cd94837802b3a574b362295": {
+    "52516788848348dca275f6ad8fc0e2d0": {
       "model_name": "OutputModel",
       "model_module": "@jupyter-widgets/output",
       "model_module_version": "1.0.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e45cd2ad5de2427ab58c42e602e4c9de",
+        "layout": "IPY_MODEL_e0d31e957b7a4d6f82b9dfb262535101",
         "outputs": []
       }
     },
-    "e45cd2ad5de2427ab58c42e602e4c9de": {
+    "e0d31e957b7a4d6f82b9dfb262535101": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e8d5136c5c074e76a1aad59c53e47be7": {
+    "180c1587141542ada504131261788912": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_7632758e312742ec8d79b88630c1ca1f",
-        "style": "IPY_MODEL_1905b6d254a44e9ea1ca8feb153739cf",
+        "layout": "IPY_MODEL_85838754c6614da796693983a5bfdbd8",
+        "style": "IPY_MODEL_eb887a687f6b4f98b7e594fb7348008e",
         "value": "<div>The Predictive Power Score (PPS) is used to estimate the ability of a feature to predict the label by itself. (Read more about <a href=https://docs.deepchecks.com/en/stable/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link target=\"_blank\">Predictive Power Score</a>)A high PPS (close to 1) can mean that this feature's success in predicting the label is actually due to data leakage - meaning that the feature holds information that is based on the label to begin with.</div>"
       }
     },
-    "7632758e312742ec8d79b88630c1ca1f": {
+    "85838754c6614da796693983a5bfdbd8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1905b6d254a44e9ea1ca8feb153739cf": {
+    "eb887a687f6b4f98b7e594fb7348008e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d239cea122184d3c97142a453c8c99eb": {
+    "8c2b1457b6dc4e9393a6647d0e482149": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -869,7 +863,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "d952c3e7d0dd4b0ba5937b1a7ed662cc"}
+{"version_major": 2, "version_minor": 0, "model_id": "5c71865e7e244dbc8386f56f4a5eb3b4"}
 </script>
 
 </body>
@@ -879,7 +873,7 @@ to download the full example code</p>
 <br />
 <br /></section>
 <section id="using-the-singlefeaturecontribution-check-class">
-<h2>Using the SingleFeatureContribution check class<a class="headerlink" href="#using-the-singlefeaturecontribution-check-class" title="Permalink to this headline">¶</a></h2>
+<h2>Using the SingleFeatureContribution check class<a class="headerlink" href="#using-the-singlefeaturecontribution-check-class" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_check</span> <span class="o">=</span> <span class="n">SingleFeatureContribution</span><span class="p">(</span><span class="n">ppscore_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">})</span>
 <span class="n">my_check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">ds</span><span class="p">)</span>
 </pre></div>
@@ -899,83 +893,83 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c02b98c9a0e24a69937f2223df0aa3b2": {
+    "803286ee6fdf48bb99f6cd9dc44e91e9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_fdda67f0871049ee825dc34940b43424",
-          "IPY_MODEL_fa71ce3b83144e0985e7bfbdb8529649",
-          "IPY_MODEL_7c4c6a8d905941b489bf741c5d498f6d"
+          "IPY_MODEL_db67ffc1a46942b7915d2f38f411829b",
+          "IPY_MODEL_f32da59f30e64a33a8ed1edc416b5eb9",
+          "IPY_MODEL_4d138fee16ab4974a0678c3b6e70d54f"
         ],
-        "layout": "IPY_MODEL_c1db045ab6f24cb980c1667744c59f2c"
+        "layout": "IPY_MODEL_80f1fd0cdd004dda9fcf7b7e6c94d96b"
       }
     },
-    "fdda67f0871049ee825dc34940b43424": {
+    "db67ffc1a46942b7915d2f38f411829b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_7988bfe41f934476b574236e8c67307f",
-        "style": "IPY_MODEL_1ffc08eabb4e41ecbf41fe61c8432c44",
+        "layout": "IPY_MODEL_89ef6f91532f4d4d9d17962fa2d18ce9",
+        "style": "IPY_MODEL_8afb02bb379a423c8eb1efc5082ce5aa",
         "value": "<h4>Single Feature Contribution</h4><p>Return the PPS (Predictive Power Score) of all features in relation to the label. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/single_feature_contribution.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "7988bfe41f934476b574236e8c67307f": {
+    "89ef6f91532f4d4d9d17962fa2d18ce9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1ffc08eabb4e41ecbf41fe61c8432c44": {
+    "8afb02bb379a423c8eb1efc5082ce5aa": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "fa71ce3b83144e0985e7bfbdb8529649": {
+    "f32da59f30e64a33a8ed1edc416b5eb9": {
       "model_name": "OutputModel",
       "model_module": "@jupyter-widgets/output",
       "model_module_version": "1.0.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2ce9f49ef2b14697bdf10a289e4bd786",
+        "layout": "IPY_MODEL_c3852acac16c479c9727ead1bc22ad5f",
         "outputs": []
       }
     },
-    "2ce9f49ef2b14697bdf10a289e4bd786": {
+    "c3852acac16c479c9727ead1bc22ad5f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7c4c6a8d905941b489bf741c5d498f6d": {
+    "4d138fee16ab4974a0678c3b6e70d54f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_20994447791c4a6c902e37cb24d87180",
-        "style": "IPY_MODEL_bcd4741d6e124fefa91f5bb80721b8ca",
+        "layout": "IPY_MODEL_268362ac90e6460a9c4b29ae8be4eb35",
+        "style": "IPY_MODEL_4a03271be0a74338b682c7f4fdb7d88d",
         "value": "<div>The Predictive Power Score (PPS) is used to estimate the ability of a feature to predict the label by itself. (Read more about <a href=https://docs.deepchecks.com/en/stable/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link target=\"_blank\">Predictive Power Score</a>)A high PPS (close to 1) can mean that this feature's success in predicting the label is actually due to data leakage - meaning that the feature holds information that is based on the label to begin with.</div>"
       }
     },
-    "20994447791c4a6c902e37cb24d87180": {
+    "268362ac90e6460a9c4b29ae8be4eb35": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "bcd4741d6e124fefa91f5bb80721b8ca": {
+    "4a03271be0a74338b682c7f4fdb7d88d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c1db045ab6f24cb980c1667744c59f2c": {
+    "80f1fd0cdd004dda9fcf7b7e6c94d96b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -985,7 +979,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c02b98c9a0e24a69937f2223df0aa3b2"}
+{"version_major": 2, "version_minor": 0, "model_id": "803286ee6fdf48bb99f6cd9dc44e91e9"}
 </script>
 
 </body>
@@ -993,7 +987,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.442 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.398 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-methodology-examples-plot-single-feature-congttribution-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/8f0ee6070203658aa6658eb0080f7711/plot_single_feature_congttribution.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_single_feature_congttribution.py</span></code></a></p>
@@ -1034,8 +1028,9 @@ to download the full example code</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -1046,7 +1041,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Whole Dataset Drift &#8212; Deepchecks b2b149f documentation</title>
+    <title>Whole Dataset Drift &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -690,7 +684,7 @@ Page: examples/tabular/checks/distribution/examples/plot_whole_dataset_drift&lab
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -758,7 +752,7 @@ Page: examples/tabular/checks/distribution/examples/plot_whole_dataset_drift&lab
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="whole-dataset-drift">
-<span id="sphx-glr-examples-tabular-checks-distribution-examples-plot-whole-dataset-drift-py"></span><h1>Whole Dataset Drift<a class="headerlink" href="#whole-dataset-drift" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-tabular-checks-distribution-examples-plot-whole-dataset-drift-py"></span><h1>Whole Dataset Drift<a class="headerlink" href="#whole-dataset-drift" title="Permalink to this headline">#</a></h1>
 <p>This notebooks provides an overview for using and understanding the whole
 dataset drift check.</p>
 <p><strong>Structure:</strong></p>
@@ -769,7 +763,7 @@ dataset drift check.</p>
 <li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
 </ul>
 <section id="what-is-a-dataset-drift">
-<h2>What is a dataset drift?<a class="headerlink" href="#what-is-a-dataset-drift" title="Permalink to this headline">¶</a></h2>
+<h2>What is a dataset drift?<a class="headerlink" href="#what-is-a-dataset-drift" title="Permalink to this headline">#</a></h2>
 <p>A whole dataset drift, or a multivariate dataset drift, occurs when the
 statistical properties of our input feature change, denoted by a change
 in the distribution P(X).</p>
@@ -789,7 +783,7 @@ test means that the model was trained on data that is different from the
 current test data, thus it will probably make more mistakes predicting the
 target variable.</p>
 <section id="how-deepchecks-detects-dataset-drift">
-<h3>How deepchecks detects dataset drift<a class="headerlink" href="#how-deepchecks-detects-dataset-drift" title="Permalink to this headline">¶</a></h3>
+<h3>How deepchecks detects dataset drift<a class="headerlink" href="#how-deepchecks-detects-dataset-drift" title="Permalink to this headline">#</a></h3>
 <p>There are many methods to detect feature drift. Some of them are statistical
 methods that aim to measure difference between distribution of 2 given sets.
 This methods are more suited to univariate distributions and are primarily
@@ -806,7 +800,7 @@ drift score from the AUC score of this classifier.</p>
 </section>
 </section>
 <section id="loading-the-data">
-<h2>Loading the Data<a class="headerlink" href="#loading-the-data" title="Permalink to this headline">¶</a></h2>
+<h2>Loading the Data<a class="headerlink" href="#loading-the-data" title="Permalink to this headline">#</a></h2>
 <p>The dataset is the adult dataset which can be downloaded from the UCI machine learning repository.</p>
 <p>Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [<a class="reference external" href="http://archive.ics.uci.edu/ml">http://archive.ics.uci.edu/ml</a>].
 Irvine, CA: University of California, School of Information and Computer Science.</p>
@@ -837,7 +831,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 </pre></div>
 </div>
 <section id="process-into-dataset">
-<h3>Process into dataset<a class="headerlink" href="#process-into-dataset" title="Permalink to this headline">¶</a></h3>
+<h3>Process into dataset<a class="headerlink" href="#process-into-dataset" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 <span class="n">cat_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;marital-status&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;relationship&#39;</span><span class="p">,</span>
@@ -858,7 +852,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 </section>
 </section>
 <section id="run-the-check">
-<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">¶</a></h2>
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">WholeDatasetDrift</span>
 
 <span class="n">check</span> <span class="o">=</span> <span class="n">WholeDatasetDrift</span><span class="p">()</span>
@@ -880,42 +874,42 @@ Irvine, CA: University of California, School of Information and Computer Science
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "ddc1ea7303994cb19d4ba5ae63e787e8": {
+    "d5f8c5e5a65a47e491980820e0aa1d24": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_cc2211f6e0d5472b82fe9dd188a68f95"
+          "IPY_MODEL_a1a73386408c44db946d7f0148fb0ccd"
         ],
-        "layout": "IPY_MODEL_3edf3af948354353b7aae476e7ce24ec"
+        "layout": "IPY_MODEL_5fb14b6dc1974b309c1281444f4787a7"
       }
     },
-    "cc2211f6e0d5472b82fe9dd188a68f95": {
+    "a1a73386408c44db946d7f0148fb0ccd": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8aad2f454e7d47638e95e9450809c880",
-        "style": "IPY_MODEL_6dc8f66f74e646a0bc5203f1eec3f3f8",
+        "layout": "IPY_MODEL_5e6cca47920546baa6f2bbb8c46ebb81",
+        "style": "IPY_MODEL_79c8ea042094466b9d5a284665c6791d",
         "value": "<h4>Whole Dataset Drift</h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/whole_dataset_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "8aad2f454e7d47638e95e9450809c880": {
+    "5e6cca47920546baa6f2bbb8c46ebb81": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6dc8f66f74e646a0bc5203f1eec3f3f8": {
+    "79c8ea042094466b9d5a284665c6791d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3edf3af948354353b7aae476e7ce24ec": {
+    "5fb14b6dc1974b309c1281444f4787a7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -925,7 +919,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "ddc1ea7303994cb19d4ba5ae63e787e8"}
+{"version_major": 2, "version_minor": 0, "model_id": "d5f8c5e5a65a47e491980820e0aa1d24"}
 </script>
 
 </body>
@@ -938,7 +932,7 @@ set of the raw adult dataset. In addition to the drift score the check displays
 the top features that contibuted to the data drift.</p>
 </section>
 <section id="introduce-drift-to-dataset">
-<h2>Introduce drift to dataset<a class="headerlink" href="#introduce-drift-to-dataset" title="Permalink to this headline">¶</a></h2>
+<h2>Introduce drift to dataset<a class="headerlink" href="#introduce-drift-to-dataset" title="Permalink to this headline">#</a></h2>
 <p>Now, let’s try to add a manual data drift to the data by sampling a biased
 portion of the training data</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sample_size</span> <span class="o">=</span> <span class="mi">10000</span>
@@ -972,46 +966,46 @@ portion of the training data</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "951b97a0b5c04ea0995271d489787615": {
+    "9c71514d692d4863ad28895ec16e57cb": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_fd7aedd379bc42789650adcd8f10cb36",
-          "IPY_MODEL_e4f429408105444a9fdbf78132cdadb3",
-          "IPY_MODEL_b7adcbb4ae3f4fcb87be50453b6f6a9b",
-          "IPY_MODEL_a3127b19a50a4b549e15a081c795ac5a",
-          "IPY_MODEL_948d1013b98b47239dc7790ff47d57c5"
+          "IPY_MODEL_4f1dde471cd24542becd640d77edd61a",
+          "IPY_MODEL_ca20053dd14e42ea9f02f45ab46dd42f",
+          "IPY_MODEL_55e852f588014b0381e8708e7ab9a061",
+          "IPY_MODEL_c3a0863e4b974205a65ebd60b4ef8fff",
+          "IPY_MODEL_1a3b52e10e254567b7b38a4b034f577b"
         ],
-        "layout": "IPY_MODEL_9a1338c7b9c242beaf60bb92f711aabc"
+        "layout": "IPY_MODEL_589ebe97fffa416e8f00bac967e492eb"
       }
     },
-    "fd7aedd379bc42789650adcd8f10cb36": {
+    "4f1dde471cd24542becd640d77edd61a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e8e29cd453644aed93e83b0c014a77a0",
-        "style": "IPY_MODEL_cd72faa8ae494b98bd9f79715c002040",
+        "layout": "IPY_MODEL_ef94f06712564d76ae7bd214f27d0f81",
+        "style": "IPY_MODEL_48ad61aa84774af4830f891be879a610",
         "value": "<h4>Whole Dataset Drift</h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/whole_dataset_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>\n        <span>\n        The shown features are the features that are most important for the domain classifier - the\n        domain_classifier trained to distinguish between the train and test datasets.<br>\n        </span>\n        </div><div>\n    <span>\n    The percents of explained dataset difference are the importance values for the feature calculated\n    using `permutation_importance`.\n    </span><br><br>\n    </div>"
       }
     },
-    "e8e29cd453644aed93e83b0c014a77a0": {
+    "ef94f06712564d76ae7bd214f27d0f81": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "cd72faa8ae494b98bd9f79715c002040": {
+    "48ad61aa84774af4830f891be879a610": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e4f429408105444a9fdbf78132cdadb3": {
+    "ca20053dd14e42ea9f02f45ab46dd42f": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1035,7 +1029,7 @@ portion of the training data</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "9816fbef-8a70-4b4e-9f5e-94dba3d75938"
+            "uid": "fcc261cb-64aa-4611-8bb6-3fda57ca3d52"
           },
           {
             "base": 0.1,
@@ -1052,7 +1046,7 @@ portion of the training data</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "d76c2042-9689-469c-a150-015081593fea"
+            "uid": "58bb7da3-87cc-463e-8443-583aab178608"
           },
           {
             "base": 0.2,
@@ -1069,7 +1063,7 @@ portion of the training data</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "69c6f0cc-d134-4ffb-9d0d-812a00ad2c04"
+            "uid": "d6f7e88d-0d57-4c42-a6a8-2c0510871e30"
           },
           {
             "base": 0.3,
@@ -1086,7 +1080,7 @@ portion of the training data</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "d15f1002-bdf3-4d9e-a80f-8902aa374fbd"
+            "uid": "32e346f8-969d-47e9-b0d9-3c7312c858e3"
           }
         ],
         "_dom_classes": [],
@@ -1954,30 +1948,30 @@ portion of the training data</p>
         "_view_count": 0
       }
     },
-    "b7adcbb4ae3f4fcb87be50453b6f6a9b": {
+    "55e852f588014b0381e8708e7ab9a061": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_be4fc0a1e4f24596bf2aeb2316f0094d",
-        "style": "IPY_MODEL_28310d2ec23341dea49cb816d7bec37e",
+        "layout": "IPY_MODEL_e6164e2baf2a4741acb4c9acc84a2d76",
+        "style": "IPY_MODEL_c9ff47df1ce04d1f90a0b233752131d5",
         "value": "<div><h3>Main features contributing to drift</h3></div><div>* showing only the top 3 columns, you can change it using n_top_columns param</div>"
       }
     },
-    "be4fc0a1e4f24596bf2aeb2316f0094d": {
+    "e6164e2baf2a4741acb4c9acc84a2d76": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "28310d2ec23341dea49cb816d7bec37e": {
+    "c9ff47df1ce04d1f90a0b233752131d5": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a3127b19a50a4b549e15a081c795ac5a": {
+    "c3a0863e4b974205a65ebd60b4ef8fff": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2002,7 +1996,7 @@ portion of the training data</p>
               ]
             },
             "type": "bar",
-            "uid": "ca851c3b-64d2-4a28-9946-c3d8f21cfcb0"
+            "uid": "39401773-f633-4608-936f-9e05f6e74970"
           },
           {
             "marker": {
@@ -2020,7 +2014,7 @@ portion of the training data</p>
               ]
             },
             "type": "bar",
-            "uid": "3fa39cf6-22c7-4503-a0fa-4bb6c3d8c75f"
+            "uid": "b74f962f-9de5-4701-8675-ff8408039434"
           }
         ],
         "_dom_classes": [],
@@ -2909,29 +2903,29 @@ portion of the training data</p>
         }
       ]
     },
-    "948d1013b98b47239dc7790ff47d57c5": {
+    "1a3b52e10e254567b7b38a4b034f577b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_885b4959c024480e82d9f73538c21361",
-        "style": "IPY_MODEL_c49ba65f187a4b30be36d2cf845b90b2"
+        "layout": "IPY_MODEL_f6ad699015a0456eaf7acec684249f46",
+        "style": "IPY_MODEL_cf5742c8fd3f414fba07b63ebb8c9212"
       }
     },
-    "885b4959c024480e82d9f73538c21361": {
+    "f6ad699015a0456eaf7acec684249f46": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "c49ba65f187a4b30be36d2cf845b90b2": {
+    "cf5742c8fd3f414fba07b63ebb8c9212": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9a1338c7b9c242beaf60bb92f711aabc": {
+    "589ebe97fffa416e8f00bac967e492eb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2941,7 +2935,7 @@ portion of the training data</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "951b97a0b5c04ea0995271d489787615"}
+{"version_major": 2, "version_minor": 0, "model_id": "9c71514d692d4863ad28895ec16e57cb"}
 </script>
 
 </body>
@@ -2955,7 +2949,7 @@ contributed the most to that drift. This is reasonable since the sampling
 was biased based on that feature.</p>
 </section>
 <section id="define-a-condition">
-<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">¶</a></h2>
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
 <p>Now, we define a condition that enforce the whole dataset drift score must be
 below 0.1. A condition is deepchecks’ way to validate model and data quality,
 and let you know if anything goes wrong.</p>
@@ -2979,46 +2973,46 @@ and let you know if anything goes wrong.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "58e113dc4d3544babc230e491e9def6d": {
+    "cd83e0add93440ba8a1525255993670f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_ab973a1e22d04a19bf19ecb823f3719c",
-          "IPY_MODEL_1147d3507e8c434ebfe84d876b2250c3",
-          "IPY_MODEL_e1bc79965c6246eaa48bbd1ff337b5f9",
-          "IPY_MODEL_648c7ef1d39f440cb3474fd0e26fb43b",
-          "IPY_MODEL_963578e9ece04ae38fed5248e765709f"
+          "IPY_MODEL_89f4464c574442b68cf009dda16266e6",
+          "IPY_MODEL_f80a589519b8422cb3aa496faa4015ff",
+          "IPY_MODEL_cbdc4b1383744d41b68ba5de9a146ce0",
+          "IPY_MODEL_8a8fd8a3f9714b2eaac1be11dd4cb740",
+          "IPY_MODEL_2556462e25044821847884cf94f04b64"
         ],
-        "layout": "IPY_MODEL_46896eed7b034ab5b4a49e932aac3405"
+        "layout": "IPY_MODEL_35f7e10cb0784c23bcbdb49ba429b60e"
       }
     },
-    "ab973a1e22d04a19bf19ecb823f3719c": {
+    "89f4464c574442b68cf009dda16266e6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_fb1da90c3ee044b1a7e7b92ba07a528c",
-        "style": "IPY_MODEL_f8f086c172b641dc96959f0071acf328",
-        "value": "<h4>Whole Dataset Drift</h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/whole_dataset_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_0f34b table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0f34b thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0f34b tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0f34b th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0f34b td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_0f34b\">\n  <thead>\n    <tr>\n      <th id=\"T_0f34b_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_0f34b_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_0f34b_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_0f34b_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_0f34b_row0_col1\" class=\"data row0 col1\" >Drift value is not greater than 0.1</td>\n      <td id=\"T_0f34b_row0_col2\" class=\"data row0 col2\" >Found drift value of: 0.35, corresponding to a domain classifier AUC of: 0.67</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>\n        <span>\n        The shown features are the features that are most important for the domain classifier - the\n        domain_classifier trained to distinguish between the train and test datasets.<br>\n        </span>\n        </div><div>\n    <span>\n    The percents of explained dataset difference are the importance values for the feature calculated\n    using `permutation_importance`.\n    </span><br><br>\n    </div>"
+        "layout": "IPY_MODEL_04b8ce4207274d4384e3f4995ed2ee83",
+        "style": "IPY_MODEL_699c70b385d04d819826111489a86f3d",
+        "value": "<h4>Whole Dataset Drift</h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/whole_dataset_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_02e3c table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_02e3c thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_02e3c tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_02e3c th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_02e3c td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_02e3c\">\n  <thead>\n    <tr>\n      <th id=\"T_02e3c_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_02e3c_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_02e3c_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_02e3c_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_02e3c_row0_col1\" class=\"data row0 col1\" >Drift value is not greater than 0.1</td>\n      <td id=\"T_02e3c_row0_col2\" class=\"data row0 col2\" >Found drift value of: 0.35, corresponding to a domain classifier AUC of: 0.67</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>\n        <span>\n        The shown features are the features that are most important for the domain classifier - the\n        domain_classifier trained to distinguish between the train and test datasets.<br>\n        </span>\n        </div><div>\n    <span>\n    The percents of explained dataset difference are the importance values for the feature calculated\n    using `permutation_importance`.\n    </span><br><br>\n    </div>"
       }
     },
-    "fb1da90c3ee044b1a7e7b92ba07a528c": {
+    "04b8ce4207274d4384e3f4995ed2ee83": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f8f086c172b641dc96959f0071acf328": {
+    "699c70b385d04d819826111489a86f3d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1147d3507e8c434ebfe84d876b2250c3": {
+    "f80a589519b8422cb3aa496faa4015ff": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -3042,7 +3036,7 @@ and let you know if anything goes wrong.</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "1a435beb-d927-4aaa-8dd9-69837b359a2c"
+            "uid": "77c86fca-7d45-4330-a326-4c361e3cd801"
           },
           {
             "base": 0.1,
@@ -3059,7 +3053,7 @@ and let you know if anything goes wrong.</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "501e5f37-4f7c-4540-bc5b-345634eb8e65"
+            "uid": "106e34d5-b664-4031-9482-402bf074fd5c"
           },
           {
             "base": 0.2,
@@ -3076,7 +3070,7 @@ and let you know if anything goes wrong.</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "c3a5908a-3b09-4ce8-9a5e-c82e3cbb5dab"
+            "uid": "30115b73-656e-4eb1-9fb9-3d2910425730"
           },
           {
             "base": 0.3,
@@ -3093,7 +3087,7 @@ and let you know if anything goes wrong.</p>
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "ba8a5b6f-cbe5-414c-9ae2-6b27c494fec6"
+            "uid": "3eb59f5d-5cbf-4bc4-a3cb-e08922c16577"
           }
         ],
         "_dom_classes": [],
@@ -3961,30 +3955,30 @@ and let you know if anything goes wrong.</p>
         "_view_count": 0
       }
     },
-    "e1bc79965c6246eaa48bbd1ff337b5f9": {
+    "cbdc4b1383744d41b68ba5de9a146ce0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d30d0200fd5b46e3a948f5aa53660a54",
-        "style": "IPY_MODEL_f849ba4ca76d40b4947f18c9b11c3295",
+        "layout": "IPY_MODEL_71474e3aa1f54c559561843f7ce4ae9e",
+        "style": "IPY_MODEL_25f998dcb39549e3aea7a3ae175fa64e",
         "value": "<div><h3>Main features contributing to drift</h3></div><div>* showing only the top 3 columns, you can change it using n_top_columns param</div>"
       }
     },
-    "d30d0200fd5b46e3a948f5aa53660a54": {
+    "71474e3aa1f54c559561843f7ce4ae9e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f849ba4ca76d40b4947f18c9b11c3295": {
+    "25f998dcb39549e3aea7a3ae175fa64e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "648c7ef1d39f440cb3474fd0e26fb43b": {
+    "8a8fd8a3f9714b2eaac1be11dd4cb740": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -4009,7 +4003,7 @@ and let you know if anything goes wrong.</p>
               ]
             },
             "type": "bar",
-            "uid": "3cdb5f28-d497-484f-be0f-14b62132b6c0"
+            "uid": "07273ad3-0a17-4c96-9f2f-2e2fddd4a9b0"
           },
           {
             "marker": {
@@ -4027,7 +4021,7 @@ and let you know if anything goes wrong.</p>
               ]
             },
             "type": "bar",
-            "uid": "773b5e63-024a-4f02-a8f3-993b7c405d71"
+            "uid": "350dda4c-103c-4d08-b4e2-9f73fd758daa"
           }
         ],
         "_dom_classes": [],
@@ -4916,29 +4910,29 @@ and let you know if anything goes wrong.</p>
         }
       ]
     },
-    "963578e9ece04ae38fed5248e765709f": {
+    "2556462e25044821847884cf94f04b64": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e4617fb0d37a41d78790d648cdc4583c",
-        "style": "IPY_MODEL_ec03fbc1530145f1a219be7e05b1e930"
+        "layout": "IPY_MODEL_6958dd50bf694342b246b2d08108e677",
+        "style": "IPY_MODEL_54a07dfc21d54a38a0777b028f027763"
       }
     },
-    "e4617fb0d37a41d78790d648cdc4583c": {
+    "6958dd50bf694342b246b2d08108e677": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ec03fbc1530145f1a219be7e05b1e930": {
+    "54a07dfc21d54a38a0777b028f027763": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "46896eed7b034ab5b4a49e932aac3405": {
+    "35f7e10cb0784c23bcbdb49ba429b60e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -4948,7 +4942,7 @@ and let you know if anything goes wrong.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "58e113dc4d3544babc230e491e9def6d"}
+{"version_major": 2, "version_minor": 0, "model_id": "cd83e0add93440ba8a1525255993670f"}
 </script>
 
 </body>
@@ -4957,7 +4951,7 @@ and let you know if anything goes wrong.</p>
 </div>
 <br />
 <br /><p>As we see, our condition successfully detects the drift score is above the defined threshold.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.034 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.879 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-distribution-examples-plot-whole-dataset-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/a497ad35b186fcccf736871c4797f2e4/plot_whole_dataset_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_whole_dataset_drift.py</span></code></a></p>
@@ -4998,8 +4992,9 @@ and let you know if anything goes wrong.</p>
       </div>
     </div>
   
-    <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -5010,7 +5005,7 @@ and let you know if anything goes wrong.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Data Properties &#8212; Deepchecks b2b149f documentation</title>
+    <title>Data Properties &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -478,7 +472,7 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -551,13 +545,13 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
               <div>
                 
   <section id="data-properties">
-<h1>Data Properties<a class="headerlink" href="#data-properties" title="Permalink to this headline">¶</a></h1>
+<h1>Data Properties<a class="headerlink" href="#data-properties" title="Permalink to this headline">#</a></h1>
 <p>Properties are one-dimension values that are extracted from either the images, labels or predictions. For example, an
 image property is <strong>brightness</strong>, and a label property is <strong>bounding box area</strong> (for detection tasks).
 Deepchecks includes <a class="reference internal" href="#deepchecks-built-in-properties"><span class="std std-ref">built-in properties</span></a> and supports implementing your own
 properties.</p>
 <section id="what-are-properties-used-for">
-<h2>What Are Properties Used For?<a class="headerlink" href="#what-are-properties-used-for" title="Permalink to this headline">¶</a></h2>
+<h2>What Are Properties Used For?<a class="headerlink" href="#what-are-properties-used-for" title="Permalink to this headline">#</a></h2>
 <p>Properties are used by some of the Deepchecks’ checks (e.g. train-test drift), in order to extract meaningful
 features from the data, since some computations are difficult to compute directly on the images (for example drift).
 Inspecting the distribution of the property’s values (e.g. to notice some images are extremely dark,
@@ -579,7 +573,7 @@ might not learn to discern wolf from dog by the animal’s characteristics, but 
 </ol>
 </section>
 <section id="deepchecks-built-in-properties">
-<h2>Deepchecks’ Built-in Properties<a class="headerlink" href="#deepchecks-built-in-properties" title="Permalink to this headline">¶</a></h2>
+<h2>Deepchecks’ Built-in Properties<a class="headerlink" href="#deepchecks-built-in-properties" title="Permalink to this headline">#</a></h2>
 <p>We divide the properties by the data that they are based on: images, labels or predictions.
 You can either use the built-in properties or implement your own ones and pass them to the relevant checks.</p>
 <p>The built-in image properties are:</p>
@@ -606,7 +600,7 @@ general intensity (brightness).</p>
 </ul>
 </section>
 <section id="property-structure">
-<h2>Property Structure<a class="headerlink" href="#property-structure" title="Permalink to this headline">¶</a></h2>
+<h2>Property Structure<a class="headerlink" href="#property-structure" title="Permalink to this headline">#</a></h2>
 <p>All property types have a similar structure, which is a dictionary with 3 keys:</p>
 <ul class="simple">
 <li><p><cite>name</cite> - The name of the property</p></li>
@@ -632,14 +626,14 @@ corresponding class labels.</p></li>
 </pre></div>
 </div>
 <section id="the-method-s-input">
-<h3>The Method’s Input<a class="headerlink" href="#the-method-s-input" title="Permalink to this headline">¶</a></h3>
+<h3>The Method’s Input<a class="headerlink" href="#the-method-s-input" title="Permalink to this headline">#</a></h3>
 <p>Each property is built for the specific data type that it runs on, and receives its deepchecks-expected format,
 as demonstrated in <a class="reference internal" href="data-classes/index.html"><span class="doc">Deepchecks’ format</span></a>.
 Note that prediction and label-based properties are not interchangeable due to their slightly different format, even if
 they calculate similar values.</p>
 </section>
 <section id="the-method-s-output">
-<h3>The Method’s Output<a class="headerlink" href="#the-method-s-output" title="Permalink to this headline">¶</a></h3>
+<h3>The Method’s Output<a class="headerlink" href="#the-method-s-output" title="Permalink to this headline">#</a></h3>
 <p>Each property function must return a sequence in the same length as the length of the input object. This is used later
 in order to couple each sample to its right properties values. In image properties we expect each image to generate a
 single property value, which results in a list of primitives types in the same length as the number of images. On the
@@ -649,10 +643,10 @@ label/prediction.</p>
 </section>
 </section>
 <section id="properties-demonstration">
-<h2>Properties Demonstration<a class="headerlink" href="#properties-demonstration" title="Permalink to this headline">¶</a></h2>
+<h2>Properties Demonstration<a class="headerlink" href="#properties-demonstration" title="Permalink to this headline">#</a></h2>
 <p>We will demonstrate the 3 drift checks (for each property type) and implement the properties to pass to it.</p>
 <section id="image-property">
-<h3>Image Property<a class="headerlink" href="#image-property" title="Permalink to this headline">¶</a></h3>
+<h3>Image Property<a class="headerlink" href="#image-property" title="Permalink to this headline">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">ImagePropertyDrift</span>
 <span class="kn">from</span> <span class="nn">skimage.color</span> <span class="kn">import</span> <span class="n">rgb2gray</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -681,7 +675,7 @@ label/prediction.</p>
 </div>
 </section>
 <section id="label-property">
-<h3>Label Property<a class="headerlink" href="#label-property" title="Permalink to this headline">¶</a></h3>
+<h3>Label Property<a class="headerlink" href="#label-property" title="Permalink to this headline">#</a></h3>
 <p>For label property the input varies according to the task type you are running. In this example we implement
 properties which apply to the Detection task type.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">TrainTestLabelDrift</span>
@@ -706,7 +700,7 @@ properties which apply to the Detection task type.</p>
 </div>
 </section>
 <section id="prediction-property">
-<h3>Prediction Property<a class="headerlink" href="#prediction-property" title="Permalink to this headline">¶</a></h3>
+<h3>Prediction Property<a class="headerlink" href="#prediction-property" title="Permalink to this headline">#</a></h3>
 <p>Prediction property’s input, like label property, also varies by the task type you are running. In this example we
 implement properties which apply to the Detection task type.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks.distribution</span> <span class="kn">import</span> <span class="n">TrainTestPredictionDrift</span>
@@ -762,8 +756,9 @@ implement properties which apply to the Detection task type.</p>
       </div>
     </div>
   
-    <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -774,7 +769,7 @@ implement properties which apply to the Detection task type.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     

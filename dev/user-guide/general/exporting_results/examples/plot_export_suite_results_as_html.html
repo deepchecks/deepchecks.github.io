@@ -38,25 +38,21 @@
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
 
     
-    <title>Export Suite Output to a HTML Report &#8212; Deepchecks b2b149f documentation</title>
+    <title>Export Suite Output to a HTML Report &#8212; Deepchecks d748d30 documentation</title>
     
-    <link href="../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-  
+
     
-    <link rel="stylesheet"
-      href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-  
-    
-      
-  
-    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
@@ -66,8 +62,9 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/rtd_sphinx_search.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
     
-    <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
-  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
     crossorigin="anonymous"></script>
@@ -173,13 +170,6 @@
 -->
 
 <script type="text/javascript">
-// Construct the target URL from the JSON components
-function buildURL(entry) {
-    var template = "https://docs.deepchecks.com/{version}/";  // supplied by jinja
-    template = template.replace("{version}", entry.version);
-    return template;
-}
-
 // Check if corresponding page path exists in other version of docs
 // and, if so, go there instead of the homepage of the other docs version
 function checkPageExistsAndRedirect(event) {
@@ -215,14 +205,16 @@ function checkPageExistsAndRedirect(event) {
             const node = document.createElement("a");
             node.setAttribute("class", "list-group-item list-group-item-action py-1");
             node.textContent = `${entry.name}`;
-            // get the base URL for that doc version, add the current page's
-            // path to it, and set as `href`
-            entry.url = buildURL(entry);
             node.setAttribute("href", `${entry.url}${currentFilePath}`);
             // on click, AJAX calls will check if the linked page exists before
             // trying to redirect, and if not, will redirect to the homepage
             // for that version of the docs.
             node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
             $("#version_switcher_menu").append(node);
             // replace dropdown button text with the preferred display name of
             // this version, rather than using sphinx's dev variable.
@@ -230,7 +222,9 @@ function checkPageExistsAndRedirect(event) {
             // version's entry
             if (entry.version == "dev") {
                 node.classList.add("active");
-                $("#version_switcher_button").text(entry.name);
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
             }
         });
     });
@@ -478,7 +472,7 @@ Page: user-guide/general/exporting_results/examples/plot_export_suite_results_as
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -529,7 +523,7 @@ Page: user-guide/general/exporting_results/examples/plot_export_suite_results_as
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="export-suite-output-to-a-html-report">
-<span id="sphx-glr-user-guide-general-exporting-results-examples-plot-export-suite-results-as-html-py"></span><h1>Export Suite Output to a HTML Report<a class="headerlink" href="#export-suite-output-to-a-html-report" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-user-guide-general-exporting-results-examples-plot-export-suite-results-as-html-py"></span><h1>Export Suite Output to a HTML Report<a class="headerlink" href="#export-suite-output-to-a-html-report" title="Permalink to this headline">#</a></h1>
 <p>In this guide, we will demonstrate how to export a suite’s output as an
 HTML report. This enables easily sharing the results easier and also
 using deepchecks outside of the notebook environment.</p>
@@ -538,7 +532,7 @@ using deepchecks outside of the notebook environment.</p>
 <li><p><a class="reference external" href="#save-suite-result-to-an-html-report">Save Suite Result to an HTML Report</a></p></li>
 </ul>
 <section id="load-data">
-<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">¶</a></h2>
+<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">#</a></h2>
 <p>Let’s fetch the iris train and test datasets</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">iris</span>
 
@@ -547,7 +541,7 @@ using deepchecks outside of the notebook environment.</p>
 </div>
 </section>
 <section id="run-suite">
-<h2>Run Suite<a class="headerlink" href="#run-suite" title="Permalink to this headline">¶</a></h2>
+<h2>Run Suite<a class="headerlink" href="#run-suite" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">full_suite</span>
 
 <span class="n">suite</span> <span class="o">=</span> <span class="n">full_suite</span><span class="p">()</span>
@@ -559,48 +553,48 @@ using deepchecks outside of the notebook environment.</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s]
 Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s, Check=Model Info]
-Full Suite:   3%|#                                   | 1/36 [00:00&lt;00:00, 3986.98 Check/s, Check=Columns Info]
-Full Suite:   6%|##                                  | 2/36 [00:00&lt;00:00, 1062.52 Check/s, Check=Confusion Matrix Report]
-Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:00, 818.45 Check/s, Check=Performance Report]
-Full Suite:  11%|####                                | 4/36 [00:00&lt;00:00, 1022.25 Check/s, Check=Roc Report]
-Full Suite:  14%|#####                               | 5/36 [00:00&lt;00:00, 922.03 Check/s, Check=Simple Model Comparison]
-Full Suite:  17%|######                              | 6/36 [00:00&lt;00:00, 1059.61 Check/s, Check=Model Error Analysis]
-Full Suite:  19%|#######                             | 7/36 [00:00&lt;00:00, 1191.81 Check/s, Check=Calibration Score]
-Full Suite:  22%|########                            | 8/36 [00:00&lt;00:00, 1087.73 Check/s, Check=Trust Score Comparison]
-Full Suite:  25%|#########                           | 9/36 [00:00&lt;00:00, 1182.38 Check/s, Check=Regression Systematic Error]
-Full Suite:  28%|##########                          | 10/36 [00:00&lt;00:00, 1272.00 Check/s, Check=Regression Error Distribution]
-Full Suite:  31%|###########                         | 11/36 [00:00&lt;00:00, 1346.01 Check/s, Check=Boosting Overfit]
-Full Suite:  33%|############                        | 12/36 [00:00&lt;00:00, 1427.32 Check/s, Check=Unused Features]
-Full Suite:  36%|#############                       | 13/36 [00:00&lt;00:00, 1515.45 Check/s, Check=Model Inference Time]
-Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:00, 1594.71 Check/s, Check=Train Test Feature Drift]
-Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:00, 64.54 Check/s, Check=Train Test Feature Drift]
-Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:00, 64.54 Check/s, Check=Train Test Label Drift]
-Full Suite:  44%|################                    | 16/36 [00:00&lt;00:00, 64.54 Check/s, Check=Whole Dataset Drift]
-Full Suite:  47%|#################                   | 17/36 [00:00&lt;00:00, 64.54 Check/s, Check=Dominant Frequency Change]
-Full Suite:  50%|##################                  | 18/36 [00:00&lt;00:00, 64.54 Check/s, Check=Category Mismatch Train Test]
-Full Suite:  53%|###################                 | 19/36 [00:00&lt;00:00, 64.54 Check/s, Check=New Label Train Test]
-Full Suite:  56%|####################                | 20/36 [00:00&lt;00:00, 64.54 Check/s, Check=String Mismatch Comparison]
-Full Suite:  58%|#####################               | 21/36 [00:00&lt;00:00, 64.54 Check/s, Check=Datasets Size Comparison]
-Full Suite:  61%|######################              | 22/36 [00:00&lt;00:00, 49.38 Check/s, Check=Datasets Size Comparison]
-Full Suite:  61%|######################              | 22/36 [00:00&lt;00:00, 49.38 Check/s, Check=Date Train Test Leakage Duplicates]
-Full Suite:  64%|#######################             | 23/36 [00:00&lt;00:00, 49.38 Check/s, Check=Date Train Test Leakage Overlap]
-Full Suite:  67%|########################            | 24/36 [00:00&lt;00:00, 49.38 Check/s, Check=Single Feature Contribution Train Test]
-Full Suite:  69%|#########################           | 25/36 [00:00&lt;00:00, 49.38 Check/s, Check=Train Test Samples Mix]
-Full Suite:  72%|##########################          | 26/36 [00:00&lt;00:00, 49.38 Check/s, Check=Identifier Leakage]
-Full Suite:  75%|###########################         | 27/36 [00:00&lt;00:00, 44.88 Check/s, Check=Identifier Leakage]
-Full Suite:  75%|###########################         | 27/36 [00:00&lt;00:00, 44.88 Check/s, Check=Index Train Test Leakage]
-Full Suite:  78%|############################        | 28/36 [00:00&lt;00:00, 44.88 Check/s, Check=Is Single Value]
-Full Suite:  81%|#############################       | 29/36 [00:00&lt;00:00, 44.88 Check/s, Check=Mixed Nulls]
-Full Suite:  83%|##############################      | 30/36 [00:00&lt;00:00, 44.88 Check/s, Check=Mixed Data Types]
-Full Suite:  86%|###############################     | 31/36 [00:00&lt;00:00, 44.88 Check/s, Check=String Mismatch]
-Full Suite:  89%|################################    | 32/36 [00:00&lt;00:00, 44.88 Check/s, Check=Data Duplicates]
-Full Suite:  92%|#################################   | 33/36 [00:00&lt;00:00, 44.88 Check/s, Check=String Length Out Of Bounds]
-Full Suite:  94%|##################################  | 34/36 [00:00&lt;00:00, 44.88 Check/s, Check=Special Characters]
-Full Suite:  97%|################################### | 35/36 [00:00&lt;00:00, 44.88 Check/s, Check=Label Ambiguity]
+Full Suite:   3%|#                                   | 1/36 [00:00&lt;00:00, 4253.86 Check/s, Check=Columns Info]
+Full Suite:   6%|##                                  | 2/36 [00:00&lt;00:00, 1065.36 Check/s, Check=Confusion Matrix Report]
+Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:00, 827.55 Check/s, Check=Performance Report]
+Full Suite:  11%|####                                | 4/36 [00:00&lt;00:00, 1034.16 Check/s, Check=Roc Report]
+Full Suite:  14%|#####                               | 5/36 [00:00&lt;00:00, 916.75 Check/s, Check=Simple Model Comparison]
+Full Suite:  17%|######                              | 6/36 [00:00&lt;00:00, 1055.61 Check/s, Check=Model Error Analysis]
+Full Suite:  19%|#######                             | 7/36 [00:00&lt;00:00, 1173.51 Check/s, Check=Calibration Score]
+Full Suite:  22%|########                            | 8/36 [00:00&lt;00:00, 1059.03 Check/s, Check=Trust Score Comparison]
+Full Suite:  25%|#########                           | 9/36 [00:00&lt;00:00, 1159.07 Check/s, Check=Regression Systematic Error]
+Full Suite:  28%|##########                          | 10/36 [00:00&lt;00:00, 1247.15 Check/s, Check=Regression Error Distribution]
+Full Suite:  31%|###########                         | 11/36 [00:00&lt;00:00, 1335.73 Check/s, Check=Boosting Overfit]
+Full Suite:  33%|############                        | 12/36 [00:00&lt;00:00, 1422.08 Check/s, Check=Unused Features]
+Full Suite:  36%|#############                       | 13/36 [00:00&lt;00:00, 1506.45 Check/s, Check=Model Inference Time]
+Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:00, 1465.55 Check/s, Check=Train Test Feature Drift]
+Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:00, 77.76 Check/s, Check=Train Test Feature Drift]
+Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:00, 77.76 Check/s, Check=Train Test Label Drift]
+Full Suite:  44%|################                    | 16/36 [00:00&lt;00:00, 77.76 Check/s, Check=Whole Dataset Drift]
+Full Suite:  47%|#################                   | 17/36 [00:00&lt;00:00, 77.76 Check/s, Check=Dominant Frequency Change]
+Full Suite:  50%|##################                  | 18/36 [00:00&lt;00:00, 77.76 Check/s, Check=Category Mismatch Train Test]
+Full Suite:  53%|###################                 | 19/36 [00:00&lt;00:00, 77.76 Check/s, Check=New Label Train Test]
+Full Suite:  56%|####################                | 20/36 [00:00&lt;00:00, 77.76 Check/s, Check=String Mismatch Comparison]
+Full Suite:  58%|#####################               | 21/36 [00:00&lt;00:00, 77.76 Check/s, Check=Datasets Size Comparison]
+Full Suite:  61%|######################              | 22/36 [00:00&lt;00:00, 77.76 Check/s, Check=Date Train Test Leakage Duplicates]
+Full Suite:  64%|#######################             | 23/36 [00:00&lt;00:00, 65.93 Check/s, Check=Date Train Test Leakage Duplicates]
+Full Suite:  64%|#######################             | 23/36 [00:00&lt;00:00, 65.93 Check/s, Check=Date Train Test Leakage Overlap]
+Full Suite:  67%|########################            | 24/36 [00:00&lt;00:00, 65.93 Check/s, Check=Single Feature Contribution Train Test]
+Full Suite:  69%|#########################           | 25/36 [00:00&lt;00:00, 65.93 Check/s, Check=Train Test Samples Mix]
+Full Suite:  72%|##########################          | 26/36 [00:00&lt;00:00, 65.93 Check/s, Check=Identifier Leakage]
+Full Suite:  75%|###########################         | 27/36 [00:00&lt;00:00, 65.93 Check/s, Check=Index Train Test Leakage]
+Full Suite:  78%|############################        | 28/36 [00:00&lt;00:00, 65.93 Check/s, Check=Is Single Value]
+Full Suite:  81%|#############################       | 29/36 [00:00&lt;00:00, 65.93 Check/s, Check=Mixed Nulls]
+Full Suite:  83%|##############################      | 30/36 [00:00&lt;00:00, 61.84 Check/s, Check=Mixed Nulls]
+Full Suite:  83%|##############################      | 30/36 [00:00&lt;00:00, 61.84 Check/s, Check=Mixed Data Types]
+Full Suite:  86%|###############################     | 31/36 [00:00&lt;00:00, 61.84 Check/s, Check=String Mismatch]
+Full Suite:  89%|################################    | 32/36 [00:00&lt;00:00, 61.84 Check/s, Check=Data Duplicates]
+Full Suite:  92%|#################################   | 33/36 [00:00&lt;00:00, 61.84 Check/s, Check=String Length Out Of Bounds]
+Full Suite:  94%|##################################  | 34/36 [00:00&lt;00:00, 61.84 Check/s, Check=Special Characters]
+Full Suite:  97%|################################### | 35/36 [00:00&lt;00:00, 61.84 Check/s, Check=Label Ambiguity]
 </pre></div>
 </div>
 <section id="save-suite-result-to-an-html-report">
-<h3>Save Suite Result to an HTML Report<a class="headerlink" href="#save-suite-result-to-an-html-report" title="Permalink to this headline">¶</a></h3>
+<h3>Save Suite Result to an HTML Report<a class="headerlink" href="#save-suite-result-to-an-html-report" title="Permalink to this headline">#</a></h3>
 <p>Exporting the suite’s output to an HTML file is possible using the <code class="docutils literal notranslate"><span class="pre">save_as_html</span></code>
 function. This function expects a file-like object, whether it’s a file name or
 the full path to the destination folder.</p>
@@ -628,7 +622,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
 </section>
 </section>
 <section id="view-suite-output">
-<h2>View Suite Output<a class="headerlink" href="#view-suite-output" title="Permalink to this headline">¶</a></h2>
+<h2>View Suite Output<a class="headerlink" href="#view-suite-output" title="Permalink to this headline">#</a></h2>
 <p>The suite’s output can still be viewed within the notebook</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">suite_result</span>
 </pre></div>
@@ -917,67 +911,67 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "aefa879f8a7247d19afa71f1df9452ba": {
+    "da21cd1627df4c28ad95e555a00b952f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_28d2e4735c92457fb8a6bd0af706ffd1",
-          "IPY_MODEL_62d8a7eecbe84cad9ce499f2355bbd2d",
-          "IPY_MODEL_3264bbe4bd0c4801850934f184aba709"
+          "IPY_MODEL_9dd840111f8542c9860eed55f2e76df7",
+          "IPY_MODEL_efc1120bd5e5479aa5843463f687ab03",
+          "IPY_MODEL_ab209e4426984517b85c26b3bcfc93dd"
         ],
-        "layout": "IPY_MODEL_db2e3c3009c448518db67483a9b7b47f"
+        "layout": "IPY_MODEL_d74e8b4fd48547bda7766863ffc47e3d"
       }
     },
-    "28d2e4735c92457fb8a6bd0af706ffd1": {
+    "9dd840111f8542c9860eed55f2e76df7": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0f5a21f9cb5a4935907a6a643d5f6ef4",
-        "style": "IPY_MODEL_834ca6e8f57440c287a486f9919f977e",
-        "value": "\n        <h1 id=\"summary_UH17J\">Full Suite</h1>\n        <p>\n            The suite is composed of various checks such as: Columns Info, Model Error Analysis, Regression Error Distribution, etc...<br>\n            Each check may contain conditions (which will result in pass / fail / warning, represented by \n    <span style=\"color: green;display:inline-block\">\u2713</span> /\n    <span style=\"color: red;display:inline-block\">\u2716</span> /\n    <span style=\"color: orange;font-weight:bold;display:inline-block\">!</span>\n    )\n            as well as other outputs such as plots or tables.<br>\n            Suites, checks and conditions can all be modified. Read more about\n            <a href=https://docs.deepchecks.com/en/stable/examples/guides/create_a_custom_suite.html?utm_source=display_output&utm_medium=referral&utm_campaign=suite_link target=\"_blank\">custom suites</a>.\n        </p>\n        "
+        "layout": "IPY_MODEL_07e9b9390cc14ca8a3076c07c4723ba4",
+        "style": "IPY_MODEL_c0b4d69d6aed4651a6c727d5596dbc50",
+        "value": "\n        <h1 id=\"summary_UH17J\">Full Suite</h1>\n        <p>\n            The suite is composed of various checks such as: Regression Error Distribution, Boosting Overfit, Data Duplicates, etc...<br>\n            Each check may contain conditions (which will result in pass / fail / warning, represented by \n    <span style=\"color: green;display:inline-block\">\u2713</span> /\n    <span style=\"color: red;display:inline-block\">\u2716</span> /\n    <span style=\"color: orange;font-weight:bold;display:inline-block\">!</span>\n    )\n            as well as other outputs such as plots or tables.<br>\n            Suites, checks and conditions can all be modified. Read more about\n            <a href=https://docs.deepchecks.com/en/stable/examples/guides/create_a_custom_suite.html?utm_source=display_output&utm_medium=referral&utm_campaign=suite_link target=\"_blank\">custom suites</a>.\n        </p>\n        "
       }
     },
-    "0f5a21f9cb5a4935907a6a643d5f6ef4": {
+    "07e9b9390cc14ca8a3076c07c4723ba4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "834ca6e8f57440c287a486f9919f977e": {
+    "c0b4d69d6aed4651a6c727d5596dbc50": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "62d8a7eecbe84cad9ce499f2355bbd2d": {
+    "efc1120bd5e5479aa5843463f687ab03": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e7ebe61c30024cfb9034835dcafc3098",
-        "style": "IPY_MODEL_fe33c6af2a2f423ca45aff82eafce756",
+        "layout": "IPY_MODEL_ba27433ed49745779eedd94ef1e8bb6e",
+        "style": "IPY_MODEL_2f285be33f2b44df977afc3866712eb3",
         "value": "<style>.jupyter-widgets.widget-tab > .p-TabBar .p-TabBar-tab {flex: 0 1 auto}</style>"
       }
     },
-    "e7ebe61c30024cfb9034835dcafc3098": {
+    "ba27433ed49745779eedd94ef1e8bb6e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "fe33c6af2a2f423ca45aff82eafce756": {
+    "2f285be33f2b44df977afc3866712eb3": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3264bbe4bd0c4801850934f184aba709": {
+    "ab209e4426984517b85c26b3bcfc93dd": {
       "model_name": "TabModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -989,14 +983,14 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
           "2": "Checks Without Output"
         },
         "children": [
-          "IPY_MODEL_2bffd9744ad446c6b8fd28c7afbb22eb",
-          "IPY_MODEL_579205c8543e462f8088e2b18d0040cd",
-          "IPY_MODEL_b1311bd4c95e4f339345e489947dbf89"
+          "IPY_MODEL_501f5e93cb6747509238d440bddc6b01",
+          "IPY_MODEL_5b66c7312aa74ac2911ce37402c444a5",
+          "IPY_MODEL_a49658787cd04cedbf2864c1ea7c05ae"
         ],
-        "layout": "IPY_MODEL_dd9ca00846044ed49e879901bdf53719"
+        "layout": "IPY_MODEL_88c55007dce44146b51231c15c712c39"
       }
     },
-    "2bffd9744ad446c6b8fd28c7afbb22eb": {
+    "501f5e93cb6747509238d440bddc6b01": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1008,46 +1002,46 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_f62973db15474d8c8a4d6ac55671d485",
-          "IPY_MODEL_3dc079aac2be44b6bec24f5839ab0a00",
-          "IPY_MODEL_d81d3793207c46ad826071cd906a62cc",
-          "IPY_MODEL_74c76bb510c9421c9b1c943f8dd09ce2",
-          "IPY_MODEL_fa9b10641bc84f3d8e434d6c4efde2d9",
-          "IPY_MODEL_734ae08a04914e179609b9186faacaa5",
-          "IPY_MODEL_b27c4a0e4087408bb94d44cfac1fc901",
-          "IPY_MODEL_2333ea7d95f84529afb96aca6dabe62e",
-          "IPY_MODEL_5be747b37dd04080983c68841d715b51",
-          "IPY_MODEL_df72a4a8caea4ce693663efb78d0e035",
-          "IPY_MODEL_6318c0252a264b64a8ed7aab1fbe2fa1",
-          "IPY_MODEL_ab1e9791cc194518bb1c8100ad5d501e"
+          "IPY_MODEL_898a4f8c46514303afe6d89105a3ab44",
+          "IPY_MODEL_c3180df843b84bb88f4bbe3ed13a64f3",
+          "IPY_MODEL_2e91568f2ae3442bb1c2865385422df4",
+          "IPY_MODEL_5ff857140b5b443fb3bfa3a251c579b8",
+          "IPY_MODEL_fc48c46ed4994b8b94b0608a0e3a2fc7",
+          "IPY_MODEL_0a64b0e6bb4d4da189feca614387d8e9",
+          "IPY_MODEL_98d1e9ca9818442694b36d50758035f9",
+          "IPY_MODEL_6d48fbf0fe6f4dd68427aeb24fab6b2e",
+          "IPY_MODEL_f3808be5edf94f26beafdeb6b69b5c07",
+          "IPY_MODEL_66786414eff4472c8e76cb44634de96f",
+          "IPY_MODEL_30efdea8699c413ab755c3c3aa8fc57c",
+          "IPY_MODEL_fd58e5873aa04eec81181a34234677f6"
         ],
-        "layout": "IPY_MODEL_44beb5f40a6749359ad0e3f2f0f55b55"
+        "layout": "IPY_MODEL_906eca96a4fd44b0b27234113cc44e9e"
       }
     },
-    "f62973db15474d8c8a4d6ac55671d485": {
+    "898a4f8c46514303afe6d89105a3ab44": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_bc696153747848c692f04eea17955a1d",
-        "style": "IPY_MODEL_e9e3908180514dc787e414ee554cde4f",
+        "layout": "IPY_MODEL_320211bad7094b84b6e28b0e0d145247",
+        "style": "IPY_MODEL_5b01614f3ab84c2299ec5ca5016a6fce",
         "value": "<h2>Conditions Summary</h2>"
       }
     },
-    "bc696153747848c692f04eea17955a1d": {
+    "320211bad7094b84b6e28b0e0d145247": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e9e3908180514dc787e414ee554cde4f": {
+    "5b01614f3ab84c2299ec5ca5016a6fce": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3dc079aac2be44b6bec24f5839ab0a00": {
+    "c3180df843b84bb88f4bbe3ed13a64f3": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1059,101 +1053,101 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_9b6f9db65b034cd8a7fc582d18c1c8d2"
+          "IPY_MODEL_c04e88b627384a5ca3bf3c7afe6e7525"
         ],
-        "layout": "IPY_MODEL_461cdaa469cc4774bcfd1cacdabb5117"
+        "layout": "IPY_MODEL_aa3a2386a96944f0bb8f4ab6874e9692"
       }
     },
-    "9b6f9db65b034cd8a7fc582d18c1c8d2": {
+    "c04e88b627384a5ca3bf3c7afe6e7525": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3dcac4d7ee274642be83ad3490b73470",
-        "style": "IPY_MODEL_9a9eb4e3188c4f7bafe8e04ac3b9424d",
-        "value": "<style type=\"text/css\">\n#T_67fab table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_67fab thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_67fab tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_67fab th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_67fab td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_67fab\">\n  <thead>\n    <tr>\n      <th id=\"T_67fab_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_67fab_level0_col1\" class=\"col_heading level0 col1\" >Check</th>\n      <th id=\"T_67fab_level0_col2\" class=\"col_heading level0 col2\" >Condition</th>\n      <th id=\"T_67fab_level0_col3\" class=\"col_heading level0 col3\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_67fab_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_67fab_row0_col1\" class=\"data row0 col1\" ><a href=#SingleFeatureContributionTrainTest_UH17J>Single Feature Contribution Train-Test</a></td>\n      <td id=\"T_67fab_row0_col2\" class=\"data row0 col2\" >Train features' Predictive Power Score is not greater than 0.7</td>\n      <td id=\"T_67fab_row0_col3\" class=\"data row0 col3\" >Features in train dataset with PPS above threshold: {'petal width (cm)': '0.91', 'petal length (cm)': '0.84'}</td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row1_col1\" class=\"data row1 col1\" ><a href=#TrainTestFeatureDrift_UH17J>Train Test Drift</a></td>\n      <td id=\"T_67fab_row1_col2\" class=\"data row1 col2\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1</td>\n      <td id=\"T_67fab_row1_col3\" class=\"data row1 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row2_col1\" class=\"data row2 col1\" ><a href=#TrainTestLabelDrift_UH17J>Train Test Label Drift</a></td>\n      <td id=\"T_67fab_row2_col2\" class=\"data row2 col2\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1 for label drift</td>\n      <td id=\"T_67fab_row2_col3\" class=\"data row2 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row3_col0\" class=\"data row3 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row3_col1\" class=\"data row3 col1\" ><a href=#DatasetsSizeComparison_UH17J>Datasets Size Comparison</a></td>\n      <td id=\"T_67fab_row3_col2\" class=\"data row3 col2\" >Test-Train size ratio is not smaller than 0.01</td>\n      <td id=\"T_67fab_row3_col3\" class=\"data row3 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row4_col0\" class=\"data row4 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row4_col1\" class=\"data row4 col1\" ><a href=#SingleFeatureContributionTrainTest_UH17J>Single Feature Contribution Train-Test</a></td>\n      <td id=\"T_67fab_row4_col2\" class=\"data row4 col2\" >Train-Test features' Predictive Power Score difference is not greater than 0.2</td>\n      <td id=\"T_67fab_row4_col3\" class=\"data row4 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row5_col0\" class=\"data row5 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row5_col1\" class=\"data row5 col1\" ><a href=#TrainTestSamplesMix_UH17J>Train Test Samples Mix</a></td>\n      <td id=\"T_67fab_row5_col2\" class=\"data row5 col2\" >Percentage of test data samples that appear in train data not greater than 10%</td>\n      <td id=\"T_67fab_row5_col3\" class=\"data row5 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row6_col0\" class=\"data row6 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row6_col1\" class=\"data row6 col1\" >Special Characters - Test Dataset</td>\n      <td id=\"T_67fab_row6_col2\" class=\"data row6 col2\" >Ratio of entirely special character samples not greater than 0.1%</td>\n      <td id=\"T_67fab_row6_col3\" class=\"data row6 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row7_col0\" class=\"data row7 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row7_col1\" class=\"data row7 col1\" >Special Characters - Train Dataset</td>\n      <td id=\"T_67fab_row7_col2\" class=\"data row7 col2\" >Ratio of entirely special character samples not greater than 0.1%</td>\n      <td id=\"T_67fab_row7_col3\" class=\"data row7 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row8_col0\" class=\"data row8 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row8_col1\" class=\"data row8 col1\" >String Length Out Of Bounds - Test Dataset</td>\n      <td id=\"T_67fab_row8_col2\" class=\"data row8 col2\" >Ratio of outliers not greater than 0% string length outliers</td>\n      <td id=\"T_67fab_row8_col3\" class=\"data row8 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row9_col0\" class=\"data row9 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row9_col1\" class=\"data row9 col1\" >String Length Out Of Bounds - Train Dataset</td>\n      <td id=\"T_67fab_row9_col2\" class=\"data row9 col2\" >Ratio of outliers not greater than 0% string length outliers</td>\n      <td id=\"T_67fab_row9_col3\" class=\"data row9 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row10_col0\" class=\"data row10 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row10_col1\" class=\"data row10 col1\" >Data Duplicates - Test Dataset</td>\n      <td id=\"T_67fab_row10_col2\" class=\"data row10 col2\" >Duplicate data ratio is not greater than 0%</td>\n      <td id=\"T_67fab_row10_col3\" class=\"data row10 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row11_col0\" class=\"data row11 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row11_col1\" class=\"data row11 col1\" >Data Duplicates - Train Dataset</td>\n      <td id=\"T_67fab_row11_col2\" class=\"data row11 col2\" >Duplicate data ratio is not greater than 0%</td>\n      <td id=\"T_67fab_row11_col3\" class=\"data row11 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row12_col0\" class=\"data row12 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row12_col1\" class=\"data row12 col1\" >String Mismatch - Test Dataset</td>\n      <td id=\"T_67fab_row12_col2\" class=\"data row12 col2\" >No string variants</td>\n      <td id=\"T_67fab_row12_col3\" class=\"data row12 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row13_col0\" class=\"data row13 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row13_col1\" class=\"data row13 col1\" >String Mismatch - Train Dataset</td>\n      <td id=\"T_67fab_row13_col2\" class=\"data row13 col2\" >No string variants</td>\n      <td id=\"T_67fab_row13_col3\" class=\"data row13 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row14_col0\" class=\"data row14 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row14_col1\" class=\"data row14 col1\" >Mixed Data Types - Test Dataset</td>\n      <td id=\"T_67fab_row14_col2\" class=\"data row14 col2\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_67fab_row14_col3\" class=\"data row14 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row15_col0\" class=\"data row15 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row15_col1\" class=\"data row15 col1\" >Mixed Nulls - Train Dataset</td>\n      <td id=\"T_67fab_row15_col2\" class=\"data row15 col2\" >Not more than 1 different null types</td>\n      <td id=\"T_67fab_row15_col3\" class=\"data row15 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row16_col0\" class=\"data row16 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row16_col1\" class=\"data row16 col1\" >Mixed Nulls - Test Dataset</td>\n      <td id=\"T_67fab_row16_col2\" class=\"data row16 col2\" >Not more than 1 different null types</td>\n      <td id=\"T_67fab_row16_col3\" class=\"data row16 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row17_col0\" class=\"data row17 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row17_col1\" class=\"data row17 col1\" >Label Ambiguity - Train Dataset</td>\n      <td id=\"T_67fab_row17_col2\" class=\"data row17 col2\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_67fab_row17_col3\" class=\"data row17 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row18_col0\" class=\"data row18 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row18_col1\" class=\"data row18 col1\" >Single Value in Column - Test Dataset</td>\n      <td id=\"T_67fab_row18_col2\" class=\"data row18 col2\" >Does not contain only a single value</td>\n      <td id=\"T_67fab_row18_col3\" class=\"data row18 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row19_col0\" class=\"data row19 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row19_col1\" class=\"data row19 col1\" >Single Value in Column - Train Dataset</td>\n      <td id=\"T_67fab_row19_col2\" class=\"data row19 col2\" >Does not contain only a single value</td>\n      <td id=\"T_67fab_row19_col3\" class=\"data row19 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row20_col0\" class=\"data row20 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row20_col1\" class=\"data row20 col1\" >String Mismatch Comparison</td>\n      <td id=\"T_67fab_row20_col2\" class=\"data row20 col2\" >No new variants allowed in test data</td>\n      <td id=\"T_67fab_row20_col3\" class=\"data row20 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row21_col0\" class=\"data row21 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row21_col1\" class=\"data row21 col1\" >New Label Train Test</td>\n      <td id=\"T_67fab_row21_col2\" class=\"data row21 col2\" >Number of new label values is not greater than 0</td>\n      <td id=\"T_67fab_row21_col3\" class=\"data row21 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row22_col0\" class=\"data row22 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row22_col1\" class=\"data row22 col1\" >Category Mismatch Train Test</td>\n      <td id=\"T_67fab_row22_col2\" class=\"data row22 col2\" >Ratio of samples with a new category is not greater than 0%</td>\n      <td id=\"T_67fab_row22_col3\" class=\"data row22 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row23_col0\" class=\"data row23 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row23_col1\" class=\"data row23 col1\" >Dominant Frequency Change</td>\n      <td id=\"T_67fab_row23_col2\" class=\"data row23 col2\" >Change in ratio of dominant value in data is not greater than 25%</td>\n      <td id=\"T_67fab_row23_col3\" class=\"data row23 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row24_col0\" class=\"data row24 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row24_col1\" class=\"data row24 col1\" >Whole Dataset Drift</td>\n      <td id=\"T_67fab_row24_col2\" class=\"data row24 col2\" >Drift value is not greater than 0.25</td>\n      <td id=\"T_67fab_row24_col3\" class=\"data row24 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row25_col0\" class=\"data row25 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row25_col1\" class=\"data row25 col1\" >Mixed Data Types - Train Dataset</td>\n      <td id=\"T_67fab_row25_col2\" class=\"data row25 col2\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_67fab_row25_col3\" class=\"data row25 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_67fab_row26_col0\" class=\"data row26 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_67fab_row26_col1\" class=\"data row26 col1\" >Label Ambiguity - Test Dataset</td>\n      <td id=\"T_67fab_row26_col2\" class=\"data row26 col2\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_67fab_row26_col3\" class=\"data row26 col3\" ></td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_1d5ecea1b80e442089913f6e5938242d",
+        "style": "IPY_MODEL_e76c10bd351d4754900a356ef3b5e4b9",
+        "value": "<style type=\"text/css\">\n#T_85c05 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85c05 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85c05 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85c05 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85c05 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_85c05\">\n  <thead>\n    <tr>\n      <th id=\"T_85c05_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_85c05_level0_col1\" class=\"col_heading level0 col1\" >Check</th>\n      <th id=\"T_85c05_level0_col2\" class=\"col_heading level0 col2\" >Condition</th>\n      <th id=\"T_85c05_level0_col3\" class=\"col_heading level0 col3\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_85c05_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_85c05_row0_col1\" class=\"data row0 col1\" ><a href=#SingleFeatureContributionTrainTest_UH17J>Single Feature Contribution Train-Test</a></td>\n      <td id=\"T_85c05_row0_col2\" class=\"data row0 col2\" >Train features' Predictive Power Score is not greater than 0.7</td>\n      <td id=\"T_85c05_row0_col3\" class=\"data row0 col3\" >Features in train dataset with PPS above threshold: {'petal width (cm)': '0.91', 'petal length (cm)': '0.84'}</td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row1_col1\" class=\"data row1 col1\" ><a href=#TrainTestFeatureDrift_UH17J>Train Test Drift</a></td>\n      <td id=\"T_85c05_row1_col2\" class=\"data row1 col2\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1</td>\n      <td id=\"T_85c05_row1_col3\" class=\"data row1 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row2_col1\" class=\"data row2 col1\" ><a href=#TrainTestLabelDrift_UH17J>Train Test Label Drift</a></td>\n      <td id=\"T_85c05_row2_col2\" class=\"data row2 col2\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1 for label drift</td>\n      <td id=\"T_85c05_row2_col3\" class=\"data row2 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row3_col0\" class=\"data row3 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row3_col1\" class=\"data row3 col1\" ><a href=#DatasetsSizeComparison_UH17J>Datasets Size Comparison</a></td>\n      <td id=\"T_85c05_row3_col2\" class=\"data row3 col2\" >Test-Train size ratio is not smaller than 0.01</td>\n      <td id=\"T_85c05_row3_col3\" class=\"data row3 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row4_col0\" class=\"data row4 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row4_col1\" class=\"data row4 col1\" ><a href=#SingleFeatureContributionTrainTest_UH17J>Single Feature Contribution Train-Test</a></td>\n      <td id=\"T_85c05_row4_col2\" class=\"data row4 col2\" >Train-Test features' Predictive Power Score difference is not greater than 0.2</td>\n      <td id=\"T_85c05_row4_col3\" class=\"data row4 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row5_col0\" class=\"data row5 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row5_col1\" class=\"data row5 col1\" ><a href=#TrainTestSamplesMix_UH17J>Train Test Samples Mix</a></td>\n      <td id=\"T_85c05_row5_col2\" class=\"data row5 col2\" >Percentage of test data samples that appear in train data not greater than 10%</td>\n      <td id=\"T_85c05_row5_col3\" class=\"data row5 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row6_col0\" class=\"data row6 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row6_col1\" class=\"data row6 col1\" >Special Characters - Test Dataset</td>\n      <td id=\"T_85c05_row6_col2\" class=\"data row6 col2\" >Ratio of entirely special character samples not greater than 0.1%</td>\n      <td id=\"T_85c05_row6_col3\" class=\"data row6 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row7_col0\" class=\"data row7 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row7_col1\" class=\"data row7 col1\" >Special Characters - Train Dataset</td>\n      <td id=\"T_85c05_row7_col2\" class=\"data row7 col2\" >Ratio of entirely special character samples not greater than 0.1%</td>\n      <td id=\"T_85c05_row7_col3\" class=\"data row7 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row8_col0\" class=\"data row8 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row8_col1\" class=\"data row8 col1\" >String Length Out Of Bounds - Test Dataset</td>\n      <td id=\"T_85c05_row8_col2\" class=\"data row8 col2\" >Ratio of outliers not greater than 0% string length outliers</td>\n      <td id=\"T_85c05_row8_col3\" class=\"data row8 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row9_col0\" class=\"data row9 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row9_col1\" class=\"data row9 col1\" >String Length Out Of Bounds - Train Dataset</td>\n      <td id=\"T_85c05_row9_col2\" class=\"data row9 col2\" >Ratio of outliers not greater than 0% string length outliers</td>\n      <td id=\"T_85c05_row9_col3\" class=\"data row9 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row10_col0\" class=\"data row10 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row10_col1\" class=\"data row10 col1\" >Data Duplicates - Test Dataset</td>\n      <td id=\"T_85c05_row10_col2\" class=\"data row10 col2\" >Duplicate data ratio is not greater than 0%</td>\n      <td id=\"T_85c05_row10_col3\" class=\"data row10 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row11_col0\" class=\"data row11 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row11_col1\" class=\"data row11 col1\" >Data Duplicates - Train Dataset</td>\n      <td id=\"T_85c05_row11_col2\" class=\"data row11 col2\" >Duplicate data ratio is not greater than 0%</td>\n      <td id=\"T_85c05_row11_col3\" class=\"data row11 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row12_col0\" class=\"data row12 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row12_col1\" class=\"data row12 col1\" >String Mismatch - Test Dataset</td>\n      <td id=\"T_85c05_row12_col2\" class=\"data row12 col2\" >No string variants</td>\n      <td id=\"T_85c05_row12_col3\" class=\"data row12 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row13_col0\" class=\"data row13 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row13_col1\" class=\"data row13 col1\" >String Mismatch - Train Dataset</td>\n      <td id=\"T_85c05_row13_col2\" class=\"data row13 col2\" >No string variants</td>\n      <td id=\"T_85c05_row13_col3\" class=\"data row13 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row14_col0\" class=\"data row14 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row14_col1\" class=\"data row14 col1\" >Mixed Data Types - Test Dataset</td>\n      <td id=\"T_85c05_row14_col2\" class=\"data row14 col2\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_85c05_row14_col3\" class=\"data row14 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row15_col0\" class=\"data row15 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row15_col1\" class=\"data row15 col1\" >Mixed Nulls - Train Dataset</td>\n      <td id=\"T_85c05_row15_col2\" class=\"data row15 col2\" >Not more than 1 different null types</td>\n      <td id=\"T_85c05_row15_col3\" class=\"data row15 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row16_col0\" class=\"data row16 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row16_col1\" class=\"data row16 col1\" >Mixed Nulls - Test Dataset</td>\n      <td id=\"T_85c05_row16_col2\" class=\"data row16 col2\" >Not more than 1 different null types</td>\n      <td id=\"T_85c05_row16_col3\" class=\"data row16 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row17_col0\" class=\"data row17 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row17_col1\" class=\"data row17 col1\" >Label Ambiguity - Train Dataset</td>\n      <td id=\"T_85c05_row17_col2\" class=\"data row17 col2\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_85c05_row17_col3\" class=\"data row17 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row18_col0\" class=\"data row18 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row18_col1\" class=\"data row18 col1\" >Single Value in Column - Test Dataset</td>\n      <td id=\"T_85c05_row18_col2\" class=\"data row18 col2\" >Does not contain only a single value</td>\n      <td id=\"T_85c05_row18_col3\" class=\"data row18 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row19_col0\" class=\"data row19 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row19_col1\" class=\"data row19 col1\" >Single Value in Column - Train Dataset</td>\n      <td id=\"T_85c05_row19_col2\" class=\"data row19 col2\" >Does not contain only a single value</td>\n      <td id=\"T_85c05_row19_col3\" class=\"data row19 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row20_col0\" class=\"data row20 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row20_col1\" class=\"data row20 col1\" >String Mismatch Comparison</td>\n      <td id=\"T_85c05_row20_col2\" class=\"data row20 col2\" >No new variants allowed in test data</td>\n      <td id=\"T_85c05_row20_col3\" class=\"data row20 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row21_col0\" class=\"data row21 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row21_col1\" class=\"data row21 col1\" >New Label Train Test</td>\n      <td id=\"T_85c05_row21_col2\" class=\"data row21 col2\" >Number of new label values is not greater than 0</td>\n      <td id=\"T_85c05_row21_col3\" class=\"data row21 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row22_col0\" class=\"data row22 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row22_col1\" class=\"data row22 col1\" >Category Mismatch Train Test</td>\n      <td id=\"T_85c05_row22_col2\" class=\"data row22 col2\" >Ratio of samples with a new category is not greater than 0%</td>\n      <td id=\"T_85c05_row22_col3\" class=\"data row22 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row23_col0\" class=\"data row23 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row23_col1\" class=\"data row23 col1\" >Dominant Frequency Change</td>\n      <td id=\"T_85c05_row23_col2\" class=\"data row23 col2\" >Change in ratio of dominant value in data is not greater than 25%</td>\n      <td id=\"T_85c05_row23_col3\" class=\"data row23 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row24_col0\" class=\"data row24 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row24_col1\" class=\"data row24 col1\" >Whole Dataset Drift</td>\n      <td id=\"T_85c05_row24_col2\" class=\"data row24 col2\" >Drift value is not greater than 0.25</td>\n      <td id=\"T_85c05_row24_col3\" class=\"data row24 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row25_col0\" class=\"data row25 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row25_col1\" class=\"data row25 col1\" >Mixed Data Types - Train Dataset</td>\n      <td id=\"T_85c05_row25_col2\" class=\"data row25 col2\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_85c05_row25_col3\" class=\"data row25 col3\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_85c05_row26_col0\" class=\"data row26 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85c05_row26_col1\" class=\"data row26 col1\" >Label Ambiguity - Test Dataset</td>\n      <td id=\"T_85c05_row26_col2\" class=\"data row26 col2\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_85c05_row26_col3\" class=\"data row26 col3\" ></td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "3dcac4d7ee274642be83ad3490b73470": {
+    "1d5ecea1b80e442089913f6e5938242d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9a9eb4e3188c4f7bafe8e04ac3b9424d": {
+    "e76c10bd351d4754900a356ef3b5e4b9": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "461cdaa469cc4774bcfd1cacdabb5117": {
+    "aa3a2386a96944f0bb8f4ab6874e9692": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d81d3793207c46ad826071cd906a62cc": {
+    "2e91568f2ae3442bb1c2865385422df4": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_aebc8075c9bd4ce3b32968a1c8fcb14c",
-        "style": "IPY_MODEL_46baeadeceab4dbda59d480d670964bc",
+        "layout": "IPY_MODEL_5a7fdc7ad9b3494c9e17e8174ac48ff7",
+        "style": "IPY_MODEL_8505d5974d64497b925375ad746de9f6",
         "value": "<h2>Check With Conditions Output</h2>"
       }
     },
-    "aebc8075c9bd4ce3b32968a1c8fcb14c": {
+    "5a7fdc7ad9b3494c9e17e8174ac48ff7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "46baeadeceab4dbda59d480d670964bc": {
+    "8505d5974d64497b925375ad746de9f6": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "74c76bb510c9421c9b1c943f8dd09ce2": {
+    "5ff857140b5b443fb3bfa3a251c579b8": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_f9b41676aaad4db197c7580ad4a6f3b1",
-          "IPY_MODEL_793333e19fe84832a076d0fc1a84b2b0",
-          "IPY_MODEL_7d248f9f63ab4b7e80c0a3e6b368341d"
+          "IPY_MODEL_f0d83a56e8464c7292f327aab27141cc",
+          "IPY_MODEL_98b5aa1f8b9c47809d33adb19fcb1e92",
+          "IPY_MODEL_a0eaf4caff944a40ac0c02ba6dad918b"
         ],
-        "layout": "IPY_MODEL_0d42dd8f928e4cea8cb5263ca380b3c1"
+        "layout": "IPY_MODEL_2fa3431a93f1448a94b9b03a1e26a789"
       }
     },
-    "f9b41676aaad4db197c7580ad4a6f3b1": {
+    "f0d83a56e8464c7292f327aab27141cc": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1be4812063364d4f955dcf358ce11594",
-        "style": "IPY_MODEL_0a4175e14b56473eb4eb963a0716e69e",
-        "value": "<h4 id=\"SingleFeatureContributionTrainTest_UH17J\">Single Feature Contribution Train-Test</h4><p>    Return the Predictive Power Score of all features, in order to estimate each feature's ability to predict the label. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_f84c3 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f84c3 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f84c3 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f84c3 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f84c3 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f84c3\">\n  <thead>\n    <tr>\n      <th id=\"T_f84c3_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_f84c3_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_f84c3_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_f84c3_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_f84c3_row0_col1\" class=\"data row0 col1\" >Train features' Predictive Power Score is not greater than 0.7</td>\n      <td id=\"T_f84c3_row0_col2\" class=\"data row0 col2\" >Features in train dataset with PPS above threshold: {'petal width (cm)': '0.91', 'petal length (cm)': '0.84'}</td>\n    </tr>\n    <tr>\n      <td id=\"T_f84c3_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_f84c3_row1_col1\" class=\"data row1 col1\" >Train-Test features' Predictive Power Score difference is not greater than 0.2</td>\n      <td id=\"T_f84c3_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5>"
+        "layout": "IPY_MODEL_b3140269b55d4e2e8d5329d5b018e914",
+        "style": "IPY_MODEL_beddbe1c1175414fb63a0b3cf08b3e60",
+        "value": "<h4 id=\"SingleFeatureContributionTrainTest_UH17J\">Single Feature Contribution Train-Test</h4><p>    Return the Predictive Power Score of all features, in order to estimate each feature's ability to predict the label. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_63013 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_63013 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_63013 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_63013 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_63013 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_63013\">\n  <thead>\n    <tr>\n      <th id=\"T_63013_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_63013_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_63013_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_63013_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_63013_row0_col1\" class=\"data row0 col1\" >Train features' Predictive Power Score is not greater than 0.7</td>\n      <td id=\"T_63013_row0_col2\" class=\"data row0 col2\" >Features in train dataset with PPS above threshold: {'petal width (cm)': '0.91', 'petal length (cm)': '0.84'}</td>\n    </tr>\n    <tr>\n      <td id=\"T_63013_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_63013_row1_col1\" class=\"data row1 col1\" >Train-Test features' Predictive Power Score difference is not greater than 0.2</td>\n      <td id=\"T_63013_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5>"
       }
     },
-    "1be4812063364d4f955dcf358ce11594": {
+    "b3140269b55d4e2e8d5329d5b018e914": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0a4175e14b56473eb4eb963a0716e69e": {
+    "beddbe1c1175414fb63a0b3cf08b3e60": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "793333e19fe84832a076d0fc1a84b2b0": {
+    "98b5aa1f8b9c47809d33adb19fcb1e92": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1187,7 +1181,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
               ]
             },
             "type": "bar",
-            "uid": "49777d36-a6a8-4fe6-968d-71b030be54b7"
+            "uid": "8e57fb83-10c3-45cf-bb04-6ea55f0a91ec"
           },
           {
             "marker": {
@@ -1214,7 +1208,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
               ]
             },
             "type": "bar",
-            "uid": "3119284a-d490-47bd-ad06-89671c5e5027"
+            "uid": "68b65a28-7337-45d1-bbe8-0ca2da84555c"
           },
           {
             "line": {
@@ -1239,7 +1233,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
               ]
             },
             "type": "scatter",
-            "uid": "127dca44-0e0e-431a-bb95-e67c025a0f54"
+            "uid": "f17599fe-81d4-4752-a858-de1fef1be6a8"
           }
         ],
         "_dom_classes": [],
@@ -2156,102 +2150,102 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "7d248f9f63ab4b7e80c0a3e6b368341d": {
+    "a0eaf4caff944a40ac0c02ba6dad918b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1fc2f55586be400bbaec20afc34f9575",
-        "style": "IPY_MODEL_fbbdef7554144425a485d16ae236506f",
+        "layout": "IPY_MODEL_689c677b87eb44ca9ed661e0a549fe57",
+        "style": "IPY_MODEL_b8892747a3b448569120a1d3b9415b67",
         "value": "<div>The Predictive Power Score (PPS) is used to estimate the ability of a feature to predict the label by itself. (Read more about <a href=https://docs.deepchecks.com/en/stable/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link target=\"_blank\">Predictive Power Score</a>)</div><div><u>In the graph above</u>, we should suspect we have problems in our data if:</div><div>1. <b>Train dataset PPS values are high</b>:</div><div>Can indicate that this feature's success in predicting the label is actually due to data leakage, </div><div>   meaning that the feature holds information that is based on the label to begin with.</div><div>2. <b>Large difference between train and test PPS</b> (train PPS is larger):</div><div>   An even more powerful indication of data leakage, as a feature that was powerful in train but not in test </div><div>   can be explained by leakage in train that is not relevant to a new dataset.</div><div>3. <b>Large difference between test and train PPS</b> (test PPS is larger):</div><div>   An anomalous value, could indicate drift in test dataset that caused a coincidental correlation to the target label.</div><br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "1fc2f55586be400bbaec20afc34f9575": {
+    "689c677b87eb44ca9ed661e0a549fe57": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "fbbdef7554144425a485d16ae236506f": {
+    "b8892747a3b448569120a1d3b9415b67": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0d42dd8f928e4cea8cb5263ca380b3c1": {
+    "2fa3431a93f1448a94b9b03a1e26a789": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "fa9b10641bc84f3d8e434d6c4efde2d9": {
+    "fc48c46ed4994b8b94b0608a0e3a2fc7": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_087e06ffbb444ed69de52387ff0a555e",
-        "style": "IPY_MODEL_cc5c2047fa4347479500eb202497d9b1",
+        "layout": "IPY_MODEL_dcec73a106c74b73bcc7e1dd9d777dc2",
+        "style": "IPY_MODEL_9af0e3bec4bc48669a5b4debcf11b9d8",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "087e06ffbb444ed69de52387ff0a555e": {
+    "dcec73a106c74b73bcc7e1dd9d777dc2": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "cc5c2047fa4347479500eb202497d9b1": {
+    "9af0e3bec4bc48669a5b4debcf11b9d8": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "734ae08a04914e179609b9186faacaa5": {
+    "0a64b0e6bb4d4da189feca614387d8e9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_e7899f3d5fdd40488ef53653681d92c1",
-          "IPY_MODEL_494a07873c5446279ed15506753ffb3d",
-          "IPY_MODEL_3172e998720b4a3b89cd8531f7924ee8",
-          "IPY_MODEL_21c5d224441e418d854ce98c98e02f3a",
-          "IPY_MODEL_ffe00ffde9af492eae351e9490747dd9",
-          "IPY_MODEL_cd4c9ebcf099449192aaea691c0f033e",
-          "IPY_MODEL_237e21981a81429599af0988ae947be4",
-          "IPY_MODEL_01c16e88c41347189137f9a3bcf20daf",
-          "IPY_MODEL_07f96ff20ce140279a2636e9abbf404e"
+          "IPY_MODEL_8707c5af8dbd4387afe42399fb8e7218",
+          "IPY_MODEL_c9742d97987641e19c3cb08d54be93cd",
+          "IPY_MODEL_15b92d399514434ab06c381d0928bfc3",
+          "IPY_MODEL_cf715639cbcd4707a9a7551bf92c3abb",
+          "IPY_MODEL_bbd5f435e10940debefbfe7446ab02d7",
+          "IPY_MODEL_dcda35cbc4d94c8c808e4f613e62a510",
+          "IPY_MODEL_9b7c32d0926d482189a87b5f0f4a1148",
+          "IPY_MODEL_3e7a3ff87a2f4a0ba2d31b29be8bfe16",
+          "IPY_MODEL_c51d4ee8647d4d2ebbbba1b8ac452c94"
         ],
-        "layout": "IPY_MODEL_cf78b691dfbb41568f04c8197eac610d"
+        "layout": "IPY_MODEL_a501c87fd8714cb7a47d0f46ba8bd77a"
       }
     },
-    "e7899f3d5fdd40488ef53653681d92c1": {
+    "8707c5af8dbd4387afe42399fb8e7218": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_7c675ce81b4e472e8b90c9147f795ee6",
-        "style": "IPY_MODEL_dfd29f1f33e2432b81be0efba034d10f",
-        "value": "<h4 id=\"TrainTestFeatureDrift_UH17J\">Train Test Drift</h4><p>    Calculate drift between train dataset and test dataset per feature, using statistical measures. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/train_test_feature_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_0a719 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0a719 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0a719 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0a719 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0a719 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_0a719\">\n  <thead>\n    <tr>\n      <th id=\"T_0a719_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_0a719_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_0a719_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_0a719_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_0a719_row0_col1\" class=\"data row0 col1\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1</td>\n      <td id=\"T_0a719_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the features, sorted by\n            drift score and showing only the top 5 features, according to drift score.\n            <br>If available, the plot titles also show the feature importance (FI) rank.\n        </span></div>"
+        "layout": "IPY_MODEL_b36d140b4f7e4f6bb52924fa98f83a5a",
+        "style": "IPY_MODEL_f9209699b3004222868b225a8714b0a1",
+        "value": "<h4 id=\"TrainTestFeatureDrift_UH17J\">Train Test Drift</h4><p>    Calculate drift between train dataset and test dataset per feature, using statistical measures. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/train_test_feature_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_961ef table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_961ef thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_961ef tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_961ef th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_961ef td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_961ef\">\n  <thead>\n    <tr>\n      <th id=\"T_961ef_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_961ef_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_961ef_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_961ef_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_961ef_row0_col1\" class=\"data row0 col1\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1</td>\n      <td id=\"T_961ef_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the features, sorted by\n            drift score and showing only the top 5 features, according to drift score.\n            <br>If available, the plot titles also show the feature importance (FI) rank.\n        </span></div>"
       }
     },
-    "7c675ce81b4e472e8b90c9147f795ee6": {
+    "b36d140b4f7e4f6bb52924fa98f83a5a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dfd29f1f33e2432b81be0efba034d10f": {
+    "f9209699b3004222868b225a8714b0a1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "494a07873c5446279ed15506753ffb3d": {
+    "c9742d97987641e19c3cb08d54be93cd": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2277,7 +2271,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "bf8a9379-9fb5-485d-aa03-c2efd82bb543"
+            "uid": "bf228884-3958-46b3-b3e4-0e72c5ba87be"
           },
           {
             "fill": "tozeroy",
@@ -2444,7 +2438,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e57f874e-b1f0-4ec4-935a-1dce3916bfff"
+            "uid": "0fb5ad9a-5691-4e5e-b294-16615adca052"
           },
           {
             "fill": "tozeroy",
@@ -2611,7 +2605,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c1e90e05-f59e-498b-aece-e4486a7337c7"
+            "uid": "67f141fd-c33f-4e55-9f58-3ead3ff522a0"
           }
         ],
         "_dom_classes": [],
@@ -3571,29 +3565,29 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "3172e998720b4a3b89cd8531f7924ee8": {
+    "15b92d399514434ab06c381d0928bfc3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0e37eaed573e4409b1ee750ed4be2e24",
-        "style": "IPY_MODEL_0443d57806a24e19ba3cd647af10f87b"
+        "layout": "IPY_MODEL_bec6f800239348ef92826cf84860751a",
+        "style": "IPY_MODEL_8b0f034e76c74773bb3ebdf55e185d29"
       }
     },
-    "0e37eaed573e4409b1ee750ed4be2e24": {
+    "bec6f800239348ef92826cf84860751a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0443d57806a24e19ba3cd647af10f87b": {
+    "8b0f034e76c74773bb3ebdf55e185d29": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "21c5d224441e418d854ce98c98e02f3a": {
+    "cf715639cbcd4707a9a7551bf92c3abb": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -3619,7 +3613,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "7130bab2-7b03-444f-a49c-d4fa769ec317"
+            "uid": "b03448ca-3a39-4954-9c3e-5f701f4b3b3f"
           },
           {
             "fill": "tozeroy",
@@ -3786,7 +3780,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f8ae432c-7137-44b4-a8af-e9b53a160ba5"
+            "uid": "609670d5-09e0-47a2-ae8b-5eeaa64e0714"
           },
           {
             "fill": "tozeroy",
@@ -3953,7 +3947,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f30a11aa-bd6a-4d54-a82c-87c1d3e9d8f7"
+            "uid": "65299ae1-e2d9-41d5-8e91-22f49a2b2276"
           }
         ],
         "_dom_classes": [],
@@ -4913,29 +4907,29 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "ffe00ffde9af492eae351e9490747dd9": {
+    "bbd5f435e10940debefbfe7446ab02d7": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_5706c7415beb46fd87849a3f489d3327",
-        "style": "IPY_MODEL_dc9813991e83418b8ee5804e05d46c9b"
+        "layout": "IPY_MODEL_c7018deff7b14994bee9cc23eb5ab9a3",
+        "style": "IPY_MODEL_bcc0533ba9e44d82ae84e884db03f6e6"
       }
     },
-    "5706c7415beb46fd87849a3f489d3327": {
+    "c7018deff7b14994bee9cc23eb5ab9a3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dc9813991e83418b8ee5804e05d46c9b": {
+    "bcc0533ba9e44d82ae84e884db03f6e6": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cd4c9ebcf099449192aaea691c0f033e": {
+    "dcda35cbc4d94c8c808e4f613e62a510": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -4961,7 +4955,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "88cbb393-2b92-48ad-be45-ceaf514420d9"
+            "uid": "1402ef49-a515-4034-a5f1-9a82c672de04"
           },
           {
             "fill": "tozeroy",
@@ -5128,7 +5122,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "6524489a-ff18-40e3-8d2b-026feb21bfa6"
+            "uid": "8bf055e7-2178-40a5-b12d-dc9df776570c"
           },
           {
             "fill": "tozeroy",
@@ -5295,7 +5289,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "ce564a07-9f23-44c7-a313-547b6fc7b93e"
+            "uid": "977ce2ee-a994-4c19-8841-2ede65aa1eff"
           }
         ],
         "_dom_classes": [],
@@ -6255,29 +6249,29 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "237e21981a81429599af0988ae947be4": {
+    "9b7c32d0926d482189a87b5f0f4a1148": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_78433674382947bab8f96d55849ee9a5",
-        "style": "IPY_MODEL_3d12b33e51964042b3e16da47c40de9b"
+        "layout": "IPY_MODEL_2dae8fdfeea349fab03b6f57254af509",
+        "style": "IPY_MODEL_41d71306771f4a2bb9a3057062c94cbe"
       }
     },
-    "78433674382947bab8f96d55849ee9a5": {
+    "2dae8fdfeea349fab03b6f57254af509": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3d12b33e51964042b3e16da47c40de9b": {
+    "41d71306771f4a2bb9a3057062c94cbe": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "01c16e88c41347189137f9a3bcf20daf": {
+    "3e7a3ff87a2f4a0ba2d31b29be8bfe16": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -6303,7 +6297,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "5e545cd6-0e3d-4bbb-ae84-b35f305d4431"
+            "uid": "9663f9c9-da55-4dec-83fc-555bc8e283e0"
           },
           {
             "fill": "tozeroy",
@@ -6470,7 +6464,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "cef9babe-d920-4719-b1e5-7663b44e82b8"
+            "uid": "9591f67c-f68c-48e0-8727-300c15037e49"
           },
           {
             "fill": "tozeroy",
@@ -6637,7 +6631,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c9a6d17f-0e93-4d8c-8e89-7cafb5c1f2cc"
+            "uid": "b454de9b-ad04-4d7a-bd8b-bc324ddf18aa"
           }
         ],
         "_dom_classes": [],
@@ -7597,96 +7591,96 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "07f96ff20ce140279a2636e9abbf404e": {
+    "c51d4ee8647d4d2ebbbba1b8ac452c94": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_9d49e6018c0f489c85ce4621fd3b9428",
-        "style": "IPY_MODEL_a40f1b620c3d49ffa7a9ab8cbcf470c3",
+        "layout": "IPY_MODEL_2e620e9a01f148aead5fa1f04a35b034",
+        "style": "IPY_MODEL_23f9e09c43b8467ea3ec4fa140168ec0",
         "value": "<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "9d49e6018c0f489c85ce4621fd3b9428": {
+    "2e620e9a01f148aead5fa1f04a35b034": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a40f1b620c3d49ffa7a9ab8cbcf470c3": {
+    "23f9e09c43b8467ea3ec4fa140168ec0": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cf78b691dfbb41568f04c8197eac610d": {
+    "a501c87fd8714cb7a47d0f46ba8bd77a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b27c4a0e4087408bb94d44cfac1fc901": {
+    "98d1e9ca9818442694b36d50758035f9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_16ec78b2fb2b4780a6d9f3df991c3d27",
-        "style": "IPY_MODEL_6fd4e9c96a4b43b3be3ebdeee4bbc9f2",
+        "layout": "IPY_MODEL_4505616c4d7a4728b149583c1ecd6f40",
+        "style": "IPY_MODEL_1f363dec5b3d406382cedad6d7673194",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "16ec78b2fb2b4780a6d9f3df991c3d27": {
+    "4505616c4d7a4728b149583c1ecd6f40": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6fd4e9c96a4b43b3be3ebdeee4bbc9f2": {
+    "1f363dec5b3d406382cedad6d7673194": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "2333ea7d95f84529afb96aca6dabe62e": {
+    "6d48fbf0fe6f4dd68427aeb24fab6b2e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_6bf9752241de4c9eb876661667fe153d",
-          "IPY_MODEL_13340233116e4d3cbd40ecf9676303d9",
-          "IPY_MODEL_71609a80a1854dcebf0684e8fdf790b8"
+          "IPY_MODEL_1752e908bd3445cda947547c3f8689be",
+          "IPY_MODEL_16d6ac37f30440b6be7061d950cf4968",
+          "IPY_MODEL_a9f4b62dee0b497dbaab74178fac14c1"
         ],
-        "layout": "IPY_MODEL_8c031b5b92964625a9145428eee036ba"
+        "layout": "IPY_MODEL_1f7fc232918f4b5c9ca4d80acce32947"
       }
     },
-    "6bf9752241de4c9eb876661667fe153d": {
+    "1752e908bd3445cda947547c3f8689be": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2b502a094b614fba95bed3970adfe1a8",
-        "style": "IPY_MODEL_183312cac07243b2877f9d1f03fbd502",
-        "value": "<h4 id=\"TrainTestLabelDrift_UH17J\">Train Test Label Drift</h4><p>    Calculate label drift between train dataset and test dataset, using statistical measures. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/train_test_label_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_cb912 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cb912 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cb912 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cb912 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_cb912 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_cb912\">\n  <thead>\n    <tr>\n      <th id=\"T_cb912_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_cb912_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_cb912_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_cb912_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_cb912_row0_col1\" class=\"data row0 col1\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1 for label drift</td>\n      <td id=\"T_cb912_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the label.\n        </span></div>"
+        "layout": "IPY_MODEL_1e17e2e7d6534a9fb5be5cccce484dfd",
+        "style": "IPY_MODEL_a496322bd9aa48eab786c680c1d5bbe9",
+        "value": "<h4 id=\"TrainTestLabelDrift_UH17J\">Train Test Label Drift</h4><p>    Calculate label drift between train dataset and test dataset, using statistical measures. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/distribution/train_test_label_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_c0dbb table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c0dbb thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c0dbb tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c0dbb th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c0dbb td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_c0dbb\">\n  <thead>\n    <tr>\n      <th id=\"T_c0dbb_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_c0dbb_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_c0dbb_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_c0dbb_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_c0dbb_row0_col1\" class=\"data row0 col1\" >PSI <= 0.2 and Earth Mover's Distance <= 0.1 for label drift</td>\n      <td id=\"T_c0dbb_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the label.\n        </span></div>"
       }
     },
-    "2b502a094b614fba95bed3970adfe1a8": {
+    "1e17e2e7d6534a9fb5be5cccce484dfd": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "183312cac07243b2877f9d1f03fbd502": {
+    "a496322bd9aa48eab786c680c1d5bbe9": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "13340233116e4d3cbd40ecf9676303d9": {
+    "16d6ac37f30440b6be7061d950cf4968": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -7712,7 +7706,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "43126cc5-4650-40b4-9705-f183b4627b40"
+            "uid": "7f3fec9e-422c-4997-9d06-2bea816b916a"
           },
           {
             "marker": {
@@ -7733,7 +7727,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "bf97aa24-be66-4555-86bd-e195f279309d"
+            "uid": "6bff1806-e95b-4749-910b-74918486ec99"
           },
           {
             "marker": {
@@ -7754,7 +7748,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "b458b746-8eef-44f6-b9aa-dfb4c01d1865"
+            "uid": "e4a1a154-673d-4b28-9106-25a21a2ee93d"
           }
         ],
         "_dom_classes": [],
@@ -8711,170 +8705,170 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
         }
       ]
     },
-    "71609a80a1854dcebf0684e8fdf790b8": {
+    "a9f4b62dee0b497dbaab74178fac14c1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2a0bb614b78e4a34afef916ba2973c39",
-        "style": "IPY_MODEL_a8bdfc846402403eb26ce9a2cb11d9ec",
+        "layout": "IPY_MODEL_309cdde8f8454bd1b55da04f72ab9ea4",
+        "style": "IPY_MODEL_20b74917211444e39cdd13d41c72433f",
         "value": "<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "2a0bb614b78e4a34afef916ba2973c39": {
+    "309cdde8f8454bd1b55da04f72ab9ea4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a8bdfc846402403eb26ce9a2cb11d9ec": {
+    "20b74917211444e39cdd13d41c72433f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "8c031b5b92964625a9145428eee036ba": {
+    "1f7fc232918f4b5c9ca4d80acce32947": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5be747b37dd04080983c68841d715b51": {
+    "f3808be5edf94f26beafdeb6b69b5c07": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b7bbd7f99d224d709a2992f19df6685d",
-        "style": "IPY_MODEL_a8e3a0a40efa4013806f14ae25fd291f",
+        "layout": "IPY_MODEL_7a0adfc57282437e8c23e3382223be14",
+        "style": "IPY_MODEL_5d5157d8aebf465cbb4056c363d58d0e",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "b7bbd7f99d224d709a2992f19df6685d": {
+    "7a0adfc57282437e8c23e3382223be14": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a8e3a0a40efa4013806f14ae25fd291f": {
+    "5d5157d8aebf465cbb4056c363d58d0e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "df72a4a8caea4ce693663efb78d0e035": {
+    "66786414eff4472c8e76cb44634de96f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_1798adf3138e4e3c937e38b24073ecc7"
+          "IPY_MODEL_14f18d0f9575416c853e9a41b9702792"
         ],
-        "layout": "IPY_MODEL_e448dc7b63394b15824e2a7a1e8f8c9e"
+        "layout": "IPY_MODEL_5443dd3baa294d3a959bc3a33185e275"
       }
     },
-    "1798adf3138e4e3c937e38b24073ecc7": {
+    "14f18d0f9575416c853e9a41b9702792": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_fddea18d7d6f41e6a32b0de39a9b35bd",
-        "style": "IPY_MODEL_69b31f7def394c0782b1dd2d2eeca014",
-        "value": "<h4 id=\"DatasetsSizeComparison_UH17J\">Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_b36aa table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b36aa thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b36aa tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b36aa th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b36aa td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_b36aa\">\n  <thead>\n    <tr>\n      <th id=\"T_b36aa_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_b36aa_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_b36aa_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_b36aa_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_b36aa_row0_col1\" class=\"data row0 col1\" >Test-Train size ratio is not smaller than 0.01</td>\n      <td id=\"T_b36aa_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_0e86a table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e86a thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e86a tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e86a th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e86a td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_0e86a\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_0e86a_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_0e86a_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_0e86a_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_0e86a_row0_col0\" class=\"data row0 col0\" >112</td>\n      <td id=\"T_0e86a_row0_col1\" class=\"data row0 col1\" >38</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
+        "layout": "IPY_MODEL_d36b1f172ec64375b5457782e24d39f1",
+        "style": "IPY_MODEL_253cb5d96c174c15bb52d1cf0b167358",
+        "value": "<h4 id=\"DatasetsSizeComparison_UH17J\">Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_85997 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85997 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85997 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85997 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_85997 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_85997\">\n  <thead>\n    <tr>\n      <th id=\"T_85997_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_85997_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_85997_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_85997_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_85997_row0_col1\" class=\"data row0 col1\" >Test-Train size ratio is not smaller than 0.01</td>\n      <td id=\"T_85997_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_6371a table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6371a thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6371a tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6371a th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6371a td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_6371a\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_6371a_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_6371a_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_6371a_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_6371a_row0_col0\" class=\"data row0 col0\" >112</td>\n      <td id=\"T_6371a_row0_col1\" class=\"data row0 col1\" >38</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "fddea18d7d6f41e6a32b0de39a9b35bd": {
+    "d36b1f172ec64375b5457782e24d39f1": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "69b31f7def394c0782b1dd2d2eeca014": {
+    "253cb5d96c174c15bb52d1cf0b167358": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e448dc7b63394b15824e2a7a1e8f8c9e": {
+    "5443dd3baa294d3a959bc3a33185e275": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6318c0252a264b64a8ed7aab1fbe2fa1": {
+    "30efdea8699c413ab755c3c3aa8fc57c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2e2d1ecb693f4c649bbfb9361cb7dbd9",
-        "style": "IPY_MODEL_41993dfd13b84f979385faebfb7eea70",
+        "layout": "IPY_MODEL_70df8a821bed44fe84ecce48e281b15f",
+        "style": "IPY_MODEL_7d831651f81242feb47aad292a938a09",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "2e2d1ecb693f4c649bbfb9361cb7dbd9": {
+    "70df8a821bed44fe84ecce48e281b15f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "41993dfd13b84f979385faebfb7eea70": {
+    "7d831651f81242feb47aad292a938a09": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ab1e9791cc194518bb1c8100ad5d501e": {
+    "fd58e5873aa04eec81181a34234677f6": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_a0df5a1c45394d8da35ad5d36876fca9"
+          "IPY_MODEL_1359be365a2f4bb59f4df441cd59f9a0"
         ],
-        "layout": "IPY_MODEL_c3f47132d4944251836bfc86958460ef"
+        "layout": "IPY_MODEL_c4d341783fdb464e8947cd5ce03c92ea"
       }
     },
-    "a0df5a1c45394d8da35ad5d36876fca9": {
+    "1359be365a2f4bb59f4df441cd59f9a0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_20cdc005c2994c7c8acc010d5a93dac8",
-        "style": "IPY_MODEL_71762027805a4173905fffbea52b072d",
-        "value": "<h4 id=\"TrainTestSamplesMix_UH17J\">Train Test Samples Mix</h4><p>Detect samples in the test data that appear also in training data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/train_test_samples_mix.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_faf51 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_faf51 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_faf51 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_faf51 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_faf51 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_faf51\">\n  <thead>\n    <tr>\n      <th id=\"T_faf51_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_faf51_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_faf51_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_faf51_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_faf51_row0_col1\" class=\"data row0 col1\" >Percentage of test data samples that appear in train data not greater than 10%</td>\n      <td id=\"T_faf51_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>2.63% (1 / 38)                      of test data samples appear in train data</div><style type=\"text/css\">\n#T_688c1 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_688c1 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_688c1 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_688c1 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_688c1 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_688c1\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_688c1_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_688c1_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_688c1_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_688c1_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_688c1_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_688c1_level0_row0\" class=\"row_heading level0 row0\" >Train indices: 30\nTest indices: 28</th>\n      <td id=\"T_688c1_row0_col0\" class=\"data row0 col0\" >5.80</td>\n      <td id=\"T_688c1_row0_col1\" class=\"data row0 col1\" >2.70</td>\n      <td id=\"T_688c1_row0_col2\" class=\"data row0 col2\" >5.10</td>\n      <td id=\"T_688c1_row0_col3\" class=\"data row0 col3\" >1.90</td>\n      <td id=\"T_688c1_row0_col4\" class=\"data row0 col4\" >2</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
+        "layout": "IPY_MODEL_872f9b15f8e94bc292e7baecc5d273a8",
+        "style": "IPY_MODEL_06b8c4defc2a4e50a61f1a898e17c0ca",
+        "value": "<h4 id=\"TrainTestSamplesMix_UH17J\">Train Test Samples Mix</h4><p>Detect samples in the test data that appear also in training data. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/train_test_samples_mix.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_db023 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db023 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db023 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db023 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db023 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_db023\">\n  <thead>\n    <tr>\n      <th id=\"T_db023_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_db023_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_db023_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_db023_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_db023_row0_col1\" class=\"data row0 col1\" >Percentage of test data samples that appear in train data not greater than 10%</td>\n      <td id=\"T_db023_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>2.63% (1 / 38)                      of test data samples appear in train data</div><style type=\"text/css\">\n#T_66c94 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_66c94 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_66c94 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_66c94 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_66c94 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_66c94\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_66c94_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_66c94_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_66c94_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_66c94_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_66c94_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_66c94_level0_row0\" class=\"row_heading level0 row0\" >Train indices: 30\nTest indices: 28</th>\n      <td id=\"T_66c94_row0_col0\" class=\"data row0 col0\" >5.80</td>\n      <td id=\"T_66c94_row0_col1\" class=\"data row0 col1\" >2.70</td>\n      <td id=\"T_66c94_row0_col2\" class=\"data row0 col2\" >5.10</td>\n      <td id=\"T_66c94_row0_col3\" class=\"data row0 col3\" >1.90</td>\n      <td id=\"T_66c94_row0_col4\" class=\"data row0 col4\" >2</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "20cdc005c2994c7c8acc010d5a93dac8": {
+    "872f9b15f8e94bc292e7baecc5d273a8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "71762027805a4173905fffbea52b072d": {
+    "06b8c4defc2a4e50a61f1a898e17c0ca": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c3f47132d4944251836bfc86958460ef": {
+    "c4d341783fdb464e8947cd5ce03c92ea": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "44beb5f40a6749359ad0e3f2f0f55b55": {
+    "906eca96a4fd44b0b27234113cc44e9e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "579205c8543e462f8088e2b18d0040cd": {
+    "5b66c7312aa74ac2911ce37402c444a5": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -8886,233 +8880,233 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_de47018db23c49f3b26397439700030d",
-          "IPY_MODEL_567fb4bcc93a41748a366a2913da63a4",
-          "IPY_MODEL_677ad37eaf474b7081eb047e032d6748",
-          "IPY_MODEL_07ee310902c145128efb4598b2af201d",
-          "IPY_MODEL_0bee15feb4004b7d9e2af3b45562d436",
-          "IPY_MODEL_7dca93b282464ec8a76ae6498b12e2af"
+          "IPY_MODEL_171d776853df47c0b9d3edf61445e948",
+          "IPY_MODEL_f068239904754680ad044f7c0024b1b3",
+          "IPY_MODEL_4e71d4c511d041379abb8490e2ea3d7d",
+          "IPY_MODEL_9c316ba6277e4bd68e9da86a785c6dc9",
+          "IPY_MODEL_1caac6d7162b425fb238007672d1715c",
+          "IPY_MODEL_bb0a2f1ecc2e44f8be705a0a0e4fbd4d"
         ],
-        "layout": "IPY_MODEL_5f50c2e3322f40f4ba5e361bae77e785"
+        "layout": "IPY_MODEL_982a3bd685cc4f45b517273acac6291b"
       }
     },
-    "de47018db23c49f3b26397439700030d": {
+    "171d776853df47c0b9d3edf61445e948": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_f878adbfe10349aebb3585780ada2ae9",
-        "style": "IPY_MODEL_a2b612f5f4e247a5a3007f053c86a098",
+        "layout": "IPY_MODEL_0acbb95c5c6643bb8826a050090d2528",
+        "style": "IPY_MODEL_15cd5788abf14a7e96e0c333e432682e",
         "value": "<h2>Check Without Conditions Output</h2>"
       }
     },
-    "f878adbfe10349aebb3585780ada2ae9": {
+    "0acbb95c5c6643bb8826a050090d2528": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a2b612f5f4e247a5a3007f053c86a098": {
+    "15cd5788abf14a7e96e0c333e432682e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "567fb4bcc93a41748a366a2913da63a4": {
+    "f068239904754680ad044f7c0024b1b3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_5457d4703ceb402d8f0af783c6c7beb5",
-        "style": "IPY_MODEL_6bd2e2a6e9294a2fbef86b211ae947a4",
-        "value": "<style type=\"text/css\">\n#T_5505f table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5505f thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5505f tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5505f th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5505f td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_5505f\">\n  <thead>\n    <tr>\n      <th id=\"T_5505f_level0_col0\" class=\"col_heading level0 col0\" >Check</th>\n      <th id=\"T_5505f_level0_col1\" class=\"col_heading level0 col1\" >Summary</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_5505f_row0_col0\" class=\"data row0 col0\" ><a href=#ColumnsInfo_UH17J>Columns Info - Train Dataset</a></td>\n      <td id=\"T_5505f_row0_col1\" class=\"data row0 col1\" >Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></td>\n    </tr>\n    <tr>\n      <td id=\"T_5505f_row1_col0\" class=\"data row1 col0\" ><a href=#ColumnsInfo_UH17J>Columns Info - Test Dataset</a></td>\n      <td id=\"T_5505f_row1_col1\" class=\"data row1 col1\" >Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_903be11bf5854a8c877d2d8d0ec7654a",
+        "style": "IPY_MODEL_e049a50777c444e89bd0931f1270459c",
+        "value": "<style type=\"text/css\">\n#T_3d2d5 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3d2d5 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3d2d5 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3d2d5 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3d2d5 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_3d2d5\">\n  <thead>\n    <tr>\n      <th id=\"T_3d2d5_level0_col0\" class=\"col_heading level0 col0\" >Check</th>\n      <th id=\"T_3d2d5_level0_col1\" class=\"col_heading level0 col1\" >Summary</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_3d2d5_row0_col0\" class=\"data row0 col0\" ><a href=#ColumnsInfo_UH17J>Columns Info - Train Dataset</a></td>\n      <td id=\"T_3d2d5_row0_col1\" class=\"data row0 col1\" >Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></td>\n    </tr>\n    <tr>\n      <td id=\"T_3d2d5_row1_col0\" class=\"data row1 col0\" ><a href=#ColumnsInfo_UH17J>Columns Info - Test Dataset</a></td>\n      <td id=\"T_3d2d5_row1_col1\" class=\"data row1 col1\" >Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "5457d4703ceb402d8f0af783c6c7beb5": {
+    "903be11bf5854a8c877d2d8d0ec7654a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6bd2e2a6e9294a2fbef86b211ae947a4": {
+    "e049a50777c444e89bd0931f1270459c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "677ad37eaf474b7081eb047e032d6748": {
+    "4e71d4c511d041379abb8490e2ea3d7d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e5a2096a9adc4d9784de2b8854f26998",
-        "style": "IPY_MODEL_8e7072e1e62f4b5d9cc321b30ee93264",
+        "layout": "IPY_MODEL_5405def9d2e142efb6e142bbc70b5c1c",
+        "style": "IPY_MODEL_6d15a3162cd7438994a1cf9f42848da7",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "e5a2096a9adc4d9784de2b8854f26998": {
+    "5405def9d2e142efb6e142bbc70b5c1c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8e7072e1e62f4b5d9cc321b30ee93264": {
+    "6d15a3162cd7438994a1cf9f42848da7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "07ee310902c145128efb4598b2af201d": {
+    "9c316ba6277e4bd68e9da86a785c6dc9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_215faf466608409b95cfde5a31c12ca4"
+          "IPY_MODEL_be2f5e14299444418e9c517881471d47"
         ],
-        "layout": "IPY_MODEL_ee21ff0c981249a892949575a64c6124"
+        "layout": "IPY_MODEL_b58b0ead2a7045aca8b2c1dc5fe24092"
       }
     },
-    "215faf466608409b95cfde5a31c12ca4": {
+    "be2f5e14299444418e9c517881471d47": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_73f4841325e3464fb3c0ff94412bb48b",
-        "style": "IPY_MODEL_db4666d3c4a44233a7ce92f6ea1f1e2b",
-        "value": "<h4 id=\"ColumnsInfo_UH17J\">Columns Info - Train Dataset</h4><p>Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_93f1f table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_93f1f thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_93f1f tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_93f1f th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_93f1f td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_93f1f\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_93f1f_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_93f1f_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_93f1f_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_93f1f_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_93f1f_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_93f1f_level0_row0\" class=\"row_heading level0 row0\" >role</th>\n      <td id=\"T_93f1f_row0_col0\" class=\"data row0 col0\" >numerical feature</td>\n      <td id=\"T_93f1f_row0_col1\" class=\"data row0 col1\" >numerical feature</td>\n      <td id=\"T_93f1f_row0_col2\" class=\"data row0 col2\" >numerical feature</td>\n      <td id=\"T_93f1f_row0_col3\" class=\"data row0 col3\" >numerical feature</td>\n      <td id=\"T_93f1f_row0_col4\" class=\"data row0 col4\" >label</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
+        "layout": "IPY_MODEL_0a0481cb7dfa47a98f3292396286ca78",
+        "style": "IPY_MODEL_de258fc2f0d24915b6484e2f2999389b",
+        "value": "<h4 id=\"ColumnsInfo_UH17J\">Columns Info - Train Dataset</h4><p>Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_6b5ac table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6b5ac thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6b5ac tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6b5ac th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6b5ac td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_6b5ac\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_6b5ac_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_6b5ac_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_6b5ac_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_6b5ac_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_6b5ac_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_6b5ac_level0_row0\" class=\"row_heading level0 row0\" >role</th>\n      <td id=\"T_6b5ac_row0_col0\" class=\"data row0 col0\" >numerical feature</td>\n      <td id=\"T_6b5ac_row0_col1\" class=\"data row0 col1\" >numerical feature</td>\n      <td id=\"T_6b5ac_row0_col2\" class=\"data row0 col2\" >numerical feature</td>\n      <td id=\"T_6b5ac_row0_col3\" class=\"data row0 col3\" >numerical feature</td>\n      <td id=\"T_6b5ac_row0_col4\" class=\"data row0 col4\" >label</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "73f4841325e3464fb3c0ff94412bb48b": {
+    "0a0481cb7dfa47a98f3292396286ca78": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "db4666d3c4a44233a7ce92f6ea1f1e2b": {
+    "de258fc2f0d24915b6484e2f2999389b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ee21ff0c981249a892949575a64c6124": {
+    "b58b0ead2a7045aca8b2c1dc5fe24092": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0bee15feb4004b7d9e2af3b45562d436": {
+    "1caac6d7162b425fb238007672d1715c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8f4ecd6be3814e9db49f251a16d03e7e",
-        "style": "IPY_MODEL_381c9b96837e491bb95a6e102dc28f79",
+        "layout": "IPY_MODEL_a01586d4a2424a068846dbf2fc10224a",
+        "style": "IPY_MODEL_087997de96a64ee8b48e022e61f9c405",
         "value": "<hr style=\"background-color: #eee;border: 0 none;color: #eee;height: 4px;\">"
       }
     },
-    "8f4ecd6be3814e9db49f251a16d03e7e": {
+    "a01586d4a2424a068846dbf2fc10224a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "381c9b96837e491bb95a6e102dc28f79": {
+    "087997de96a64ee8b48e022e61f9c405": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7dca93b282464ec8a76ae6498b12e2af": {
+    "bb0a2f1ecc2e44f8be705a0a0e4fbd4d": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_9b4f769608cd44b1b4da915681c86c2c"
+          "IPY_MODEL_23aec5b0633543c3be805515a3ab5eba"
         ],
-        "layout": "IPY_MODEL_cd24b01024274170a276537a6c30aa65"
+        "layout": "IPY_MODEL_e9d2b0e2d0b24e84ba7dceb1ffac015d"
       }
     },
-    "9b4f769608cd44b1b4da915681c86c2c": {
+    "23aec5b0633543c3be805515a3ab5eba": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_6e14068177874f73bf1f05e07c1e0579",
-        "style": "IPY_MODEL_0de0f32f3f60476a8ba0ac7d403ef2b4",
-        "value": "<h4 id=\"ColumnsInfo_UH17J\">Columns Info - Test Dataset</h4><p>Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_5770e table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5770e thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5770e tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5770e th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5770e td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_5770e\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_5770e_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_5770e_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_5770e_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_5770e_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_5770e_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_5770e_level0_row0\" class=\"row_heading level0 row0\" >role</th>\n      <td id=\"T_5770e_row0_col0\" class=\"data row0 col0\" >numerical feature</td>\n      <td id=\"T_5770e_row0_col1\" class=\"data row0 col1\" >numerical feature</td>\n      <td id=\"T_5770e_row0_col2\" class=\"data row0 col2\" >numerical feature</td>\n      <td id=\"T_5770e_row0_col3\" class=\"data row0 col3\" >numerical feature</td>\n      <td id=\"T_5770e_row0_col4\" class=\"data row0 col4\" >label</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
+        "layout": "IPY_MODEL_5404d97f981e4d238b0402f8711ea6b3",
+        "style": "IPY_MODEL_f690748c985e481abfba9cb592bef991",
+        "value": "<h4 id=\"ColumnsInfo_UH17J\">Columns Info - Test Dataset</h4><p>Return the role and logical type of each column. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/overview/columns_info.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_6e1d6 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6e1d6 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6e1d6 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6e1d6 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_6e1d6 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_6e1d6\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_6e1d6_level0_col0\" class=\"col_heading level0 col0\" >sepal length (cm)</th>\n      <th id=\"T_6e1d6_level0_col1\" class=\"col_heading level0 col1\" >sepal width (cm)</th>\n      <th id=\"T_6e1d6_level0_col2\" class=\"col_heading level0 col2\" >petal length (cm)</th>\n      <th id=\"T_6e1d6_level0_col3\" class=\"col_heading level0 col3\" >petal width (cm)</th>\n      <th id=\"T_6e1d6_level0_col4\" class=\"col_heading level0 col4\" >target</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_6e1d6_level0_row0\" class=\"row_heading level0 row0\" >role</th>\n      <td id=\"T_6e1d6_row0_col0\" class=\"data row0 col0\" >numerical feature</td>\n      <td id=\"T_6e1d6_row0_col1\" class=\"data row0 col1\" >numerical feature</td>\n      <td id=\"T_6e1d6_row0_col2\" class=\"data row0 col2\" >numerical feature</td>\n      <td id=\"T_6e1d6_row0_col3\" class=\"data row0 col3\" >numerical feature</td>\n      <td id=\"T_6e1d6_row0_col4\" class=\"data row0 col4\" >label</td>\n    </tr>\n  </tbody>\n</table>\n<br><a href=\"#summary_UH17J\" style=\"font-size: 14px\">Go to top</a>"
       }
     },
-    "6e14068177874f73bf1f05e07c1e0579": {
+    "5404d97f981e4d238b0402f8711ea6b3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0de0f32f3f60476a8ba0ac7d403ef2b4": {
+    "f690748c985e481abfba9cb592bef991": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cd24b01024274170a276537a6c30aa65": {
+    "e9d2b0e2d0b24e84ba7dceb1ffac015d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5f50c2e3322f40f4ba5e361bae77e785": {
+    "982a3bd685cc4f45b517273acac6291b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b1311bd4c95e4f339345e489947dbf89": {
+    "a49658787cd04cedbf2864c1ea7c05ae": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_57797ca36fbd4e8799bc41d3ca799612",
-          "IPY_MODEL_76767993fcd942c195d3bbfb11eb57da"
+          "IPY_MODEL_74596969c5ee43828edb4fc5e14f9e2f",
+          "IPY_MODEL_a39e0351884f47f6b6d2ccdb452775cf"
         ],
-        "layout": "IPY_MODEL_3889f4dd996c453fab46c79609193efb"
+        "layout": "IPY_MODEL_84e0427c8b5444d89b92c82fbcd9ff28"
       }
     },
-    "57797ca36fbd4e8799bc41d3ca799612": {
+    "74596969c5ee43828edb4fc5e14f9e2f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0d388dacecd04a63a53f4a34843f95ea",
-        "style": "IPY_MODEL_158a03d347104201bde09b4bd6b84274",
+        "layout": "IPY_MODEL_c44c7a5579e94577b28852b66f215f03",
+        "style": "IPY_MODEL_0626cf2264cf44648b7535d4f823a3bf",
         "value": "<h2>Other Checks That Weren't Displayed</h2>"
       }
     },
-    "0d388dacecd04a63a53f4a34843f95ea": {
+    "c44c7a5579e94577b28852b66f215f03": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "158a03d347104201bde09b4bd6b84274": {
+    "0626cf2264cf44648b7535d4f823a3bf": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "76767993fcd942c195d3bbfb11eb57da": {
+    "a39e0351884f47f6b6d2ccdb452775cf": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -9124,53 +9118,53 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_02b4a2882ca442b7b6a7b318555e66cb"
+          "IPY_MODEL_f7d31dc6aabf40ffbf8924db3e1cba5a"
         ],
-        "layout": "IPY_MODEL_fa9150a083254d73aa3ad0c87bd828fa"
+        "layout": "IPY_MODEL_db0d69a8b0a64bb5ad30c6e0fb120593"
       }
     },
-    "02b4a2882ca442b7b6a7b318555e66cb": {
+    "f7d31dc6aabf40ffbf8924db3e1cba5a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_6fcc0e6a00674eb6a03f3b4dc8943925",
-        "style": "IPY_MODEL_9bf05e4d215d40fc96e924685e7e8c60",
-        "value": "<style type=\"text/css\">\n#T_32254 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_32254 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_32254 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_32254 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_32254 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_32254\">\n  <thead>\n    <tr>\n      <th id=\"T_32254_level0_col0\" class=\"col_heading level0 col0\" >Check</th>\n      <th id=\"T_32254_level0_col1\" class=\"col_heading level0 col1\" >Reason</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_32254_row0_col0\" class=\"data row0 col0\" >Model Info</td>\n      <td id=\"T_32254_row0_col1\" class=\"data row0 col1\" >DeepchecksNotSupportedError: Check is irrelevant if model is not supplied</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row1_col0\" class=\"data row1 col0\" >Index Train Test Leakage</td>\n      <td id=\"T_32254_row1_col1\" class=\"data row1 col1\" >There is no index defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row2_col0\" class=\"data row2 col0\" >Identifier Leakage - Test Dataset</td>\n      <td id=\"T_32254_row2_col1\" class=\"data row2 col1\" >Check is irrelevant for Datasets without index or date column</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row3_col0\" class=\"data row3 col0\" >Identifier Leakage - Train Dataset</td>\n      <td id=\"T_32254_row3_col1\" class=\"data row3 col1\" >Check is irrelevant for Datasets without index or date column</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row4_col0\" class=\"data row4 col0\" >Date Train Test Leakage Overlap</td>\n      <td id=\"T_32254_row4_col1\" class=\"data row4 col1\" >There is no datetime defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row5_col0\" class=\"data row5 col0\" >Date Train Test Leakage Duplicates</td>\n      <td id=\"T_32254_row5_col1\" class=\"data row5 col1\" >There is no datetime defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row6_col0\" class=\"data row6 col0\" >Model Inference Time - Test Dataset</td>\n      <td id=\"T_32254_row6_col1\" class=\"data row6 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row7_col0\" class=\"data row7 col0\" >Model Inference Time - Train Dataset</td>\n      <td id=\"T_32254_row7_col1\" class=\"data row7 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row8_col0\" class=\"data row8 col0\" >Boosting Overfit</td>\n      <td id=\"T_32254_row8_col1\" class=\"data row8 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row9_col0\" class=\"data row9 col0\" >Regression Error Distribution - Test Dataset</td>\n      <td id=\"T_32254_row9_col1\" class=\"data row9 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row10_col0\" class=\"data row10 col0\" >Regression Error Distribution - Train Dataset</td>\n      <td id=\"T_32254_row10_col1\" class=\"data row10 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row11_col0\" class=\"data row11 col0\" >Regression Systematic Error - Test Dataset</td>\n      <td id=\"T_32254_row11_col1\" class=\"data row11 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row12_col0\" class=\"data row12 col0\" >Unused Features</td>\n      <td id=\"T_32254_row12_col1\" class=\"data row12 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row13_col0\" class=\"data row13 col0\" >Trust Score Comparison</td>\n      <td id=\"T_32254_row13_col1\" class=\"data row13 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row14_col0\" class=\"data row14 col0\" >Calibration Score - Test Dataset</td>\n      <td id=\"T_32254_row14_col1\" class=\"data row14 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row15_col0\" class=\"data row15 col0\" >Calibration Score - Train Dataset</td>\n      <td id=\"T_32254_row15_col1\" class=\"data row15 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row16_col0\" class=\"data row16 col0\" >Model Error Analysis</td>\n      <td id=\"T_32254_row16_col1\" class=\"data row16 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row17_col0\" class=\"data row17 col0\" >Simple Model Comparison</td>\n      <td id=\"T_32254_row17_col1\" class=\"data row17 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row18_col0\" class=\"data row18 col0\" >Confusion Matrix Report - Train Dataset</td>\n      <td id=\"T_32254_row18_col1\" class=\"data row18 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row19_col0\" class=\"data row19 col0\" >Confusion Matrix Report - Test Dataset</td>\n      <td id=\"T_32254_row19_col1\" class=\"data row19 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row20_col0\" class=\"data row20 col0\" >Regression Systematic Error - Train Dataset</td>\n      <td id=\"T_32254_row20_col1\" class=\"data row20 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row21_col0\" class=\"data row21 col0\" >Performance Report</td>\n      <td id=\"T_32254_row21_col1\" class=\"data row21 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row22_col0\" class=\"data row22 col0\" >Roc Report - Test Dataset</td>\n      <td id=\"T_32254_row22_col1\" class=\"data row22 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row23_col0\" class=\"data row23 col0\" >Roc Report - Train Dataset</td>\n      <td id=\"T_32254_row23_col1\" class=\"data row23 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row24_col0\" class=\"data row24 col0\" >String Mismatch - Test Dataset</td>\n      <td id=\"T_32254_row24_col1\" class=\"data row24 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row25_col0\" class=\"data row25 col0\" >Data Duplicates - Train Dataset</td>\n      <td id=\"T_32254_row25_col1\" class=\"data row25 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row26_col0\" class=\"data row26 col0\" >String Length Out Of Bounds - Train Dataset</td>\n      <td id=\"T_32254_row26_col1\" class=\"data row26 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row27_col0\" class=\"data row27 col0\" >String Length Out Of Bounds - Test Dataset</td>\n      <td id=\"T_32254_row27_col1\" class=\"data row27 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row28_col0\" class=\"data row28 col0\" >Special Characters - Train Dataset</td>\n      <td id=\"T_32254_row28_col1\" class=\"data row28 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row29_col0\" class=\"data row29 col0\" >Special Characters - Test Dataset</td>\n      <td id=\"T_32254_row29_col1\" class=\"data row29 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row30_col0\" class=\"data row30 col0\" >String Mismatch - Train Dataset</td>\n      <td id=\"T_32254_row30_col1\" class=\"data row30 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row31_col0\" class=\"data row31 col0\" >Data Duplicates - Test Dataset</td>\n      <td id=\"T_32254_row31_col1\" class=\"data row31 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row32_col0\" class=\"data row32 col0\" >Mixed Data Types - Test Dataset</td>\n      <td id=\"T_32254_row32_col1\" class=\"data row32 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row33_col0\" class=\"data row33 col0\" >New Label Train Test</td>\n      <td id=\"T_32254_row33_col1\" class=\"data row33 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row34_col0\" class=\"data row34 col0\" >Mixed Nulls - Test Dataset</td>\n      <td id=\"T_32254_row34_col1\" class=\"data row34 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row35_col0\" class=\"data row35 col0\" >Mixed Nulls - Train Dataset</td>\n      <td id=\"T_32254_row35_col1\" class=\"data row35 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row36_col0\" class=\"data row36 col0\" >Single Value in Column - Test Dataset</td>\n      <td id=\"T_32254_row36_col1\" class=\"data row36 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row37_col0\" class=\"data row37 col0\" >Single Value in Column - Train Dataset</td>\n      <td id=\"T_32254_row37_col1\" class=\"data row37 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row38_col0\" class=\"data row38 col0\" >String Mismatch Comparison</td>\n      <td id=\"T_32254_row38_col1\" class=\"data row38 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row39_col0\" class=\"data row39 col0\" >Label Ambiguity - Train Dataset</td>\n      <td id=\"T_32254_row39_col1\" class=\"data row39 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row40_col0\" class=\"data row40 col0\" >Category Mismatch Train Test</td>\n      <td id=\"T_32254_row40_col1\" class=\"data row40 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row41_col0\" class=\"data row41 col0\" >Dominant Frequency Change</td>\n      <td id=\"T_32254_row41_col1\" class=\"data row41 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row42_col0\" class=\"data row42 col0\" >Whole Dataset Drift</td>\n      <td id=\"T_32254_row42_col1\" class=\"data row42 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row43_col0\" class=\"data row43 col0\" >Mixed Data Types - Train Dataset</td>\n      <td id=\"T_32254_row43_col1\" class=\"data row43 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_32254_row44_col0\" class=\"data row44 col0\" >Label Ambiguity - Test Dataset</td>\n      <td id=\"T_32254_row44_col1\" class=\"data row44 col1\" >Nothing found</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_2ddb5388dd2946b6a6933962150b4352",
+        "style": "IPY_MODEL_1edd2e3349d5443b938a0b396209b48a",
+        "value": "<style type=\"text/css\">\n#T_bffc4 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bffc4 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bffc4 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bffc4 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_bffc4 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_bffc4\">\n  <thead>\n    <tr>\n      <th id=\"T_bffc4_level0_col0\" class=\"col_heading level0 col0\" >Check</th>\n      <th id=\"T_bffc4_level0_col1\" class=\"col_heading level0 col1\" >Reason</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_bffc4_row0_col0\" class=\"data row0 col0\" >Model Info</td>\n      <td id=\"T_bffc4_row0_col1\" class=\"data row0 col1\" >DeepchecksNotSupportedError: Check is irrelevant if model is not supplied</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row1_col0\" class=\"data row1 col0\" >Index Train Test Leakage</td>\n      <td id=\"T_bffc4_row1_col1\" class=\"data row1 col1\" >There is no index defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row2_col0\" class=\"data row2 col0\" >Identifier Leakage - Test Dataset</td>\n      <td id=\"T_bffc4_row2_col1\" class=\"data row2 col1\" >Check is irrelevant for Datasets without index or date column</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row3_col0\" class=\"data row3 col0\" >Identifier Leakage - Train Dataset</td>\n      <td id=\"T_bffc4_row3_col1\" class=\"data row3 col1\" >Check is irrelevant for Datasets without index or date column</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row4_col0\" class=\"data row4 col0\" >Date Train Test Leakage Overlap</td>\n      <td id=\"T_bffc4_row4_col1\" class=\"data row4 col1\" >There is no datetime defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row5_col0\" class=\"data row5 col0\" >Date Train Test Leakage Duplicates</td>\n      <td id=\"T_bffc4_row5_col1\" class=\"data row5 col1\" >There is no datetime defined to use. Did you pass a DataFrame instead of a Dataset?</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row6_col0\" class=\"data row6 col0\" >Model Inference Time - Test Dataset</td>\n      <td id=\"T_bffc4_row6_col1\" class=\"data row6 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row7_col0\" class=\"data row7 col0\" >Model Inference Time - Train Dataset</td>\n      <td id=\"T_bffc4_row7_col1\" class=\"data row7 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row8_col0\" class=\"data row8 col0\" >Boosting Overfit</td>\n      <td id=\"T_bffc4_row8_col1\" class=\"data row8 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row9_col0\" class=\"data row9 col0\" >Regression Error Distribution - Test Dataset</td>\n      <td id=\"T_bffc4_row9_col1\" class=\"data row9 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row10_col0\" class=\"data row10 col0\" >Regression Error Distribution - Train Dataset</td>\n      <td id=\"T_bffc4_row10_col1\" class=\"data row10 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row11_col0\" class=\"data row11 col0\" >Regression Systematic Error - Test Dataset</td>\n      <td id=\"T_bffc4_row11_col1\" class=\"data row11 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row12_col0\" class=\"data row12 col0\" >Unused Features</td>\n      <td id=\"T_bffc4_row12_col1\" class=\"data row12 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row13_col0\" class=\"data row13 col0\" >Trust Score Comparison</td>\n      <td id=\"T_bffc4_row13_col1\" class=\"data row13 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row14_col0\" class=\"data row14 col0\" >Calibration Score - Test Dataset</td>\n      <td id=\"T_bffc4_row14_col1\" class=\"data row14 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row15_col0\" class=\"data row15 col0\" >Calibration Score - Train Dataset</td>\n      <td id=\"T_bffc4_row15_col1\" class=\"data row15 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row16_col0\" class=\"data row16 col0\" >Model Error Analysis</td>\n      <td id=\"T_bffc4_row16_col1\" class=\"data row16 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row17_col0\" class=\"data row17 col0\" >Simple Model Comparison</td>\n      <td id=\"T_bffc4_row17_col1\" class=\"data row17 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row18_col0\" class=\"data row18 col0\" >Confusion Matrix Report - Train Dataset</td>\n      <td id=\"T_bffc4_row18_col1\" class=\"data row18 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row19_col0\" class=\"data row19 col0\" >Confusion Matrix Report - Test Dataset</td>\n      <td id=\"T_bffc4_row19_col1\" class=\"data row19 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row20_col0\" class=\"data row20 col0\" >Regression Systematic Error - Train Dataset</td>\n      <td id=\"T_bffc4_row20_col1\" class=\"data row20 col1\" >Check is irrelevant for classification tasks</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row21_col0\" class=\"data row21 col0\" >Performance Report</td>\n      <td id=\"T_bffc4_row21_col1\" class=\"data row21 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row22_col0\" class=\"data row22 col0\" >Roc Report - Test Dataset</td>\n      <td id=\"T_bffc4_row22_col1\" class=\"data row22 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row23_col0\" class=\"data row23 col0\" >Roc Report - Train Dataset</td>\n      <td id=\"T_bffc4_row23_col1\" class=\"data row23 col1\" >DeepchecksNotSupportedError: Check is irrelevant for Datasets without model</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row24_col0\" class=\"data row24 col0\" >String Mismatch - Test Dataset</td>\n      <td id=\"T_bffc4_row24_col1\" class=\"data row24 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row25_col0\" class=\"data row25 col0\" >Data Duplicates - Train Dataset</td>\n      <td id=\"T_bffc4_row25_col1\" class=\"data row25 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row26_col0\" class=\"data row26 col0\" >String Length Out Of Bounds - Train Dataset</td>\n      <td id=\"T_bffc4_row26_col1\" class=\"data row26 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row27_col0\" class=\"data row27 col0\" >String Length Out Of Bounds - Test Dataset</td>\n      <td id=\"T_bffc4_row27_col1\" class=\"data row27 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row28_col0\" class=\"data row28 col0\" >Special Characters - Train Dataset</td>\n      <td id=\"T_bffc4_row28_col1\" class=\"data row28 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row29_col0\" class=\"data row29 col0\" >Special Characters - Test Dataset</td>\n      <td id=\"T_bffc4_row29_col1\" class=\"data row29 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row30_col0\" class=\"data row30 col0\" >String Mismatch - Train Dataset</td>\n      <td id=\"T_bffc4_row30_col1\" class=\"data row30 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row31_col0\" class=\"data row31 col0\" >Data Duplicates - Test Dataset</td>\n      <td id=\"T_bffc4_row31_col1\" class=\"data row31 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row32_col0\" class=\"data row32 col0\" >Mixed Data Types - Test Dataset</td>\n      <td id=\"T_bffc4_row32_col1\" class=\"data row32 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row33_col0\" class=\"data row33 col0\" >New Label Train Test</td>\n      <td id=\"T_bffc4_row33_col1\" class=\"data row33 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row34_col0\" class=\"data row34 col0\" >Mixed Nulls - Test Dataset</td>\n      <td id=\"T_bffc4_row34_col1\" class=\"data row34 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row35_col0\" class=\"data row35 col0\" >Mixed Nulls - Train Dataset</td>\n      <td id=\"T_bffc4_row35_col1\" class=\"data row35 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row36_col0\" class=\"data row36 col0\" >Single Value in Column - Test Dataset</td>\n      <td id=\"T_bffc4_row36_col1\" class=\"data row36 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row37_col0\" class=\"data row37 col0\" >Single Value in Column - Train Dataset</td>\n      <td id=\"T_bffc4_row37_col1\" class=\"data row37 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row38_col0\" class=\"data row38 col0\" >String Mismatch Comparison</td>\n      <td id=\"T_bffc4_row38_col1\" class=\"data row38 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row39_col0\" class=\"data row39 col0\" >Label Ambiguity - Train Dataset</td>\n      <td id=\"T_bffc4_row39_col1\" class=\"data row39 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row40_col0\" class=\"data row40 col0\" >Category Mismatch Train Test</td>\n      <td id=\"T_bffc4_row40_col1\" class=\"data row40 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row41_col0\" class=\"data row41 col0\" >Dominant Frequency Change</td>\n      <td id=\"T_bffc4_row41_col1\" class=\"data row41 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row42_col0\" class=\"data row42 col0\" >Whole Dataset Drift</td>\n      <td id=\"T_bffc4_row42_col1\" class=\"data row42 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row43_col0\" class=\"data row43 col0\" >Mixed Data Types - Train Dataset</td>\n      <td id=\"T_bffc4_row43_col1\" class=\"data row43 col1\" >Nothing found</td>\n    </tr>\n    <tr>\n      <td id=\"T_bffc4_row44_col0\" class=\"data row44 col0\" >Label Ambiguity - Test Dataset</td>\n      <td id=\"T_bffc4_row44_col1\" class=\"data row44 col1\" >Nothing found</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "6fcc0e6a00674eb6a03f3b4dc8943925": {
+    "2ddb5388dd2946b6a6933962150b4352": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9bf05e4d215d40fc96e924685e7e8c60": {
+    "1edd2e3349d5443b938a0b396209b48a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "fa9150a083254d73aa3ad0c87bd828fa": {
+    "db0d69a8b0a64bb5ad30c6e0fb120593": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3889f4dd996c453fab46c79609193efb": {
+    "84e0427c8b5444d89b92c82fbcd9ff28": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dd9ca00846044ed49e879901bdf53719": {
+    "88c55007dce44146b51231c15c712c39": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "db2e3c3009c448518db67483a9b7b47f": {
+    "d74e8b4fd48547bda7766863ffc47e3d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -9180,14 +9174,14 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "aefa879f8a7247d19afa71f1df9452ba"}
+{"version_major": 2, "version_minor": 0, "model_id": "da21cd1627df4c28ad95e555a00b952f"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.566 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.858 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-general-exporting-results-examples-plot-export-suite-results-as-html-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../_downloads/598e53bd2fe17d9ca05a34a0885b8711/plot_export_suite_results_as_html.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_export_suite_results_as_html.py</span></code></a></p>
@@ -9228,8 +9222,9 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
       </div>
     </div>
   
-    <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-  <footer class="footer mt-5 mt-md-0">
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
   <div class="container">
     
     <div class="footer-item">
@@ -9240,7 +9235,7 @@ setting the file argument with a <code class="docutils literal notranslate"><spa
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/b2b149f.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/d748d30.<br>
 </p>
     </div>
     
