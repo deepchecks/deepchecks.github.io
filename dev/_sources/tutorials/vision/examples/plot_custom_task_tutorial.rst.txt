@@ -18,10 +18,6 @@
 .. _sphx_glr_tutorials_vision_examples_plot_custom_task_tutorial.py:
 
 
-.. custom_task:
-
-.. currentmodule:: deepchecks.vision
-
 ====================
 Custom Task Tutorial
 ====================
@@ -42,19 +38,19 @@ the exact bounding box format in order to run, while other checks that uses
 
 In this guide we will implement a custom instance segmentation task and run checks on it.
 
-#. :ref:`Defining the Data`_
-#. :ref:`Implement Custom Task`_
-#. :ref:`Implement Custom Properties`_
-#. :ref:`Implement Custom Metric`_
+# 1. `Defining the Data <#defining-the-data>`__
+# 2. `Implement Custom Task <#implement-custom-task>`__
+# 3. `Implement Custom Properties <#implement-custom-properties>`__
+# 4. `Implement Custom Metric <#implement-custom-metric>`__
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-37
+.. GENERATED FROM PYTHON SOURCE LINES 29-33
 
 Defining the Data
 =================
 First we will define a `PyTorch Dataset <https://pytorch.org/tutorials/beginner/basics/data_tutorial.html>`_.
 of COCO-128 segmentation task. This part represents your own code, and is not yet Deepchecks related.
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-189
+.. GENERATED FROM PYTHON SOURCE LINES 33-191
 
 .. code-block:: default
 
@@ -180,6 +176,12 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
                         extract_root=str(root),
                         md5=md5
                     )
+            
+                try:
+                    # remove coco128's README.txt so that it does not come in docs
+                    os.remove("coco128/README.txt")
+                except:
+                    pass
             return CocoSegmentDataset(coco_dir, folder, train=train, transforms=A.Compose([ToTensorV2()]))
 
 
@@ -220,16 +222,16 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 
  .. code-block:: none
 
-      0%|          | 0/7115649 [00:00<?, ?it/s]    7115776it [00:00, 148379167.96it/s]        
+      0%|          | 0/7115649 [00:00<?, ?it/s]    7115776it [00:00, 98020676.75it/s]         
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-191
+.. GENERATED FROM PYTHON SOURCE LINES 192-193
 
 Visualizing that we loaded our datasets correctly:
 
-.. GENERATED FROM PYTHON SOURCE LINES 191-204
+.. GENERATED FROM PYTHON SOURCE LINES 193-206
 
 .. code-block:: default
 
@@ -266,7 +268,7 @@ Visualizing that we loaded our datasets correctly:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 205-213
+.. GENERATED FROM PYTHON SOURCE LINES 207-215
 
 Implement Custom Task
 =====================
@@ -277,7 +279,7 @@ With the built-in base classes, the checks are accessing directly the values whi
 functions' values are not used directly, so we can just return our own data as is. On the other hand the  functions
 `batch_to_images` and `get_classes` are used so we will need to make sure our data is in the expected format.
 
-.. GENERATED FROM PYTHON SOURCE LINES 213-240
+.. GENERATED FROM PYTHON SOURCE LINES 215-242
 
 .. code-block:: default
 
@@ -315,12 +317,12 @@ functions' values are not used directly, so we can just return our own data as i
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 241-243
+.. GENERATED FROM PYTHON SOURCE LINES 243-245
 
 Now we are able to run checks that use only the image data, since it's in the standard Deepchecks format.
 Let's run SimpleFeatureContribution check with our task
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-293
+.. GENERATED FROM PYTHON SOURCE LINES 245-295
 
 .. code-block:: default
 
@@ -389,7 +391,7 @@ Let's run SimpleFeatureContribution check with our task
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-301
+.. GENERATED FROM PYTHON SOURCE LINES 296-303
 
 Implement Custom Metric
 =======================
@@ -402,7 +404,7 @@ your data structure. The metrics need to conform to the API of
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  41.893 seconds)
+   **Total running time of the script:** ( 0 minutes  55.265 seconds)
 
 
 .. _sphx_glr_download_tutorials_vision_examples_plot_custom_task_tutorial.py:
