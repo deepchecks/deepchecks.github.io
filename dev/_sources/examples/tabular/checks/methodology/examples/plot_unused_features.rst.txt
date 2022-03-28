@@ -49,7 +49,7 @@ The dataset is the adult dataset which can be downloaded from the UCI machine le
 Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
 Irvine, CA: University of California, School of Information and Computer Science.
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-47
+.. GENERATED FROM PYTHON SOURCE LINES 23-32
 
 .. code-block:: default
 
@@ -57,25 +57,10 @@ Irvine, CA: University of California, School of Information and Computer Science
     from urllib.request import urlopen
     from sklearn.preprocessing import LabelEncoder
 
-    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
-    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+    from deepchecks.tabular.datasets.classification import adult
 
-    features = [l.split(':')[0] for l in lines]
     label_name = 'income'
 
-    cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
-
-    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
-                           names=features + [label_name])
-    test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
-                          names=features + [label_name], skiprows=1)
-
-    test_df[label_name] = test_df [label_name].str[:-1]
-
-    encoder = LabelEncoder()
-    encoder.fit(train_df[label_name])
-    train_df[label_name] = encoder.transform(train_df[label_name])
-    test_df[label_name] = encoder.transform(test_df[label_name])
 
 
 
@@ -84,24 +69,17 @@ Irvine, CA: University of California, School of Information and Computer Science
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 Create datasets
 ===============
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-60
+.. GENERATED FROM PYTHON SOURCE LINES 35-38
 
 .. code-block:: default
 
 
-    from deepchecks.tabular import Dataset
-
-    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
-                    'race', 'sex', 'native-country']
-    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
-    test_ds = Dataset(test_df, label=label_name, cat_features=cat_features)
-
-    numeric_features = list(set(train_ds.features) - set(cat_features))
+    train_ds, test_ds = adult.load_data()
 
 
 
@@ -110,37 +88,17 @@ Create datasets
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-63
+.. GENERATED FROM PYTHON SOURCE LINES 39-41
 
 Classification model
 ====================
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-86
+.. GENERATED FROM PYTHON SOURCE LINES 41-44
 
 .. code-block:: default
 
 
-    from sklearn.pipeline import Pipeline
-    from sklearn.impute import SimpleImputer
-    from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OrdinalEncoder
-    from sklearn.ensemble import RandomForestClassifier
-
-    numeric_transformer = SimpleImputer()
-    categorical_transformer = Pipeline(
-        steps=[("imputer", SimpleImputer(strategy="most_frequent")), ("encoder", OrdinalEncoder())]
-    )
-
-    train_ds.features
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, cat_features),
-        ]
-    )
-
-    model = Pipeline(steps=[("preprocessing", preprocessor), ("model", RandomForestClassifier(max_depth=5, n_jobs=-1))])
-    model = model.fit(train_ds.data[train_ds.features], train_ds.data[train_ds.label_name])
+    model = adult.load_fitted_model()
 
 
 
@@ -149,7 +107,7 @@ Classification model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-90
+.. GENERATED FROM PYTHON SOURCE LINES 45-48
 
 .. code-block:: default
 
@@ -178,44 +136,44 @@ Classification model
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "9ce6d2ff6c9a4f57adab31e3204cd9ba": {
+        "4e7a6effa88c49fdb9f08b4db24ac5fd": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_96c489ee63e244e69a9c4f0a728ee20b",
-              "IPY_MODEL_a62536f8b1db473ca3df2d6aa7a27883",
-              "IPY_MODEL_1dcf948727ff4aad8ac397581943c73c"
+              "IPY_MODEL_78a6b61c33814232b514b22c1d31c13d",
+              "IPY_MODEL_d7f4374d77c24517aa3f81b0d96aa30a",
+              "IPY_MODEL_28c3dc58b2de469fabd81baa637c140f"
             ],
-            "layout": "IPY_MODEL_3bd005f049a047c88745a1889e31b5fb"
+            "layout": "IPY_MODEL_d12b08de8de446499b9c1675808dfe86"
           }
         },
-        "96c489ee63e244e69a9c4f0a728ee20b": {
+        "78a6b61c33814232b514b22c1d31c13d": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_05862befcd2e47088de2860d71b3d5da",
-            "style": "IPY_MODEL_a1a30ebff1d14bc994123d67ab335180",
-            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"
+            "layout": "IPY_MODEL_51d080a5f64e42f99a6040c21b4f3eab",
+            "style": "IPY_MODEL_777c2fe353f74bd0a4c42a30a97a452d",
+            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"
           }
         },
-        "05862befcd2e47088de2860d71b3d5da": {
+        "51d080a5f64e42f99a6040c21b4f3eab": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "a1a30ebff1d14bc994123d67ab335180": {
+        "777c2fe353f74bd0a4c42a30a97a452d": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "a62536f8b1db473ca3df2d6aa7a27883": {
+        "d7f4374d77c24517aa3f81b0d96aa30a": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -237,17 +195,17 @@ Classification model
                   ]
                 },
                 "y": [
-                  "capital-gain",
-                  "fnlwgt",
+                  "education",
                   "race",
-                  "workclass",
-                  "education-num",
+                  "fnlwgt",
+                  "capital-gain",
+                  "age",
                   "native-country",
                   "capital-loss",
-                  "age"
+                  "marital-status"
                 ],
                 "type": "bar",
-                "uid": "2d52a3ea-8027-4ddc-bf9f-505f1e1cd656"
+                "uid": "4bc37266-90f2-43bc-9cca-ee50a4c21d29"
               },
               {
                 "marker": {
@@ -262,17 +220,17 @@ Classification model
                   ]
                 },
                 "y": [
-                  "capital-gain",
-                  "fnlwgt",
+                  "education",
                   "race",
-                  "workclass",
-                  "education-num",
+                  "fnlwgt",
+                  "capital-gain",
+                  "age",
                   "native-country",
                   "capital-loss",
-                  "age"
+                  "marital-status"
                 ],
                 "type": "bar",
-                "uid": "96f2f6a9-fde6-4bce-851a-482c5e7ac49b"
+                "uid": "dc54004a-ecd8-4437-aae7-b84d9b8bd7dd"
               }
             ],
             "_dom_classes": [],
@@ -1157,7 +1115,7 @@ Classification model
                 "x",
                 "buffer"
               ],
-              "data": "Nu/4byylN0A0FxrcqSo2QINkssGBnjBATHjlr2dxMEAEsvTgw3kaQJZuyzNK5KQ/bjpw0TLasj83rFAexZq4Pw=="
+              "data": "C3ogUlb4OECA4dNUfGUzQFJw5f7CLzJAt/tjkawWLECOV4MdOvMbQOTCU30mwKU/j872B6tzsT9zSEeXSEK3Pw=="
             },
             {
               "encoding": "base64",
@@ -1167,33 +1125,33 @@ Classification model
                 "x",
                 "buffer"
               ],
-              "data": "UeUNih/8JEDa2/f4SOchQMHggPcIcxFAvYwbvOEWKUC0AJifEg8UQDVaoGyzcyVASIGiyEr/JEANQ3TtzwUNQA=="
+              "data": "G3LTQiSpJkDB4ID3CHMRQNrb9/hI5yFAUeUNih/8JEANQ3TtzwUNQDVaoGyzcyVASIGiyEr/JECyjtLpKwkSQA=="
             }
           ]
         },
-        "1dcf948727ff4aad8ac397581943c73c": {
+        "28c3dc58b2de469fabd81baa637c140f": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_150ce1b228f2440e806ce2a17a732765",
-            "style": "IPY_MODEL_bf98f79159b140f7a6fa089ca2e4bae6"
+            "layout": "IPY_MODEL_930d6d05adf34c7680a66a32430b5f59",
+            "style": "IPY_MODEL_0f992985f68d4c9ea2505b4b0870e018"
           }
         },
-        "150ce1b228f2440e806ce2a17a732765": {
+        "930d6d05adf34c7680a66a32430b5f59": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "bf98f79159b140f7a6fa089ca2e4bae6": {
+        "0f992985f68d4c9ea2505b4b0870e018": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "3bd005f049a047c88745a1889e31b5fb": {
+        "d12b08de8de446499b9c1675808dfe86": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1203,7 +1161,7 @@ Classification model
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "9ce6d2ff6c9a4f57adab31e3204cd9ba"}
+    {"version_major": 2, "version_minor": 0, "model_id": "4e7a6effa88c49fdb9f08b4db24ac5fd"}
     </script>
 
     </body>
@@ -1213,11 +1171,11 @@ Classification model
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-92
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 **stricter threshold on what features are considered "high variance"**
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-95
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 .. code-block:: default
 
@@ -1246,44 +1204,44 @@ Classification model
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "60d0be747b8541109cec4168c99cad73": {
+        "0d5bcd7e7bcb4d569dea69dd9ac41c55": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_501704ac9256467f876f867bfdde399d",
-              "IPY_MODEL_1e5e055137244d858f6b5334fe1c0a01",
-              "IPY_MODEL_003b7775ff7c40e792f87e0e3970720f"
+              "IPY_MODEL_40ce1ec5cc30497489efa35b6a814975",
+              "IPY_MODEL_c979dd33559d43aeacb38cb4d1f3bc6d",
+              "IPY_MODEL_cdce5bf204994062837299db796a27cf"
             ],
-            "layout": "IPY_MODEL_faf61a00f9994a85b62a8eec1604aa62"
+            "layout": "IPY_MODEL_cfabc2fe147749e8afaed515bbe38f94"
           }
         },
-        "501704ac9256467f876f867bfdde399d": {
+        "40ce1ec5cc30497489efa35b6a814975": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_493657258fd24c8c9de8cb210b863443",
-            "style": "IPY_MODEL_89b0b7d9e2904cd4931388f859e925f4",
-            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"
+            "layout": "IPY_MODEL_640dc7c3b8fa442d88ca02abe6ad2b71",
+            "style": "IPY_MODEL_fd8485892bd04d29a7c59b01357c56bb",
+            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"
           }
         },
-        "493657258fd24c8c9de8cb210b863443": {
+        "640dc7c3b8fa442d88ca02abe6ad2b71": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "89b0b7d9e2904cd4931388f859e925f4": {
+        "fd8485892bd04d29a7c59b01357c56bb": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "1e5e055137244d858f6b5334fe1c0a01": {
+        "c979dd33559d43aeacb38cb4d1f3bc6d": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -1305,15 +1263,15 @@ Classification model
                   ]
                 },
                 "y": [
-                  "capital-gain",
-                  "fnlwgt",
+                  "education",
                   "race",
-                  "workclass",
-                  "education-num",
+                  "fnlwgt",
+                  "capital-gain",
+                  "age",
                   "native-country"
                 ],
                 "type": "bar",
-                "uid": "3346a92f-3782-4ccb-bd49-16bc3de2fac3"
+                "uid": "3fcd73b8-8838-44c7-a8cd-f06b1ad842cf"
               },
               {
                 "marker": {
@@ -1328,15 +1286,15 @@ Classification model
                   ]
                 },
                 "y": [
-                  "capital-gain",
-                  "fnlwgt",
+                  "education",
                   "race",
-                  "workclass",
-                  "education-num",
+                  "fnlwgt",
+                  "capital-gain",
+                  "age",
                   "native-country"
                 ],
                 "type": "bar",
-                "uid": "5886464e-ab1f-4d0b-b0b2-b0e84a9e7520"
+                "uid": "893ab261-6cc5-4c04-8ec3-6e10f9a07188"
               }
             ],
             "_dom_classes": [],
@@ -2221,7 +2179,7 @@ Classification model
                 "x",
                 "buffer"
               ],
-              "data": "Nu/4byylN0A0FxrcqSo2QINkssGBnjBATHjlr2dxMEAEsvTgw3kaQJZuyzNK5KQ/"
+              "data": "C3ogUlb4OECA4dNUfGUzQFJw5f7CLzJAt/tjkawWLECOV4MdOvMbQOTCU30mwKU/"
             },
             {
               "encoding": "base64",
@@ -2231,33 +2189,33 @@ Classification model
                 "x",
                 "buffer"
               ],
-              "data": "UeUNih/8JEDa2/f4SOchQMHggPcIcxFAvYwbvOEWKUC0AJifEg8UQDVaoGyzcyVA"
+              "data": "G3LTQiSpJkDB4ID3CHMRQNrb9/hI5yFAUeUNih/8JEANQ3TtzwUNQDVaoGyzcyVA"
             }
           ]
         },
-        "003b7775ff7c40e792f87e0e3970720f": {
+        "cdce5bf204994062837299db796a27cf": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_af6a734973604dddb25bb2f01b0133aa",
-            "style": "IPY_MODEL_c0b24d174db34193ad2316dd3d807a1e"
+            "layout": "IPY_MODEL_0f883d83771c4952ae82c5a277b51ae4",
+            "style": "IPY_MODEL_22e2f8c7b70644739425b11e0d1bb166"
           }
         },
-        "af6a734973604dddb25bb2f01b0133aa": {
+        "0f883d83771c4952ae82c5a277b51ae4": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "c0b24d174db34193ad2316dd3d807a1e": {
+        "22e2f8c7b70644739425b11e0d1bb166": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "faf61a00f9994a85b62a8eec1604aa62": {
+        "cfabc2fe147749e8afaed515bbe38f94": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -2267,7 +2225,7 @@ Classification model
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "60d0be747b8541109cec4168c99cad73"}
+    {"version_major": 2, "version_minor": 0, "model_id": "0d5bcd7e7bcb4d569dea69dd9ac41c55"}
     </script>
 
     </body>
@@ -2277,11 +2235,11 @@ Classification model
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-97
+.. GENERATED FROM PYTHON SOURCE LINES 54-55
 
 **All features are considered important**
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-99
+.. GENERATED FROM PYTHON SOURCE LINES 55-57
 
 .. code-block:: default
 
@@ -2309,42 +2267,42 @@ Classification model
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "dcf25f4a14a2416abe91b0758219b262": {
+        "cd84e2a7d04f46078437f1bedd89e87e": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_04827c596d764576b1294fe2048c46ab"
+              "IPY_MODEL_c704b0a394594b7996c779e1a2a9595e"
             ],
-            "layout": "IPY_MODEL_9b3b4c6cae854bda8cefa0f039a9925f"
+            "layout": "IPY_MODEL_b6c6e9553f9b42649dec5a6069c2a751"
           }
         },
-        "04827c596d764576b1294fe2048c46ab": {
+        "c704b0a394594b7996c779e1a2a9595e": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_4704d081d5a04dc2a5374b691fdaa981",
-            "style": "IPY_MODEL_038d2b6e1cf546a7b244acff22b6fd56",
-            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
+            "layout": "IPY_MODEL_fcc324cc930f421e997e599875bae162",
+            "style": "IPY_MODEL_94edbf81016e405d9714cdeb9874d4e6",
+            "value": "<h4>Unused Features</h4><p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/methodology/unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
           }
         },
-        "4704d081d5a04dc2a5374b691fdaa981": {
+        "fcc324cc930f421e997e599875bae162": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "038d2b6e1cf546a7b244acff22b6fd56": {
+        "94edbf81016e405d9714cdeb9874d4e6": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "9b3b4c6cae854bda8cefa0f039a9925f": {
+        "b6c6e9553f9b42649dec5a6069c2a751": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -2354,7 +2312,7 @@ Classification model
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "dcf25f4a14a2416abe91b0758219b262"}
+    {"version_major": 2, "version_minor": 0, "model_id": "cd84e2a7d04f46078437f1bedd89e87e"}
     </script>
 
     </body>
@@ -2367,7 +2325,7 @@ Classification model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.532 seconds)
+   **Total running time of the script:** ( 0 minutes  11.554 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_methodology_examples_plot_unused_features.py:

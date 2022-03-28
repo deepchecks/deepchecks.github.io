@@ -30,34 +30,16 @@ The dataset is the adult dataset which can be downloaded from the UCI machine le
 Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
 Irvine, CA: University of California, School of Information and Computer Science.
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-39
+.. GENERATED FROM PYTHON SOURCE LINES 14-20
 
 .. code-block:: default
 
 
-    import pandas as pd
-    from urllib.request import urlopen
     from sklearn.preprocessing import LabelEncoder
+    from deepchecks.tabular.datasets.classification import adult
 
-    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
-    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
-
-    features = [l.split(':')[0] for l in lines]
     label_name = 'income'
 
-    cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
-
-    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
-                           names=features + [label_name])
-    val_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
-                          names=features + [label_name], skiprows=1)
-
-    val_df[label_name] = val_df [label_name].str[:-1]
-
-    encoder = LabelEncoder()
-    encoder.fit(train_df[label_name])
-    train_df[label_name] = encoder.transform(train_df[label_name])
-    val_df[label_name] = encoder.transform(val_df[label_name])
 
 
 
@@ -65,25 +47,20 @@ Irvine, CA: University of California, School of Information and Computer Science
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 40-42
+.. GENERATED FROM PYTHON SOURCE LINES 21-23
 
 Create Dataset
 ==============
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-52
+.. GENERATED FROM PYTHON SOURCE LINES 23-30
 
 .. code-block:: default
 
 
-    from deepchecks.tabular import Dataset
-
-    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
-                    'race', 'sex', 'native-country']
-    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
-    validation_ds = Dataset(val_df, label=label_name, cat_features=cat_features)
-
-    numeric_features = list(set(train_ds.features) - set(cat_features))
+    train_ds, validation_ds = adult.load_data()
+    encoder = LabelEncoder()
+    train_ds.data[label_name] = encoder.fit_transform(train_ds.data[label_name])
+    validation_ds.data[label_name] = encoder.transform(validation_ds.data[label_name])
 
 
 
@@ -92,54 +69,18 @@ Create Dataset
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-55
+
+.. GENERATED FROM PYTHON SOURCE LINES 31-33
 
 Classification Model
 ====================
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-82
+.. GENERATED FROM PYTHON SOURCE LINES 33-37
 
 .. code-block:: default
 
 
-    from sklearn.pipeline import Pipeline
-    from sklearn.impute import SimpleImputer
-    from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OrdinalEncoder
-    from sklearn.ensemble import RandomForestClassifier
-
-    numeric_transformer = SimpleImputer()
-    categorical_transformer = Pipeline(
-        steps=[("imputer", SimpleImputer(strategy="most_frequent")), ("encoder", OrdinalEncoder())]
-    )
-
-    train_ds.features
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("num", numeric_transformer, numeric_features),
-            ("cat", categorical_transformer, cat_features),
-        ]
-    )
-
-    model = Pipeline(
-        steps=[
-            ("preprocessing", preprocessor), 
-            ("model", RandomForestClassifier(max_depth=5, n_jobs=-1))
-        ]
-    ).fit(train_ds.data[train_ds.features], train_ds.data[train_ds.label_name])
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 83-86
-
-.. code-block:: default
-
-
+    model = adult.load_fitted_model()
     model
 
 
@@ -155,10 +96,11 @@ Classification Model
 
     Pipeline(steps=[('preprocessing',
                      ColumnTransformer(transformers=[('num', SimpleImputer(),
-                                                      ['fnlwgt', 'education-num',
+                                                      ['age', 'capital-loss',
+                                                       'education-num',
                                                        'capital-gain',
-                                                       'hours-per-week', 'age',
-                                                       'capital-loss']),
+                                                       'hours-per-week',
+                                                       'fnlwgt']),
                                                      ('cat',
                                                       Pipeline(steps=[('imputer',
                                                                        SimpleImputer(strategy='most_frequent')),
@@ -169,11 +111,13 @@ Classification Model
                                                        'occupation', 'relationship',
                                                        'race', 'sex',
                                                        'native-country'])])),
-                    ('model', RandomForestClassifier(max_depth=5, n_jobs=-1))])
+                    ('model',
+                     RandomForestClassifier(max_depth=5, n_jobs=-1,
+                                            random_state=0))])
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-91
+.. GENERATED FROM PYTHON SOURCE LINES 38-42
 
 .. code-block:: default
 
@@ -203,44 +147,44 @@ Classification Model
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "d7996db348fa433d9cedd8801b59db17": {
+        "425b58fd9385454890a2030b24821420": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_f3c28caa700b4b73b54847401c72e2a5",
-              "IPY_MODEL_1178ed8262494a37a7d961763168a2a4",
-              "IPY_MODEL_56f51f1310404d1886846705351d96a6"
+              "IPY_MODEL_4f49f2898ccd4634bf38f73de142e442",
+              "IPY_MODEL_454ed2ea1b6d44cb999506b3cd3591ce",
+              "IPY_MODEL_a1b2fa6a79b34330958964727fc35989"
             ],
-            "layout": "IPY_MODEL_486e1a3442044201aa87a5466e24388d"
+            "layout": "IPY_MODEL_4744bd2578b746229f88ebfcf470da22"
           }
         },
-        "f3c28caa700b4b73b54847401c72e2a5": {
+        "4f49f2898ccd4634bf38f73de142e442": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_d9f5ef239cf147e385befb20225a8f1c",
-            "style": "IPY_MODEL_dd914ee7640a436ab96515af85f96fc6",
-            "value": "<h4>Segment Performance</h4><p>Display performance score segmented by 2 top (or given) features in a heatmap. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/segment_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
+            "layout": "IPY_MODEL_1530037435e54c66be3c1400ec2cac53",
+            "style": "IPY_MODEL_8f373e1fc4f64cb6920bb8d58a4b0aa5",
+            "value": "<h4>Segment Performance</h4><p>Display performance score segmented by 2 top (or given) features in a heatmap. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/performance/segment_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
           }
         },
-        "d9f5ef239cf147e385befb20225a8f1c": {
+        "1530037435e54c66be3c1400ec2cac53": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "dd914ee7640a436ab96515af85f96fc6": {
+        "8f373e1fc4f64cb6920bb8d58a4b0aa5": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "1178ed8262494a37a7d961763168a2a4": {
+        "454ed2ea1b6d44cb999506b3cd3591ce": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -316,56 +260,56 @@ Classification Model
                 ],
                 "z": [
                   [
-                    0.9623655913978495,
-                    0.9481132075471698,
-                    0.9036755386565273,
-                    0.8523625096824168,
-                    0.7953603976801988,
-                    0.7889908256880734
+                    0.9666666666666667,
+                    0.9492924528301887,
+                    0.9011406844106464,
+                    0.8505034856700232,
+                    0.7862468931234465,
+                    0.7798165137614679
                   ],
                   [
-                    0.8601398601398601,
-                    0.8717948717948718,
-                    0.8452380952380952,
-                    0.8248847926267281,
-                    0.7678571428571429,
-                    0.7523510971786834
+                    0.9090909090909091,
+                    0.8632478632478633,
+                    0.8333333333333334,
+                    0.8202764976958525,
+                    0.7589285714285714,
+                    0.7492163009404389
                   ],
                   [
                     0.92,
                     0.8888888888888888,
                     0.8602150537634409,
-                    0.8147540983606557,
-                    0.7217391304347827,
+                    0.8114754098360656,
+                    0.7130434782608696,
                     0.6551724137931034
                   ],
                   [
-                    0.9328859060402684,
+                    0.9295302013422819,
                     0.9714285714285714,
-                    0.9508196721311475,
-                    0.9561855670103093,
+                    0.9344262295081968,
+                    0.9458762886597938,
                     0.868421052631579,
-                    0.8947368421052632
+                    0.9210526315789473
                   ],
                   [
                     0.9176470588235294,
                     0.9259259259259259,
-                    0.9152542372881356,
+                    0.9322033898305084,
                     0.8361858190709046,
-                    0.7358490566037735,
-                    0.6
+                    0.7169811320754716,
+                    0.62
                   ],
                   [
                     0.8301886792452831,
                     0.9090909090909091,
-                    0.8461538461538461,
-                    0.7668393782383419,
-                    0.7037037037037037,
-                    0.6971153846153846
+                    0.8076923076923077,
+                    0.7651122625215889,
+                    0.6975308641975309,
+                    0.7115384615384616
                   ]
                 ],
                 "type": "heatmap",
-                "uid": "7f2cf59f-7898-495b-b09a-25e60ab7cae1"
+                "uid": "8ec10c84-2348-4b7e-a2f0-4f3056ff993c"
               }
             ],
             "_dom_classes": [],
@@ -382,7 +326,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.96\n(930)",
+                  "text": "0.97\n(930)",
                   "x": "[1 - 24)",
                   "xref": "x",
                   "y": " Private",
@@ -426,7 +370,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.8\n(1207)",
+                  "text": "0.79\n(1207)",
                   "x": "[48 - 55)",
                   "xref": "x",
                   "y": " Private",
@@ -437,7 +381,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.79\n(981)",
+                  "text": "0.78\n(981)",
                   "x": "[55 - 99]",
                   "xref": "x",
                   "y": " Private",
@@ -448,7 +392,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.86\n(143)",
+                  "text": "0.91\n(143)",
                   "x": "[1 - 24)",
                   "xref": "x",
                   "y": " Self-emp-not-inc",
@@ -459,7 +403,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.87\n(117)",
+                  "text": "0.86\n(117)",
                   "x": "[24 - 35)",
                   "xref": "x",
                   "y": " Self-emp-not-inc",
@@ -470,7 +414,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.85\n(84)",
+                  "text": "0.83\n(84)",
                   "x": "[35 - 40)",
                   "xref": "x",
                   "y": " Self-emp-not-inc",
@@ -492,7 +436,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.77\n(224)",
+                  "text": "0.76\n(224)",
                   "x": "[48 - 55)",
                   "xref": "x",
                   "y": " Self-emp-not-inc",
@@ -558,7 +502,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.72\n(115)",
+                  "text": "0.71\n(115)",
                   "x": "[48 - 55)",
                   "xref": "x",
                   "y": " Local-gov",
@@ -602,7 +546,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.95\n(61)",
+                  "text": "0.93\n(61)",
                   "x": "[35 - 40)",
                   "xref": "x",
                   "y": " ?",
@@ -613,7 +557,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.96\n(388)",
+                  "text": "0.95\n(388)",
                   "x": "[40 - 48)",
                   "xref": "x",
                   "y": " ?",
@@ -635,7 +579,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.89\n(38)",
+                  "text": "0.92\n(38)",
                   "x": "[55 - 99]",
                   "xref": "x",
                   "y": " ?",
@@ -668,7 +612,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.92\n(59)",
+                  "text": "0.93\n(59)",
                   "x": "[35 - 40)",
                   "xref": "x",
                   "y": " State-gov",
@@ -690,7 +634,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.74\n(53)",
+                  "text": "0.72\n(53)",
                   "x": "[48 - 55)",
                   "xref": "x",
                   "y": " State-gov",
@@ -701,7 +645,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.6\n(50)",
+                  "text": "0.62\n(50)",
                   "x": "[55 - 99]",
                   "xref": "x",
                   "y": " State-gov",
@@ -734,7 +678,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.85\n(26)",
+                  "text": "0.81\n(26)",
                   "x": "[35 - 40)",
                   "xref": "x",
                   "y": "Others",
@@ -767,7 +711,7 @@ Classification Model
                     "color": "black"
                   },
                   "showarrow": false,
-                  "text": "0.7\n(208)",
+                  "text": "0.71\n(208)",
                   "x": "[55 - 99]",
                   "xref": "x",
                   "y": "Others",
@@ -1627,29 +1571,29 @@ Classification Model
             "_view_count": 0
           }
         },
-        "56f51f1310404d1886846705351d96a6": {
+        "a1b2fa6a79b34330958964727fc35989": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_eb5a2fb74f1b4359970667953ea3e976",
-            "style": "IPY_MODEL_32707e2d71734251837fcca56e7e565f"
+            "layout": "IPY_MODEL_7746444743ed4fa1b9f58fefd7c32ffd",
+            "style": "IPY_MODEL_55d4e35ccb70456fa2238936f982a84a"
           }
         },
-        "eb5a2fb74f1b4359970667953ea3e976": {
+        "7746444743ed4fa1b9f58fefd7c32ffd": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "32707e2d71734251837fcca56e7e565f": {
+        "55d4e35ccb70456fa2238936f982a84a": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "486e1a3442044201aa87a5466e24388d": {
+        "4744bd2578b746229f88ebfcf470da22": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1659,7 +1603,7 @@ Classification Model
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "d7996db348fa433d9cedd8801b59db17"}
+    {"version_major": 2, "version_minor": 0, "model_id": "425b58fd9385454890a2030b24821420"}
     </script>
 
     </body>
@@ -1672,7 +1616,7 @@ Classification Model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.375 seconds)
+   **Total running time of the script:** ( 0 minutes  12.603 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_performance_examples_plot_segement_performance.py:

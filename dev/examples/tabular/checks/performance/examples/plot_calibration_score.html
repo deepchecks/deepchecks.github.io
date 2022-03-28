@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Calibration Score &#8212; Deepchecks c254ff2 documentation</title>
+    <title>Calibration Score &#8212; Deepchecks 1e6f8b4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -76,7 +76,7 @@
     <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="Overview" href="../../overview/examples/index.html" />
+    <link rel="next" title="Performance Report" href="plot_performance_report.html" />
     <link rel="prev" title="Model Error Analysis" href="plot_model_error_analysis.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -336,6 +336,11 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../distribution/examples/plot_whole_dataset_drift.html">
+     Whole Dataset Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../distribution/examples/plot_trust_score_comparison.html">
      Trust Score Comparison
     </a>
@@ -343,11 +348,6 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
    <li class="toctree-l2">
     <a class="reference internal" href="../../distribution/examples/plot_train_test_label_drift.html">
      Train Test Label Drift
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../distribution/examples/plot_whole_dataset_drift.html">
-     Whole Dataset Drift
     </a>
    </li>
    <li class="toctree-l2">
@@ -450,6 +450,11 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../methodology/examples/plot_unused_features.html">
+     Unused Features
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../methodology/examples/plot_datasets_size_comparison.html">
      Datasets Size Comparison
     </a>
@@ -470,13 +475,13 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../methodology/examples/plot_single_feature_contribution_train_test.html">
-     Single Feature Contribution Train Test
+    <a class="reference internal" href="../../methodology/examples/plot_boosting_overfit.html">
+     Boosting Overfit
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../methodology/examples/plot_boosting_overfit.html">
-     Boosting Overfit
+    <a class="reference internal" href="../../methodology/examples/plot_single_feature_contribution_train_test.html">
+     Single Feature Contribution Train Test
     </a>
    </li>
    <li class="toctree-l2">
@@ -487,11 +492,6 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
    <li class="toctree-l2">
     <a class="reference internal" href="../../methodology/examples/plot_date_train_test_leakage_duplicates.html">
      Date Train Validation Leakage Duplicates
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../methodology/examples/plot_unused_features.html">
-     Unused Features
     </a>
    </li>
   </ul>
@@ -506,6 +506,11 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
    </i>
   </label>
   <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_segement_performance.html">
+     Segment Performance
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="plot_confusion_matrix_report.html">
      Confusion Matrix Report
@@ -532,21 +537,6 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_performance_report.html">
-     Performance Report
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_multi_model_performance_report.html">
-     Multi Model Performance Report
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_segement_performance.html">
-     Segment Performance
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="plot_model_error_analysis.html">
      Model Error Analysis
     </a>
@@ -554,6 +544,16 @@ Page: examples/tabular/checks/performance/examples/plot_calibration_score&labels
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Calibration Score
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_performance_report.html">
+     Performance Report
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_multi_model_performance_report.html">
+     Multi Model Performance Report
     </a>
    </li>
   </ul>
@@ -760,6 +760,9 @@ to download the full example code</p>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
+<span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">adult</span>
+
+
 <span class="k">def</span> <span class="nf">custom_formatwarning</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># ignore everything except the message</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -778,58 +781,15 @@ Irvine, CA: University of California, School of Information and Computer Science
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
 
-<span class="n">name_data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names&#39;</span><span class="p">)</span>
-<span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">name_data</span> <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;|&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)]</span>
-
-<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
 <span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;income&#39;</span>
-
-<span class="n">cat_features</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="s1">&#39;continuous&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">l</span><span class="p">]</span>
-
-<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data&#39;</span><span class="p">,</span>
-                       <span class="n">names</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="p">[</span><span class="n">label_name</span><span class="p">])</span>
-<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test&#39;</span><span class="p">,</span>
-                      <span class="n">names</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="p">[</span><span class="n">label_name</span><span class="p">],</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">test_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_df</span> <span class="p">[</span><span class="n">label_name</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="n">encoder</span> <span class="o">=</span> <span class="n">LabelEncoder</span><span class="p">()</span>
-<span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">])</span>
-<span class="n">train_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">])</span>
-<span class="n">test_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_df</span><span class="p">[</span><span class="n">label_name</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
-<span class="n">cat_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;marital-status&#39;</span><span class="p">,</span> <span class="s1">&#39;occupation&#39;</span><span class="p">,</span> <span class="s1">&#39;relationship&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;native-country&#39;</span><span class="p">]</span>
-<span class="n">train_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label_name</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="n">cat_features</span><span class="p">)</span>
-<span class="n">test_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label_name</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="n">cat_features</span><span class="p">)</span>
-
-<span class="n">numeric_features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">train_ds</span><span class="o">.</span><span class="n">features</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">cat_features</span><span class="p">))</span>
+<span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
-<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OrdinalEncoder</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
-
-<span class="n">numeric_transformer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">()</span>
-<span class="n">categorical_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span>
-    <span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;most_frequent&quot;</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">OrdinalEncoder</span><span class="p">())]</span>
-<span class="p">)</span>
-
-<span class="n">train_ds</span><span class="o">.</span><span class="n">features</span>
-<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span>
-    <span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">,</span> <span class="n">numeric_transformer</span><span class="p">,</span> <span class="n">numeric_features</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">categorical_transformer</span><span class="p">,</span> <span class="n">cat_features</span><span class="p">),</span>
-    <span class="p">]</span>
-<span class="p">)</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;preprocessing&quot;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">))])</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_ds</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">train_ds</span><span class="o">.</span><span class="n">features</span><span class="p">],</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">train_ds</span><span class="o">.</span><span class="n">label_name</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">load_fitted_model</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">CalibrationScore</span><span class="p">()</span>
@@ -851,44 +811,44 @@ Irvine, CA: University of California, School of Information and Computer Science
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "1c42c4eb683744d495369dda5e7bc0e2": {
+    "d3cd96073c5e450985329b36247d36aa": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_33c544e3237c4b93ad5f310b98512d23",
-          "IPY_MODEL_3b17e50480c44a60bf61678a55645dcd",
-          "IPY_MODEL_576518be2e7f44efbd380ef8440437eb"
+          "IPY_MODEL_f5134f416926492aacb5069ba16c30d2",
+          "IPY_MODEL_ac0899a9d99c4bb89aca8dacde0b937a",
+          "IPY_MODEL_6ae68c3802104315914d294c50bac97c"
         ],
-        "layout": "IPY_MODEL_42262aedf00a47e79ea385b4885aaa80"
+        "layout": "IPY_MODEL_b22cb562baec499096e703e71796dd2f"
       }
     },
-    "33c544e3237c4b93ad5f310b98512d23": {
+    "f5134f416926492aacb5069ba16c30d2": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3949b8fe1deb42758a4506fca272b3bf",
-        "style": "IPY_MODEL_a62dffbefa5c441e999515d6c82a482f",
-        "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
+        "layout": "IPY_MODEL_ef63704ed08c4b6dbeb221d27828b4aa",
+        "style": "IPY_MODEL_b872df0c7bd742b18dac53b76940d761",
+        "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/performance/calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
       }
     },
-    "3949b8fe1deb42758a4506fca272b3bf": {
+    "ef63704ed08c4b6dbeb221d27828b4aa": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a62dffbefa5c441e999515d6c82a482f": {
+    "b872df0c7bd742b18dac53b76940d761": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3b17e50480c44a60bf61678a55645dcd": {
+    "ac0899a9d99c4bb89aca8dacde0b937a": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -912,25 +872,25 @@ Irvine, CA: University of California, School of Information and Computer Science
               1
             ],
             "type": "scatter",
-            "uid": "c0b38af6-fc27-4665-9836-e69714bfe6fc"
+            "uid": "381c504c-edc0-4072-a332-8165d951e7bb"
           },
           {
             "mode": "lines+markers",
-            "name": "(brier:   0.1070)",
+            "name": "(brier:   0.1090)",
             "x": {
               "dtype": "float64",
               "shape": [
-                10
+                9
               ]
             },
             "y": {
               "dtype": "float64",
               "shape": [
-                10
+                9
               ]
             },
             "type": "scatter",
-            "uid": "7318554c-9c43-479d-817c-363561323696"
+            "uid": "4dd36863-40a1-478b-a475-a43b56941b82"
           }
         ],
         "_dom_classes": [],
@@ -1794,7 +1754,7 @@ Irvine, CA: University of California, School of Information and Computer Science
             "x",
             "buffer"
           ],
-          "data": "uOtchWiIpj8B4e+KFk/CP2ZnNS2kEtA/XEW5S+gm1j/VdH+THsvcP9zDPju5COI/ZuFISm8T5D/dmrl482LoP74UChwWWes/whj9jAAk7T8="
+          "data": "bh27DWG3pT8nE1CbA9PBP+ZO+HXnkNA/u3vwys1B1T8odzPvDDjdP7/H25djg+E/jruBMZzT4z9Pc9hpJx7oPzLC1hAvZes/"
         },
         {
           "encoding": "base64",
@@ -1804,34 +1764,34 @@ Irvine, CA: University of California, School of Information and Computer Science
             "y",
             "buffer"
           ],
-          "data": "n+5rdIEwiT+5nUTAylK1P4WlrS9QWMo/5+bm5ubm1j+NPcwC8kXiPzk94/ZfZeQ/OQ8dw4vz6D/5qTtKZU7vP1FeQ3kN5e8/AAAAAAAA8D8="
+          "data": "GIOHJDSjfj8uquL0wOGtPy0P+9GjTcw/+EUt/4aE2T9Cb92fnEviPz03jDw3jOQ/1EbCQMDq6D89AZbm/IjvP6eh2Urf6+8/"
         }
       ]
     },
-    "576518be2e7f44efbd380ef8440437eb": {
+    "6ae68c3802104315914d294c50bac97c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_792fa4d30991413db3181e517d185c6e",
-        "style": "IPY_MODEL_251d076ceddf447ab98f3b008f42343d",
+        "layout": "IPY_MODEL_aa36ac4f7ada461b89fbc5cd61a93e35",
+        "style": "IPY_MODEL_75f672e9786d46b2ab78198720fef280",
         "value": "<div>The Brier score metric may be used to assess how well a classifier is calibrated. For more info, please visit https://en.wikipedia.org/wiki/Brier_score</div>"
       }
     },
-    "792fa4d30991413db3181e517d185c6e": {
+    "aa36ac4f7ada461b89fbc5cd61a93e35": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "251d076ceddf447ab98f3b008f42343d": {
+    "75f672e9786d46b2ab78198720fef280": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "42262aedf00a47e79ea385b4885aaa80": {
+    "b22cb562baec499096e703e71796dd2f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1841,7 +1801,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "1c42c4eb683744d495369dda5e7bc0e2"}
+{"version_major": 2, "version_minor": 0, "model_id": "d3cd96073c5e450985329b36247d36aa"}
 </script>
 
 </body>
@@ -1884,44 +1844,44 @@ Irvine, CA: University of California, School of Information and Computer Science
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "98b6dd501cca4ae7b65e2ebc61e22dde": {
+    "11152467f7c44bd689e42101ed2d1d59": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_3f6d62c7a72d4a22a9fb72132d082ae6",
-          "IPY_MODEL_059f29d32d1f430392ba9db86558a55b",
-          "IPY_MODEL_15054ec7dfed41bfbd100d0cbc4872b8"
+          "IPY_MODEL_a299906076fe44feaf3384a521922d5c",
+          "IPY_MODEL_22740288c1a44692b158d4291fb898c0",
+          "IPY_MODEL_a37f19030a9e46fba9830e3438e8744f"
         ],
-        "layout": "IPY_MODEL_2d44e798123540d3944ca27525d1febb"
+        "layout": "IPY_MODEL_20f10883487148999533fb06d400904f"
       }
     },
-    "3f6d62c7a72d4a22a9fb72132d082ae6": {
+    "a299906076fe44feaf3384a521922d5c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1fe97dadc5674db888272d498f37c8d9",
-        "style": "IPY_MODEL_ce8ca213171840148b2e421f532153c3",
-        "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/en/0.6.0.dev1/examples/tabular/checks/performance/calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
+        "layout": "IPY_MODEL_6cd78e2fe883459e90534e030c051a44",
+        "style": "IPY_MODEL_c902f258babd49c583d02e48870f2a47",
+        "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/0.6.0.dev1/examples/checks/performance/calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
       }
     },
-    "1fe97dadc5674db888272d498f37c8d9": {
+    "6cd78e2fe883459e90534e030c051a44": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ce8ca213171840148b2e421f532153c3": {
+    "c902f258babd49c583d02e48870f2a47": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "059f29d32d1f430392ba9db86558a55b": {
+    "22740288c1a44692b158d4291fb898c0": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1945,7 +1905,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               1
             ],
             "type": "scatter",
-            "uid": "724de7bf-8c69-4225-a42b-6303dcc4b435"
+            "uid": "158403bf-30d2-47f7-899a-155fca653eec"
           },
           {
             "mode": "lines+markers",
@@ -1963,7 +1923,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               ]
             },
             "type": "scatter",
-            "uid": "3b40721d-1537-472c-b497-6fbca8642658"
+            "uid": "4144e9b4-8f83-45fc-958c-6c249cffea3a"
           },
           {
             "mode": "lines+markers",
@@ -1981,7 +1941,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               ]
             },
             "type": "scatter",
-            "uid": "efd154ac-b8aa-423c-9702-2f972f5b3faf"
+            "uid": "e37cffda-2f37-4e54-92f0-8fdcdc5a0a57"
           },
           {
             "mode": "lines+markers",
@@ -1999,7 +1959,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               ]
             },
             "type": "scatter",
-            "uid": "4e72fcc7-8b96-4f7b-a9d1-4a051970f51f"
+            "uid": "fa0bb6c2-2072-44e1-9490-9550cb7d016d"
           }
         ],
         "_dom_classes": [],
@@ -2917,30 +2877,30 @@ Irvine, CA: University of California, School of Information and Computer Science
         }
       ]
     },
-    "15054ec7dfed41bfbd100d0cbc4872b8": {
+    "a37f19030a9e46fba9830e3438e8744f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_367d6defda914d9890dba733ca660fb7",
-        "style": "IPY_MODEL_25932b8020f84512a86bc06428170ee3",
+        "layout": "IPY_MODEL_e65e05d8ada14b788734631846abd1fe",
+        "style": "IPY_MODEL_8fc36cc3c22b48cbab6d626063bd6f63",
         "value": "<div>The Brier score metric may be used to assess how well a classifier is calibrated. For more info, please visit https://en.wikipedia.org/wiki/Brier_score</div>"
       }
     },
-    "367d6defda914d9890dba733ca660fb7": {
+    "e65e05d8ada14b788734631846abd1fe": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "25932b8020f84512a86bc06428170ee3": {
+    "8fc36cc3c22b48cbab6d626063bd6f63": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "2d44e798123540d3944ca27525d1febb": {
+    "20f10883487148999533fb06d400904f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2950,7 +2910,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "98b6dd501cca4ae7b65e2ebc61e22dde"}
+{"version_major": 2, "version_minor": 0, "model_id": "11152467f7c44bd689e42101ed2d1d59"}
 </script>
 
 </body>
@@ -2958,7 +2918,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.020 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.901 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-performance-examples-plot-calibration-score-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/1c75c372da9a6c43d1795b57e2dae81c/plot_calibration_score.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_calibration_score.py</span></code></a></p>
@@ -2984,10 +2944,10 @@ Irvine, CA: University of California, School of Information and Computer Science
             <p class="prev-next-title">Model Error Analysis</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../../overview/examples/index.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_performance_report.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Overview</p>
+        <p class="prev-next-title">Performance Report</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -3012,7 +2972,7 @@ Irvine, CA: University of California, School of Information and Computer Science
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0+/c254ff2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/1e6f8b4.<br>
 </p>
     </div>
     
