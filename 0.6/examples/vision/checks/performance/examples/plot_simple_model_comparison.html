@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Simple Model Comparison &#8212; Deepchecks 6b5ec9c documentation</title>
+    <title>Simple Model Comparison &#8212; Deepchecks 86b67f8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,8 +77,8 @@
     <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="Image Segment Performance" href="plot_image_segment_performance.html" />
-    <link rel="prev" title="Confusion Matrix" href="plot_confusion_matrix.html" />
+    <link rel="next" title="Model Error Analysis check" href="plot_model_error_analysis.html" />
+    <link rel="prev" title="Robustness Report" href="plot_robustness_report.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -345,11 +345,6 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_string_mismatch_comparison.html">
-     String Mismatch Comparison
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_mixed_nulls.html">
      Mixed Nulls
     </a>
@@ -365,6 +360,11 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_string_mismatch_comparison.html">
+     String Mismatch Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_string_length_out_of_bounds.html">
      String Length Out Of Bounds
     </a>
@@ -375,13 +375,13 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_label_ambiguity.html">
-     Label Ambiguity
+    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_category_mismatch_train_test.html">
+     New Category
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_category_mismatch_train_test.html">
-     New Category
+    <a class="reference internal" href="../../../../tabular/checks/integrity/examples/plot_label_ambiguity.html">
+     Label Ambiguity
     </a>
    </li>
    <li class="toctree-l2">
@@ -444,7 +444,7 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../../tabular/checks/methodology/examples/plot_single_feature_congttribution.html">
+    <a class="reference internal" href="../../../../tabular/checks/methodology/examples/plot_single_feature_contribution.html">
      Single Feature Contribution
     </a>
    </li>
@@ -622,7 +622,7 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../distribution/examples/plot_image_property_check.html">
+    <a class="reference internal" href="../../distribution/examples/plot_image_property_drift.html">
      Image Property Drift Check
     </a>
    </li>
@@ -649,6 +649,11 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../methodology/examples/plot_similar_image_leakage.html">
+     Similar Image Leakage
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../methodology/examples/plot_simple_feature_contribution.html">
      Simple Feature Contribution
     </a>
@@ -670,11 +675,6 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
      Confusion Matrix
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Simple Model Comparison
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="plot_image_segment_performance.html">
      Image Segment Performance
@@ -693,6 +693,16 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
    <li class="toctree-l2">
     <a class="reference internal" href="plot_robustness_report.html">
      Robustness Report
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Simple Model Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_model_error_analysis.html">
+     Model Error Analysis check
     </a>
    </li>
    <li class="toctree-l2">
@@ -746,6 +756,11 @@ Page: examples/vision/checks/performance/examples/plot_simple_model_comparison&l
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
+  </a>
  </li>
 </ul>
 
@@ -841,6 +856,31 @@ providing an alternative scorer using the <code class="docutils literal notransl
 <span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">mnist_model</span><span class="p">)</span>
 </pre></div>
 </div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:   0%| | 0/1 [00:00&lt;?, ? /s]
+Validating Input: 100%|#| 1/1 [00:00&lt;00:00,  8.52 /s]
+
+
+Ingesting Batches - Train Dataset:   0%|                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Train Dataset:  17%|###########################                                                                                                                                  | 27/157 [00:00&lt;00:00, 268.39 Batch/s]
+Ingesting Batches - Train Dataset:  34%|######################################################                                                                                                       | 54/157 [00:00&lt;00:00, 268.05 Batch/s]
+Ingesting Batches - Train Dataset:  52%|#################################################################################                                                                            | 81/157 [00:00&lt;00:00, 268.49 Batch/s]
+Ingesting Batches - Train Dataset:  69%|############################################################################################################                                                 | 108/157 [00:00&lt;00:00, 268.11 Batch/s]
+Ingesting Batches - Train Dataset:  86%|#######################################################################################################################################                      | 135/157 [00:00&lt;00:00, 267.95 Batch/s]
+
+
+Ingesting Batches - Test Dataset:   0%|                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Test Dataset:   1%|##                                                                                                                                                           | 2/157 [00:00&lt;00:14, 10.87 Batch/s]
+Ingesting Batches - Test Dataset:   3%|####                                                                                                                                                         | 4/157 [00:00&lt;00:14, 10.85 Batch/s]
+Ingesting Batches - Test Dataset:   4%|######                                                                                                                                                       | 6/157 [00:00&lt;00:13, 10.92 Batch/s]
+Ingesting Batches - Test Dataset:   5%|########                                                                                                                                                     | 8/157 [00:00&lt;00:13, 10.94 Batch/s]
+Ingesting Batches - Test Dataset:   6%|##########                                                                                                                                                   | 10/157 [00:00&lt;00:13, 10.93 Batch/s]
+
+
+Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
+Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  6.26 Check/s]
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span>
 </pre></div>
 </div>
@@ -859,44 +899,44 @@ providing an alternative scorer using the <code class="docutils literal notransl
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "8981b3c3108f4aebb16d1712f3cd0701": {
+    "64727fa6f64d413f99de897055c3c448": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_71f5e0f827914c59826871d21aa1efe5",
-          "IPY_MODEL_9a67154899e04567bf4fd8187f79d4cf",
-          "IPY_MODEL_93597337668e41f79f425b06faff0adc"
+          "IPY_MODEL_d168c9b50ac844bb8e9231c1805c1aca",
+          "IPY_MODEL_bf5b179edd6045fd8058ea834def8c97",
+          "IPY_MODEL_b6741ef71ed74910bb2d7f39360de1df"
         ],
-        "layout": "IPY_MODEL_f6fc6956bbb04d0dac01c238b8391df9"
+        "layout": "IPY_MODEL_b48980c938954ac3a17fc549ad6ec7a5"
       }
     },
-    "71f5e0f827914c59826871d21aa1efe5": {
+    "d168c9b50ac844bb8e9231c1805c1aca": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_dc897e8a4e6f4ffe84af341507a1cfbb",
-        "style": "IPY_MODEL_ac5a2cb5e05c400dbb6624ca2ba2e185",
-        "value": "<h4>Simple Model Comparison</h4><p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/0.6.0/examples/vision/checks/performance/simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
+        "layout": "IPY_MODEL_2cfa820996284fca8b8f5e3eda63338e",
+        "style": "IPY_MODEL_c7d18b59cb7040d1888de29deb5d2dd4",
+        "value": "<h4>Simple Model Comparison</h4><p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/0.6.1/examples/vision/checks/performance/examples/plot_simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "dc897e8a4e6f4ffe84af341507a1cfbb": {
+    "2cfa820996284fca8b8f5e3eda63338e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ac5a2cb5e05c400dbb6624ca2ba2e185": {
+    "c7d18b59cb7040d1888de29deb5d2dd4": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9a67154899e04567bf4fd8187f79d4cf": {
+    "bf5b179edd6045fd8058ea834def8c97": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -922,16 +962,16 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "orientation": "v",
             "showlegend": true,
             "x": [
-              "8",
               "1",
-              "2",
+              "6",
               "7",
               "3",
-              "5",
-              "4",
+              "2",
               "0",
-              "6",
-              "9"
+              "5",
+              "9",
+              "8",
+              "4"
             ],
             "xaxis": "x",
             "y": {
@@ -942,7 +982,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "55973863-2c0c-4887-9823-f282d392ed73"
+            "uid": "98195f58-e407-4af6-898e-9e644c7fd4bd"
           },
           {
             "alignmentgroup": "True",
@@ -961,16 +1001,16 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "orientation": "v",
             "showlegend": false,
             "x": [
+              "3",
               "2",
-              "8",
               "1",
               "7",
-              "3",
-              "4",
+              "6",
+              "0",
               "9",
               "5",
-              "0",
-              "6"
+              "8",
+              "4"
             ],
             "xaxis": "x2",
             "y": {
@@ -981,7 +1021,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "5d3e284e-3302-4aad-980c-497e3ed68fee"
+            "uid": "560e017b-02c6-4e39-83f7-4942ffd6781e"
           },
           {
             "alignmentgroup": "True",
@@ -1000,16 +1040,16 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "orientation": "v",
             "showlegend": true,
             "x": [
-              "1",
               "0",
-              "6",
+              "1",
               "4",
-              "5",
-              "7",
-              "3",
               "2",
-              "8",
-              "9"
+              "5",
+              "6",
+              "3",
+              "7",
+              "9",
+              "8"
             ],
             "xaxis": "x",
             "y": {
@@ -1020,7 +1060,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "ca6e776e-652b-4ac0-8b56-706b90f8f70c"
+            "uid": "42485fb2-9644-428a-8300-e7e5034b8f0e"
           },
           {
             "alignmentgroup": "True",
@@ -1039,16 +1079,16 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "orientation": "v",
             "showlegend": false,
             "x": [
-              "6",
               "8",
-              "2",
-              "5",
-              "3",
-              "9",
               "1",
+              "6",
+              "3",
               "4",
+              "9",
               "0",
-              "7"
+              "5",
+              "7",
+              "2"
             ],
             "xaxis": "x2",
             "y": {
@@ -1059,7 +1099,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "e495b181-c87b-466f-b316-427a0444f03f"
+            "uid": "fbbf5fa9-9d66-4478-b666-d42928447d37"
           }
         ],
         "_dom_classes": [],
@@ -1098,9 +1138,6 @@ providing an alternative scorer using the <code class="docutils literal notransl
               "text": "Model"
             },
             "tracegroupgap": 0
-          },
-          "margin": {
-            "t": 60
           },
           "template": {
             "data": {
@@ -1919,6 +1956,9 @@ providing an alternative scorer using the <code class="docutils literal notransl
               }
             }
           },
+          "title": {
+            "text": "Simple Model (Strategy: stratified) vs. Given Model"
+          },
           "xaxis": {
             "anchor": "y",
             "domain": [
@@ -1973,7 +2013,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "JV/9MonNvz+ONNkT2N68PzJnzBlzxrw/m2SbZJtkuz85x+8fCd66PyjDar0FZbg/+C/s8ZA+uD9YfMVXfMW3PxRm32KZP7c/CZwpHKHVtj8="
+          "data": "jjTZE9jevD+AD32qX1O8P5tkm2SbZLs/2atVz18buj805ow5Y864P70/1yobjrg/3MCoM40buD89IU3Qe5i3P0HcG30eSrU/fTAp04FVtD8="
         },
         {
           "encoding": "base64",
@@ -1983,7 +2023,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "NbRkVr+9vj+pR8efk6O+PzMIueLY+r0/NCuepTNQuz8GfxUnpOS5P1bL3eFAP7k/zb+vm0ITuD9ZMeFScCy3P7oWpWtRurY/EZpqv7qQtj8="
+          "data": "TGKZ+njQuz/Yq6khvCW7P7jzCdl3Grs/0DxaVCL5uj+bmpqampq6P/XI0ZzaZ7g/6Ao3LmMluD9jPSFMbIS2P9nnkJpgvLU/JQJotK3otD8="
         },
         {
           "encoding": "base64",
@@ -1993,7 +2033,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "yybsJyHj7z/EtCcykN7vPzuPjCcKs+8/6v0Lezyk7z8hfc1TKaTvP3iId4h3iO8/5K6fLVaG7z/cEXfEHXHvP/dGn4dSJe8/83OnLFAE7z8="
+          "data": "J487S9jN7z+XTdhPQsbvP2AVxRKUrO8/6oq6oq6o7z/YPJVC+prvP08UZt9ime8/eGuMAwFu7z/PMM8wzzDvP4CZ055uDO8/4DrwMTfR7j8="
         },
         {
           "encoding": "base64",
@@ -2003,33 +2043,34 @@ providing an alternative scorer using the <code class="docutils literal notransl
             "y",
             "buffer"
           ],
-          "data": "EoMr45Oq7z+Xu38PfarvP6hfgfoVqO8/IX3NUymk7z/hFrocYZ7vP50/y/mznO8/kQGB99Wb7z9dk3HDkIvvPwTPfRjBc+8/dTD3dY397j8="
+          "data": "h/CWbJDU7z/jt0s9Gb/vP20d+s3Woe8/yPQwcBae7z/sSZljgIPvP0acqDwtdO8/w+4ggBpT7z9BbxT0RkHvPwb0F9BfQO8/AO+spIP/7j8="
         }
       ]
     },
-    "93597337668e41f79f425b06faff0adc": {
+    "b6741ef71ed74910bb2d7f39360de1df": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_a57f2d0e96cf49448a8ff67ec2eb7b3a",
-        "style": "IPY_MODEL_1c351ef1cc2a435ca6f49861cbc0d157"
+        "layout": "IPY_MODEL_96c1d6a861ac42aabd814a54ab7f59d4",
+        "style": "IPY_MODEL_7b47c546afb140bc8c6dc4c7aa19eef7",
+        "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "a57f2d0e96cf49448a8ff67ec2eb7b3a": {
+    "96c1d6a861ac42aabd814a54ab7f59d4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1c351ef1cc2a435ca6f49861cbc0d157": {
+    "7b47c546afb140bc8c6dc4c7aa19eef7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "f6fc6956bbb04d0dac01c238b8391df9": {
+    "b48980c938954ac3a17fc549ad6ec7a5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2039,7 +2080,7 @@ providing an alternative scorer using the <code class="docutils literal notransl
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "8981b3c3108f4aebb16d1712f3cd0701"}
+{"version_major": 2, "version_minor": 0, "model_id": "64727fa6f64d413f99de897055c3c448"}
 </script>
 
 </body>
@@ -2087,13 +2128,13 @@ all of the information that is needed for defining the conditions for validation
   </thead>
   <tbody>
     <tr>
-      <th>18</th>
+      <th>11</th>
       <td>Simple Model</td>
       <td>Precision</td>
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.088780</td>
+      <td>0.095335</td>
     </tr>
     <tr>
       <th>20</th>
@@ -2105,22 +2146,22 @@ all of the information that is needed for defining the conditions for validation
       <td>1.000000</td>
     </tr>
     <tr>
-      <th>55</th>
+      <th>53</th>
       <td>Given Model</td>
       <td>Precision</td>
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.982880</td>
+      <td>0.978894</td>
     </tr>
     <tr>
-      <th>14</th>
+      <th>10</th>
       <td>Simple Model</td>
       <td>Recall</td>
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.092857</td>
+      <td>0.095918</td>
     </tr>
     <tr>
       <th>30</th>
@@ -2138,16 +2179,16 @@ all of the information that is needed for defining the conditions for validation
       <td>0</td>
       <td>0</td>
       <td>980</td>
-      <td>0.995918</td>
+      <td>0.993878</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>5</th>
       <td>Simple Model</td>
       <td>Precision</td>
       <td>1</td>
       <td>1</td>
       <td>1135</td>
-      <td>0.117109</td>
+      <td>0.105873</td>
     </tr>
     <tr>
       <th>21</th>
@@ -2159,16 +2200,16 @@ all of the information that is needed for defining the conditions for validation
       <td>1.000000</td>
     </tr>
     <tr>
-      <th>51</th>
+      <th>43</th>
       <td>Given Model</td>
       <td>Precision</td>
       <td>1</td>
       <td>1</td>
       <td>1135</td>
-      <td>0.987773</td>
+      <td>0.992077</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>0</th>
       <td>Simple Model</td>
       <td>Recall</td>
       <td>1</td>
@@ -2181,7 +2222,1260 @@ all of the information that is needed for defining the conditions for validation
 </div>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.959 seconds)</p>
+<br /></section>
+</section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>We can define on our check a condition that will validate our model is better than
+the simple model by a given margin called gain. For classification we check the gain
+for each class separately and if there is a class that doesn’t pass the defined gain
+the condition will fail.</p>
+<p>The performance gain is the percent of the improved performance out of the
+“remaining” unattained performance. Its purpose is to reflect the significance of
+the said improvement. Take for example for a metric between 0 and 1. A change of
+only 0.03 that takes us from 0.95 to 0.98 is highly significant (especially in an
+imbalance scenario), but improving from 0.1 to 0.13 is not a great achievement.</p>
+<p>The gain is calculated as: <img class="math" src="../../../../../_images/math/1f2f30a44a7c5048a2e68211c7e0764341466784.svg" alt="gain = \frac{\text{model score} - \text{simple score}}
+{\text{perfect score} - \text{simple score}}"/></p>
+<p>Let’s add a condition to the check and see what happens when it fails:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">SimpleModelComparison</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;stratified&#39;</span><span class="p">)</span>
+<span class="n">check</span><span class="o">.</span><span class="n">add_condition_gain_not_less_than</span><span class="p">(</span><span class="n">min_allowed_gain</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">mnist_model</span><span class="p">)</span>
+<span class="n">result</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:   0%| | 0/1 [00:00&lt;?, ? /s]
+Validating Input: 100%|#| 1/1 [00:00&lt;00:00,  8.74 /s]
+
+
+Ingesting Batches - Train Dataset:   0%|                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Train Dataset:  17%|###########################                                                                                                                                  | 27/157 [00:00&lt;00:00, 266.25 Batch/s]
+Ingesting Batches - Train Dataset:  34%|######################################################                                                                                                       | 54/157 [00:00&lt;00:00, 266.84 Batch/s]
+Ingesting Batches - Train Dataset:  52%|#################################################################################                                                                            | 81/157 [00:00&lt;00:00, 266.50 Batch/s]
+Ingesting Batches - Train Dataset:  69%|############################################################################################################                                                 | 108/157 [00:00&lt;00:00, 266.12 Batch/s]
+Ingesting Batches - Train Dataset:  86%|#######################################################################################################################################                      | 135/157 [00:00&lt;00:00, 266.33 Batch/s]
+
+
+Ingesting Batches - Test Dataset:   0%|                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Test Dataset:   1%|##                                                                                                                                                           | 2/157 [00:00&lt;00:14, 10.92 Batch/s]
+Ingesting Batches - Test Dataset:   3%|####                                                                                                                                                         | 4/157 [00:00&lt;00:13, 10.93 Batch/s]
+Ingesting Batches - Test Dataset:   4%|######                                                                                                                                                       | 6/157 [00:00&lt;00:13, 10.93 Batch/s]
+Ingesting Batches - Test Dataset:   5%|########                                                                                                                                                     | 8/157 [00:00&lt;00:13, 10.94 Batch/s]
+Ingesting Batches - Test Dataset:   6%|##########                                                                                                                                                   | 10/157 [00:00&lt;00:13, 10.96 Batch/s]
+
+
+Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
+Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  5.61 Check/s]
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IPyWidget export</title>
+</head>
+<body>
+
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "e3ccd33a04934636946af684248d89fe": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "children": [
+          "IPY_MODEL_b9c9276686b34fe983e2c37bd8bbc72f",
+          "IPY_MODEL_e3d8c802b96d47ba9f664ab73ecda616",
+          "IPY_MODEL_3de2b70b44c646ad804ed4b41ecf6f53"
+        ],
+        "layout": "IPY_MODEL_0ae9292193c24c5986b36eef754e240c"
+      }
+    },
+    "b9c9276686b34fe983e2c37bd8bbc72f": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_5135ab330c0241a9beb27198f63707eb",
+        "style": "IPY_MODEL_cc93413806fa48fe942abece00ac21f9",
+        "value": "<h4>Simple Model Comparison</h4><p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/0.6.1/examples/vision/checks/performance/examples/plot_simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_f7615 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f7615 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f7615 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f7615 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f7615 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f7615\">\n  <thead>\n    <tr>\n      <th id=\"T_f7615_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_f7615_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_f7615_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_f7615_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_f7615_row0_col1\" class=\"data row0 col1\" >Model performance gain over simple model is not less than 99%</td>\n      <td id=\"T_f7615_row0_col2\" class=\"data row0 col2\" >Found metrics with gain below threshold: {'Precision': {6: '98.74%', 3: '98.67%', 4: '98.32%', 9: '98.08%', 0: '97.66%', 5: '97.44%', 7: '97.42%', 2: '96.54%'}, 'Recall': {4: '98.88%', 2: '98.82%', 5: '98.64%', 6: '98.62%', 3: '98.02%', 7: '97.18%', 9: '96.67%', 8: '95.92%'}}</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5>"
+      }
+    },
+    "5135ab330c0241a9beb27198f63707eb": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "cc93413806fa48fe942abece00ac21f9": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "e3d8c802b96d47ba9f664ab73ecda616": {
+      "model_name": "FigureModel",
+      "model_module": "jupyterlab-plotly",
+      "model_module_version": "^5.5.0",
+      "state": {
+        "_config": {
+          "plotlyServerURL": "https://plot.ly"
+        },
+        "_data": [
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "sum",
+            "hovertemplate": "Model=Simple Model<br>Metric=Precision<br>Class Name=%{x}<br>sum of Value=%{y}<extra></extra>",
+            "legendgroup": "Simple Model",
+            "marker": {
+              "color": "#2191FB",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "Simple Model",
+            "offsetgroup": "Simple Model",
+            "orientation": "v",
+            "showlegend": true,
+            "x": [
+              "9",
+              "0",
+              "3",
+              "1",
+              "8",
+              "2",
+              "4",
+              "7",
+              "6",
+              "5"
+            ],
+            "xaxis": "x",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                10
+              ]
+            },
+            "yaxis": "y",
+            "type": "histogram",
+            "uid": "0e090bee-ade7-43dc-8741-8a53714b0208"
+          },
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "sum",
+            "hovertemplate": "Model=Simple Model<br>Metric=Recall<br>Class Name=%{x}<br>sum of Value=%{y}<extra></extra>",
+            "legendgroup": "Simple Model",
+            "marker": {
+              "color": "#2191FB",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "Simple Model",
+            "offsetgroup": "Simple Model",
+            "orientation": "v",
+            "showlegend": false,
+            "x": [
+              "9",
+              "7",
+              "3",
+              "1",
+              "6",
+              "5",
+              "8",
+              "2",
+              "0",
+              "4"
+            ],
+            "xaxis": "x2",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                10
+              ]
+            },
+            "yaxis": "y2",
+            "type": "histogram",
+            "uid": "81c909f4-f597-4a03-a090-55b5245a3cbe"
+          },
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "sum",
+            "hovertemplate": "Model=Given Model<br>Metric=Precision<br>Class Name=%{x}<br>sum of Value=%{y}<extra></extra>",
+            "legendgroup": "Given Model",
+            "marker": {
+              "color": "#b287a3",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "Given Model",
+            "offsetgroup": "Given Model",
+            "orientation": "v",
+            "showlegend": true,
+            "x": [
+              "8",
+              "1",
+              "6",
+              "3",
+              "4",
+              "9",
+              "0",
+              "5",
+              "7",
+              "2"
+            ],
+            "xaxis": "x",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                10
+              ]
+            },
+            "yaxis": "y",
+            "type": "histogram",
+            "uid": "fecdfb11-3b83-4914-bbc7-f0dcad2d9937"
+          },
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "sum",
+            "hovertemplate": "Model=Given Model<br>Metric=Recall<br>Class Name=%{x}<br>sum of Value=%{y}<extra></extra>",
+            "legendgroup": "Given Model",
+            "marker": {
+              "color": "#b287a3",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "Given Model",
+            "offsetgroup": "Given Model",
+            "orientation": "v",
+            "showlegend": false,
+            "x": [
+              "0",
+              "1",
+              "4",
+              "2",
+              "5",
+              "6",
+              "3",
+              "7",
+              "9",
+              "8"
+            ],
+            "xaxis": "x2",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                10
+              ]
+            },
+            "yaxis": "y2",
+            "type": "histogram",
+            "uid": "596de02a-37ca-48c5-8282-a7f7f8924355"
+          }
+        ],
+        "_dom_classes": [],
+        "_js2py_layoutDelta": {},
+        "_js2py_pointsCallback": {},
+        "_js2py_relayout": {},
+        "_js2py_restyle": {},
+        "_js2py_traceDeltas": {},
+        "_js2py_update": {},
+        "_layout": {
+          "annotations": [
+            {
+              "showarrow": false,
+              "text": "Precision",
+              "x": 0.2375,
+              "xanchor": "center",
+              "xref": "paper",
+              "y": 1.0,
+              "yanchor": "bottom",
+              "yref": "paper"
+            },
+            {
+              "showarrow": false,
+              "text": "Recall",
+              "x": 0.7625,
+              "xanchor": "center",
+              "xref": "paper",
+              "y": 1.0,
+              "yanchor": "bottom",
+              "yref": "paper"
+            }
+          ],
+          "barmode": "group",
+          "legend": {
+            "title": {
+              "text": "Model"
+            },
+            "tracegroupgap": 0
+          },
+          "template": {
+            "data": {
+              "barpolar": [
+                {
+                  "marker": {
+                    "line": {
+                      "color": "#E5ECF6",
+                      "width": 0.5
+                    },
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "barpolar"
+                }
+              ],
+              "bar": [
+                {
+                  "error_x": {
+                    "color": "#2a3f5f"
+                  },
+                  "error_y": {
+                    "color": "#2a3f5f"
+                  },
+                  "marker": {
+                    "line": {
+                      "color": "#E5ECF6",
+                      "width": 0.5
+                    },
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "bar"
+                }
+              ],
+              "carpet": [
+                {
+                  "aaxis": {
+                    "endlinecolor": "#2a3f5f",
+                    "gridcolor": "white",
+                    "linecolor": "white",
+                    "minorgridcolor": "white",
+                    "startlinecolor": "#2a3f5f"
+                  },
+                  "baxis": {
+                    "endlinecolor": "#2a3f5f",
+                    "gridcolor": "white",
+                    "linecolor": "white",
+                    "minorgridcolor": "white",
+                    "startlinecolor": "#2a3f5f"
+                  },
+                  "type": "carpet"
+                }
+              ],
+              "choropleth": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "choropleth"
+                }
+              ],
+              "contourcarpet": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "contourcarpet"
+                }
+              ],
+              "contour": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "contour"
+                }
+              ],
+              "heatmapgl": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "heatmapgl"
+                }
+              ],
+              "heatmap": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "heatmap"
+                }
+              ],
+              "histogram2dcontour": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "histogram2dcontour"
+                }
+              ],
+              "histogram2d": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "histogram2d"
+                }
+              ],
+              "histogram": [
+                {
+                  "marker": {
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "histogram"
+                }
+              ],
+              "mesh3d": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "mesh3d"
+                }
+              ],
+              "parcoords": [
+                {
+                  "line": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "parcoords"
+                }
+              ],
+              "pie": [
+                {
+                  "automargin": true,
+                  "type": "pie"
+                }
+              ],
+              "scatter3d": [
+                {
+                  "line": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatter3d"
+                }
+              ],
+              "scattercarpet": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattercarpet"
+                }
+              ],
+              "scattergeo": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattergeo"
+                }
+              ],
+              "scattergl": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattergl"
+                }
+              ],
+              "scattermapbox": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattermapbox"
+                }
+              ],
+              "scatterpolargl": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterpolargl"
+                }
+              ],
+              "scatterpolar": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterpolar"
+                }
+              ],
+              "scatter": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatter"
+                }
+              ],
+              "scatterternary": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterternary"
+                }
+              ],
+              "surface": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "surface"
+                }
+              ],
+              "table": [
+                {
+                  "cells": {
+                    "fill": {
+                      "color": "#EBF0F8"
+                    },
+                    "line": {
+                      "color": "white"
+                    }
+                  },
+                  "header": {
+                    "fill": {
+                      "color": "#C8D4E3"
+                    },
+                    "line": {
+                      "color": "white"
+                    }
+                  },
+                  "type": "table"
+                }
+              ]
+            },
+            "layout": {
+              "annotationdefaults": {
+                "arrowcolor": "#2a3f5f",
+                "arrowhead": 0,
+                "arrowwidth": 1
+              },
+              "autotypenumbers": "strict",
+              "coloraxis": {
+                "colorbar": {
+                  "outlinewidth": 0,
+                  "ticks": ""
+                }
+              },
+              "colorscale": {
+                "diverging": [
+                  [
+                    0,
+                    "#8e0152"
+                  ],
+                  [
+                    0.1,
+                    "#c51b7d"
+                  ],
+                  [
+                    0.2,
+                    "#de77ae"
+                  ],
+                  [
+                    0.3,
+                    "#f1b6da"
+                  ],
+                  [
+                    0.4,
+                    "#fde0ef"
+                  ],
+                  [
+                    0.5,
+                    "#f7f7f7"
+                  ],
+                  [
+                    0.6,
+                    "#e6f5d0"
+                  ],
+                  [
+                    0.7,
+                    "#b8e186"
+                  ],
+                  [
+                    0.8,
+                    "#7fbc41"
+                  ],
+                  [
+                    0.9,
+                    "#4d9221"
+                  ],
+                  [
+                    1,
+                    "#276419"
+                  ]
+                ],
+                "sequential": [
+                  [
+                    0.0,
+                    "#0d0887"
+                  ],
+                  [
+                    0.1111111111111111,
+                    "#46039f"
+                  ],
+                  [
+                    0.2222222222222222,
+                    "#7201a8"
+                  ],
+                  [
+                    0.3333333333333333,
+                    "#9c179e"
+                  ],
+                  [
+                    0.4444444444444444,
+                    "#bd3786"
+                  ],
+                  [
+                    0.5555555555555556,
+                    "#d8576b"
+                  ],
+                  [
+                    0.6666666666666666,
+                    "#ed7953"
+                  ],
+                  [
+                    0.7777777777777778,
+                    "#fb9f3a"
+                  ],
+                  [
+                    0.8888888888888888,
+                    "#fdca26"
+                  ],
+                  [
+                    1.0,
+                    "#f0f921"
+                  ]
+                ],
+                "sequentialminus": [
+                  [
+                    0.0,
+                    "#0d0887"
+                  ],
+                  [
+                    0.1111111111111111,
+                    "#46039f"
+                  ],
+                  [
+                    0.2222222222222222,
+                    "#7201a8"
+                  ],
+                  [
+                    0.3333333333333333,
+                    "#9c179e"
+                  ],
+                  [
+                    0.4444444444444444,
+                    "#bd3786"
+                  ],
+                  [
+                    0.5555555555555556,
+                    "#d8576b"
+                  ],
+                  [
+                    0.6666666666666666,
+                    "#ed7953"
+                  ],
+                  [
+                    0.7777777777777778,
+                    "#fb9f3a"
+                  ],
+                  [
+                    0.8888888888888888,
+                    "#fdca26"
+                  ],
+                  [
+                    1.0,
+                    "#f0f921"
+                  ]
+                ]
+              },
+              "colorway": [
+                "#636efa",
+                "#EF553B",
+                "#00cc96",
+                "#ab63fa",
+                "#FFA15A",
+                "#19d3f3",
+                "#FF6692",
+                "#B6E880",
+                "#FF97FF",
+                "#FECB52"
+              ],
+              "font": {
+                "color": "#2a3f5f"
+              },
+              "geo": {
+                "bgcolor": "white",
+                "lakecolor": "white",
+                "landcolor": "#E5ECF6",
+                "showlakes": true,
+                "showland": true,
+                "subunitcolor": "white"
+              },
+              "hoverlabel": {
+                "align": "left"
+              },
+              "hovermode": "closest",
+              "mapbox": {
+                "style": "light"
+              },
+              "paper_bgcolor": "white",
+              "plot_bgcolor": "#E5ECF6",
+              "polar": {
+                "angularaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "bgcolor": "#E5ECF6",
+                "radialaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                }
+              },
+              "scene": {
+                "xaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                },
+                "yaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                },
+                "zaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                }
+              },
+              "shapedefaults": {
+                "line": {
+                  "color": "#2a3f5f"
+                }
+              },
+              "ternary": {
+                "aaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "baxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "bgcolor": "#E5ECF6",
+                "caxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                }
+              },
+              "title": {
+                "x": 0.05
+              },
+              "xaxis": {
+                "automargin": true,
+                "gridcolor": "white",
+                "linecolor": "white",
+                "ticks": "",
+                "title": {
+                  "standoff": 15
+                },
+                "zerolinecolor": "white",
+                "zerolinewidth": 2
+              },
+              "yaxis": {
+                "automargin": true,
+                "gridcolor": "white",
+                "linecolor": "white",
+                "ticks": "",
+                "title": {
+                  "standoff": 15
+                },
+                "zerolinecolor": "white",
+                "zerolinewidth": 2
+              }
+            }
+          },
+          "title": {
+            "text": "Simple Model (Strategy: stratified) vs. Given Model"
+          },
+          "xaxis": {
+            "anchor": "y",
+            "domain": [
+              0.0,
+              0.475
+            ],
+            "type": "category"
+          },
+          "yaxis": {
+            "anchor": "x",
+            "domain": [
+              0.0,
+              1.0
+            ],
+            "showticklabels": true
+          },
+          "xaxis2": {
+            "anchor": "y2",
+            "domain": [
+              0.525,
+              1.0
+            ],
+            "matches": "x",
+            "type": "category"
+          },
+          "yaxis2": {
+            "anchor": "x2",
+            "domain": [
+              0.0,
+              1.0
+            ],
+            "showticklabels": true
+          }
+        },
+        "_py2js_addTraces": {},
+        "_py2js_animate": {},
+        "_py2js_deleteTraces": {},
+        "_py2js_moveTraces": {},
+        "_py2js_relayout": {},
+        "_py2js_removeLayoutProps": {},
+        "_py2js_removeTraceProps": {},
+        "_py2js_restyle": {},
+        "_py2js_update": {},
+        "_view_count": 0
+      },
+      "buffers": [
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            0,
+            "y",
+            "buffer"
+          ],
+          "data": "1vtlvV/Wuz+teUH5Z5K5P0+XpvrIN7k//zF0fYn/uD85juM4juO4P6CkggFKKrg/Plofp9H9tz9DeQ3lNZS3P7jWwyYW6LY/F2zBFmzBtj8="
+        },
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            1,
+            "y",
+            "buffer"
+          ],
+          "data": "2I6dw80luz/aJdol2iW6P1qH3WPTF7k/WES/UAZcuD+X2nlkPFG4P9zAqDONG7g/+jyUKvnqtz/0BX1BX9C3P1h8xVd8xbc/eYUAPeHwtj8="
+        },
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            2,
+            "y",
+            "buffer"
+          ],
+          "data": "h/CWbJDU7z/jt0s9Gb/vP20d+s3Woe8/yPQwcBae7z/sSZljgIPvP0acqDwtdO8/w+4ggBpT7z9BbxT0RkHvPwb0F9BfQO8/AO+spIP/7j8="
+        },
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            3,
+            "y",
+            "buffer"
+          ],
+          "data": "J487S9jN7z+XTdhPQsbvP2AVxRKUrO8/6oq6oq6o7z/YPJVC+prvP08UZt9ime8/eGuMAwFu7z/PMM8wzzDvP4CZ055uDO8/4DrwMTfR7j8="
+        }
+      ]
+    },
+    "3de2b70b44c646ad804ed4b41ecf6f53": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_f94af2c4e5b34b1e9206dba73b427092",
+        "style": "IPY_MODEL_561e84c223204fc9b0e93f1a7f16bc06",
+        "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
+      }
+    },
+    "f94af2c4e5b34b1e9206dba73b427092": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "561e84c223204fc9b0e93f1a7f16bc06": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "0ae9292193c24c5986b36eef754e240c": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "e3ccd33a04934636946af684248d89fe"}
+</script>
+
+</body>
+</html>
+
+</div>
+<br />
+<br /><p>We detected that for several classes our gain did not passed the target gain we
+defined, therefore it failed.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.783 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-vision-checks-performance-examples-plot-simple-model-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/1e6c4f0bc8c9ac576a9059cddcc111a9/plot_simple_model_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_simple_model_comparison.py</span></code></a></p>
@@ -2193,7 +3487,6 @@ all of the information that is needed for defining the conditions for validation
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 </section>
-</section>
 
 
               </div>
@@ -2201,17 +3494,17 @@ all of the information that is needed for defining the conditions for validation
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_confusion_matrix.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_robustness_report.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Confusion Matrix</p>
+            <p class="prev-next-title">Robustness Report</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_image_segment_performance.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_model_error_analysis.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Image Segment Performance</p>
+        <p class="prev-next-title">Model Error Analysis check</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -2236,7 +3529,7 @@ all of the information that is needed for defining the conditions for validation
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/6b5ec9c.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/86b67f8.<br>
 </p>
     </div>
     
