@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>String Mismatch &#8212; Deepchecks b4f1227 documentation</title>
+    <title>String Mismatch &#8212; Deepchecks b09450b documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,7 +77,7 @@
     <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="String Mismatch Comparison" href="plot_string_mismatch_comparison.html" />
+    <link rel="next" title="Mixed Nulls" href="plot_mixed_nulls.html" />
     <link rel="prev" title="Data Integrity" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -345,11 +345,6 @@ Page: examples/tabular/checks/integrity/examples/plot_string_mismatch&labels=lab
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_string_mismatch_comparison.html">
-     String Mismatch Comparison
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="plot_mixed_nulls.html">
      Mixed Nulls
     </a>
@@ -362,6 +357,11 @@ Page: examples/tabular/checks/integrity/examples/plot_string_mismatch&labels=lab
    <li class="toctree-l2">
     <a class="reference internal" href="plot_mixed_data_types.html">
      Mixed Data Types
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_string_mismatch_comparison.html">
+     String Mismatch Comparison
     </a>
    </li>
    <li class="toctree-l2">
@@ -729,9 +729,36 @@ Page: examples/tabular/checks/integrity/examples/plot_string_mismatch&labels=lab
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-the-purpose-of-the-check">
+   What is the purpose of the check?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-string-mismatch-defined">
+     How String Mismatch Defined?
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the Check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a Condition
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -754,20 +781,49 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="string-mismatch">
 <span id="sphx-glr-examples-tabular-checks-integrity-examples-plot-string-mismatch-py"></span><h1>String Mismatch<a class="headerlink" href="#string-mismatch" title="Permalink to this headline">#</a></h1>
+<p>This page provides an overview for using and understanding the “String Mismatch” check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-the-purpose-of-the-check">What is the purpose of the check?</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+</ul>
+<section id="what-is-the-purpose-of-the-check">
+<h2>What is the purpose of the check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
+<p>String Mismatch works on a single dataset, and it looks for mismatches in each string column in the data. Finding
+mismatches in strings is helpful for identifying errors in the data. For example, if your data is aggregated from
+multiple sources, it might have the same values but with a little variation in the formatting, like a leading uppercase.
+In this case, the model’s ability to learn may be impaired since it will see categories that are supposed to be the
+same, as different categories.</p>
+<section id="how-string-mismatch-defined">
+<h3>How String Mismatch Defined?<a class="headerlink" href="#how-string-mismatch-defined" title="Permalink to this headline">#</a></h3>
+<p>To recognize string mismatch, we transform each string to it’s base form. The base form is the string with only its
+alphanumeric characters in lowercase. (For example “Cat-9?!” base form is “cat9”). If two strings have the same base
+form, they are considered to be the same.</p>
+</section>
+</section>
+<section id="run-the-check">
+<h2>Run the Check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">StringMismatch</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Deep&#39;</span><span class="p">,</span> <span class="s1">&#39;deep&#39;</span><span class="p">,</span> <span class="s1">&#39;deep!!!&#39;</span><span class="p">,</span> <span class="s1">&#39;$deeP$&#39;</span><span class="p">,</span> <span class="s1">&#39;earth&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;foo?&#39;</span><span class="p">]}</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">StringMismatch</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">StringMismatch</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span>  <span class="o">=</span> <span class="n">StringMismatch</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_no_variants</span><span class="p">()</span>
-<span class="n">c</span><span class="o">.</span><span class="n">conditions_decision</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</section>
+<section id="define-a-condition">
+<h2>Define a Condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">StringMismatch</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_no_variants</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[{&#39;details&#39;: &quot;Found columns with amount of variants above threshold: {&#39;col1&#39;: [&#39;deep&#39;, &#39;foo&#39;]}&quot;, &#39;category&#39;: &lt;ConditionCategory.WARN: &#39;WARN&#39;&gt;, &#39;name&#39;: &#39;No string variants&#39;}]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/deepchecks/deepchecks/deepchecks/core/check_result.py:432: UserWarning:
+
+You are running in a non-interactive python shell. in order to show result you have to use an IPython shell (etc Jupyter)
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.009 seconds)</p>
@@ -780,6 +836,7 @@ to download the full example code</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 
@@ -795,10 +852,10 @@ to download the full example code</p>
             <p class="prev-next-title">Data Integrity</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_string_mismatch_comparison.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_mixed_nulls.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">String Mismatch Comparison</p>
+        <p class="prev-next-title">Mixed Nulls</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -823,7 +880,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/b4f1227.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/b09450b.<br>
 </p>
     </div>
     

@@ -21,30 +21,48 @@
 String Mismatch Comparison
 **************************
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-11
+This page provides an overview for using and understanding the "String Mismatch Comparison" check.
+
+**Structure:**
+
+* `What is the purpose of the check? <#what-is-the-purpose-of-the-check>`__
+* `Run check <#run-the-check>`__
+* `Define a condition <#define-a-condition>`__
+
+
+What is the purpose of the check?
+=================================
+The check compares the same categorical column within train and test and checks whether there are variants of similar
+strings that exists only in test and not in train.
+Finding those mismatches is helpful to prevent errors when inferring on the test data. For example, in train data we
+have category 'New York', and  in our test data we have 'new york'. We would like to be acknowledged that the test
+data contain a new variant of the train data, so we can address the problem.
+
+How String Mismatch Defined?
+----------------------------
+To recognize string mismatch, we transform each string to it's base form. The base form is the string with only its
+alphanumeric characters in lowercase. (For example "Cat-9?!" base form is "cat9"). If two strings have the same base
+form, they are considered to be the same.
+
+.. GENERATED FROM PYTHON SOURCE LINES 31-33
+
+Run the Check
+=============
+
+.. GENERATED FROM PYTHON SOURCE LINES 33-43
 
 .. code-block:: default
-
 
     from deepchecks.tabular.checks import StringMismatchComparison
     import pandas as pd
 
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 12-17
-
-.. code-block:: default
-
-
     data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
     compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
 
-    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    check = StringMismatchComparison()
+    result = check.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    result
+
 
 
 
@@ -67,42 +85,42 @@ String Mismatch Comparison
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "6abee82c7de44ece956be7d56be0e3d5": {
+        "327cfef49d564d5abdf1081165cd0c01": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_74234e05ce034c6799aedc4e3e660a59"
+              "IPY_MODEL_c922bdc5b8994c69907f770bc24958e9"
             ],
-            "layout": "IPY_MODEL_2297dc2d85694c3999bbbba91bfdceff"
+            "layout": "IPY_MODEL_20b142346c6641109ba3bcc6ec15d73b"
           }
         },
-        "74234e05ce034c6799aedc4e3e660a59": {
+        "c922bdc5b8994c69907f770bc24958e9": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_1399792536e747a2965e0879e758c3bf",
-            "style": "IPY_MODEL_76601d92c24f43fd827b087bd35abb13",
-            "value": "<h4>String Mismatch Comparison</h4><p>Detect different variants of string categories between the same categorical column in two datasets. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/integrity/examples/plot_string_mismatch_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_116d9 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_116d9 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_116d9 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_116d9 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_116d9 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_116d9\">\n  <thead>\n    <tr>\n      <th class=\"index_name level0\" >Column name</th>\n      <th id=\"T_116d9_level0_col0\" class=\"col_heading level0 col0\" >col1</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level1\" >Base form</th>\n      <th id=\"T_116d9_level1_col0\" class=\"col_heading level1 col0\" >deep</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_116d9_level0_row0\" class=\"row_heading level0 row0\" >Common variants</th>\n      <td id=\"T_116d9_row0_col0\" class=\"data row0 col0\" >['Deep', 'deep']</td>\n    </tr>\n    <tr>\n      <th id=\"T_116d9_level0_row1\" class=\"row_heading level0 row1\" >Variants only in test</th>\n      <td id=\"T_116d9_row1_col0\" class=\"data row1 col0\" >['?deep', '$deeP$']</td>\n    </tr>\n    <tr>\n      <th id=\"T_116d9_level0_row2\" class=\"row_heading level0 row2\" >% Unique variants out of all dataset samples (count)</th>\n      <td id=\"T_116d9_row2_col0\" class=\"data row2 col0\" >25% (2)</td>\n    </tr>\n    <tr>\n      <th id=\"T_116d9_level0_row3\" class=\"row_heading level0 row3\" >Variants only in train</th>\n      <td id=\"T_116d9_row3_col0\" class=\"data row3 col0\" >['deep!!!']</td>\n    </tr>\n    <tr>\n      <th id=\"T_116d9_level0_row4\" class=\"row_heading level0 row4\" >% Unique variants out of all baseline samples (count)</th>\n      <td id=\"T_116d9_row4_col0\" class=\"data row4 col0\" >14.29% (1)</td>\n    </tr>\n  </tbody>\n</table>\n"
+            "layout": "IPY_MODEL_168c5da9b1c94e06aaf7b86535736848",
+            "style": "IPY_MODEL_ef9794f773e941339b292d488de2be11",
+            "value": "<h4>String Mismatch Comparison</h4><p>Detect different variants of string categories between the same categorical column in two datasets. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/integrity/examples/plot_string_mismatch_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_191ef table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_191ef thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_191ef tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_191ef th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_191ef td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_191ef\">\n  <thead>\n    <tr>\n      <th class=\"index_name level0\" >Column name</th>\n      <th id=\"T_191ef_level0_col0\" class=\"col_heading level0 col0\" >col1</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level1\" >Base form</th>\n      <th id=\"T_191ef_level1_col0\" class=\"col_heading level1 col0\" >deep</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_191ef_level0_row0\" class=\"row_heading level0 row0\" >Common variants</th>\n      <td id=\"T_191ef_row0_col0\" class=\"data row0 col0\" >['deep', 'Deep']</td>\n    </tr>\n    <tr>\n      <th id=\"T_191ef_level0_row1\" class=\"row_heading level0 row1\" >Variants only in test</th>\n      <td id=\"T_191ef_row1_col0\" class=\"data row1 col0\" >['$deeP$', '?deep']</td>\n    </tr>\n    <tr>\n      <th id=\"T_191ef_level0_row2\" class=\"row_heading level0 row2\" >% Unique variants out of all dataset samples (count)</th>\n      <td id=\"T_191ef_row2_col0\" class=\"data row2 col0\" >25% (2)</td>\n    </tr>\n    <tr>\n      <th id=\"T_191ef_level0_row3\" class=\"row_heading level0 row3\" >Variants only in train</th>\n      <td id=\"T_191ef_row3_col0\" class=\"data row3 col0\" >['deep!!!']</td>\n    </tr>\n    <tr>\n      <th id=\"T_191ef_level0_row4\" class=\"row_heading level0 row4\" >% Unique variants out of all baseline samples (count)</th>\n      <td id=\"T_191ef_row4_col0\" class=\"data row4 col0\" >14.29% (1)</td>\n    </tr>\n  </tbody>\n</table>\n"
           }
         },
-        "1399792536e747a2965e0879e758c3bf": {
+        "168c5da9b1c94e06aaf7b86535736848": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "76601d92c24f43fd827b087bd35abb13": {
+        "ef9794f773e941339b292d488de2be11": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "2297dc2d85694c3999bbbba91bfdceff": {
+        "20b142346c6641109ba3bcc6ec15d73b": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -112,7 +130,7 @@ String Mismatch Comparison
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "6abee82c7de44ece956be7d56be0e3d5"}
+    {"version_major": 2, "version_minor": 0, "model_id": "327cfef49d564d5abdf1081165cd0c01"}
     </script>
 
     </body>
@@ -122,10 +140,41 @@ String Mismatch Comparison
     <br />
     <br />
 
+.. GENERATED FROM PYTHON SOURCE LINES 44-46
+
+Define a Condition
+==================
+
+.. GENERATED FROM PYTHON SOURCE LINES 46-50
+
+.. code-block:: default
+
+
+    check = StringMismatchComparison().add_condition_no_new_variants()
+    result = check.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    result.show(show_additional_outputs=False)
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /home/runner/work/deepchecks/deepchecks/deepchecks/core/check_result.py:432: UserWarning:
+
+    You are running in a non-interactive python shell. in order to show result you have to use an IPython shell (etc Jupyter)
+
+
+
+
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.023 seconds)
+   **Total running time of the script:** ( 0 minutes  0.020 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_integrity_examples_plot_string_mismatch_comparison.py:
