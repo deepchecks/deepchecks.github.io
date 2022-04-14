@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Performance Report &#8212; Deepchecks c7d1390 documentation</title>
+    <title>Performance Report &#8212; Deepchecks eb13d00 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,8 +77,8 @@
     <link rel="shortcut icon" href="../../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
-    <link rel="next" title="Multi Model Performance Report" href="plot_multi_model_performance_report.html" />
-    <link rel="prev" title="Calibration Score" href="plot_calibration_score.html" />
+    <link rel="next" title="Regression Systematic Error" href="plot_regression_systematic_error.html" />
+    <link rel="prev" title="Simple Model Comparison" href="plot_simple_model_comparison.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -535,6 +535,11 @@ Page: examples/tabular/checks/performance/examples/plot_performance_report&label
      Simple Model Comparison
     </a>
    </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Performance Report
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="plot_regression_systematic_error.html">
      Regression Systematic Error
@@ -553,11 +558,6 @@ Page: examples/tabular/checks/performance/examples/plot_performance_report&label
    <li class="toctree-l2">
     <a class="reference internal" href="plot_calibration_score.html">
      Calibration Score
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Performance Report
     </a>
    </li>
    <li class="toctree-l2">
@@ -741,28 +741,28 @@ Page: examples/tabular/checks/performance/examples/plot_performance_report&label
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#imports">
-   Imports
+  <a class="reference internal nav-link" href="#what-is-the-purpose-of-the-check">
+   What is the purpose of the check?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generating-data">
-   Generating data
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#running-peformance-report-on-classification">
-   Running peformance report on classification
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generate-regression-data">
-   Generate regression data
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-performance-report-on-regression">
-   Run performance report on regression
+  <a class="reference internal nav-link" href="#using-alternative-scorers">
+   Using alternative scorers
   </a>
  </li>
 </ul>
@@ -789,41 +789,38 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="performance-report">
 <span id="sphx-glr-examples-tabular-checks-performance-examples-plot-performance-report-py"></span><h1>Performance Report<a class="headerlink" href="#performance-report" title="Permalink to this headline">#</a></h1>
-<section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span><span class="p">,</span> <span class="n">AdaBoostRegressor</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.performance</span> <span class="kn">import</span> <span class="n">PerformanceReport</span>
+<p>This notebooks provides an overview for using and understanding performance report check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-the-purpose-of-the-check">What is the purpose of the check?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+<li><p><a class="reference external" href="#using-alternative-scorers">Using alternative scorers</a></p></li>
+</ul>
+<section id="what-is-the-purpose-of-the-check">
+<h2>What is the purpose of the check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
+<p>This check helps you compare your model’s performance between two datasets.
+The default metric that are used are F1, Percision, and Recall for Classification
+and Negative Root Mean Square Error, Negative Mean Absolute Error, and R2 for Regression. RMSE and MAE Scorers are
+negative because we subscribe to the sklearn convention of defining scoring functions.
+<a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#scoring">See scorers documentation</a></p>
+</section>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.phishing</span> <span class="kn">import</span> <span class="n">load_data</span><span class="p">,</span> <span class="n">load_fitted_model</span>
+
+<span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_fitted_model</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="generating-data">
-<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">()</span>
-<span class="n">frame</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">frame</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">train_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">features</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
-<span class="n">test_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">features</span><span class="o">=</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="running-peformance-report-on-classification">
-<h2>Running peformance report on classification<a class="headerlink" href="#running-peformance-report-on-classification" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
-<span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.performance</span> <span class="kn">import</span> <span class="n">PerformanceReport</span>
+
+<span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
+<span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -841,44 +838,44 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "ad70b8b22e25482798cb5aa4168240d7": {
+    "d53f5fa07449459d96db460ad4900c60": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_e6ad480c40cf49d399e9551f5caf318b",
-          "IPY_MODEL_842fe345e1754ed990239902b8a3c421",
-          "IPY_MODEL_95ea3a1b49ad4ebca11febd68852925c"
+          "IPY_MODEL_bdb98449c1074669b8cff33bb78e38d1",
+          "IPY_MODEL_e3095011b4ff4316aca6e8efb08acf80",
+          "IPY_MODEL_7d9c70ca653a4756a79a88e208120496"
         ],
-        "layout": "IPY_MODEL_09daf74d642240e1a64cbc77f8e1b411"
+        "layout": "IPY_MODEL_122ddf1996ef424da5f6bdc95d06c21a"
       }
     },
-    "e6ad480c40cf49d399e9551f5caf318b": {
+    "bdb98449c1074669b8cff33bb78e38d1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_11b39ca806df42c79e0a35868b2b9573",
-        "style": "IPY_MODEL_31981174041e42d388221a50fd98cc0c",
+        "layout": "IPY_MODEL_2a7f73d691e24a398fc042a12e15eb06",
+        "style": "IPY_MODEL_227c497676b3408a8dd513ca8584feb3",
         "value": "<h4>Performance Report</h4><p>Summarize given scores on a dataset and model. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/performance/examples/plot_performance_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "11b39ca806df42c79e0a35868b2b9573": {
+    "2a7f73d691e24a398fc042a12e15eb06": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "31981174041e42d388221a50fd98cc0c": {
+    "227c497676b3408a8dd513ca8584feb3": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "842fe345e1754ed990239902b8a3c421": {
+    "e3095011b4ff4316aca6e8efb08acf80": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -905,19 +902,18 @@ to download the full example code</p>
             "showlegend": true,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "fe42f61e-0887-4e62-a886-91f052f29de9"
+            "uid": "732ec397-df8a-4d15-8970-dd4e3a03f754"
           },
           {
             "alignmentgroup": "True",
@@ -937,19 +933,18 @@ to download the full example code</p>
             "showlegend": false,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x2",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "e643dda2-665b-4a7f-8cb7-830bc14644d6"
+            "uid": "e0d7e2f7-5673-4970-ab9d-4b7b66eeb427"
           },
           {
             "alignmentgroup": "True",
@@ -969,19 +964,18 @@ to download the full example code</p>
             "showlegend": false,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x3",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "311055dd-6f56-4527-8b4e-4737d039ab03"
+            "uid": "757f7659-3d94-418e-986f-62742b8c2007"
           },
           {
             "alignmentgroup": "True",
@@ -1001,19 +995,18 @@ to download the full example code</p>
             "showlegend": true,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "e58a5097-248d-4e37-b528-f9ba5373a5e0"
+            "uid": "3ab164ff-bc90-4813-9ff1-02a624c0ab08"
           },
           {
             "alignmentgroup": "True",
@@ -1033,19 +1026,18 @@ to download the full example code</p>
             "showlegend": false,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x2",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "577e4109-6ddf-463b-9308-6ceafc2c25b9"
+            "uid": "6a137b6d-ba55-4d6a-888b-2a6f2874b5a6"
           },
           {
             "alignmentgroup": "True",
@@ -1065,19 +1057,18 @@ to download the full example code</p>
             "showlegend": false,
             "x": [
               0,
-              1,
-              2
+              1
             ],
             "xaxis": "x3",
             "y": {
               "dtype": "float64",
               "shape": [
-                3
+                2
               ]
             },
             "yaxis": "y3",
             "type": "histogram",
-            "uid": "0fb93018-6597-498f-80ac-63ba46e32cfe"
+            "uid": "f4570a5f-d6d5-4ac0-98e9-4295b4f5408e"
           }
         ],
         "_dom_classes": [],
@@ -2024,7 +2015,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D+P4ziO4zjuPxA++OCDD+4/"
+          "data": "75fTPff+7z+YURDQXN/vPw=="
         },
         {
           "encoding": "base64",
@@ -2034,7 +2025,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D991g2myGftPwAAAAAAAO8/"
+          "data": "OLPDjO797z8AAAAAAADwPw=="
         },
         {
           "encoding": "base64",
@@ -2044,7 +2035,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D9f8RVf8RXvPy0tLS0tLe0/"
+          "data": "AAAAAAAA8D/w+77v+77vPw=="
         },
         {
           "encoding": "base64",
@@ -2054,7 +2045,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D88PDw8PDzsP9u2bdu2bes/"
+          "data": "Q5S+Csfm7z9ry1XSqLbsPw=="
         },
         {
           "encoding": "base64",
@@ -2064,7 +2055,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D82lNdQXkPpPwAAAAAAAPA/"
+          "data": "+ASs8T7Y7z+zdeg3W4fuPw=="
         },
         {
           "encoding": "base64",
@@ -2074,33 +2065,33 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "AAAAAAAA8D8AAAAAAADwPwAAAAAAAOg/"
+          "data": "P6IMbVz17z/H+tBYHxrrPw=="
         }
       ]
     },
-    "95ea3a1b49ad4ebca11febd68852925c": {
+    "7d9c70ca653a4756a79a88e208120496": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b4505379b36b4393aa30eea0d667a6dc",
-        "style": "IPY_MODEL_61f5e480bdf243c887c1ef27d47570b5"
+        "layout": "IPY_MODEL_8c64095d553e447b9404b41432be925c",
+        "style": "IPY_MODEL_f2f502fe93af491d8ecb2696f0a4523e"
       }
     },
-    "b4505379b36b4393aa30eea0d667a6dc": {
+    "8c64095d553e447b9404b41432be925c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "61f5e480bdf243c887c1ef27d47570b5": {
+    "f2f502fe93af491d8ecb2696f0a4523e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "09daf74d642240e1a64cbc77f8e1b411": {
+    "122ddf1996ef424da5f6bdc95d06c21a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2110,7 +2101,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "ad70b8b22e25482798cb5aa4168240d7"}
+{"version_major": 2, "version_minor": 0, "model_id": "d53f5fa07449459d96db460ad4900c60"}
 </script>
 
 </body>
@@ -2119,32 +2110,34 @@ to download the full example code</p>
 </div>
 <br />
 <br /></section>
-<section id="generate-regression-data">
-<h2>Generate regression data<a class="headerlink" href="#generate-regression-data" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
-
-<span class="n">diabetes</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostRegressor</span><span class="p">()</span>
-
-<span class="n">frame</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">frame</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">data</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">diabetes</span><span class="o">.</span><span class="n">target</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">train_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">features</span><span class="o">=</span><span class="n">diabetes</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
-<span class="n">test_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">features</span><span class="o">=</span><span class="n">diabetes</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>We can define on our check a condition that will validate that our model doesn’t degrade
+on new data.</p>
+<p>Let’s add a condition to the check and see what happens when it fails:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
+<span class="n">check</span><span class="o">.</span><span class="n">add_condition_train_test_relative_degradation_not_greater_than</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/deepchecks/deepchecks/deepchecks/core/check_result.py:432: UserWarning:
+
+You are running in a non-interactive python shell. in order to show result you have to use an IPython shell (etc Jupyter)
+</pre></div>
+</div>
+<p>We detected that for class “0” our the Precision result is degraded by more than 5%</p>
 </section>
-<section id="run-performance-report-on-regression">
-<h2>Run performance report on regression<a class="headerlink" href="#run-performance-report-on-regression" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">()</span>
-<span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+<section id="using-alternative-scorers">
+<h2>Using alternative scorers<a class="headerlink" href="#using-alternative-scorers" title="Permalink to this headline">#</a></h2>
+<p>We can define alternative scorers that are not run by default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">fbeta_score</span>
+
+<span class="n">fbeta_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">fbeta_score</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">check</span> <span class="o">=</span> <span class="n">PerformanceReport</span><span class="p">(</span><span class="n">alternative_scorers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;my scorer&#39;</span><span class="p">:</span> <span class="n">fbeta_scorer</span><span class="p">})</span>
+<span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -2162,44 +2155,44 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "d3f1413ea68147148fcd9151fab33490": {
+    "bc685a8fbee442afb077139ab8e91d50": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_24dc4bd543a14bc8af78dad655418737",
-          "IPY_MODEL_33b98ad14ba3472896c9a8fe5260c08e",
-          "IPY_MODEL_aa7cb5172f4a4676869f7cbf01a54be8"
+          "IPY_MODEL_53201f283c194d8a9182b92db77b21eb",
+          "IPY_MODEL_64830319a7d7402dadd40922fd2aaa3a",
+          "IPY_MODEL_a1f6625919a44ccab40f5ec78f6ffb1d"
         ],
-        "layout": "IPY_MODEL_81195e00bf6a4326ba4e8dca086c17ff"
+        "layout": "IPY_MODEL_8ae6a0fbc1564af5bef2b83db4efc014"
       }
     },
-    "24dc4bd543a14bc8af78dad655418737": {
+    "53201f283c194d8a9182b92db77b21eb": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3b09597eeb774f8fa48db4c665248e08",
-        "style": "IPY_MODEL_9f2b5f5e9fda44679dcb2dafa94a8cb8",
+        "layout": "IPY_MODEL_04b0abb7376f45a3ba342f77d1fcf072",
+        "style": "IPY_MODEL_197e9941316c429cbff10b0daafa315d",
         "value": "<h4>Performance Report</h4><p>Summarize given scores on a dataset and model. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/performance/examples/plot_performance_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "3b09597eeb774f8fa48db4c665248e08": {
+    "04b0abb7376f45a3ba342f77d1fcf072": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9f2b5f5e9fda44679dcb2dafa94a8cb8": {
+    "197e9941316c429cbff10b0daafa315d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "33b98ad14ba3472896c9a8fe5260c08e": {
+    "64830319a7d7402dadd40922fd2aaa3a": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2212,7 +2205,7 @@ to download the full example code</p>
             "alignmentgroup": "True",
             "bingroup": "x",
             "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=Neg RMSE<br>sum of Value=%{y}<extra></extra>",
+            "hovertemplate": "Dataset=Train<br>Metric=my scorer<br>Class=%{x}<br>sum of Value=%{y}<extra></extra>",
             "legendgroup": "Train",
             "marker": {
               "color": "#636efa",
@@ -2225,84 +2218,25 @@ to download the full example code</p>
             "orientation": "v",
             "showlegend": true,
             "x": [
-              "Train"
+              0,
+              1
             ],
             "xaxis": "x",
             "y": {
               "dtype": "float64",
               "shape": [
-                1
+                2
               ]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "fe877a20-6ec7-457b-b5f1-403a66849edb"
+            "uid": "5a4ab1a9-d89c-4687-9628-7052e6fb320e"
           },
           {
             "alignmentgroup": "True",
             "bingroup": "x",
             "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=Neg MAE<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Train",
-            "marker": {
-              "color": "#636efa",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Train",
-            "offsetgroup": "Train",
-            "orientation": "v",
-            "showlegend": false,
-            "x": [
-              "Train"
-            ],
-            "xaxis": "x2",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                1
-              ]
-            },
-            "yaxis": "y2",
-            "type": "histogram",
-            "uid": "b471cd43-cc65-4dd9-a5f5-e7fa65557359"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=R2<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Train",
-            "marker": {
-              "color": "#636efa",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Train",
-            "offsetgroup": "Train",
-            "orientation": "v",
-            "showlegend": false,
-            "x": [
-              "Train"
-            ],
-            "xaxis": "x3",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                1
-              ]
-            },
-            "yaxis": "y3",
-            "type": "histogram",
-            "uid": "02fd7845-ad35-4678-a895-b5aaf5d31ba0"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=Neg RMSE<br>sum of Value=%{y}<extra></extra>",
+            "hovertemplate": "Dataset=Test<br>Metric=my scorer<br>Class=%{x}<br>sum of Value=%{y}<extra></extra>",
             "legendgroup": "Test",
             "marker": {
               "color": "#EF553B",
@@ -2315,78 +2249,19 @@ to download the full example code</p>
             "orientation": "v",
             "showlegend": true,
             "x": [
-              "Test"
+              0,
+              1
             ],
             "xaxis": "x",
             "y": {
               "dtype": "float64",
               "shape": [
-                1
+                2
               ]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "97e3caa8-c3e8-4d88-8bea-476c6809e3b3"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=Neg MAE<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Test",
-            "marker": {
-              "color": "#EF553B",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Test",
-            "offsetgroup": "Test",
-            "orientation": "v",
-            "showlegend": false,
-            "x": [
-              "Test"
-            ],
-            "xaxis": "x2",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                1
-              ]
-            },
-            "yaxis": "y2",
-            "type": "histogram",
-            "uid": "6e0efb12-2802-48ff-9945-c9e1fe72402b"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Dataset=%{x}<br>Metric=R2<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Test",
-            "marker": {
-              "color": "#EF553B",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Test",
-            "offsetgroup": "Test",
-            "orientation": "v",
-            "showlegend": false,
-            "x": [
-              "Test"
-            ],
-            "xaxis": "x3",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                1
-              ]
-            },
-            "yaxis": "y3",
-            "type": "histogram",
-            "uid": "b0f37d63-a3a4-4616-9093-53b406cf4f3e"
+            "uid": "9711fb9c-f643-4ca6-bc5a-5d47d9e8beab"
           }
         ],
         "_dom_classes": [],
@@ -2400,28 +2275,8 @@ to download the full example code</p>
           "annotations": [
             {
               "showarrow": false,
-              "text": "Neg RMSE",
-              "x": 0.15,
-              "xanchor": "center",
-              "xref": "paper",
-              "y": 1.0,
-              "yanchor": "bottom",
-              "yref": "paper"
-            },
-            {
-              "showarrow": false,
-              "text": "Neg MAE",
-              "x": 0.49999999999999994,
-              "xanchor": "center",
-              "xref": "paper",
-              "y": 1.0,
-              "yanchor": "bottom",
-              "yref": "paper"
-            },
-            {
-              "showarrow": false,
-              "text": "R2",
-              "x": 0.85,
+              "text": "my scorer",
+              "x": 0.5,
               "xanchor": "center",
               "xref": "paper",
               "y": 1.0,
@@ -3258,63 +3113,16 @@ to download the full example code</p>
           },
           "xaxis": {
             "anchor": "y",
-            "categoryarray": [
-              "Train",
-              "Test"
-            ],
-            "categoryorder": "array",
             "domain": [
               0.0,
-              0.3
+              1.0
             ],
+            "tickangle": 60,
+            "tickprefix": "Class ",
             "type": "category"
           },
           "yaxis": {
             "anchor": "x",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "showticklabels": true
-          },
-          "xaxis2": {
-            "anchor": "y2",
-            "categoryarray": [
-              "Train",
-              "Test"
-            ],
-            "categoryorder": "array",
-            "domain": [
-              0.35,
-              0.6499999999999999
-            ],
-            "matches": "x",
-            "type": "category"
-          },
-          "yaxis2": {
-            "anchor": "x2",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "showticklabels": true
-          },
-          "xaxis3": {
-            "anchor": "y3",
-            "categoryarray": [
-              "Train",
-              "Test"
-            ],
-            "categoryorder": "array",
-            "domain": [
-              0.7,
-              1.0
-            ],
-            "matches": "x",
-            "type": "category"
-          },
-          "yaxis3": {
-            "anchor": "x3",
             "domain": [
               0.0,
               1.0
@@ -3342,7 +3150,7 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "PqxIQ01gR8A="
+          "data": "mOaL6AL+7z94NcPrev3vPw=="
         },
         {
           "encoding": "base64",
@@ -3352,73 +3160,33 @@ to download the full example code</p>
             "y",
             "buffer"
           ],
-          "data": "POsd5XWqRMA="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            2,
-            "y",
-            "buffer"
-          ],
-          "data": "hSGL55Zf5D8="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            3,
-            "y",
-            "buffer"
-          ],
-          "data": "ulRuDjt3S8A="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            4,
-            "y",
-            "buffer"
-          ],
-          "data": "3OIU534DRsA="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            5,
-            "y",
-            "buffer"
-          ],
-          "data": "FJeJwuhx3j8="
+          "data": "uQilolzZ7z/CglfXiGHuPw=="
         }
       ]
     },
-    "aa7cb5172f4a4676869f7cbf01a54be8": {
+    "a1f6625919a44ccab40f5ec78f6ffb1d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cadc65b1203948d4986f2697bbf4fe42",
-        "style": "IPY_MODEL_4eacddc5a50f47a68f08447af7694e0f"
+        "layout": "IPY_MODEL_de1f9dbc6ec048bf971254eb27b93aac",
+        "style": "IPY_MODEL_cdfe0011d36849d2a77bf25fabaefe81"
       }
     },
-    "cadc65b1203948d4986f2697bbf4fe42": {
+    "de1f9dbc6ec048bf971254eb27b93aac": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4eacddc5a50f47a68f08447af7694e0f": {
+    "cdfe0011d36849d2a77bf25fabaefe81": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "81195e00bf6a4326ba4e8dca086c17ff": {
+    "8ae6a0fbc1564af5bef2b83db4efc014": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3428,7 +3196,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "d3f1413ea68147148fcd9151fab33490"}
+{"version_major": 2, "version_minor": 0, "model_id": "bc685a8fbee442afb077139ab8e91d50"}
 </script>
 
 </body>
@@ -3436,7 +3204,7 @@ to download the full example code</p>
 
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.508 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.737 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-tabular-checks-performance-examples-plot-performance-report-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../../_downloads/faa27971044768154e095b125c291334/plot_performance_report.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_performance_report.py</span></code></a></p>
@@ -3455,17 +3223,17 @@ to download the full example code</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_calibration_score.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_simple_model_comparison.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Calibration Score</p>
+            <p class="prev-next-title">Simple Model Comparison</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_multi_model_performance_report.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_regression_systematic_error.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Multi Model Performance Report</p>
+        <p class="prev-next-title">Regression Systematic Error</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -3490,7 +3258,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/c7d1390.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/eb13d00.<br>
 </p>
     </div>
     
