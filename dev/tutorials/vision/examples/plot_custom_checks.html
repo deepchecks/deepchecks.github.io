@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks d02251d documentation</title>
+    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks f0aa52e documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -512,24 +512,293 @@ functions when implementing the check in order to be able to reuse them later.</
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.71 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:01&lt;00:00,  1.78 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.98 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.12 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.11 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:01&lt;00:00,  1.98 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.47 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.24 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPyWidget export</title>
+    <title>Color Averages Check</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
 </head>
 <body>
 
@@ -539,42 +808,42 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "2415e04826764255a92245699401b21e": {
+    "fed5e6fb3ae94089b63ab76bde5810a2": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_e052932a74364f05ae0a99a7fe89d2d9"
+          "IPY_MODEL_cf38e6fc47444211b57b6ca4e72201f6"
         ],
-        "layout": "IPY_MODEL_7176badfc9364f6ab8fef3ca77d94a26"
+        "layout": "IPY_MODEL_bd536d2261804e4699b77fe76b8efa7a"
       }
     },
-    "e052932a74364f05ae0a99a7fe89d2d9": {
+    "cf38e6fc47444211b57b6ca4e72201f6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ab80ad628c404937986e4584d4c67336",
-        "style": "IPY_MODEL_b0af93c8e242486bb4acd2181456a184",
+        "layout": "IPY_MODEL_93f8ee51bb9240639d13f5667661c589",
+        "style": "IPY_MODEL_e73fedf05c294e1795ed89428c6b9525",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset.</p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "ab80ad628c404937986e4584d4c67336": {
+    "93f8ee51bb9240639d13f5667661c589": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b0af93c8e242486bb4acd2181456a184": {
+    "e73fedf05c294e1795ed89428c6b9525": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7176badfc9364f6ab8fef3ca77d94a26": {
+    "bd536d2261804e4699b77fe76b8efa7a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -584,12 +853,11 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "2415e04826764255a92245699401b21e"}
+{"version_major": 2, "version_minor": 0, "model_id": "fed5e6fb3ae94089b63ab76bde5810a2"}
 </script>
 
 </body>
 </html>
-
 </div>
 <br />
 <br /><p>Our check ran successfully, but we got the print “Nothing found”. This is because we haven’t defined to the check
@@ -666,24 +934,293 @@ will inherit from the original check to shorten the code an update only the comp
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.87 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:01&lt;00:00,  1.93 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.11 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.20 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.20 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.08 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.44 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.32 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPyWidget export</title>
+    <title>Color Averages Check</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
 </head>
 <body>
 
@@ -693,44 +1230,44 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "144dc482573a48a08a41dc73e03f9e9f": {
+    "74966dde15334a71953da20f3653c0cd": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_8eef66b9626e4505b3008f85fe38cd3d",
-          "IPY_MODEL_826bfe2a567149e580dd6a30cff77c58",
-          "IPY_MODEL_bacb4daf7f144010ac2b70a75014312c"
+          "IPY_MODEL_1370d93610dc48488969f51c26b18450",
+          "IPY_MODEL_353d590ad84d4c3da5acd781f5c5554a",
+          "IPY_MODEL_ec4dbea907064bdda2061dca1f5146f4"
         ],
-        "layout": "IPY_MODEL_0d32d4395ef547d7aac82228b72600d3"
+        "layout": "IPY_MODEL_d678c813a2db4fba968de37e90608aef"
       }
     },
-    "8eef66b9626e4505b3008f85fe38cd3d": {
+    "1370d93610dc48488969f51c26b18450": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_248607a0923b45ce8f4190417185a232",
-        "style": "IPY_MODEL_71102679973945429ab96a0819eed986",
+        "layout": "IPY_MODEL_f227f97ee02743f78c3e379374ee04a9",
+        "style": "IPY_MODEL_e3a3ac29bd694b61b5137a7dc3676b3f",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset.</p><h5>Additional Outputs</h5>"
       }
     },
-    "248607a0923b45ce8f4190417185a232": {
+    "f227f97ee02743f78c3e379374ee04a9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "71102679973945429ab96a0819eed986": {
+    "e3a3ac29bd694b61b5137a7dc3676b3f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "826bfe2a567149e580dd6a30cff77c58": {
+    "353d590ad84d4c3da5acd781f5c5554a": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -768,7 +1305,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "0601dfdf-8264-46e3-a45d-be8f7a4d3490"
+            "uid": "21968e59-b2ed-495b-8244-785635406b06"
           },
           {
             "alignmentgroup": "True",
@@ -799,7 +1336,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "f4a8d9bd-3f0e-4126-bc5b-0ea8b00fca2f"
+            "uid": "7aa93681-1007-4003-9fba-2986ab320cae"
           },
           {
             "alignmentgroup": "True",
@@ -830,7 +1367,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "818d5b63-438e-4086-8306-06c1e157d8f9"
+            "uid": "16d2b3d1-0e13-482f-9665-03b0cf049930"
           }
         ],
         "_dom_classes": [],
@@ -1733,29 +2270,29 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
         }
       ]
     },
-    "bacb4daf7f144010ac2b70a75014312c": {
+    "ec4dbea907064bdda2061dca1f5146f4": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_49860bd14258495f83facb935bd4d3fd",
-        "style": "IPY_MODEL_b3b346af9f3e42e9b50b56bf8b261980"
+        "layout": "IPY_MODEL_18d5fe7e1f914b44bf8f02707f260480",
+        "style": "IPY_MODEL_9dcbe3bffef8495cbcbc699a0c002f40"
       }
     },
-    "49860bd14258495f83facb935bd4d3fd": {
+    "18d5fe7e1f914b44bf8f02707f260480": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b3b346af9f3e42e9b50b56bf8b261980": {
+    "9dcbe3bffef8495cbcbc699a0c002f40": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0d32d4395ef547d7aac82228b72600d3": {
+    "d678c813a2db4fba968de37e90608aef": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1765,12 +2302,11 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "144dc482573a48a08a41dc73e03f9e9f"}
+{"version_major": 2, "version_minor": 0, "model_id": "74966dde15334a71953da20f3653c0cd"}
 </script>
 
 </body>
 </html>
-
 </div>
 <br />
 <br /><p>Voilà! Now we have a check that prints a graph and has a value. We can add this check
@@ -1855,24 +2391,293 @@ verifying that the color averages haven’t changed by more than 10%.</p>
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.91 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:01&lt;00:00,  1.99 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.09 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.19 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.20 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.07 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.44 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.28 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPyWidget export</title>
+    <title>Color Averages Check</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
 </head>
 <body>
 
@@ -1882,44 +2687,44 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "6af36d4230fe400c94f177e27e69fbde": {
+    "b5f915a54cc54799ba553f765e24f835": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_807cc86aebd54497a76d685d5b05e053",
-          "IPY_MODEL_1b710a2bd84c4402b7d98e3377877b85",
-          "IPY_MODEL_4ef206d6d4ea4c6685abddc7aeceae19"
+          "IPY_MODEL_b2f73beb6b7c4c9db853c94b41734b65",
+          "IPY_MODEL_470b6fc955994f68bed1d4f9945f91fb",
+          "IPY_MODEL_a6403088bf5e45ca80216bdf4484b579"
         ],
-        "layout": "IPY_MODEL_116a499caeba4a7d99c19368f35a0afb"
+        "layout": "IPY_MODEL_973646cca6c448149c39984baf6ba2ca"
       }
     },
-    "807cc86aebd54497a76d685d5b05e053": {
+    "b2f73beb6b7c4c9db853c94b41734b65": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_506db71f92564195a5117251dd7a6b0f",
-        "style": "IPY_MODEL_b4afad347ee94b99b0b474d3a8128e16",
+        "layout": "IPY_MODEL_737a16aa7441438bbac175c4c2d5eaa3",
+        "style": "IPY_MODEL_3cec9d34fdfa42069c967835d8bfa78c",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset.</p><h5>Additional Outputs</h5>"
       }
     },
-    "506db71f92564195a5117251dd7a6b0f": {
+    "737a16aa7441438bbac175c4c2d5eaa3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b4afad347ee94b99b0b474d3a8128e16": {
+    "3cec9d34fdfa42069c967835d8bfa78c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1b710a2bd84c4402b7d98e3377877b85": {
+    "470b6fc955994f68bed1d4f9945f91fb": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1957,7 +2762,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "3b76bd4c-8626-429f-9b6d-1d8217f35c29"
+            "uid": "b3c0fe6a-9650-4f0c-b655-a686ccbca695"
           },
           {
             "alignmentgroup": "True",
@@ -1988,7 +2793,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "f779deaa-dcc9-45b7-b33d-5434bb3bf827"
+            "uid": "6dd9341e-20d2-486a-ba52-0dc095077097"
           },
           {
             "alignmentgroup": "True",
@@ -2019,7 +2824,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "91dbdbe5-c116-48f6-81f7-3018c91b0f98"
+            "uid": "25711d48-db9b-45e4-81a5-21d98ff4c7a3"
           }
         ],
         "_dom_classes": [],
@@ -2922,29 +3727,29 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
         }
       ]
     },
-    "4ef206d6d4ea4c6685abddc7aeceae19": {
+    "a6403088bf5e45ca80216bdf4484b579": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_952387f338f34241b9fe6bc3de660137",
-        "style": "IPY_MODEL_b51129120eaf4db19a453730905bdee7"
+        "layout": "IPY_MODEL_3140b9d1c7194099ac548ce900a26fcf",
+        "style": "IPY_MODEL_b7ca3edc8e164c0ba84083739396ae54"
       }
     },
-    "952387f338f34241b9fe6bc3de660137": {
+    "3140b9d1c7194099ac548ce900a26fcf": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b51129120eaf4db19a453730905bdee7": {
+    "b7ca3edc8e164c0ba84083739396ae54": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "116a499caeba4a7d99c19368f35a0afb": {
+    "973646cca6c448149c39984baf6ba2ca": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2954,12 +3759,11 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "6af36d4230fe400c94f177e27e69fbde"}
+{"version_major": 2, "version_minor": 0, "model_id": "b5f915a54cc54799ba553f765e24f835"}
 </script>
 
 </body>
 </html>
-
 </div>
 <br />
 <br /><p>And now our check we will alert us automatically if the color averages have changed by more than 10%!</p>
@@ -2976,7 +3780,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 deepchecks subpackage. Each has its own run signature, according to the objects on which it will run.</p>
 <p>The first two classes of checks run some logic on the image data, and so the check structure is designed to enable
 accumulating and computation on batches outputted by the dataloader.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.072 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.293 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-vision-examples-plot-custom-checks-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/6fa7e099bf2f67d27f955a69be7cf1e9/plot_custom_checks.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_checks.py</span></code></a></p>
@@ -3030,7 +3834,7 @@ accumulating and computation on batches outputted by the dataloader.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/d02251d.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/f0aa52e.<br>
 </p>
     </div>
     

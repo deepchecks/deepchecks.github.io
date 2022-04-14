@@ -90,56 +90,325 @@ Synthetic example dates before last training
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Date Train-Test Leakage (overlap)</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "fa7b21aeb9e2441d93b9b9f79e285b96": {
+        "23d3ad8e959c4ec6a88474172b9c9ec9": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_a60f7a41c34a498aaacbadcdf8c25153"
+              "IPY_MODEL_429623f8071e4c2eaab0adfdcbe8e50c"
             ],
-            "layout": "IPY_MODEL_7a5206ed0bf449e48dddc4788a3c9f38"
+            "layout": "IPY_MODEL_a9ba540b62ce4415a593b51ae008e8d8"
           }
         },
-        "a60f7a41c34a498aaacbadcdf8c25153": {
+        "429623f8071e4c2eaab0adfdcbe8e50c": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_256cce32b23940c7b3e0856bf1281967",
-            "style": "IPY_MODEL_cc5def6e85bb4c65a0c948f747a4206b",
+            "layout": "IPY_MODEL_03b4a550d05849ab9b80e27474b0c06f",
+            "style": "IPY_MODEL_0bccbe203009455ea276fcf218a24eb0",
             "value": "<h4>Date Train-Test Leakage (overlap)</h4><p>Check test data that is dated earlier than latest date in train. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/methodology/examples/plot_date_train_test_leakage_overlap.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>11.11% of test data dates before last training data date (2021/10/05 00:00:00.000000 )</div>"
           }
         },
-        "256cce32b23940c7b3e0856bf1281967": {
+        "03b4a550d05849ab9b80e27474b0c06f": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "cc5def6e85bb4c65a0c948f747a4206b": {
+        "0bccbe203009455ea276fcf218a24eb0": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "7a5206ed0bf449e48dddc4788a3c9f38": {
+        "a9ba540b62ce4415a593b51ae008e8d8": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -149,12 +418,11 @@ Synthetic example dates before last training
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "fa7b21aeb9e2441d93b9b9f79e285b96"}
+    {"version_major": 2, "version_minor": 0, "model_id": "23d3ad8e959c4ec6a88474172b9c9ec9"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -195,56 +463,325 @@ Synthetic example no date leakage
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Date Train-Test Leakage (overlap)</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "3255b2b4c5e04f51aee544a5dca39fd0": {
+        "3682c3711d7a4c72a523b1bac0a005bc": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_f60c71b6e0694812bace0f3ed822b048"
+              "IPY_MODEL_a104a065ae284f3284d25fc3b8d10949"
             ],
-            "layout": "IPY_MODEL_94a6273d647d41e0821c1dab31a24e1f"
+            "layout": "IPY_MODEL_69f36e1eb4004d6c8bcbda1839a97f83"
           }
         },
-        "f60c71b6e0694812bace0f3ed822b048": {
+        "a104a065ae284f3284d25fc3b8d10949": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_626804f50424424ca26f1eef8d5b2285",
-            "style": "IPY_MODEL_6d7b828b2cbb48e5a14f18bebdbcad7d",
+            "layout": "IPY_MODEL_67d096ede2584f158ddb49061a2abe04",
+            "style": "IPY_MODEL_5a619236e37947e18ac06897f1d7adf9",
             "value": "<h4>Date Train-Test Leakage (overlap)</h4><p>Check test data that is dated earlier than latest date in train. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/methodology/examples/plot_date_train_test_leakage_overlap.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
           }
         },
-        "626804f50424424ca26f1eef8d5b2285": {
+        "67d096ede2584f158ddb49061a2abe04": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "6d7b828b2cbb48e5a14f18bebdbcad7d": {
+        "5a619236e37947e18ac06897f1d7adf9": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "94a6273d647d41e0821c1dab31a24e1f": {
+        "69f36e1eb4004d6c8bcbda1839a97f83": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -254,12 +791,11 @@ Synthetic example no date leakage
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "3255b2b4c5e04f51aee544a5dca39fd0"}
+    {"version_major": 2, "version_minor": 0, "model_id": "3682c3711d7a4c72a523b1bac0a005bc"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -267,7 +803,7 @@ Synthetic example no date leakage
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.033 seconds)
+   **Total running time of the script:** ( 0 minutes  0.029 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_methodology_examples_plot_date_train_test_leakage_overlap.py:

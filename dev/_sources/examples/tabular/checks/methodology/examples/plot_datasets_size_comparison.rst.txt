@@ -79,56 +79,325 @@ Datasets Size Comparison
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Datasets Size Comparison</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "b7cfc0255a074aaaaa5347aff1b8e059": {
+        "67a97cef3ffe46ac942cc80311aa1880": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_74d88fe0b299451988b04f8b8ea50a5d"
+              "IPY_MODEL_1ab32586c0dc4d75acf1d1190c7b04a1"
             ],
-            "layout": "IPY_MODEL_7d2396fda97c41ce956da41f06410863"
+            "layout": "IPY_MODEL_c1e476f737d34652836e4d3967fbed50"
           }
         },
-        "74d88fe0b299451988b04f8b8ea50a5d": {
+        "1ab32586c0dc4d75acf1d1190c7b04a1": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_6a3220d6865640b1b2cfe4266124d232",
-            "style": "IPY_MODEL_5c57e33ff6a247dc88e966e19d9042bd",
-            "value": "<h4>Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/methodology/examples/plot_datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_39bd6 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_39bd6 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_39bd6 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_39bd6 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_39bd6 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_39bd6\">\n  <thead>\n    <tr>\n      <th id=\"T_39bd6_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_39bd6_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_39bd6_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_39bd6_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_39bd6_row0_col1\" class=\"data row0 col1\" >Train dataset is not smaller than test dataset</td>\n      <td id=\"T_39bd6_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_39bd6_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_39bd6_row1_col1\" class=\"data row1 col1\" >Test dataset size is not smaller than 100</td>\n      <td id=\"T_39bd6_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_39bd6_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_39bd6_row2_col1\" class=\"data row2 col1\" >Test-Train size ratio is not smaller than 0.2</td>\n      <td id=\"T_39bd6_row2_col2\" class=\"data row2 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_47b46 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_47b46 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_47b46 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_47b46 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_47b46 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_47b46\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_47b46_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_47b46_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_47b46_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_47b46_row0_col0\" class=\"data row0 col0\" >600</td>\n      <td id=\"T_47b46_row0_col1\" class=\"data row0 col1\" >400</td>\n    </tr>\n  </tbody>\n</table>\n"
+            "layout": "IPY_MODEL_37c7fdc7ae114491a0a3e4b21974badf",
+            "style": "IPY_MODEL_96ad3988d9c345e5936191e700b3de0f",
+            "value": "<h4>Datasets Size Comparison</h4><p>Verify test dataset size comparing it to the train dataset size. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/methodology/examples/plot_datasets_size_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_e3f0f table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e3f0f thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e3f0f tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e3f0f th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e3f0f td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_e3f0f\">\n  <thead>\n    <tr>\n      <th id=\"T_e3f0f_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_e3f0f_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_e3f0f_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_e3f0f_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_e3f0f_row0_col1\" class=\"data row0 col1\" >Train dataset is not smaller than test dataset</td>\n      <td id=\"T_e3f0f_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_e3f0f_row1_col0\" class=\"data row1 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_e3f0f_row1_col1\" class=\"data row1 col1\" >Test dataset size is not smaller than 100</td>\n      <td id=\"T_e3f0f_row1_col2\" class=\"data row1 col2\" ></td>\n    </tr>\n    <tr>\n      <td id=\"T_e3f0f_row2_col0\" class=\"data row2 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_e3f0f_row2_col1\" class=\"data row2 col1\" >Test-Train size ratio is not smaller than 0.2</td>\n      <td id=\"T_e3f0f_row2_col2\" class=\"data row2 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><style type=\"text/css\">\n#T_3759e table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3759e thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3759e tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3759e th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3759e td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_3759e\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_3759e_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_3759e_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_3759e_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_3759e_row0_col0\" class=\"data row0 col0\" >600</td>\n      <td id=\"T_3759e_row0_col1\" class=\"data row0 col1\" >400</td>\n    </tr>\n  </tbody>\n</table>\n"
           }
         },
-        "6a3220d6865640b1b2cfe4266124d232": {
+        "37c7fdc7ae114491a0a3e4b21974badf": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "5c57e33ff6a247dc88e966e19d9042bd": {
+        "96ad3988d9c345e5936191e700b3de0f": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "7d2396fda97c41ce956da41f06410863": {
+        "c1e476f737d34652836e4d3967fbed50": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -138,12 +407,11 @@ Datasets Size Comparison
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "b7cfc0255a074aaaaa5347aff1b8e059"}
+    {"version_major": 2, "version_minor": 0, "model_id": "67a97cef3ffe46ac942cc80311aa1880"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
