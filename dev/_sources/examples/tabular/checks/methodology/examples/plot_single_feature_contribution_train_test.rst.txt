@@ -167,58 +167,327 @@ Run the check
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Single Feature Contribution Train-Test</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "502eaffe414142d4aafccf1809b2f092": {
+        "1568372231f94d8389158ab07c631bf8": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_d910308c347a4032ad121bdaf7395e4b",
-              "IPY_MODEL_6765a5658aac4bab883a5a546a624f55",
-              "IPY_MODEL_ae273c30d9f448f9bec321369af93470"
+              "IPY_MODEL_318afce611924032b4d8c192328ea432",
+              "IPY_MODEL_13847ba7c97f43168a580459a3297ae4",
+              "IPY_MODEL_c34ddba7617c4e17963390e99ecdecab"
             ],
-            "layout": "IPY_MODEL_14a8f1ba137c4411b6f959c8bd1888f4"
+            "layout": "IPY_MODEL_2403a37fa69049db84920e5736869af7"
           }
         },
-        "d910308c347a4032ad121bdaf7395e4b": {
+        "318afce611924032b4d8c192328ea432": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_7bbedb35366e468fa8ac1a77568ba737",
-            "style": "IPY_MODEL_f653f31d735745dd87fc19ca1b5ad7ae",
+            "layout": "IPY_MODEL_716f1cc06eca4183944ee907e66d5b4f",
+            "style": "IPY_MODEL_502d955e5e2c4e95aacb603dcbea3e3a",
             "value": "<h4>Single Feature Contribution Train-Test</h4><p>    Return the Predictive Power Score of all features, in order to estimate each feature's ability to predict the label. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/methodology/examples/plot_single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
           }
         },
-        "7bbedb35366e468fa8ac1a77568ba737": {
+        "716f1cc06eca4183944ee907e66d5b4f": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "f653f31d735745dd87fc19ca1b5ad7ae": {
+        "502d955e5e2c4e95aacb603dcbea3e3a": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "6765a5658aac4bab883a5a546a624f55": {
+        "13847ba7c97f43168a580459a3297ae4": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -253,7 +522,7 @@ Run the check
                   ]
                 },
                 "type": "bar",
-                "uid": "3f933eed-f33e-4a5e-8c6f-05990ef384f2"
+                "uid": "cef63f21-5218-424d-8a94-0a9c58f07fc9"
               },
               {
                 "marker": {
@@ -281,7 +550,7 @@ Run the check
                   ]
                 },
                 "type": "bar",
-                "uid": "3ae38468-7dd6-4306-b0ff-dc5e15de2076"
+                "uid": "73a75ff9-9dc9-4f1f-b19c-a6e2a4f018f1"
               },
               {
                 "line": {
@@ -307,7 +576,7 @@ Run the check
                   ]
                 },
                 "type": "scatter",
-                "uid": "e3e3d2bd-4e5a-4770-801c-f0ae97daaea6"
+                "uid": "45ffe178-0665-49e8-828d-ac99969742e1"
               }
             ],
             "_dom_classes": [],
@@ -1224,30 +1493,30 @@ Run the check
             }
           ]
         },
-        "ae273c30d9f448f9bec321369af93470": {
+        "c34ddba7617c4e17963390e99ecdecab": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_bdf269c4143e464e993bb672f9a06261",
-            "style": "IPY_MODEL_ba99b40ad48f4298b2e66afb379cc0e4",
+            "layout": "IPY_MODEL_2ee69ede76614e178b54f4a9d2056313",
+            "style": "IPY_MODEL_a8641072ec7c4abaa528ec0d4142f821",
             "value": "<div>The Predictive Power Score (PPS) is used to estimate the ability of a feature to predict the label by itself. (Read more about <a href=https://docs.deepchecks.com/en/stable/examples/tabular/checks/methodology/single_feature_contribution_train_test.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link target=\"_blank\">Predictive Power Score</a>)</div><div><u>In the graph above</u>, we should suspect we have problems in our data if:</div><div>1. <b>Train dataset PPS values are high</b>:</div><div>Can indicate that this feature's success in predicting the label is actually due to data leakage, </div><div>   meaning that the feature holds information that is based on the label to begin with.</div><div>2. <b>Large difference between train and test PPS</b> (train PPS is larger):</div><div>   An even more powerful indication of data leakage, as a feature that was powerful in train but not in test </div><div>   can be explained by leakage in train that is not relevant to a new dataset.</div><div>3. <b>Large difference between test and train PPS</b> (test PPS is larger):</div><div>   An anomalous value, could indicate drift in test dataset that caused a coincidental correlation to the target label.</div>"
           }
         },
-        "bdf269c4143e464e993bb672f9a06261": {
+        "2ee69ede76614e178b54f4a9d2056313": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "ba99b40ad48f4298b2e66afb379cc0e4": {
+        "a8641072ec7c4abaa528ec0d4142f821": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "14a8f1ba137c4411b6f959c8bd1888f4": {
+        "2403a37fa69049db84920e5736869af7": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1257,12 +1526,11 @@ Run the check
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "502eaffe414142d4aafccf1809b2f092"}
+    {"version_major": 2, "version_minor": 0, "model_id": "1568372231f94d8389158ab07c631bf8"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -1338,7 +1606,7 @@ Let's add the conditions, and re-run the check:
 
  .. code-block:: none
 
-    /home/runner/work/deepchecks/deepchecks/deepchecks/core/check_result.py:432: UserWarning:
+    /home/runner/work/deepchecks/deepchecks/deepchecks/core/check_result.py:446: UserWarning:
 
     You are running in a non-interactive python shell. in order to show result you have to use an IPython shell (etc Jupyter)
 
@@ -1349,7 +1617,7 @@ Let's add the conditions, and re-run the check:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.855 seconds)
+   **Total running time of the script:** ( 0 minutes  5.475 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_methodology_examples_plot_single_feature_contribution_train_test.py:

@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Add a Custom Check &#8212; Deepchecks d02251d documentation</title>
+    <title>Add a Custom Check &#8212; Deepchecks f0aa52e documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -476,11 +476,280 @@ dictionary, string, etc…</em></p>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPyWidget export</title>
+    <title>Dataset Size Comparison</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
 </head>
 <body>
 
@@ -490,42 +759,42 @@ dictionary, string, etc…</em></p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "80f3f55e13184eeaa3b0616c1ba811a4": {
+    "9d54bde9dc0249ac95c59414f010927c": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_ec939319e0054acc8ad2c899d54aa06a"
+          "IPY_MODEL_80ff13249bd440ae8efa14a1f31af4ad"
         ],
-        "layout": "IPY_MODEL_36ceb80df41240b0ba16a8a9c1a6f5b8"
+        "layout": "IPY_MODEL_bed4d9d0f5c849f4a25acb08184204c2"
       }
     },
-    "ec939319e0054acc8ad2c899d54aa06a": {
+    "80ff13249bd440ae8efa14a1f31af4ad": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1da1d8552a714780ac4ca122324a397c",
-        "style": "IPY_MODEL_a0a6f223ca23472ebfd568af42f54fed",
+        "layout": "IPY_MODEL_7c40af7bb3724a6082013bdfe32b9a0a",
+        "style": "IPY_MODEL_665d2c257b8345f984842ab4e73b0358",
         "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "1da1d8552a714780ac4ca122324a397c": {
+    "7c40af7bb3724a6082013bdfe32b9a0a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a0a6f223ca23472ebfd568af42f54fed": {
+    "665d2c257b8345f984842ab4e73b0358": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "36ceb80df41240b0ba16a8a9c1a6f5b8": {
+    "bed4d9d0f5c849f4a25acb08184204c2": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -535,12 +804,11 @@ dictionary, string, etc…</em></p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "80f3f55e13184eeaa3b0616c1ba811a4"}
+{"version_major": 2, "version_minor": 0, "model_id": "9d54bde9dc0249ac95c59414f010927c"}
 </script>
 
 </body>
 </html>
-
 </div>
 <br />
 <br /><p>Our check ran successfully but we got the print “Nothing found”. This is
@@ -598,11 +866,280 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IPyWidget export</title>
+    <title>Dataset Size Comparison</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
 </head>
 <body>
 
@@ -612,82 +1149,82 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "17cdece0a7f44a7793a37759aa35ed39": {
+    "ac0d24291b1e49dfadbdaae2ecc91191": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_f9306afdbcc54813a7cb20139e34af2f",
-          "IPY_MODEL_3c3bb2a3e1d946eaba52f6ccd6ec803b",
-          "IPY_MODEL_89ef7e953803444bb6d7194aa1b1454e"
+          "IPY_MODEL_e2f39e82de4f4bc3982e0c8440c0a27e",
+          "IPY_MODEL_b2c0a19985724e2284b9d01d85456192",
+          "IPY_MODEL_179d45e8de43438ab995d43b403752c8"
         ],
-        "layout": "IPY_MODEL_6a681b9bb61648a7a611e5eee691cb86"
+        "layout": "IPY_MODEL_a897b0162a894625b5582e481ed6ce9d"
       }
     },
-    "f9306afdbcc54813a7cb20139e34af2f": {
+    "e2f39e82de4f4bc3982e0c8440c0a27e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1f434198993442fea57c9d5edf362cbb",
-        "style": "IPY_MODEL_e0c4d13ced794424ba5f92dea3d595db",
-        "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_c15c0 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c15c0 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c15c0 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c15c0 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_c15c0 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_c15c0\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_c15c0_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_c15c0_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_c15c0_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_c15c0_row0_col0\" class=\"data row0 col0\" >9</td>\n      <td id=\"T_c15c0_row0_col1\" class=\"data row0 col1\" >3</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_bca981b52ae148c2a634b5a3523c737a",
+        "style": "IPY_MODEL_1874ed97cd914fd6afcd09df743c8f10",
+        "value": "<h4>Dataset Size Comparison</h4><p>Check which compares the sizes of train and test datasets.</p><h5>Additional Outputs</h5><style type=\"text/css\">\n#T_a8aa0 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a8aa0 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a8aa0 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a8aa0 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_a8aa0 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_a8aa0\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_a8aa0_level0_col0\" class=\"col_heading level0 col0\" >Train</th>\n      <th id=\"T_a8aa0_level0_col1\" class=\"col_heading level0 col1\" >Test</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_a8aa0_level0_row0\" class=\"row_heading level0 row0\" >Size</th>\n      <td id=\"T_a8aa0_row0_col0\" class=\"data row0 col0\" >9</td>\n      <td id=\"T_a8aa0_row0_col1\" class=\"data row0 col1\" >3</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "1f434198993442fea57c9d5edf362cbb": {
+    "bca981b52ae148c2a634b5a3523c737a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e0c4d13ced794424ba5f92dea3d595db": {
+    "1874ed97cd914fd6afcd09df743c8f10": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3c3bb2a3e1d946eaba52f6ccd6ec803b": {
+    "b2c0a19985724e2284b9d01d85456192": {
       "model_name": "OutputModel",
       "model_module": "@jupyter-widgets/output",
       "model_module_version": "1.0.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cebb5f6699164ca1b42edaabfd16413d",
+        "layout": "IPY_MODEL_e318ef989821470da26b9b950a045c05",
         "outputs": []
       }
     },
-    "cebb5f6699164ca1b42edaabfd16413d": {
+    "e318ef989821470da26b9b950a045c05": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "89ef7e953803444bb6d7194aa1b1454e": {
+    "179d45e8de43438ab995d43b403752c8": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_92ac14cf232d46069df2542d24afbbe7",
-        "style": "IPY_MODEL_d84a772205e243dabeb032e9fc5a1cad"
+        "layout": "IPY_MODEL_ed1a678008614b76a0d063f8059ac0a9",
+        "style": "IPY_MODEL_c163137419224f8f83ecee970e63f550"
       }
     },
-    "92ac14cf232d46069df2542d24afbbe7": {
+    "ed1a678008614b76a0d063f8059ac0a9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d84a772205e243dabeb032e9fc5a1cad": {
+    "c163137419224f8f83ecee970e63f550": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6a681b9bb61648a7a611e5eee691cb86": {
+    "a897b0162a894625b5582e481ed6ce9d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -697,12 +1234,11 @@ architectural limitations of <code class="docutils literal notranslate"><span cl
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "17cdece0a7f44a7793a37759aa35ed39"}
+{"version_major": 2, "version_minor": 0, "model_id": "ac0d24291b1e49dfadbdaae2ecc91191"}
 </script>
 
 </body>
 </html>
-
 </div>
 <br />
 <br /><section id="voila">
@@ -745,7 +1281,7 @@ and their sole difference is the <code class="docutils literal notranslate"><spa
 </tr>
 </tbody>
 </table>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.066 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.061 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tabular-examples-plot-add-a-custom-check-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/c381aeacc08b9b6a350e0b7b258093ef/plot_add_a_custom_check.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_add_a_custom_check.py</span></code></a></p>
@@ -800,7 +1336,7 @@ and their sole difference is the <code class="docutils literal notranslate"><spa
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/d02251d.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/f0aa52e.<br>
 </p>
     </div>
     

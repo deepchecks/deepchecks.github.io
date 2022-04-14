@@ -63,7 +63,7 @@ and using the `YOLOv5 model <https://github.com/ultralytics/yolov5>`__.
  .. code-block:: none
 
     Downloading https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt to yolov5s.pt...
-      0%|          | 0.00/14.1M [00:00<?, ?B/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 163MB/s]
+      0%|          | 0.00/14.1M [00:00<?, ?B/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 173MB/s]
 
 
 
@@ -93,63 +93,332 @@ Run the check
 
  .. code-block:: none
 
-    Validating Input:   0%| | 0/1 [00:00<?, ? /s]    Validating Input: 100%|#| 1/1 [00:09<00:00,  9.35s/ ]                                                         Ingesting Batches:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches:  50%|# | 1/2 [00:09<00:09,  9.61s/ Batch]    Ingesting Batches: 100%|##| 2/2 [00:19<00:00,  9.55s/ Batch]                                                                Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]                                                 
+    Validating Input:   0%| | 0/1 [00:00<?, ? /s]    Validating Input: 100%|#| 1/1 [00:08<00:00,  8.49s/ ]                                                         Ingesting Batches:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches:  50%|# | 1/2 [00:08<00:08,  8.48s/ Batch]    Ingesting Batches: 100%|##| 2/2 [00:16<00:00,  8.42s/ Batch]                                                                Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]                                                 
 
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Confusion Matrix</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "433b36996e754bcc9679a8bfef3c0f07": {
+        "c551cafed0a94222b2a3640956e517dc": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_84f8d0047cde4211ac60e306e9b71ca1",
-              "IPY_MODEL_a0872df90ccb4a84933f7ed0f64d0888",
-              "IPY_MODEL_5855b7f3b825486c9ac0aab953d6ee16"
+              "IPY_MODEL_570be80f3f554a2d9cfe4a17212b5701",
+              "IPY_MODEL_7077cb70353c4d609d1f0e6d852c7eae",
+              "IPY_MODEL_264fe0c3e1d94f0eb7a012074401db66"
             ],
-            "layout": "IPY_MODEL_8cfd348dad41433ea294ce08eb9477d5"
+            "layout": "IPY_MODEL_77a4a0281d714b91a13ef3610ba4de91"
           }
         },
-        "84f8d0047cde4211ac60e306e9b71ca1": {
+        "570be80f3f554a2d9cfe4a17212b5701": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_90c2d527625347758bd7a73b894eb9b0",
-            "style": "IPY_MODEL_8c408a7920464bf1a5af474fa6f8d965",
+            "layout": "IPY_MODEL_cd9f2a49ee27461cb6f1738c7efb365c",
+            "style": "IPY_MODEL_5b809649248d4ef59594fcfb19704ef0",
             "value": "<h4>Confusion Matrix</h4><p>Calculate the confusion matrix of the model on the given dataset. <a href=\"https://docs.deepchecks.com/dev/examples/vision/checks/performance/examples/plot_confusion_matrix.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Showing 20 of 80 classes:</div><div>\"No overlapping\" categories are labels and prediction which did not have a matching label/prediction. For example a predictions that did not have a sufficiently overlapping label bounding box will appear under the \"No overlapping label\" category</div>"
           }
         },
-        "90c2d527625347758bd7a73b894eb9b0": {
+        "cd9f2a49ee27461cb6f1738c7efb365c": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "8c408a7920464bf1a5af474fa6f8d965": {
+        "5b809649248d4ef59594fcfb19704ef0": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "a0872df90ccb4a84933f7ed0f64d0888": {
+        "7077cb70353c4d609d1f0e6d852c7eae": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -652,7 +921,7 @@ Run the check
                   ]
                 ],
                 "type": "heatmap",
-                "uid": "d4c0a699-f973-4062-beeb-03c9ff9757e7"
+                "uid": "1c38b5c9-30d2-4a4b-b7ce-ee3488e61daa"
               }
             ],
             "_dom_classes": [],
@@ -1568,29 +1837,29 @@ Run the check
             "_view_count": 0
           }
         },
-        "5855b7f3b825486c9ac0aab953d6ee16": {
+        "264fe0c3e1d94f0eb7a012074401db66": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_8b8ab8c6a1c94a6c87b1969612adda32",
-            "style": "IPY_MODEL_c946ba6f8f264d479b24ca1292e61bb0"
+            "layout": "IPY_MODEL_0d364aafb1934f28b7f77cf0a6b68470",
+            "style": "IPY_MODEL_47cb074096794f1eb5903d78030c8e97"
           }
         },
-        "8b8ab8c6a1c94a6c87b1969612adda32": {
+        "0d364aafb1934f28b7f77cf0a6b68470": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "c946ba6f8f264d479b24ca1292e61bb0": {
+        "47cb074096794f1eb5903d78030c8e97": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "8cfd348dad41433ea294ce08eb9477d5": {
+        "77a4a0281d714b91a13ef3610ba4de91": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1600,12 +1869,11 @@ Run the check
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "433b36996e754bcc9679a8bfef3c0f07"}
+    {"version_major": 2, "version_minor": 0, "model_id": "c551cafed0a94222b2a3640956e517dc"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -1613,7 +1881,7 @@ Run the check
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  29.407 seconds)
+   **Total running time of the script:** ( 0 minutes  26.486 seconds)
 
 
 .. _sphx_glr_download_examples_vision_checks_performance_examples_plot_confusion_matrix.py:

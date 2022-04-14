@@ -124,58 +124,327 @@ Irvine, CA: University of California, School of Information and Computer Science
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Calibration Metric</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "d40d108389d84494b566403ca5c5c201": {
+        "0c2e9b5581cf404b9cd0d9bc6189de8a": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_db045d053af84ffc975334c126048323",
-              "IPY_MODEL_a27701c4e448407d95aa701a837ef89f",
-              "IPY_MODEL_f1f6bd6cdf8c454b8931240db3d33264"
+              "IPY_MODEL_a6fdeed995a94a6aa3cc8a3f3749b67f",
+              "IPY_MODEL_09754eda9e374b26b26b1a26c2cedab2",
+              "IPY_MODEL_098f706e5e4346219ec39100a3074b15"
             ],
-            "layout": "IPY_MODEL_fbd884233d8f47bda3b2fa35b535f56b"
+            "layout": "IPY_MODEL_53d77adf2dc54b819af37aa0a029bcfd"
           }
         },
-        "db045d053af84ffc975334c126048323": {
+        "a6fdeed995a94a6aa3cc8a3f3749b67f": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_f1ee17fed1e647e08f0e9e3ec1a9d583",
-            "style": "IPY_MODEL_82aab17ce03c4f439a6f79013efe8063",
+            "layout": "IPY_MODEL_2c541db6ff174cfba42a1810610368c9",
+            "style": "IPY_MODEL_65f6654622404477975f271a703664d1",
             "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/performance/examples/plot_calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
           }
         },
-        "f1ee17fed1e647e08f0e9e3ec1a9d583": {
+        "2c541db6ff174cfba42a1810610368c9": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "82aab17ce03c4f439a6f79013efe8063": {
+        "65f6654622404477975f271a703664d1": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "a27701c4e448407d95aa701a837ef89f": {
+        "09754eda9e374b26b26b1a26c2cedab2": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -199,11 +468,11 @@ Irvine, CA: University of California, School of Information and Computer Science
                   1
                 ],
                 "type": "scatter",
-                "uid": "c17fa7f2-f4d3-4212-b529-0dae8d81fddc"
+                "uid": "952934e0-ba24-49f5-b886-0c69120d730e"
               },
               {
                 "mode": "lines+markers",
-                "name": "(brier:   0.1089)",
+                "name": "(brier:   0.1086)",
                 "x": {
                   "dtype": "float64",
                   "shape": [
@@ -217,7 +486,7 @@ Irvine, CA: University of California, School of Information and Computer Science
                   ]
                 },
                 "type": "scatter",
-                "uid": "ad0312f5-7910-40b8-acce-917eda1c708d"
+                "uid": "db1a105a-e58d-4aa3-8a77-e645637e4555"
               }
             ],
             "_dom_classes": [],
@@ -1081,7 +1350,7 @@ Irvine, CA: University of California, School of Information and Computer Science
                 "x",
                 "buffer"
               ],
-              "data": "+3JRibPMpj+dWsl2kBrCP89fwy6u0tA/nyWkk4dO1T8QxgzueHjdP9AnGlJTyeE/9FMOWXYi5D9QwXXssRjoP21GwVK+h+s/b751J7fO7D8="
+              "data": "eADXF4yFpj8ljUGuF/fBP/CNOhCyYdA/dXrJAfUx1T/dxz5YOJ/dP/lW0NfTg+E/9oZNiGtC5D8Z0sVwLwHoP44MKSp/ies/gs1wocjV7D8="
             },
             {
               "encoding": "base64",
@@ -1091,34 +1360,34 @@ Irvine, CA: University of California, School of Information and Computer Science
                 "y",
                 "buffer"
               ],
-              "data": "B7i8Y8XOfD9IrQXp1gexP5IEfeJ0Y8w/yewYEEUH2j+TIVhHm/fhPzGe9bX2UeQ/HvXCtOpQ6T/ENTgMJHfvPwAAAAAAAPA/AAAAAAAA8D8="
+              "data": "BKuDZjQmgT8QoFXw1imuP+6E3pcbs8s/52tY4Yau2T9J4wSoL6bgPylRokSJEuU/eY/3eI/36D/2gVhShYLvPwAAAAAAAPA/AAAAAAAA8D8="
             }
           ]
         },
-        "f1f6bd6cdf8c454b8931240db3d33264": {
+        "098f706e5e4346219ec39100a3074b15": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_96c1a258b54448338be43f7abe4c51d5",
-            "style": "IPY_MODEL_c8e91da9c04644ff93937706547fd385",
+            "layout": "IPY_MODEL_512bfca59e7846088715769f0a6f8fc3",
+            "style": "IPY_MODEL_3e20c38e76404f2bbb6cd6949ba4ccec",
             "value": "<div>The Brier score metric may be used to assess how well a classifier is calibrated. For more info, please visit https://en.wikipedia.org/wiki/Brier_score</div>"
           }
         },
-        "96c1a258b54448338be43f7abe4c51d5": {
+        "512bfca59e7846088715769f0a6f8fc3": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "c8e91da9c04644ff93937706547fd385": {
+        "3e20c38e76404f2bbb6cd6949ba4ccec": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "fbd884233d8f47bda3b2fa35b535f56b": {
+        "53d77adf2dc54b819af37aa0a029bcfd": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1128,12 +1397,11 @@ Irvine, CA: University of California, School of Information and Computer Science
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "d40d108389d84494b566403ca5c5c201"}
+    {"version_major": 2, "version_minor": 0, "model_id": "0c2e9b5581cf404b9cd0d9bc6189de8a"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -1181,58 +1449,327 @@ Multi-class classification
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>IPyWidget export</title>
+        <title>Calibration Metric</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
     </head>
     <body>
-
+    
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "fae870a51361462ca5e510487726ce18": {
+        "b63686ba7d5c49c6806b2342b528da00": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_9b1ef33d7810446ca095541839819ba4",
-              "IPY_MODEL_0d2a6baa99634668a559701bfc4956fa",
-              "IPY_MODEL_3ed741b68daa43d1ae12610bbea9f502"
+              "IPY_MODEL_f913898e52914f6083cff61512b03467",
+              "IPY_MODEL_464637b95ccf49a1aab23d9156b95026",
+              "IPY_MODEL_0e0e7de522ca4e18a579d932bbbd74ad"
             ],
-            "layout": "IPY_MODEL_4013e895a97947b08bff76cd2a01dbe9"
+            "layout": "IPY_MODEL_e5622f6ed1534a6dab704966f9c62306"
           }
         },
-        "9b1ef33d7810446ca095541839819ba4": {
+        "f913898e52914f6083cff61512b03467": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_c59d1dd365b44e0f9919ff287b3c6126",
-            "style": "IPY_MODEL_d8a7adebb957441ea3145ade694f40db",
+            "layout": "IPY_MODEL_c550662536124a5eb6dd5536fde8d2c3",
+            "style": "IPY_MODEL_f3f39586aee745dfa9f5af96a3ba45a7",
             "value": "<h4>Calibration Metric</h4><p>Calculate the calibration curve with brier score for each class. <a href=\"https://docs.deepchecks.com/dev/examples/tabular/checks/performance/examples/plot_calibration_score.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Calibration curves (also known as reliability diagrams) compare how well the probabilistic predictions of a binary classifier are calibrated. It plots the true frequency of the positive label against its predicted probability, for binned predictions.</div>"
           }
         },
-        "c59d1dd365b44e0f9919ff287b3c6126": {
+        "c550662536124a5eb6dd5536fde8d2c3": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "d8a7adebb957441ea3145ade694f40db": {
+        "f3f39586aee745dfa9f5af96a3ba45a7": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "0d2a6baa99634668a559701bfc4956fa": {
+        "464637b95ccf49a1aab23d9156b95026": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -1256,7 +1793,7 @@ Multi-class classification
                   1
                 ],
                 "type": "scatter",
-                "uid": "84b76358-fafa-4796-ae80-39b59b1f88ec"
+                "uid": "a6bba8be-8f4c-4233-ada1-4c69d3868a4d"
               },
               {
                 "mode": "lines+markers",
@@ -1274,7 +1811,7 @@ Multi-class classification
                   ]
                 },
                 "type": "scatter",
-                "uid": "7bf23ced-d612-40f2-99b6-639902f52809"
+                "uid": "3cd8ad1b-19bf-454b-98d2-0c3782003c86"
               },
               {
                 "mode": "lines+markers",
@@ -1292,7 +1829,7 @@ Multi-class classification
                   ]
                 },
                 "type": "scatter",
-                "uid": "5e03218c-bcc5-44d3-b4db-453e19a8f8fa"
+                "uid": "c086ff05-6e20-45f1-8987-bcc32796c898"
               },
               {
                 "mode": "lines+markers",
@@ -1310,7 +1847,7 @@ Multi-class classification
                   ]
                 },
                 "type": "scatter",
-                "uid": "77056640-0c51-4fee-a927-8cf7997eecd2"
+                "uid": "970abfa7-1563-46d6-8d80-2926ad04375c"
               }
             ],
             "_dom_classes": [],
@@ -2228,30 +2765,30 @@ Multi-class classification
             }
           ]
         },
-        "3ed741b68daa43d1ae12610bbea9f502": {
+        "0e0e7de522ca4e18a579d932bbbd74ad": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_c734295d71af40a395db5a0fd5b8a437",
-            "style": "IPY_MODEL_3e498884c00b4be18e70353c9b568051",
+            "layout": "IPY_MODEL_8e389c65ae2f4be1b2da10d09d3cf713",
+            "style": "IPY_MODEL_5e264091787c428f9a388062fc4150e0",
             "value": "<div>The Brier score metric may be used to assess how well a classifier is calibrated. For more info, please visit https://en.wikipedia.org/wiki/Brier_score</div>"
           }
         },
-        "c734295d71af40a395db5a0fd5b8a437": {
+        "8e389c65ae2f4be1b2da10d09d3cf713": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "3e498884c00b4be18e70353c9b568051": {
+        "5e264091787c428f9a388062fc4150e0": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "4013e895a97947b08bff76cd2a01dbe9": {
+        "e5622f6ed1534a6dab704966f9c62306": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -2261,12 +2798,11 @@ Multi-class classification
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "fae870a51361462ca5e510487726ce18"}
+    {"version_major": 2, "version_minor": 0, "model_id": "b63686ba7d5c49c6806b2342b528da00"}
     </script>
 
     </body>
     </html>
-
     </div>
     <br />
     <br />
@@ -2274,7 +2810,7 @@ Multi-class classification
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.981 seconds)
+   **Total running time of the script:** ( 0 minutes  12.688 seconds)
 
 
 .. _sphx_glr_download_examples_tabular_checks_performance_examples_plot_calibration_score.py:
