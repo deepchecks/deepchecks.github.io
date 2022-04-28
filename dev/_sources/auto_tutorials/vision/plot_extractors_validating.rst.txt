@@ -63,7 +63,7 @@ In the first step we load the DataLoader and our model
  .. code-block:: none
 
     Downloading https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt to yolov5s.pt...
-      0%|          | 0.00/14.1M [00:00<?, ?B/s]     28%|##8       | 4.01M/14.1M [00:00<00:00, 28.6MB/s]     57%|#####6    | 8.01M/14.1M [00:00<00:00, 28.2MB/s]     85%|########5 | 12.0M/14.1M [00:00<00:00, 28.9MB/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 32.8MB/s]
+      0%|          | 0.00/14.1M [00:00<?, ?B/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 149MB/s]
 
 
 
@@ -79,12 +79,13 @@ and model's output are not in the format expected by deepchecks, so when we
 validate them on our data we will see in the results the functions we overrided
 are not passing, and then we will implement a correct functions.
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-52
+.. GENERATED FROM PYTHON SOURCE LINES 39-53
 
 .. code-block:: default
 
 
     from deepchecks.vision.detection_data import DetectionData
+
 
     class CocoDetectionData(DetectionData):
         def batch_to_images(self, batch):
@@ -103,7 +104,7 @@ are not passing, and then we will implement a correct functions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-59
+.. GENERATED FROM PYTHON SOURCE LINES 54-60
 
 Running the extractors validation
 ---------------------------------
@@ -112,7 +113,7 @@ the extractors on our data. The function will print for us the validation
 results. At the end, if all your extractors are valid the output should look
 in `this <#The-end-result>`__.
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-64
+.. GENERATED FROM PYTHON SOURCE LINES 60-65
 
 .. code-block:: default
 
@@ -147,7 +148,7 @@ in `this <#The-end-result>`__.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-82
+.. GENERATED FROM PYTHON SOURCE LINES 66-83
 
 Understand validation results
 -----------------------------
@@ -167,12 +168,13 @@ We know that the classes in our data are represented by class id which is an int
 therefore we understand the labels does not contain the data in the right order.
 For the next step we'll fix the label extractor and then validate again:
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-104
+.. GENERATED FROM PYTHON SOURCE LINES 83-106
 
 .. code-block:: default
 
 
     import torch
+
 
     class CocoDetectionData(DetectionData):
         def batch_to_labels(self, batch):
@@ -219,12 +221,12 @@ For the next step we'll fix the label extractor and then validate again:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-107
+.. GENERATED FROM PYTHON SOURCE LINES 107-109
 
 Now we can see in the content section that our classes are indeed as we expect
 them to be, class ids of type int. Now we can continue and fix the prediction extractor
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-136
+.. GENERATED FROM PYTHON SOURCE LINES 109-138
 
 .. code-block:: default
 
@@ -283,17 +285,18 @@ them to be, class ids of type int. Now we can continue and fix the prediction ex
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-139
+.. GENERATED FROM PYTHON SOURCE LINES 139-141
 
 Now our prediction formatter also have valid structure. But in order to really
 validate it we also need visual assertion and for that we need the image extractor to work.
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-173
+.. GENERATED FROM PYTHON SOURCE LINES 141-176
 
 .. code-block:: default
 
 
     import numpy as np
+
 
     class CocoDetectionData(DetectionData):
         def batch_to_images(self, batch):
@@ -359,7 +362,7 @@ validate it we also need visual assertion and for that we need the image extract
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-180
+.. GENERATED FROM PYTHON SOURCE LINES 177-183
 
 Now that that image extractor is valid it displays for us visually the label and prediction.
 When we look at the label we see it is correct, but when we look at the prediction something
@@ -368,7 +371,7 @@ is broken.
 We need to fix the prediction so the prediction will be returned in
 [x, y, w, h, confidence, class] format.
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-213
+.. GENERATED FROM PYTHON SOURCE LINES 183-216
 
 .. code-block:: default
 
@@ -412,12 +415,12 @@ We need to fix the prediction so the prediction will be returned in
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-216
+.. GENERATED FROM PYTHON SOURCE LINES 217-219
 
 The end result
 --------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-217
+.. GENERATED FROM PYTHON SOURCE LINES 219-220
 
 .. code-block:: default
 
@@ -458,7 +461,7 @@ The end result
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  52.737 seconds)
+   **Total running time of the script:** ( 1 minutes  32.135 seconds)
 
 
 .. _sphx_glr_download_auto_tutorials_vision_plot_extractors_validating.py:

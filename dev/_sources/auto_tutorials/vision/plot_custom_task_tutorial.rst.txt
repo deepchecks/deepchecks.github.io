@@ -55,22 +55,22 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 .. code-block:: default
 
 
-    import os
     import contextlib
+    import os
     import typing as t
     from pathlib import Path
 
+    import albumentations as A
+    import matplotlib.pyplot as plt
+    import numpy as np
     import torch
+    import torchvision.transforms.functional as F
+    from albumentations.pytorch.transforms import ToTensorV2
+    from PIL import Image, ImageDraw
     from torch.utils.data import DataLoader
     from torchvision.datasets import VisionDataset
     from torchvision.datasets.utils import download_and_extract_archive
     from torchvision.utils import draw_segmentation_masks
-    import torchvision.transforms.functional as F
-    from PIL import Image, ImageDraw
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import albumentations as A
-    from albumentations.pytorch.transforms import ToTensorV2
 
 
     class CocoSegmentDataset(VisionDataset):
@@ -222,7 +222,7 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 
  .. code-block:: none
 
-      0%|          | 0/7115649 [00:00<?, ?it/s]    7115776it [00:00, 123935302.49it/s]        
+      0%|          | 0/7115649 [00:00<?, ?it/s]    7115776it [00:00, 145847884.73it/s]        
 
 
 
@@ -279,12 +279,13 @@ With the built-in base classes, the checks are accessing directly the values whi
 functions' values are not used directly, so we can just return our own data as is. On the other hand the  functions
 `batch_to_images` and `get_classes` are used so we will need to make sure our data is in the expected format.
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-242
+.. GENERATED FROM PYTHON SOURCE LINES 215-243
 
 .. code-block:: default
 
 
     from typing import List, Sequence
+
     from deepchecks.vision import VisionData
 
 
@@ -317,12 +318,12 @@ functions' values are not used directly, so we can just return our own data as i
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-245
+.. GENERATED FROM PYTHON SOURCE LINES 244-246
 
 Now we are able to run checks that use only the image data, since it's in the standard Deepchecks format.
 Let's run SimpleFeatureContribution check with our task
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-295
+.. GENERATED FROM PYTHON SOURCE LINES 246-297
 
 .. code-block:: default
 
@@ -347,6 +348,7 @@ Let's run SimpleFeatureContribution check with our task
 
 
     from itertools import chain
+
     from deepchecks.vision.checks import TrainTestLabelDrift
 
     # The labels object is the result of `batch_to_labels` function we defined earlier. The property should return a flat
@@ -386,7 +388,7 @@ Let's run SimpleFeatureContribution check with our task
 
  .. code-block:: none
 
-    Validating Input:   0%| | 0/1 [00:00<?, ? /s]                                                 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:12<00:12, 12.44s/ Batch]    Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:23<00:00, 11.55s/ Batch]                                                                                Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:08<00:08,  8.25s/ Batch]    Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:16<00:00,  8.19s/ Batch]                                                                               Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]    Computing Check: 100%|#| 1/1 [00:07<00:00,  7.83s/ Check]                                                             Validating Input:   0%| | 0/1 [00:00<?, ? /s]                                                 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00<00:00,  5.57 Batch/s]    Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00<00:00,  5.82 Batch/s]                                                                                Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00<00:00,  6.67 Batch/s]    Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00<00:00,  6.97 Batch/s]                                                                               Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]    Computing Check: 100%|#| 1/1 [00:00<00:00,  9.45 Check/s]                                                         
+    Validating Input:   0%| | 0/1 [00:00<?, ? /s]                                                 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:09<00:09,  9.51s/ Batch]    Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:17<00:00,  8.84s/ Batch]                                                                                Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:06<00:06,  6.36s/ Batch]    Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:12<00:00,  6.37s/ Batch]                                                                               Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]    Computing Check: 100%|#| 1/1 [00:06<00:00,  6.61s/ Check]                                                             Validating Input:   0%| | 0/1 [00:00<?, ? /s]                                                 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00<00:00,  6.97 Batch/s]    Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00<00:00,  7.17 Batch/s]                                                                                Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00<?, ? Batch/s]    Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00<00:00,  8.25 Batch/s]    Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00<00:00,  8.44 Batch/s]                                                                               Computing Check:   0%| | 0/1 [00:00<?, ? Check/s]                                                 
 
 .. raw:: html
 
@@ -674,7 +676,7 @@ Let's run SimpleFeatureContribution check with our task
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "55a9f2a3f08541c29513e4607c3e6876": {
+        "8e9e754674024959af965db80268bf74": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
@@ -683,39 +685,39 @@ Let's run SimpleFeatureContribution check with our task
               "rendered_html"
             ],
             "children": [
-              "IPY_MODEL_b52df65fa860458dafd2d9c6dfa8b905",
-              "IPY_MODEL_ab2bf40755164040953cc680ad68f23c",
-              "IPY_MODEL_293b50aa735a4c92bf9e95d013873b02",
-              "IPY_MODEL_4877989fb03d4cff8d92ba47832b07ac",
-              "IPY_MODEL_8d0e90993a44495ea92ceaac778055d8"
+              "IPY_MODEL_50ce874cc3f64a8490e26a684d1f2cd9",
+              "IPY_MODEL_d5e72165c45c418ba0670b2e087ff6ae",
+              "IPY_MODEL_f23d54f75c8a4e8ba92a06925dbecde5",
+              "IPY_MODEL_9a008dd3fc8e475db3d22ec66c906a00",
+              "IPY_MODEL_241f58cf33a44baebfc938a0b8670487"
             ],
-            "layout": "IPY_MODEL_a44f33b33dfd4fe4bcce0afb3600d465"
+            "layout": "IPY_MODEL_bfb22fc0d7084ab49df262fd833b88f7"
           }
         },
-        "b52df65fa860458dafd2d9c6dfa8b905": {
+        "50ce874cc3f64a8490e26a684d1f2cd9": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_83b0bdc60fc54f9b9f003fa4031d20b8",
-            "style": "IPY_MODEL_192bf7e181ca481793e48a6064b7c6c7",
+            "layout": "IPY_MODEL_672e4a890adc4aa8a3fc74be4b121450",
+            "style": "IPY_MODEL_0c434a9e48894c97bd9d807f3e5dcbc1",
             "value": "<h4>Train Test Label Drift</h4><p>    Calculate label drift between train dataset and test dataset, using statistical measures. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/distribution/plot_train_test_label_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['# Detections per Label', 'Classes in Labels'].</span></div>"
           }
         },
-        "83b0bdc60fc54f9b9f003fa4031d20b8": {
+        "672e4a890adc4aa8a3fc74be4b121450": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "192bf7e181ca481793e48a6064b7c6c7": {
+        "0c434a9e48894c97bd9d807f3e5dcbc1": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "ab2bf40755164040953cc680ad68f23c": {
+        "d5e72165c45c418ba0670b2e087ff6ae": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.7.0",
@@ -741,7 +743,7 @@ Let's run SimpleFeatureContribution check with our task
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "fa464bf3-e5ce-472c-972c-0ffc580a0174"
+                "uid": "7998f84f-7138-4842-af79-e711399a87b4"
               },
               {
                 "base": 0.1,
@@ -760,7 +762,7 @@ Let's run SimpleFeatureContribution check with our task
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "9add9fc2-a7fe-41b4-9d2e-ab6af92b2e85"
+                "uid": "0e8d27b8-20b3-4ebe-a1eb-7dadfb7a576e"
               },
               {
                 "base": 0.2,
@@ -779,7 +781,7 @@ Let's run SimpleFeatureContribution check with our task
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "2dccb191-fab1-4577-8037-1844108191fc"
+                "uid": "0a48f65c-d478-4f68-a96f-722b1f272b54"
               },
               {
                 "marker": {
@@ -807,7 +809,7 @@ Let's run SimpleFeatureContribution check with our task
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "5a093c91-6732-4f3a-94b5-f516e3f5a597"
+                "uid": "4f1492a7-72a5-4868-8699-cffc68b993f5"
               },
               {
                 "marker": {
@@ -835,7 +837,7 @@ Let's run SimpleFeatureContribution check with our task
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "19b0ba88-8a07-4b95-9b26-d0e005987545"
+                "uid": "fefcb42a-5f50-40f6-bb89-95a83425b618"
               }
             ],
             "_dom_classes": [],
@@ -1815,29 +1817,29 @@ Let's run SimpleFeatureContribution check with our task
             }
           ]
         },
-        "293b50aa735a4c92bf9e95d013873b02": {
+        "f23d54f75c8a4e8ba92a06925dbecde5": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_870f97b2f9f64e00be9f13974c7e3af9",
-            "style": "IPY_MODEL_9ff12df978464eb0959869661c523b2e"
+            "layout": "IPY_MODEL_957e798585fe42b18efb0ccbbaeb566b",
+            "style": "IPY_MODEL_2c9ec5c4ace44f6e89dafc4a7f080510"
           }
         },
-        "870f97b2f9f64e00be9f13974c7e3af9": {
+        "957e798585fe42b18efb0ccbbaeb566b": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "9ff12df978464eb0959869661c523b2e": {
+        "2c9ec5c4ace44f6e89dafc4a7f080510": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "4877989fb03d4cff8d92ba47832b07ac": {
+        "9a008dd3fc8e475db3d22ec66c906a00": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.7.0",
@@ -1863,7 +1865,7 @@ Let's run SimpleFeatureContribution check with our task
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "80f504a6-95c7-47a6-8740-a4d17d52c7eb"
+                "uid": "fa9e09dc-e754-4122-a5ca-358cfbe94d79"
               },
               {
                 "base": 0.1,
@@ -1882,7 +1884,7 @@ Let's run SimpleFeatureContribution check with our task
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "b3a8f032-12c1-48ff-a44b-4a39ccf6deb2"
+                "uid": "8ae8a858-d8cd-4b18-8593-e6923a477c3f"
               },
               {
                 "marker": {
@@ -1910,7 +1912,7 @@ Let's run SimpleFeatureContribution check with our task
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "1bf11a4e-3457-4745-b61d-c27729c20818"
+                "uid": "c2b6b085-c9cc-4e73-84b0-aa04a7ac5fd1"
               },
               {
                 "marker": {
@@ -1938,7 +1940,7 @@ Let's run SimpleFeatureContribution check with our task
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "2f094033-fdcc-4153-8023-0e75cb540402"
+                "uid": "8e4ef83b-5c76-46ef-805b-ae4690c42136"
               }
             ],
             "_dom_classes": [],
@@ -2918,29 +2920,29 @@ Let's run SimpleFeatureContribution check with our task
             }
           ]
         },
-        "8d0e90993a44495ea92ceaac778055d8": {
+        "241f58cf33a44baebfc938a0b8670487": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_81bf77d9c3444c0aa5a33ef336bd7215",
-            "style": "IPY_MODEL_39e01317bbc54d4da4ff76d6fdc54af5"
+            "layout": "IPY_MODEL_5fc915acb8544bf69ba161cc366a8bb1",
+            "style": "IPY_MODEL_6259d608727947be8bc841398e1f55a2"
           }
         },
-        "81bf77d9c3444c0aa5a33ef336bd7215": {
+        "5fc915acb8544bf69ba161cc366a8bb1": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "39e01317bbc54d4da4ff76d6fdc54af5": {
+        "6259d608727947be8bc841398e1f55a2": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "a44f33b33dfd4fe4bcce0afb3600d465": {
+        "bfb22fc0d7084ab49df262fd833b88f7": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -2950,7 +2952,7 @@ Let's run SimpleFeatureContribution check with our task
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "55a9f2a3f08541c29513e4607c3e6876"}
+    {"version_major": 2, "version_minor": 0, "model_id": "8e9e754674024959af965db80268bf74"}
     </script>
 
     </body>
@@ -2959,7 +2961,7 @@ Let's run SimpleFeatureContribution check with our task
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 296-303
+.. GENERATED FROM PYTHON SOURCE LINES 298-305
 
 Implement Custom Metric
 =======================
@@ -2972,7 +2974,7 @@ your data structure. The metrics need to conform to the API of
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  50.326 seconds)
+   **Total running time of the script:** ( 0 minutes  39.180 seconds)
 
 
 .. _sphx_glr_download_auto_tutorials_vision_plot_custom_task_tutorial.py:

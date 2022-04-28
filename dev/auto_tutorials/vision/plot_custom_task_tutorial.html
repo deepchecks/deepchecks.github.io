@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Custom Task Tutorial &#8212; Deepchecks c7043bb documentation</title>
+    <title>Custom Task Tutorial &#8212; Deepchecks 040b8ff documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,8 +77,6 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Writing Custom Computer Vision Checks" href="plot_custom_checks.html" />
-    <link rel="prev" title="Classification Model Validation Tutorial" href="plot_classification_tutorial.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -144,7 +142,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../index.html">
   Tutorials
  </a>
@@ -329,90 +327,7 @@ Page: auto_tutorials/vision/plot_custom_task_tutorial&labels=labels=chore/docume
 </form> -->
 </div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Tabular Tutorials
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../tabular/index.html">
-   Tabular Tutorials
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_quickstart_in_5_minutes.html">
-     Quickstart in 5 minutes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_add_a_custom_check.html">
-     Add a Custom Check
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_phishing_urls.html">
-     Use Cases - Classifying Malicious URLs
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Vision Tutorials
- </span>
-</p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Computer Vision Tutorials
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_simple_classification_tutorial.html">
-     Using Deepchecks Vision With a Few Lines of Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_extractors_validating.html">
-     Test Your Vision Data Class During Development
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_classification_tutorial.html">
-     Classification Model Validation Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Custom Task Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_custom_checks.html">
-     Writing Custom Computer Vision Checks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_detection_tutorial.html">
-     Object Detection Tutorial
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
+    
   </div>
 </nav>
               </div>
@@ -496,22 +411,22 @@ the exact bounding box format in order to run, while other checks that uses
 <h2>Defining the Data<a class="headerlink" href="#defining-the-data" title="Permalink to this headline">#</a></h2>
 <p>First we will define a <a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/data_tutorial.html">PyTorch Dataset</a>.
 of COCO-128 segmentation task. This part represents your own code, and is not yet Deepchecks related.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">contextlib</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
+<span class="kn">import</span> <span class="nn">albumentations</span> <span class="k">as</span> <span class="nn">A</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">albumentations.pytorch.transforms</span> <span class="kn">import</span> <span class="n">ToTensorV2</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">DataLoader</span>
 <span class="kn">from</span> <span class="nn">torchvision.datasets</span> <span class="kn">import</span> <span class="n">VisionDataset</span>
 <span class="kn">from</span> <span class="nn">torchvision.datasets.utils</span> <span class="kn">import</span> <span class="n">download_and_extract_archive</span>
 <span class="kn">from</span> <span class="nn">torchvision.utils</span> <span class="kn">import</span> <span class="n">draw_segmentation_masks</span>
-<span class="kn">import</span> <span class="nn">torchvision.transforms.functional</span> <span class="k">as</span> <span class="nn">F</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">albumentations</span> <span class="k">as</span> <span class="nn">A</span>
-<span class="kn">from</span> <span class="nn">albumentations.pytorch.transforms</span> <span class="kn">import</span> <span class="n">ToTensorV2</span>
 
 
 <span class="k">class</span> <span class="nc">CocoSegmentDataset</span><span class="p">(</span><span class="n">VisionDataset</span><span class="p">):</span>
@@ -656,7 +571,7 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/7115649 [00:00&lt;?, ?it/s]
-7115776it [00:00, 123935302.49it/s]
+7115776it [00:00, 145847884.73it/s]
 </pre></div>
 </div>
 <p>Visualizing that we loaded our datasets correctly:</p>
@@ -686,6 +601,7 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 functions’ values are not used directly, so we can just return our own data as is. On the other hand the  functions
 <cite>batch_to_images</cite> and <cite>get_classes</cite> are used so we will need to make sure our data is in the expected format.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span>
+
 <span class="kn">from</span> <span class="nn">deepchecks.vision</span> <span class="kn">import</span> <a href="../../api/generated/deepchecks.vision.VisionData.html#deepchecks.vision.VisionData" title="deepchecks.vision.VisionData" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">VisionData</span></a>
 
 
@@ -734,6 +650,7 @@ Let’s run SimpleFeatureContribution check with our task</p>
 
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+
 <span class="kn">from</span> <span class="nn">deepchecks.vision.checks</span> <span class="kn">import</span> <a href="../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">TrainTestLabelDrift</span></a>
 
 <span class="c1"># The labels object is the result of `batch_to_labels` function we defined earlier. The property should return a flat</span>
@@ -769,34 +686,33 @@ Let’s run SimpleFeatureContribution check with our task</p>
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:12&lt;00:12, 12.44s/ Batch]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:23&lt;00:00, 11.55s/ Batch]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:09&lt;00:09,  9.51s/ Batch]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:17&lt;00:00,  8.84s/ Batch]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:08&lt;00:08,  8.25s/ Batch]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:16&lt;00:00,  8.19s/ Batch]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:06&lt;00:06,  6.36s/ Batch]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:12&lt;00:00,  6.37s/ Batch]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
-Computing Check: 100%|#| 1/1 [00:07&lt;00:00,  7.83s/ Check]
+Computing Check: 100%|#| 1/1 [00:06&lt;00:00,  6.61s/ Check]
 
 
 Validating Input:   0%| | 0/1 [00:00&lt;?, ? /s]
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  5.57 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  5.82 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  6.97 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  7.17 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  6.67 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  6.97 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  8.25 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  8.44 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
-Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1083,7 +999,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "55a9f2a3f08541c29513e4607c3e6876": {
+    "8e9e754674024959af965db80268bf74": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1092,39 +1008,39 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_b52df65fa860458dafd2d9c6dfa8b905",
-          "IPY_MODEL_ab2bf40755164040953cc680ad68f23c",
-          "IPY_MODEL_293b50aa735a4c92bf9e95d013873b02",
-          "IPY_MODEL_4877989fb03d4cff8d92ba47832b07ac",
-          "IPY_MODEL_8d0e90993a44495ea92ceaac778055d8"
+          "IPY_MODEL_50ce874cc3f64a8490e26a684d1f2cd9",
+          "IPY_MODEL_d5e72165c45c418ba0670b2e087ff6ae",
+          "IPY_MODEL_f23d54f75c8a4e8ba92a06925dbecde5",
+          "IPY_MODEL_9a008dd3fc8e475db3d22ec66c906a00",
+          "IPY_MODEL_241f58cf33a44baebfc938a0b8670487"
         ],
-        "layout": "IPY_MODEL_a44f33b33dfd4fe4bcce0afb3600d465"
+        "layout": "IPY_MODEL_bfb22fc0d7084ab49df262fd833b88f7"
       }
     },
-    "b52df65fa860458dafd2d9c6dfa8b905": {
+    "50ce874cc3f64a8490e26a684d1f2cd9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_83b0bdc60fc54f9b9f003fa4031d20b8",
-        "style": "IPY_MODEL_192bf7e181ca481793e48a6064b7c6c7",
+        "layout": "IPY_MODEL_672e4a890adc4aa8a3fc74be4b121450",
+        "style": "IPY_MODEL_0c434a9e48894c97bd9d807f3e5dcbc1",
         "value": "<h4>Train Test Label Drift</h4><p>    Calculate label drift between train dataset and test dataset, using statistical measures. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/distribution/plot_train_test_label_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['# Detections per Label', 'Classes in Labels'].</span></div>"
       }
     },
-    "83b0bdc60fc54f9b9f003fa4031d20b8": {
+    "672e4a890adc4aa8a3fc74be4b121450": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "192bf7e181ca481793e48a6064b7c6c7": {
+    "0c434a9e48894c97bd9d807f3e5dcbc1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ab2bf40755164040953cc680ad68f23c": {
+    "d5e72165c45c418ba0670b2e087ff6ae": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.7.0",
@@ -1150,7 +1066,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "fa464bf3-e5ce-472c-972c-0ffc580a0174"
+            "uid": "7998f84f-7138-4842-af79-e711399a87b4"
           },
           {
             "base": 0.1,
@@ -1169,7 +1085,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "9add9fc2-a7fe-41b4-9d2e-ab6af92b2e85"
+            "uid": "0e8d27b8-20b3-4ebe-a1eb-7dadfb7a576e"
           },
           {
             "base": 0.2,
@@ -1188,7 +1104,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "2dccb191-fab1-4577-8037-1844108191fc"
+            "uid": "0a48f65c-d478-4f68-a96f-722b1f272b54"
           },
           {
             "marker": {
@@ -1216,7 +1132,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "5a093c91-6732-4f3a-94b5-f516e3f5a597"
+            "uid": "4f1492a7-72a5-4868-8699-cffc68b993f5"
           },
           {
             "marker": {
@@ -1244,7 +1160,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "19b0ba88-8a07-4b95-9b26-d0e005987545"
+            "uid": "fefcb42a-5f50-40f6-bb89-95a83425b618"
           }
         ],
         "_dom_classes": [],
@@ -2224,29 +2140,29 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
         }
       ]
     },
-    "293b50aa735a4c92bf9e95d013873b02": {
+    "f23d54f75c8a4e8ba92a06925dbecde5": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_870f97b2f9f64e00be9f13974c7e3af9",
-        "style": "IPY_MODEL_9ff12df978464eb0959869661c523b2e"
+        "layout": "IPY_MODEL_957e798585fe42b18efb0ccbbaeb566b",
+        "style": "IPY_MODEL_2c9ec5c4ace44f6e89dafc4a7f080510"
       }
     },
-    "870f97b2f9f64e00be9f13974c7e3af9": {
+    "957e798585fe42b18efb0ccbbaeb566b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9ff12df978464eb0959869661c523b2e": {
+    "2c9ec5c4ace44f6e89dafc4a7f080510": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4877989fb03d4cff8d92ba47832b07ac": {
+    "9a008dd3fc8e475db3d22ec66c906a00": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.7.0",
@@ -2272,7 +2188,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "80f504a6-95c7-47a6-8740-a4d17d52c7eb"
+            "uid": "fa9e09dc-e754-4122-a5ca-358cfbe94d79"
           },
           {
             "base": 0.1,
@@ -2291,7 +2207,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "b3a8f032-12c1-48ff-a44b-4a39ccf6deb2"
+            "uid": "8ae8a858-d8cd-4b18-8593-e6923a477c3f"
           },
           {
             "marker": {
@@ -2319,7 +2235,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "1bf11a4e-3457-4745-b61d-c27729c20818"
+            "uid": "c2b6b085-c9cc-4e73-84b0-aa04a7ac5fd1"
           },
           {
             "marker": {
@@ -2347,7 +2263,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "2f094033-fdcc-4153-8023-0e75cb540402"
+            "uid": "8e4ef83b-5c76-46ef-805b-ae4690c42136"
           }
         ],
         "_dom_classes": [],
@@ -3327,29 +3243,29 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
         }
       ]
     },
-    "8d0e90993a44495ea92ceaac778055d8": {
+    "241f58cf33a44baebfc938a0b8670487": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_81bf77d9c3444c0aa5a33ef336bd7215",
-        "style": "IPY_MODEL_39e01317bbc54d4da4ff76d6fdc54af5"
+        "layout": "IPY_MODEL_5fc915acb8544bf69ba161cc366a8bb1",
+        "style": "IPY_MODEL_6259d608727947be8bc841398e1f55a2"
       }
     },
-    "81bf77d9c3444c0aa5a33ef336bd7215": {
+    "5fc915acb8544bf69ba161cc366a8bb1": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "39e01317bbc54d4da4ff76d6fdc54af5": {
+    "6259d608727947be8bc841398e1f55a2": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a44f33b33dfd4fe4bcce0afb3600d465": {
+    "bfb22fc0d7084ab49df262fd833b88f7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3359,7 +3275,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "55a9f2a3f08541c29513e4607c3e6876"}
+{"version_major": 2, "version_minor": 0, "model_id": "8e9e754674024959af965db80268bf74"}
 </script>
 
 </body>
@@ -3373,7 +3289,7 @@ Computing Check: 100%|#| 1/1 [00:00&lt;00:00,  9.45 Check/s]
 have to create a custom metric in order for those checks to work, since the built-in metrics don’t know to handle
 your data structure. The metrics need to conform to the API of
 <a class="reference external" href="https://pytorch.org/ignite/metrics.html">pytorch-ignite</a>.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  50.326 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  39.180 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-tutorials-vision-plot-custom-task-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/4a0068ab948b3840722deded9f9e6334/plot_custom_task_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_task_tutorial.py</span></code></a></p>
@@ -3392,20 +3308,6 @@ your data structure. The metrics need to conform to the API of
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_classification_tutorial.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Classification Model Validation Tutorial</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="plot_custom_checks.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Writing Custom Computer Vision Checks</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
 </div>
         
     </main>
@@ -3427,7 +3329,7 @@ your data structure. The metrics need to conform to the API of
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/c7043bb.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/040b8ff.<br>
 </p>
     </div>
     

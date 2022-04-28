@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Label Ambiguity &#8212; Deepchecks c7043bb documentation</title>
+    <title>Label Ambiguity &#8212; Deepchecks 040b8ff documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -569,15 +569,15 @@ Page: checks_gallery/tabular/integrity/plot_label_ambiguity&labels=labels=chore/
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../performance/plot_performance_report.html">
-   Performance Report
+  <a class="reference internal" href="../performance/plot_regression_systematic_error.html">
+   Regression Systematic Error
   </a>
  </li>
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../performance/plot_regression_systematic_error.html">
-   Regression Systematic Error
+  <a class="reference internal" href="../performance/plot_performance_report.html">
+   Performance Report
   </a>
  </li>
 </ul>
@@ -690,17 +690,19 @@ to download the full example code</p>
 occur due to either mislabeled data, or when the data collected is missing
 features necessary to separate the labels. If the data is mislabled, it can
 confuse the model and can result in lower performance of the model.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.integrity</span> <span class="kn">import</span> <span class="n">LabelAmbiguity</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
 <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.integrity</span> <span class="kn">import</span> <span class="n">LabelAmbiguity</span>
+<span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.phishing</span> <span class="kn">import</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_data.html#deepchecks.tabular.datasets.classification.phishing.load_data" title="deepchecks.tabular.datasets.classification.phishing.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">load_data</span></a>
 </pre></div>
 </div>
 </section>
 <section id="load-data">
 <h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.phishing</span> <span class="kn">import</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_data.html#deepchecks.tabular.datasets.classification.phishing.load_data" title="deepchecks.tabular.datasets.classification.phishing.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">load_data</span></a>
-
-<span class="n">phishing_dataframe</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_data.html#deepchecks.tabular.datasets.classification.phishing.load_data" title="deepchecks.tabular.datasets.classification.phishing.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">(</span><span class="n">as_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">phishing_dataframe</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_data.html#deepchecks.tabular.datasets.classification.phishing.load_data" title="deepchecks.tabular.datasets.classification.phishing.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">(</span><span class="n">as_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">)</span>
 <span class="n">phishing_dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">phishing_dataframe</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;urlLength&#39;</span><span class="p">,</span> <span class="s1">&#39;numDigits&#39;</span><span class="p">,</span> <span class="s1">&#39;numParams&#39;</span><span class="p">,</span> <span class="s1">&#39;num_%20&#39;</span><span class="p">,</span> <span class="s1">&#39;num_@&#39;</span><span class="p">,</span> <span class="s1">&#39;bodyLength&#39;</span><span class="p">,</span> <span class="s1">&#39;numTitles&#39;</span><span class="p">,</span> <span class="s1">&#39;numImages&#39;</span><span class="p">,</span> <span class="s1">&#39;numLinks&#39;</span><span class="p">,</span> <span class="s1">&#39;specialChars&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -994,7 +996,7 @@ confuse the model and can result in lower performance of the model.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "4bed69a092a04686ae868955ae176e49": {
+    "e2f82589fb384e16a5ec25e70040820f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1003,35 +1005,35 @@ confuse the model and can result in lower performance of the model.</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_2c8fe36a70b04f8195a97843fba5e623"
+          "IPY_MODEL_43f59dcf493648e3ac5cb805019aa358"
         ],
-        "layout": "IPY_MODEL_379da95b19a04395a6c98f57a9397087"
+        "layout": "IPY_MODEL_be686c8caa5a49ffb3ec565637dab4aa"
       }
     },
-    "2c8fe36a70b04f8195a97843fba5e623": {
+    "43f59dcf493648e3ac5cb805019aa358": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8a3c34090b8846b89f3392d00bfa24e1",
-        "style": "IPY_MODEL_2683b4e085ac4b43b5a561355246f5ec",
+        "layout": "IPY_MODEL_9c1c10b6211a43078bcf8b138172ca0d",
+        "style": "IPY_MODEL_5dff56844a76451392a45d5c7dba6bc8",
         "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Each row in the table shows an example of a data sample and the its observed labels as found in the dataset. Showing top 5 of 17</div><table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>urlLength</th>\n      <th>numDigits</th>\n      <th>numParams</th>\n      <th>num_%20</th>\n      <th>num_@</th>\n      <th>bodyLength</th>\n      <th>numTitles</th>\n      <th>numImages</th>\n      <th>numLinks</th>\n      <th>specialChars</th>\n    </tr>\n    <tr>\n      <th>Observed Labels</th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>(0, 1)</th>\n      <td>81</td>\n      <td>6</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>82</td>\n      <td>2</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>85</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>85</td>\n      <td>20</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>88</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>"
       }
     },
-    "8a3c34090b8846b89f3392d00bfa24e1": {
+    "9c1c10b6211a43078bcf8b138172ca0d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2683b4e085ac4b43b5a561355246f5ec": {
+    "5dff56844a76451392a45d5c7dba6bc8": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "379da95b19a04395a6c98f57a9397087": {
+    "be686c8caa5a49ffb3ec565637dab4aa": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1041,7 +1043,7 @@ confuse the model and can result in lower performance of the model.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "4bed69a092a04686ae868955ae176e49"}
+{"version_major": 2, "version_minor": 0, "model_id": "e2f82589fb384e16a5ec25e70040820f"}
 </script>
 
 </body>
@@ -1336,7 +1338,7 @@ confuse the model and can result in lower performance of the model.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "2fd829a3a363450bbd8f46ba307e13f1": {
+    "560a2359d5c94126be8f42fe0df1174a": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1345,35 +1347,35 @@ confuse the model and can result in lower performance of the model.</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_b9bf3c3730b04904b12a86de929b3d93"
+          "IPY_MODEL_fe88a82158164300baf114074bd608f9"
         ],
-        "layout": "IPY_MODEL_1d4b7172aba1422d827014058757ab80"
+        "layout": "IPY_MODEL_0509e4c84f834712a30863f50c7de79c"
       }
     },
-    "b9bf3c3730b04904b12a86de929b3d93": {
+    "fe88a82158164300baf114074bd608f9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_a8030c7134464b9d9e592e8fce93cd64",
-        "style": "IPY_MODEL_086dccd9366a4c4cbd579bb567afd7a0",
-        "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Each row in the table shows an example of a data sample and the its observed labels as found in the dataset. Showing top 1 of 17</div><style type=\"text/css\">\n#T_3f2c4 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3f2c4 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3f2c4 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3f2c4 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3f2c4 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_3f2c4\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_3f2c4_level0_col0\" class=\"col_heading level0 col0\" >urlLength</th>\n      <th id=\"T_3f2c4_level0_col1\" class=\"col_heading level0 col1\" >numDigits</th>\n      <th id=\"T_3f2c4_level0_col2\" class=\"col_heading level0 col2\" >numParams</th>\n      <th id=\"T_3f2c4_level0_col3\" class=\"col_heading level0 col3\" >num_%20</th>\n      <th id=\"T_3f2c4_level0_col4\" class=\"col_heading level0 col4\" >num_@</th>\n      <th id=\"T_3f2c4_level0_col5\" class=\"col_heading level0 col5\" >bodyLength</th>\n      <th id=\"T_3f2c4_level0_col6\" class=\"col_heading level0 col6\" >numTitles</th>\n      <th id=\"T_3f2c4_level0_col7\" class=\"col_heading level0 col7\" >numImages</th>\n      <th id=\"T_3f2c4_level0_col8\" class=\"col_heading level0 col8\" >numLinks</th>\n      <th id=\"T_3f2c4_level0_col9\" class=\"col_heading level0 col9\" >specialChars</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Observed Labels</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n      <th class=\"blank col3\" >&nbsp;</th>\n      <th class=\"blank col4\" >&nbsp;</th>\n      <th class=\"blank col5\" >&nbsp;</th>\n      <th class=\"blank col6\" >&nbsp;</th>\n      <th class=\"blank col7\" >&nbsp;</th>\n      <th class=\"blank col8\" >&nbsp;</th>\n      <th class=\"blank col9\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_3f2c4_level0_row0\" class=\"row_heading level0 row0\" >(0, 1)</th>\n      <td id=\"T_3f2c4_row0_col0\" class=\"data row0 col0\" >81</td>\n      <td id=\"T_3f2c4_row0_col1\" class=\"data row0 col1\" >6</td>\n      <td id=\"T_3f2c4_row0_col2\" class=\"data row0 col2\" >0</td>\n      <td id=\"T_3f2c4_row0_col3\" class=\"data row0 col3\" >0</td>\n      <td id=\"T_3f2c4_row0_col4\" class=\"data row0 col4\" >0</td>\n      <td id=\"T_3f2c4_row0_col5\" class=\"data row0 col5\" >0</td>\n      <td id=\"T_3f2c4_row0_col6\" class=\"data row0 col6\" >0</td>\n      <td id=\"T_3f2c4_row0_col7\" class=\"data row0 col7\" >0</td>\n      <td id=\"T_3f2c4_row0_col8\" class=\"data row0 col8\" >0</td>\n      <td id=\"T_3f2c4_row0_col9\" class=\"data row0 col9\" >0</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_5b691688481c4d329993fb4d0ae8621f",
+        "style": "IPY_MODEL_e8a07c6cef084a7f863f7890bd04a7a7",
+        "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Each row in the table shows an example of a data sample and the its observed labels as found in the dataset. Showing top 1 of 17</div><style type=\"text/css\">\n#T_57265 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_57265 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_57265 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_57265 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_57265 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_57265\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_57265_level0_col0\" class=\"col_heading level0 col0\" >urlLength</th>\n      <th id=\"T_57265_level0_col1\" class=\"col_heading level0 col1\" >numDigits</th>\n      <th id=\"T_57265_level0_col2\" class=\"col_heading level0 col2\" >numParams</th>\n      <th id=\"T_57265_level0_col3\" class=\"col_heading level0 col3\" >num_%20</th>\n      <th id=\"T_57265_level0_col4\" class=\"col_heading level0 col4\" >num_@</th>\n      <th id=\"T_57265_level0_col5\" class=\"col_heading level0 col5\" >bodyLength</th>\n      <th id=\"T_57265_level0_col6\" class=\"col_heading level0 col6\" >numTitles</th>\n      <th id=\"T_57265_level0_col7\" class=\"col_heading level0 col7\" >numImages</th>\n      <th id=\"T_57265_level0_col8\" class=\"col_heading level0 col8\" >numLinks</th>\n      <th id=\"T_57265_level0_col9\" class=\"col_heading level0 col9\" >specialChars</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Observed Labels</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n      <th class=\"blank col3\" >&nbsp;</th>\n      <th class=\"blank col4\" >&nbsp;</th>\n      <th class=\"blank col5\" >&nbsp;</th>\n      <th class=\"blank col6\" >&nbsp;</th>\n      <th class=\"blank col7\" >&nbsp;</th>\n      <th class=\"blank col8\" >&nbsp;</th>\n      <th class=\"blank col9\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_57265_level0_row0\" class=\"row_heading level0 row0\" >(0, 1)</th>\n      <td id=\"T_57265_row0_col0\" class=\"data row0 col0\" >81</td>\n      <td id=\"T_57265_row0_col1\" class=\"data row0 col1\" >6</td>\n      <td id=\"T_57265_row0_col2\" class=\"data row0 col2\" >0</td>\n      <td id=\"T_57265_row0_col3\" class=\"data row0 col3\" >0</td>\n      <td id=\"T_57265_row0_col4\" class=\"data row0 col4\" >0</td>\n      <td id=\"T_57265_row0_col5\" class=\"data row0 col5\" >0</td>\n      <td id=\"T_57265_row0_col6\" class=\"data row0 col6\" >0</td>\n      <td id=\"T_57265_row0_col7\" class=\"data row0 col7\" >0</td>\n      <td id=\"T_57265_row0_col8\" class=\"data row0 col8\" >0</td>\n      <td id=\"T_57265_row0_col9\" class=\"data row0 col9\" >0</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "a8030c7134464b9d9e592e8fce93cd64": {
+    "5b691688481c4d329993fb4d0ae8621f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "086dccd9366a4c4cbd579bb567afd7a0": {
+    "e8a07c6cef084a7f863f7890bd04a7a7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1d4b7172aba1422d827014058757ab80": {
+    "0509e4c84f834712a30863f50c7de79c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1383,7 +1385,7 @@ confuse the model and can result in lower performance of the model.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "2fd829a3a363450bbd8f46ba307e13f1"}
+{"version_major": 2, "version_minor": 0, "model_id": "560a2359d5c94126be8f42fe0df1174a"}
 </script>
 
 </body>
@@ -1677,7 +1679,7 @@ confuse the model and can result in lower performance of the model.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "5ea5699d3fef4c7882173b67bf3ccda6": {
+    "5cfc0fda04144c60a70d691132de20ab": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1686,35 +1688,35 @@ confuse the model and can result in lower performance of the model.</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_6f173ea9e0954f79b39d4514a28510df"
+          "IPY_MODEL_8306f9f7bffa40b5a04f5be5642becf3"
         ],
-        "layout": "IPY_MODEL_65d9acc53c484a27a9de87723826cb4d"
+        "layout": "IPY_MODEL_4d3a8b282bd34e56a352eb16ecc9e38b"
       }
     },
-    "6f173ea9e0954f79b39d4514a28510df": {
+    "8306f9f7bffa40b5a04f5be5642becf3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3e4f0b52325849aaa236cc74e2c5106e",
-        "style": "IPY_MODEL_1b799a8732b34653b950d07bc7ede2c4",
+        "layout": "IPY_MODEL_61a4f8032ba8474d80cdf164ca4a21bb",
+        "style": "IPY_MODEL_09cb314aec734e44a9422c587327ac91",
         "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>Each row in the table shows an example of a data sample and the its observed labels as found in the dataset. Showing top 5 of 78</div><table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n      <th></th>\n      <th>urlLength</th>\n      <th>numDigits</th>\n    </tr>\n    <tr>\n      <th>Observed Labels</th>\n      <th></th>\n      <th></th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th>(0, 1)</th>\n      <td>81</td>\n      <td>0</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>81</td>\n      <td>6</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>82</td>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>84</td>\n      <td>2</td>\n    </tr>\n    <tr>\n      <th>(0, 1)</th>\n      <td>85</td>\n      <td>0</td>\n    </tr>\n  </tbody>\n</table>"
       }
     },
-    "3e4f0b52325849aaa236cc74e2c5106e": {
+    "61a4f8032ba8474d80cdf164ca4a21bb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1b799a8732b34653b950d07bc7ede2c4": {
+    "09cb314aec734e44a9422c587327ac91": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "65d9acc53c484a27a9de87723826cb4d": {
+    "4d3a8b282bd34e56a352eb16ecc9e38b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1724,7 +1726,7 @@ confuse the model and can result in lower performance of the model.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "5ea5699d3fef4c7882173b67bf3ccda6"}
+{"version_major": 2, "version_minor": 0, "model_id": "5cfc0fda04144c60a70d691132de20ab"}
 </script>
 
 </body>
@@ -2027,7 +2029,7 @@ and let you know if anything goes wrong.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c219081af1464edc93244958ed316676": {
+    "fe7d34b6e65d4b83baf2755c9b31a055": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -2036,35 +2038,35 @@ and let you know if anything goes wrong.</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_8e0d2ebb5668437eae438410808866e1"
+          "IPY_MODEL_a33585458c0445b19cbccb96c95d5dcd"
         ],
-        "layout": "IPY_MODEL_c5a7a38436fd4cde97a5d08f1368519c"
+        "layout": "IPY_MODEL_5cd5e27387674c05bd9fbfafd1aef8ac"
       }
     },
-    "8e0d2ebb5668437eae438410808866e1": {
+    "a33585458c0445b19cbccb96c95d5dcd": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c6ad3e20ef5a4594b31e36953a6b79c3",
-        "style": "IPY_MODEL_85fa10f827164931b0acbf76a7946bb1",
-        "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_1e47b table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1e47b thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1e47b tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1e47b th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1e47b td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_1e47b\">\n  <thead>\n    <tr>\n      <th id=\"T_1e47b_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_1e47b_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_1e47b_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_1e47b_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_1e47b_row0_col1\" class=\"data row0 col1\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_1e47b_row0_col2\" class=\"data row0 col2\" >Found ratio of samples with multiple labels above threshold: 0.6%</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_803e2610864447859d86f64347e6ff7e",
+        "style": "IPY_MODEL_43733421407b42829fe78124f64be1b8",
+        "value": "<h4>Label Ambiguity</h4><p>Find samples with multiple labels. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_label_ambiguity.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_ff945 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ff945 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ff945 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ff945 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ff945 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_ff945\">\n  <thead>\n    <tr>\n      <th id=\"T_ff945_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_ff945_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_ff945_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_ff945_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_ff945_row0_col1\" class=\"data row0 col1\" >Ambiguous sample ratio is not greater than 0%</td>\n      <td id=\"T_ff945_row0_col2\" class=\"data row0 col2\" >Found ratio of samples with multiple labels above threshold: 0.6%</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "c6ad3e20ef5a4594b31e36953a6b79c3": {
+    "803e2610864447859d86f64347e6ff7e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "85fa10f827164931b0acbf76a7946bb1": {
+    "43733421407b42829fe78124f64be1b8": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c5a7a38436fd4cde97a5d08f1368519c": {
+    "5cd5e27387674c05bd9fbfafd1aef8ac": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2074,14 +2076,14 @@ and let you know if anything goes wrong.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c219081af1464edc93244958ed316676"}
+{"version_major": 2, "version_minor": 0, "model_id": "fe7d34b6e65d4b83baf2755c9b31a055"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.541 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.091 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-integrity-plot-label-ambiguity-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/efd3a0202c450affd4ef17a99bd32744/plot_label_ambiguity.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_label_ambiguity.py</span></code></a></p>
@@ -2135,7 +2137,7 @@ and let you know if anything goes wrong.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/c7043bb.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/040b8ff.<br>
 </p>
     </div>
     

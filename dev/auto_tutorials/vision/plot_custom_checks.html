@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks c7043bb documentation</title>
+    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks 040b8ff documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,8 +77,6 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Object Detection Tutorial" href="plot_detection_tutorial.html" />
-    <link rel="prev" title="Custom Task Tutorial" href="plot_custom_task_tutorial.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -144,7 +142,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../index.html">
   Tutorials
  </a>
@@ -329,90 +327,7 @@ Page: auto_tutorials/vision/plot_custom_checks&labels=labels=chore/documentation
 </form> -->
 </div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Tabular Tutorials
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../tabular/index.html">
-   Tabular Tutorials
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_quickstart_in_5_minutes.html">
-     Quickstart in 5 minutes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_add_a_custom_check.html">
-     Add a Custom Check
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../tabular/plot_phishing_urls.html">
-     Use Cases - Classifying Malicious URLs
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Vision Tutorials
- </span>
-</p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Computer Vision Tutorials
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_simple_classification_tutorial.html">
-     Using Deepchecks Vision With a Few Lines of Code
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_extractors_validating.html">
-     Test Your Vision Data Class During Development
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_classification_tutorial.html">
-     Classification Model Validation Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_custom_task_tutorial.html">
-     Custom Task Tutorial
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Writing Custom Computer Vision Checks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_detection_tutorial.html">
-     Object Detection Tutorial
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
+    
   </div>
 </nav>
               </div>
@@ -518,14 +433,15 @@ handle check parameters.</p>
 functions when implementing the check in order to be able to reuse them later.</p>
 <p><strong>Good to know: the return value of a check can be any object, a number, dictionary, string, etc…</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">deepchecks.core.check_result</span> <span class="kn">import</span> <span class="n">CheckResult</span>
+<span class="kn">from</span> <span class="nn">deepchecks.core.checks</span> <span class="kn">import</span> <span class="n">DatasetKind</span>
 <span class="kn">from</span> <span class="nn">deepchecks.core.condition</span> <span class="kn">import</span> <span class="n">ConditionCategory</span>
 <span class="kn">from</span> <span class="nn">deepchecks.vision.base_checks</span> <span class="kn">import</span> <a href="../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">TrainTestCheck</span></a>
-<span class="kn">from</span> <span class="nn">deepchecks.vision.context</span> <span class="kn">import</span> <a href="../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a>
 <span class="kn">from</span> <span class="nn">deepchecks.vision.batch_wrapper</span> <span class="kn">import</span> <span class="n">Batch</span>
-<span class="kn">from</span> <span class="nn">deepchecks.core.checks</span> <span class="kn">import</span> <span class="n">DatasetKind</span>
-<span class="kn">from</span> <span class="nn">deepchecks.core.check_result</span> <span class="kn">import</span> <span class="n">CheckResult</span>
+<span class="kn">from</span> <span class="nn">deepchecks.vision.context</span> <span class="kn">import</span> <a href="../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a>
 
 
 <span class="k">def</span> <span class="nf">init_color_averages_dict</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">t</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
@@ -602,13 +518,13 @@ functions when implementing the check in order to be able to reuse them later.</
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.91 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:01&lt;00:00,  2.01 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.33 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.43 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.29 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.11 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.74 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.54 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
@@ -898,7 +814,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "db535e2bb83f493d8c6afe61685ba78b": {
+    "f14143da53b4470686743b3ea94c5753": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -907,35 +823,35 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_e1c22f1d7b074111bdf61e7b139a260e"
+          "IPY_MODEL_a9073770b1e94ce49e8c3390d2a6e9a2"
         ],
-        "layout": "IPY_MODEL_337fd2039f9749e19b919d58e4557bfa"
+        "layout": "IPY_MODEL_259b3a0d159b4609b5272c0a7fd5c2c5"
       }
     },
-    "e1c22f1d7b074111bdf61e7b139a260e": {
+    "a9073770b1e94ce49e8c3390d2a6e9a2": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ac464bca6f804512a145c0c12ea83476",
-        "style": "IPY_MODEL_731530316f0f470284259eec16af4f1b",
+        "layout": "IPY_MODEL_5575874d31574d0cb1aca1cfffc859ab",
+        "style": "IPY_MODEL_74e490763f444c6783372f0801caae5c",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><p><b>&#x2713;</b> Nothing found</p>"
       }
     },
-    "ac464bca6f804512a145c0c12ea83476": {
+    "5575874d31574d0cb1aca1cfffc859ab": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "731530316f0f470284259eec16af4f1b": {
+    "74e490763f444c6783372f0801caae5c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "337fd2039f9749e19b919d58e4557bfa": {
+    "259b3a0d159b4609b5272c0a7fd5c2c5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -945,7 +861,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "db535e2bb83f493d8c6afe61685ba78b"}
+{"version_major": 2, "version_minor": 0, "model_id": "f14143da53b4470686743b3ea94c5753"}
 </script>
 
 </body>
@@ -1026,13 +942,13 @@ will inherit from the original check to shorten the code an update only the comp
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.95 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.03 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.33 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.44 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.29 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.12 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.77 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.56 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
@@ -1322,7 +1238,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "aae90b063aea419f85f0e6ab13259154": {
+    "63f62e278a3a4b4c93a342c7a4e0300e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1331,37 +1247,37 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_3ef335e651324a9c950f49f9cca6776c",
-          "IPY_MODEL_7385b3996e28476c88d81124b30e5b67",
-          "IPY_MODEL_cb674625083e4178a35708439ed36e72"
+          "IPY_MODEL_ae8794e6f23f410ba939286db2dcff6e",
+          "IPY_MODEL_b6fd475082004523adb5f810d4d777a2",
+          "IPY_MODEL_beaa0112d4b4446c8607ee94a2eae37b"
         ],
-        "layout": "IPY_MODEL_836e9cac2b714634ba9d8a164ae35db9"
+        "layout": "IPY_MODEL_bbcdf204dc6d495c84c7c6d2de65ebb9"
       }
     },
-    "3ef335e651324a9c950f49f9cca6776c": {
+    "ae8794e6f23f410ba939286db2dcff6e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1e56ee66cc58406b9698d0ce414ed58c",
-        "style": "IPY_MODEL_a836f2e30b3f4d739e636104fe19960b",
+        "layout": "IPY_MODEL_ff043888cad540dc80036f3c577ff48f",
+        "style": "IPY_MODEL_bf6e1428e6fa4496bcf3eb808e45bd3b",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "1e56ee66cc58406b9698d0ce414ed58c": {
+    "ff043888cad540dc80036f3c577ff48f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a836f2e30b3f4d739e636104fe19960b": {
+    "bf6e1428e6fa4496bcf3eb808e45bd3b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7385b3996e28476c88d81124b30e5b67": {
+    "b6fd475082004523adb5f810d4d777a2": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.7.0",
@@ -1399,7 +1315,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "afce909f-afbe-42d3-ae84-d5de4489ecd7"
+            "uid": "cc0365fb-bd03-451f-9098-24df26d6839c"
           },
           {
             "alignmentgroup": "True",
@@ -1430,7 +1346,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "7323bfb0-f1ec-4c8c-8a8e-c6ffb07f7083"
+            "uid": "86cdc3d9-ca8b-451f-8a63-cb75f974480b"
           },
           {
             "alignmentgroup": "True",
@@ -1461,7 +1377,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "defe6377-d29e-4138-a6a7-251b2c7571d2"
+            "uid": "b315c9e8-802e-4fa5-9025-62cd53a32117"
           }
         ],
         "_dom_classes": [],
@@ -2363,29 +2279,29 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
         }
       ]
     },
-    "cb674625083e4178a35708439ed36e72": {
+    "beaa0112d4b4446c8607ee94a2eae37b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0145eba02884494e9335638f4f27026b",
-        "style": "IPY_MODEL_29c6d87822364122ae480bd16a9a042c"
+        "layout": "IPY_MODEL_bdc48d27e774479b865474bb0865a40c",
+        "style": "IPY_MODEL_79b5c275731447c284156225d3aacd94"
       }
     },
-    "0145eba02884494e9335638f4f27026b": {
+    "bdc48d27e774479b865474bb0865a40c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "29c6d87822364122ae480bd16a9a042c": {
+    "79b5c275731447c284156225d3aacd94": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "836e9cac2b714634ba9d8a164ae35db9": {
+    "bbcdf204dc6d495c84c7c6d2de65ebb9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2395,7 +2311,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "aae90b063aea419f85f0e6ab13259154"}
+{"version_major": 2, "version_minor": 0, "model_id": "63f62e278a3a4b4c93a342c7a4e0300e"}
 </script>
 
 </body>
@@ -2484,13 +2400,13 @@ verifying that the color averages haven’t changed by more than 10%.</p>
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  1.95 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.06 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.34 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.44 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.30 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.14 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.74 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.54 Batch/s]
 
 
 Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
@@ -2780,7 +2696,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "e2655631eda8454e9bfa12f60c7315b3": {
+    "ed02e013250b4a5e8e8d0c6383057bce": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -2789,37 +2705,37 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_91cb5d2d6520416b98ce73826d093c0e",
-          "IPY_MODEL_a58af62dd0fd4e6d9301a5c7e25c6784",
-          "IPY_MODEL_728fecdd9fab4a6482010b14ec05b64f"
+          "IPY_MODEL_38bc180a2953466b91b1050f8ad86933",
+          "IPY_MODEL_a72fd0d96ba14574ab7b2d2f646cba49",
+          "IPY_MODEL_b2a1e2bf91b146b190cacc6d341c6838"
         ],
-        "layout": "IPY_MODEL_cdb64c5b0931438c973f6cff4bc15ca6"
+        "layout": "IPY_MODEL_4b1ee152ba8849f3bce78fde34683bef"
       }
     },
-    "91cb5d2d6520416b98ce73826d093c0e": {
+    "38bc180a2953466b91b1050f8ad86933": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_982994d6eab8474884899c215b5d173f",
-        "style": "IPY_MODEL_7e2925d19dd34b86aabc8f8836891a0c",
+        "layout": "IPY_MODEL_5bdcdff0ffdd436e96f9af347425b35e",
+        "style": "IPY_MODEL_291b0103be6f45fc84c38a5c961e6396",
         "value": "<h4>Color Averages Check</h4><p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5>"
       }
     },
-    "982994d6eab8474884899c215b5d173f": {
+    "5bdcdff0ffdd436e96f9af347425b35e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7e2925d19dd34b86aabc8f8836891a0c": {
+    "291b0103be6f45fc84c38a5c961e6396": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a58af62dd0fd4e6d9301a5c7e25c6784": {
+    "a72fd0d96ba14574ab7b2d2f646cba49": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.7.0",
@@ -2857,7 +2773,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "d7949f60-3d9f-45cb-871e-c405311a52d5"
+            "uid": "a34b71a7-6133-497f-9358-18588b69c874"
           },
           {
             "alignmentgroup": "True",
@@ -2888,7 +2804,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "463b3f2c-32ba-4e18-9606-5c23ee060da9"
+            "uid": "cdcc3afc-154c-4053-a229-731194373767"
           },
           {
             "alignmentgroup": "True",
@@ -2919,7 +2835,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "31b89e15-ca05-4b27-b28a-646ad3eefe35"
+            "uid": "f929d9bd-1075-4f02-a852-6108dbfc656e"
           }
         ],
         "_dom_classes": [],
@@ -3821,29 +3737,29 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
         }
       ]
     },
-    "728fecdd9fab4a6482010b14ec05b64f": {
+    "b2a1e2bf91b146b190cacc6d341c6838": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8d8ab3ceb9eb49369c5de731cc5773e2",
-        "style": "IPY_MODEL_5894c7ec33d848eabb4d052b42d86ae4"
+        "layout": "IPY_MODEL_0b94b7c092c5455395c5bf7265e9c232",
+        "style": "IPY_MODEL_9da49698e2ab4ae996f9b304e9a059bd"
       }
     },
-    "8d8ab3ceb9eb49369c5de731cc5773e2": {
+    "0b94b7c092c5455395c5bf7265e9c232": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5894c7ec33d848eabb4d052b42d86ae4": {
+    "9da49698e2ab4ae996f9b304e9a059bd": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cdb64c5b0931438c973f6cff4bc15ca6": {
+    "4b1ee152ba8849f3bce78fde34683bef": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3853,7 +3769,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "e2655631eda8454e9bfa12f60c7315b3"}
+{"version_major": 2, "version_minor": 0, "model_id": "ed02e013250b4a5e8e8d0c6383057bce"}
 </script>
 
 </body>
@@ -3874,7 +3790,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 deepchecks subpackage. Each has its own run signature, according to the objects on which it will run.</p>
 <p>The first two classes of checks run some logic on the image data, and so the check structure is designed to enable
 accumulating and computation on batches outputted by the dataloader.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.562 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.466 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-tutorials-vision-plot-custom-checks-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/0da8dbd78e5e2e469fcf4b54359ad1d3/plot_custom_checks.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_checks.py</span></code></a></p>
@@ -3893,20 +3809,6 @@ accumulating and computation on batches outputted by the dataloader.</p>
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_custom_task_tutorial.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Custom Task Tutorial</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="plot_detection_tutorial.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Object Detection Tutorial</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
 </div>
         
     </main>
@@ -3928,7 +3830,7 @@ accumulating and computation on batches outputted by the dataloader.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/c7043bb.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/040b8ff.<br>
 </p>
     </div>
     
