@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Boosting Overfit &#8212; Deepchecks 351f118 documentation</title>
+    <title>Boosting Overfit &#8212; Deepchecks 3e19f63 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -77,8 +77,8 @@
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Single Feature Contribution Train Test" href="plot_single_feature_contribution_train_test.html" />
-    <link rel="prev" title="Index Leakage" href="plot_index_leakage.html" />
+    <link rel="next" title="Date Train Validation Leakage Overlap" href="plot_date_train_test_leakage_overlap.html" />
+    <link rel="prev" title="Single Feature Contribution Train Test" href="plot_single_feature_contribution_train_test.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -497,17 +497,17 @@ Page: checks_gallery/tabular/methodology/plot_boosting_overfit&labels=labels=cho
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Boosting Overfit
-  </a>
- </li>
-</ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="plot_single_feature_contribution_train_test.html">
    Single Feature Contribution Train Test
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Boosting Overfit
   </a>
  </li>
 </ul>
@@ -632,18 +632,42 @@ Page: checks_gallery/tabular/methodology/plot_boosting_overfit&labels=labels=cho
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#load-data">
-   Load Data
+  <a class="reference internal nav-link" href="#what-is-a-boosting-overfit">
+   What is A Boosting Overfit?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-deepchecks-detects-a-boosting-overfit">
+     How deepchecks detects a boosting overfit?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#supported-models">
+     Supported Models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#classification-model">
+     Classification model
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#create-dataset">
-   Create Dataset
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#classification-model">
-   Classification model
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
   </a>
  </li>
 </ul>
@@ -671,8 +695,46 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="boosting-overfit">
 <span id="sphx-glr-checks-gallery-tabular-methodology-plot-boosting-overfit-py"></span><h1>Boosting Overfit<a class="headerlink" href="#boosting-overfit" title="Permalink to this headline">#</a></h1>
-<section id="load-data">
-<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">#</a></h2>
+<p>This notebooks provides an overview for using and understanding the boosting overfit check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-a-boosting-overfit">What is a boosting overfit?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+</ul>
+<section id="what-is-a-boosting-overfit">
+<h2>What is A Boosting Overfit?<a class="headerlink" href="#what-is-a-boosting-overfit" title="Permalink to this headline">#</a></h2>
+<p>A boosting algorithm is a machine learning algorithm that uses a combination of weak learners to predict a target
+variable. The mechanism of boosting is to increase the number of weak learners in the ensemble by iteratively adding a
+new weak learner. The new weak learner uses the error of the ensemble from the previous iterations as its training data.
+This mechanism continues until the ensemble reaches a certain performance level or until the given maximum number of
+iterations is reached.</p>
+<p>Thanks to its mechanism, boosting algorithms are usually less prone to overfitting than other traditional algorithms
+like single decision trees. However, the number of weak learners in the ensemble can be too large making the ensemble
+too complex given the amount of data it was trained on. In this case, the ensemble may be overfitted on the training
+data.</p>
+<section id="how-deepchecks-detects-a-boosting-overfit">
+<h3>How deepchecks detects a boosting overfit?<a class="headerlink" href="#how-deepchecks-detects-a-boosting-overfit" title="Permalink to this headline">#</a></h3>
+<p>The check runs for a pre-defined number of iterations, and in each step it uses only the first X estimators from the
+boosting model when predicting the target variable (number of estimators X is monotonic increasing).
+It plots the given score calculated for each iteration for both the train dataset and the test dataset.</p>
+<p>If the ratio of decline between the maximal test score achieved in any boosting iteration and the test score achieved in the
+last iteration (“full” model score) is above a given threshold (0.05 by default), it means the model is overfitted
+and the default condition, if added, will fail.</p>
+</section>
+<section id="supported-models">
+<h3>Supported Models<a class="headerlink" href="#supported-models" title="Permalink to this headline">#</a></h3>
+<p>Currently the check supports the following models:
+- AdaBoost (sklearn)
+- GradientBoosting (sklearn)
+- XGBoost (xgboost)
+- LGBM (lightgbm)
+- CatBoost (catboost)</p>
+</section>
+</section>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
 <p>The dataset is the adult dataset which can be downloaded from the UCI machine
 learning repository.</p>
 <p>Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [<a class="reference external" href="http://archive.ics.uci.edu/ml">http://archive.ics.uci.edu/ml</a>].
@@ -681,6 +743,7 @@ Irvine, CA: University of California, School of Information and Computer Science
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
 
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">adult</span>
+<span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 <span class="n">train_df</span><span class="p">,</span> <span class="n">val_df</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_data.html#deepchecks.tabular.datasets.classification.adult.load_data" title="deepchecks.tabular.datasets.classification.adult.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">adult</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">(</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">)</span>
 
@@ -691,27 +754,32 @@ Irvine, CA: University of California, School of Information and Computer Science
         <span class="n">le</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_df</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">val_df</span><span class="p">[</span><span class="n">column</span><span class="p">]]))</span>
         <span class="n">train_df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">le</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
         <span class="n">val_df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">le</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">val_df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
-</pre></div>
-</div>
-</section>
-<section id="create-dataset">
-<h2>Create Dataset<a class="headerlink" href="#create-dataset" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.methodology.boosting_overfit</span> <span class="kn">import</span> \
-    <span class="n">BoostingOverfit</span>
 
 <span class="n">train_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;income&#39;</span><span class="p">)</span>
 <span class="n">validation_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">val_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;income&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
 <section id="classification-model">
-<h2>Classification model<a class="headerlink" href="#classification-model" title="Permalink to this headline">#</a></h2>
+<h3>Classification model<a class="headerlink" href="#classification-model" title="Permalink to this headline">#</a></h3>
+<p>We use the AdaBoost boosting algorithm with a decision tree as weak learner.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
 
-<span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_ds</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">train_ds</span><span class="o">.</span><span class="n">features</span><span class="p">],</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">train_ds</span><span class="o">.</span><span class="n">label_name</span><span class="p">])</span>
-<span class="n">BoostingOverfit</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">validation_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>AdaBoostClassifier(n_estimators=100, random_state=0)
+</pre></div>
+</div>
+</section>
+</section>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks.methodology.boosting_overfit</span> <span class="kn">import</span> <span class="n">BoostingOverfit</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">BoostingOverfit</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">validation_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+<span class="n">result</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -998,7 +1066,7 @@ Irvine, CA: University of California, School of Information and Computer Science
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "cb77dfefbdf6432daa7ca0ba0331a3f8": {
+    "e554d156cf74433cb2fa4e7ee8d4689d": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1007,37 +1075,37 @@ Irvine, CA: University of California, School of Information and Computer Science
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_6e835ad6c68d4d79b544000a33fbeb1f",
-          "IPY_MODEL_634994bcd3c549439d3924d43bdee1b3",
-          "IPY_MODEL_4ec33044ec724159ac1246fe2a90da4a"
+          "IPY_MODEL_ae86460a6990493fb09216ce85d810d1",
+          "IPY_MODEL_dab07b79c9f64854bf45f9255cfcb834",
+          "IPY_MODEL_2bb248f2f7514f8e823a6772d9d7ae09"
         ],
-        "layout": "IPY_MODEL_de6235e6bf6a41a5af1bc1d7397f3bc0"
+        "layout": "IPY_MODEL_dc9444b7e51b4080a0ce41a2a2f6477d"
       }
     },
-    "6e835ad6c68d4d79b544000a33fbeb1f": {
+    "ae86460a6990493fb09216ce85d810d1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b243ebe5a43a477fb67b927cb61e579a",
-        "style": "IPY_MODEL_3eed982015b14ca791956c7803bf853a",
+        "layout": "IPY_MODEL_920d00b076d7467288c70999c91f47d8",
+        "style": "IPY_MODEL_d9178f09478845c89f95604507736545",
         "value": "<h4>Boosting Overfit</h4><p>Check for overfit caused by using too many iterations in a gradient boosted model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/methodology/plot_boosting_overfit.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div><span>\n            The check limits the boosting model to using up to N estimators each time, and plotting the\n            Accuracy calculated for each subset of estimators for both the train dataset and the test dataset.\n        </span></div>"
       }
     },
-    "b243ebe5a43a477fb67b927cb61e579a": {
+    "920d00b076d7467288c70999c91f47d8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3eed982015b14ca791956c7803bf853a": {
+    "d9178f09478845c89f95604507736545": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "634994bcd3c549439d3924d43bdee1b3": {
+    "dab07b79c9f64854bf45f9255cfcb834": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.7.0",
@@ -1055,21 +1123,21 @@ Irvine, CA: University of California, School of Information and Computer Science
               3,
               4,
               5,
-              8,
               12,
-              15,
-              17,
-              20,
+              18,
               24,
-              26,
-              30,
-              32,
-              35,
-              38,
-              41,
-              44,
-              47,
-              50
+              31,
+              37,
+              43,
+              50,
+              56,
+              62,
+              69,
+              75,
+              81,
+              88,
+              94,
+              100
             ],
             "y": {
               "dtype": "float64",
@@ -1078,7 +1146,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               ]
             },
             "type": "scatter",
-            "uid": "a16e47fa-bb88-40c5-b561-a60ec7d21ae7"
+            "uid": "1e4572fd-61d1-43df-ac6b-a1cf85bf2eff"
           },
           {
             "mode": "lines+markers",
@@ -1089,21 +1157,21 @@ Irvine, CA: University of California, School of Information and Computer Science
               3,
               4,
               5,
-              8,
               12,
-              15,
-              17,
-              20,
+              18,
               24,
-              26,
-              30,
-              32,
-              35,
-              38,
-              41,
-              44,
-              47,
-              50
+              31,
+              37,
+              43,
+              50,
+              56,
+              62,
+              69,
+              75,
+              81,
+              88,
+              94,
+              100
             ],
             "y": {
               "dtype": "float64",
@@ -1112,7 +1180,7 @@ Irvine, CA: University of California, School of Information and Computer Science
               ]
             },
             "type": "scatter",
-            "uid": "48d00b41-fb23-4837-8edb-cbbd7a021fe1"
+            "uid": "da62d9b4-ec63-457a-b6ae-4b8316db9505"
           }
         ],
         "_dom_classes": [],
@@ -1975,7 +2043,7 @@ Irvine, CA: University of California, School of Information and Computer Science
             "y",
             "buffer"
           ],
-          "data": "HZBGwUlL6D8E3LDx2wnqP/RYLknk1Oo/TkCdD5746j+YcD9rZ/7qPzyIUI3qJ+s/nrl3xNMZ6z8ZB8lPHB/rP8eDN1sOPus/W+R7EqFJ6z/rDfbA8VPrP6YdVZZ/XOs/SSP4Z9hr6z+OHNC6X3DrP9MVqA3ndOs/rGaN7+t36z82WT2V+oDrPzuQB548gus/WdGNqrN86z+PLj4LiorrPw=="
+          "data": "HZBGwUlL6D8E3LDx2wnqP/RYLknk1Oo/TkCdD5746j+YcD9rZ/7qP565d8TTGes/YBtGG+NK6z/rDfbA8VPrP1ORjHlcbus/APyMNCRz6z87kAeePILrP48uPguKius//NYwfAyM6z/ZXuBmU5DrP9UwTYYmnOs/VbVoGrGi6z8CIGnVeKfrP6Qc1X68qes/roppkECs6z80Rk8tDbTrPw=="
         },
         {
           "encoding": "base64",
@@ -1985,33 +2053,33 @@ Irvine, CA: University of California, School of Information and Computer Science
             "y",
             "buffer"
           ],
-          "data": "XDnAl9Vw6D8vob2E9hLqP1q+JmAlz+o/CwlpKGb36j8eRDSk/QXrP95/nHcxJus/7nDCgiQe6z8zWxhrrSPrP60+njDMNus/FOdYelM76z/B5/XR70zrPzpd73GCWOs/O8t7lw5g6z9OBkcTpm7rP3DEq3Skbes/HFe8prR36z/ZSH8JRIHrPz+DrS0/fus/6TmlFDd56z8/g60tP37rPw=="
+          "data": "XDnAl9Vw6D8vob2E9hLqP1q+JmAlz+o/CwlpKGb36j8eRDSk/QXrP+5wwoIkHus/FsNxxWtK6z/B5/XR70zrPzvLe5cOYOs/6MsY76px6z/qpzE6w4DrPz+DrS0/fus/2Uh/CUSB6z+VzLVGR4PrPw5Cr+bZjus/3JIkeuiX6z/t8daqZ5frPzLcLJPwnOs/7fHWqmeX6z92WPZV7ZrrPw=="
         }
       ]
     },
-    "4ec33044ec724159ac1246fe2a90da4a": {
+    "2bb248f2f7514f8e823a6772d9d7ae09": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_4e20037a1f1447cd8a4fa3e520140dd6",
-        "style": "IPY_MODEL_3a1af90d917340e7a6328177acfb58bf"
+        "layout": "IPY_MODEL_763a002b1a8c44639f951e4753fe448e",
+        "style": "IPY_MODEL_f8f64fd2ceba4c42be0d8c1284af79dc"
       }
     },
-    "4e20037a1f1447cd8a4fa3e520140dd6": {
+    "763a002b1a8c44639f951e4753fe448e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3a1af90d917340e7a6328177acfb58bf": {
+    "f8f64fd2ceba4c42be0d8c1284af79dc": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "de6235e6bf6a41a5af1bc1d7397f3bc0": {
+    "dc9444b7e51b4080a0ce41a2a2f6477d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2021,14 +2089,363 @@ Irvine, CA: University of California, School of Information and Computer Science
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "cb77dfefbdf6432daa7ca0ba0331a3f8"}
+{"version_major": 2, "version_minor": 0, "model_id": "e554d156cf74433cb2fa4e7ee8d4689d"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.108 seconds)</p>
+<br /></section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>Now, we define a condition that will validate if the percent of decline between the maximal score achieved in any
+boosting iteration and the score achieved in the last iteration is above 0.02%.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">BoostingOverfit</span><span class="p">()</span>
+<span class="n">check</span><span class="o">.</span><span class="n">add_condition_test_score_percent_decline_not_greater_than</span><span class="p">(</span><span class="mf">0.0002</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">validation_ds</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boosting Overfit</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
+</head>
+<body>
+
+<script src="" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "c8ae4067241c406ab3f82f222a55a688": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [
+          "rendered_html"
+        ],
+        "children": [
+          "IPY_MODEL_24da4c470068400c949af4ab96cfd11c"
+        ],
+        "layout": "IPY_MODEL_f339cff11a514e34a65f7565769a4774"
+      }
+    },
+    "24da4c470068400c949af4ab96cfd11c": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_4204a61de607483c80966d2332a7063b",
+        "style": "IPY_MODEL_7ecbc01813444cc68a5907b33c4a539d",
+        "value": "<h4>Boosting Overfit</h4><p>Check for overfit caused by using too many iterations in a gradient boosted model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/methodology/plot_boosting_overfit.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_b88ba table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b88ba thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b88ba tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b88ba th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_b88ba td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_b88ba\">\n  <thead>\n    <tr>\n      <th id=\"T_b88ba_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_b88ba_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_b88ba_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_b88ba_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_b88ba_row0_col1\" class=\"data row0 col1\" >Test score over iterations doesn't decline by more than 0.02% from the best score</td>\n      <td id=\"T_b88ba_row0_col2\" class=\"data row0 col2\" >Found score decline above threshold: -0.03%</td>\n    </tr>\n  </tbody>\n</table>\n"
+      }
+    },
+    "4204a61de607483c80966d2332a7063b": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "7ecbc01813444cc68a5907b33c4a539d": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "f339cff11a514e34a65f7565769a4774": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "c8ae4067241c406ab3f82f222a55a688"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  18.604 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-methodology-plot-boosting-overfit-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/6ec9ce1cccc82a4575d48b07f84b8690/plot_boosting_overfit.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_boosting_overfit.py</span></code></a></p>
@@ -2047,17 +2464,17 @@ Irvine, CA: University of California, School of Information and Computer Science
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_index_leakage.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_single_feature_contribution_train_test.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Index Leakage</p>
+            <p class="prev-next-title">Single Feature Contribution Train Test</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_single_feature_contribution_train_test.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_date_train_test_leakage_overlap.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Single Feature Contribution Train Test</p>
+        <p class="prev-next-title">Date Train Validation Leakage Overlap</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -2082,7 +2499,7 @@ Irvine, CA: University of California, School of Information and Computer Science
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/351f118.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/3e19f63.<br>
 </p>
     </div>
     
