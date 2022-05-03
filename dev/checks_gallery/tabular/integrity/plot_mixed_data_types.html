@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Mixed Data Types &#8212; Deepchecks ad112a3 documentation</title>
+    <title>Mixed Data Types &#8212; Deepchecks fc35b1e documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -79,8 +79,8 @@
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="String Mismatch Comparison" href="plot_string_mismatch_comparison.html" />
-    <link rel="prev" title="Is Single Value" href="plot_is_single_value.html" />
+    <link rel="next" title="Single Feature Contribution" href="../methodology/plot_single_feature_contribution.html" />
+    <link rel="prev" title="Special Characters" href="plot_special_chars.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -382,13 +382,6 @@ Page: checks_gallery/tabular/integrity/plot_mixed_data_types&labels=labels=chore
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Mixed Data Types
-  </a>
- </li>
-</ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="plot_string_mismatch_comparison.html">
@@ -449,6 +442,13 @@ Page: checks_gallery/tabular/integrity/plot_mixed_data_types&labels=labels=chore
  <li class="toctree-l1">
   <a class="reference internal" href="plot_special_chars.html">
    Special Characters
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Mixed Data Types
   </a>
  </li>
 </ul>
@@ -636,13 +636,18 @@ Page: checks_gallery/tabular/integrity/plot_mixed_data_types&labels=labels=chore
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#benign-condition">
-   Benign condition
+  <a class="reference internal nav-link" href="#what-are-mixed-data-types">
+   What are Mixed Data Types?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#issue-detected">
-   Issue detected
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the Check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a Condition
   </a>
  </li>
 </ul>
@@ -670,16 +675,65 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="mixed-data-types">
 <span id="sphx-glr-checks-gallery-tabular-integrity-plot-mixed-data-types-py"></span><h1>Mixed Data Types<a class="headerlink" href="#mixed-data-types" title="Permalink to this headline">#</a></h1>
+<p>This notebooks provides an overview for using and understanding the mixed data types check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-are-mixed-data-types">What are Mixed Data Types?</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the Check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a Condition</a></p></li>
+</ul>
+<section id="what-are-mixed-data-types">
+<h2>What are Mixed Data Types?<a class="headerlink" href="#what-are-mixed-data-types" title="Permalink to this headline">#</a></h2>
+<p>Mixed data types is when a column contains both string values and numeric values (either as numeric type or
+as string like “42.90”). This may indicate a problem in the data collection pipeline, or represent a
+problem situation for the model’s training.</p>
+<p>This checks searches for columns with a mix of strings and numeric values and returns them and their respective ratios.</p>
+</section>
+<section id="run-the-check">
+<h2>Run the Check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<p>We will run the check on the adult dataset which can be downloaded from the
+<a class="reference external" href="http://archive.ics.uci.edu/ml">UCI machine learning repository</a> and is also available in
+<cite>deepchecks.tabular.datasets</cite>, and introduce to it some data type mixing in order to show the check’s result.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">adult</span>
 
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">MixedDataTypes</span>
+<span class="c1"># Prepare functions to insert mixed data types</span>
+
+<span class="k">def</span> <span class="nf">insert_new_values_types</span><span class="p">(</span><span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">values_list</span><span class="p">):</span>
+    <span class="n">col</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+    <span class="n">indices_to_replace</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="o">*</span> <span class="n">ratio_to_replace</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">new_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">values_list</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices_to_replace</span><span class="p">))</span>
+    <span class="n">col</span><span class="p">[</span><span class="n">indices_to_replace</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_values</span>
+    <span class="k">return</span> <span class="n">col</span>
+
+
+<span class="k">def</span> <span class="nf">insert_string_types</span><span class="p">(</span><span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">insert_new_values_types</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">insert_numeric_string_types</span><span class="p">(</span><span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">insert_new_values_types</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;10394.33&#39;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">insert_number_types</span><span class="p">(</span><span class="n">col</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">insert_new_values_types</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">ratio_to_replace</span><span class="p">,</span> <span class="p">[</span><span class="mi">66</span><span class="p">,</span> <span class="mf">99.9</span><span class="p">])</span>
+
+
+<span class="c1"># Load dataset and insert some data type mixing</span>
+<span class="n">adult_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_data.html#deepchecks.tabular.datasets.classification.adult.load_data" title="deepchecks.tabular.datasets.classification.adult.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">adult</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">(</span><span class="n">as_train_test</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">)</span>
+<span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;workclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">insert_numeric_string_types</span><span class="p">(</span><span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;workclass&#39;</span><span class="p">],</span> <span class="n">ratio_to_replace</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">insert_number_types</span><span class="p">(</span><span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span> <span class="n">ratio_to_replace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">insert_string_types</span><span class="p">(</span><span class="n">adult_df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span> <span class="n">ratio_to_replace</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="benign-condition">
-<h2>Benign condition<a class="headerlink" href="#benign-condition" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">]}</span>
-<span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-<span class="n">MixedDataTypes</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_rare_type_ratio_not_in_range</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dataframe</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">MixedDataTypes</span>
+
+<span class="n">adult_dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">adult_df</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;workclass&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">])</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">MixedDataTypes</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">adult_dataset</span><span class="p">)</span>
+<span class="n">result</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -966,7 +1020,7 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "f3d8adb21ea24de9b5820041a3326a8e": {
+    "d3d466fdb32c4f7f8ed69c42abba1565": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -975,35 +1029,35 @@ to download the full example code</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_195b9694520241a0b1d1b68833822732"
+          "IPY_MODEL_367fbe16b3cf48d59346c9e6e9e80c1c"
         ],
-        "layout": "IPY_MODEL_9c0e2426509f48c4bb6f8000590b9f8c"
+        "layout": "IPY_MODEL_2ce28a86df1b448f8302d3ad317dd2d8"
       }
     },
-    "195b9694520241a0b1d1b68833822732": {
+    "367fbe16b3cf48d59346c9e6e9e80c1c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_481f56b9b6b04e7aa77c4b87470cabbb",
-        "style": "IPY_MODEL_435b0abf8c574c6f9836b72296e49ade",
-        "value": "<h4>Mixed Data Types</h4><p>Detect a small amount of a rare data type within a column, such as few string samples in a mostly numeric column. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_mixed_data_types.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_4db9e table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4db9e thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4db9e tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4db9e th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4db9e td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_4db9e\">\n  <thead>\n    <tr>\n      <th id=\"T_4db9e_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_4db9e_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_4db9e_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_4db9e_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_4db9e_row0_col1\" class=\"data row0 col1\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_4db9e_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>Nothing found on columns: col1</div>"
+        "layout": "IPY_MODEL_62694859fd75435e9e803ccc710bf86d",
+        "style": "IPY_MODEL_479eaf2ad58e4e72a78372bac7aff8ca",
+        "value": "<h4>Mixed Data Types</h4><p>Detect columns which contain a mix of numerical and string values. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_mixed_data_types.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_11a5f table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11a5f thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11a5f tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11a5f th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11a5f td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_11a5f\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_11a5f_level0_col0\" class=\"col_heading level0 col0\" >age</th>\n      <th id=\"T_11a5f_level0_col1\" class=\"col_heading level0 col1\" >workclass</th>\n      <th id=\"T_11a5f_level0_col2\" class=\"col_heading level0 col2\" >education</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_11a5f_level0_row0\" class=\"row_heading level0 row0\" >strings</th>\n      <td id=\"T_11a5f_row0_col0\" class=\"data row0 col0\" >50%</td>\n      <td id=\"T_11a5f_row0_col1\" class=\"data row0 col1\" >99%</td>\n      <td id=\"T_11a5f_row0_col2\" class=\"data row0 col2\" >90%</td>\n    </tr>\n    <tr>\n      <th id=\"T_11a5f_level0_row1\" class=\"row_heading level0 row1\" >numbers</th>\n      <td id=\"T_11a5f_row1_col0\" class=\"data row1 col0\" >50%</td>\n      <td id=\"T_11a5f_row1_col1\" class=\"data row1 col1\" >1%</td>\n      <td id=\"T_11a5f_row1_col2\" class=\"data row1 col2\" >10%</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "481f56b9b6b04e7aa77c4b87470cabbb": {
+    "62694859fd75435e9e803ccc710bf86d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "435b0abf8c574c6f9836b72296e49ade": {
+    "479eaf2ad58e4e72a78372bac7aff8ca": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9c0e2426509f48c4bb6f8000590b9f8c": {
+    "2ce28a86df1b448f8302d3ad317dd2d8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1013,7 +1067,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "f3d8adb21ea24de9b5820041a3326a8e"}
+{"version_major": 2, "version_minor": 0, "model_id": "d3d466fdb32c4f7f8ed69c42abba1565"}
 </script>
 
 </body>
@@ -1021,12 +1075,16 @@ to download the full example code</p>
 </div>
 <br />
 <br /></section>
-<section id="issue-detected">
-<h2>Issue detected<a class="headerlink" href="#issue-detected" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;col1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">,</span> <span class="mf">2.61</span> <span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;col2&#39;</span><span class="p">:[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;col3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">],</span> <span class="s1">&#39;col4&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">]}</span>
-<span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-<span class="n">MixedDataTypes</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_rare_type_ratio_not_in_range</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dataframe</span><span class="p">)</span>
+<section id="define-a-condition">
+<h2>Define a Condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>We can define a condition that enforces the ratio of the “rare type” (the less common type, either numeric or string)
+is not in a given range. The range represents the dangerous zone, when the ratio is lower than the lower bound, then
+it’s presumably a contamination but a negligible one, and when the ratio is higher than the upper bound, then it’s
+presumably supposed to contain both numbers and string values. So when the ratio is inside the range there is a real
+chance that the rarer data type may represent a problem to model training and inference.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">MixedDataTypes</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_rare_type_ratio_not_in_range</span><span class="p">((</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">adult_dataset</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1313,7 +1371,7 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "f33cbac8e21043968c5c0c8abe8323f8": {
+    "2fb87a5d838e44f5816151def133ddbe": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1322,35 +1380,35 @@ to download the full example code</p>
           "rendered_html"
         ],
         "children": [
-          "IPY_MODEL_bbd6487889c54e89979ea7eaee0142e1"
+          "IPY_MODEL_000baa8de9fa4ec8acb155603ccc8d00"
         ],
-        "layout": "IPY_MODEL_48347d6964764f399f1e7afae6386202"
+        "layout": "IPY_MODEL_95472c671d7b499eab0e46f4c3dd5810"
       }
     },
-    "bbd6487889c54e89979ea7eaee0142e1": {
+    "000baa8de9fa4ec8acb155603ccc8d00": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_baec52e9fa6e421389dde429b21313d0",
-        "style": "IPY_MODEL_50117963063a409fa1d3966c549e6e48",
-        "value": "<h4>Mixed Data Types</h4><p>Detect a small amount of a rare data type within a column, such as few string samples in a mostly numeric column. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_mixed_data_types.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_701f6 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_701f6 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_701f6 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_701f6 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_701f6 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_701f6\">\n  <thead>\n    <tr>\n      <th id=\"T_701f6_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_701f6_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_701f6_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_701f6_row0_col0\" class=\"data row0 col0\" ><div style=\"color: orange;text-align: center;font-weight:bold\">!</div></td>\n      <td id=\"T_701f6_row0_col1\" class=\"data row0 col1\" >Rare data types in column are either more than 10% or less than 1% of the data</td>\n      <td id=\"T_701f6_row0_col2\" class=\"data row0 col2\" >Found columns with non-negligible quantities of samples with a different data type from the majority of samples: ['col2', 'col4']</td>\n    </tr>\n  </tbody>\n</table>\n<h5>Additional Outputs</h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type=\"text/css\">\n#T_0e72b table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e72b thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e72b tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e72b th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_0e72b td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_0e72b\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_0e72b_level0_col0\" class=\"col_heading level0 col0\" >col1</th>\n      <th id=\"T_0e72b_level0_col1\" class=\"col_heading level0 col1\" >col2</th>\n      <th id=\"T_0e72b_level0_col2\" class=\"col_heading level0 col2\" >col4</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_0e72b_level0_row0\" class=\"row_heading level0 row0\" >strings</th>\n      <td id=\"T_0e72b_row0_col0\" class=\"data row0 col0\" >18.18%</td>\n      <td id=\"T_0e72b_row0_col1\" class=\"data row0 col1\" >90.91%</td>\n      <td id=\"T_0e72b_row0_col2\" class=\"data row0 col2\" >9.09%</td>\n    </tr>\n    <tr>\n      <th id=\"T_0e72b_level0_row1\" class=\"row_heading level0 row1\" >numbers</th>\n      <td id=\"T_0e72b_row1_col0\" class=\"data row1 col0\" >81.82%</td>\n      <td id=\"T_0e72b_row1_col1\" class=\"data row1 col1\" >9.09%</td>\n      <td id=\"T_0e72b_row1_col2\" class=\"data row1 col2\" >90.91%</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_80460e1eafdb44a9bee4a20da62668e4",
+        "style": "IPY_MODEL_6af10097668b4652bbb9e34807788399",
+        "value": "<h4>Mixed Data Types</h4><p>Detect columns which contain a mix of numerical and string values. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/integrity/plot_mixed_data_types.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Conditions Summary</h5><style type=\"text/css\">\n#T_db5a9 table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db5a9 thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db5a9 tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db5a9 th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_db5a9 td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_db5a9\">\n  <thead>\n    <tr>\n      <th id=\"T_db5a9_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_db5a9_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_db5a9_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_db5a9_row0_col0\" class=\"data row0 col0\" ><div style=\"color: orange;text-align: center;font-weight:bold\">!</div></td>\n      <td id=\"T_db5a9_row0_col1\" class=\"data row0 col1\" >Rare data types in column are either more than 20% or less than 1% of the data</td>\n      <td id=\"T_db5a9_row0_col2\" class=\"data row0 col2\" >Found columns with non-negligible quantities of samples with a different data type from the majority of samples: ['education']</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "baec52e9fa6e421389dde429b21313d0": {
+    "80460e1eafdb44a9bee4a20da62668e4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "50117963063a409fa1d3966c549e6e48": {
+    "6af10097668b4652bbb9e34807788399": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "48347d6964764f399f1e7afae6386202": {
+    "95472c671d7b499eab0e46f4c3dd5810": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1360,14 +1418,14 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "f33cbac8e21043968c5c0c8abe8323f8"}
+{"version_major": 2, "version_minor": 0, "model_id": "2fb87a5d838e44f5816151def133ddbe"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.035 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.263 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-integrity-plot-mixed-data-types-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/6731dc4fb4df6144a43c7b3ab7670b3f/plot_mixed_data_types.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mixed_data_types.py</span></code></a></p>
@@ -1386,17 +1444,17 @@ to download the full example code</p>
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_is_single_value.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_special_chars.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Is Single Value</p>
+            <p class="prev-next-title">Special Characters</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_string_mismatch_comparison.html" title="next page">
+    <a class='right-next' id="next-link" href="../methodology/plot_single_feature_contribution.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">String Mismatch Comparison</p>
+        <p class="prev-next-title">Single Feature Contribution</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -1421,7 +1479,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/ad112a3.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/fc35b1e.<br>
 </p>
     </div>
     
