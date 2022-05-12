@@ -20,8 +20,50 @@
 
 Boosting Overfit
 ****************
-Load Data
-=========
+
+This notebooks provides an overview for using and understanding the boosting overfit check.
+
+**Structure:**
+
+* `What is a boosting overfit? <#what-is-a-boosting-overfit>`__
+* `Generate data & model <#generate-data-model>`__
+* `Run the check <#run-the-check>`__
+* `Define a condition <#define-a-condition>`__
+
+What is A Boosting Overfit?
+===========================
+A boosting algorithm is a machine learning algorithm that uses a combination of weak learners to predict a target
+variable. The mechanism of boosting is to increase the number of weak learners in the ensemble by iteratively adding a
+new weak learner. The new weak learner uses the error of the ensemble from the previous iterations as its training data.
+This mechanism continues until the ensemble reaches a certain performance level or until the given maximum number of
+iterations is reached.
+
+Thanks to its mechanism, boosting algorithms are usually less prone to overfitting than other traditional algorithms
+like single decision trees. However, the number of weak learners in the ensemble can be too large making the ensemble
+too complex given the amount of data it was trained on. In this case, the ensemble may be overfitted on the training
+data.
+
+How deepchecks detects a boosting overfit?
+------------------------------------------
+The check runs for a pre-defined number of iterations, and in each step it uses only the first X estimators from the
+boosting model when predicting the target variable (number of estimators X is monotonic increasing).
+It plots the given score calculated for each iteration for both the train dataset and the test dataset.
+
+If the ratio of decline between the maximal test score achieved in any boosting iteration and the test score achieved in the
+last iteration ("full" model score) is above a given threshold (0.05 by default), it means the model is overfitted
+and the default condition, if added, will fail.
+
+Supported Models
+----------------
+Currently the check supports the following models:
+- AdaBoost (sklearn)
+- GradientBoosting (sklearn)
+- XGBoost (xgboost)
+- LGBM (lightgbm)
+- CatBoost (catboost)
+
+Generate data & model
+=====================
 
 The dataset is the adult dataset which can be downloaded from the UCI machine
 learning repository.
@@ -29,7 +71,7 @@ learning repository.
 Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
 Irvine, CA: University of California, School of Information and Computer Science.
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-32
+.. GENERATED FROM PYTHON SOURCE LINES 56-76
 
 .. code-block:: default
 
@@ -38,6 +80,7 @@ Irvine, CA: University of California, School of Information and Computer Science
     from sklearn.preprocessing import LabelEncoder
 
     from deepchecks.tabular.datasets.classification import adult
+    from deepchecks.tabular import Dataset
 
     train_df, val_df = adult.load_data(data_format='Dataframe')
 
@@ -49,26 +92,6 @@ Irvine, CA: University of California, School of Information and Computer Science
             train_df[column] = le.transform(train_df[column])
             val_df[column] = le.transform(val_df[column])
 
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 33-35
-
-Create Dataset
-==============
-
-.. GENERATED FROM PYTHON SOURCE LINES 35-42
-
-.. code-block:: default
-
-
-    from deepchecks.tabular import Dataset
-    from deepchecks.tabular.checks.methodology.boosting_overfit import BoostingOverfit
-
     train_ds = Dataset(train_df, label='income')
     validation_ds = Dataset(val_df, label='income')
 
@@ -79,21 +102,135 @@ Create Dataset
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-45
+.. GENERATED FROM PYTHON SOURCE LINES 77-80
 
 Classification model
-====================
+--------------------
+We use the AdaBoost boosting algorithm with a decision tree as weak learner.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-51
+.. GENERATED FROM PYTHON SOURCE LINES 80-86
 
 .. code-block:: default
 
 
     from sklearn.ensemble import AdaBoostClassifier
 
-    clf = AdaBoostClassifier(random_state=0)
+    clf = AdaBoostClassifier(random_state=0, n_estimators=100)
     clf.fit(train_ds.data[train_ds.features], train_ds.data[train_ds.label_name])
-    BoostingOverfit().run(train_ds, validation_ds, clf)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    AdaBoostClassifier(n_estimators=100, random_state=0)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 87-89
+
+Run the check
+==============
+
+.. GENERATED FROM PYTHON SOURCE LINES 89-94
+
+.. code-block:: default
+
+    from deepchecks.tabular.checks.methodology.boosting_overfit import BoostingOverfit
+
+    result = BoostingOverfit().run(train_ds, validation_ds, clf)
+    result
+
+
+
+
+
+
+.. raw:: html
+
+    <div class="output_subarea output_html rendered_html output_result">
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
+        integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+    </script>
+
+    <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+    <script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
+    <script type="text/javascript">
+        if (typeof require !== 'undefined') {
+            require.undef("plotly");
+            requirejs.config({
+                paths: {'plotly': ['https://cdn.plot.ly/plotly-2.8.3.min']}
+            });
+            require(
+                ['plotly'],
+                function(Plotly) {
+                    window._Plotly = Plotly;
+                    window.Plotly = Plotly;
+                    console.log('Loaded plotly successfully');
+                },
+                function() {console.log('Failed to load plotly')}
+            );
+        } else {
+            console.log('requirejs is not present');
+        }
+    </script>
+    <h4><b>Boosting Overfit</b></h4><p>Check for overfit caused by using too many iterations in a gradient boosted model.</p><h5><b>Additional Outputs</b></h5><div><span>
+                The check limits the boosting model to using up to N estimators each time, and plotting the
+                Accuracy calculated for each subset of estimators for both the train dataset and the test dataset.
+            </span></div><div>                            <div id="bba4be5f-7cfd-4bfa-82e0-53cd302484b3" class="plotly-graph-div" style="height:500px; width:800px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("bba4be5f-7cfd-4bfa-82e0-53cd302484b3")) {                    Plotly.newPlot(                        "bba4be5f-7cfd-4bfa-82e0-53cd302484b3",                        [{"mode":"lines+markers","name":"Training score","x":[1,2,3,4,5,12,18,24,31,37,43,50,56,62,69,75,81,88,94,100],"y":[0.7591904425539756,0.8137035103344492,0.8384877614323885,0.8428488068548263,0.8435551733669113,0.8469027364024446,0.8528914959614262,0.8539971131107768,0.8572218297963822,0.8578053499585394,0.8596480452074567,0.8606615275943613,0.8608457971192531,0.8613678941064463,0.8628113387180983,0.8636098399926292,0.8641933601547864,0.864469764442124,0.8647768803169436,0.8657289395288843],"type":"scatter"},{"mode":"lines+markers","name":"Test score","x":[1,2,3,4,5,12,18,24,31,37,43,50,56,62,69,75,81,88,94,100],"y":[0.7637737239727289,0.8148148148148148,0.8377863767581843,0.8427000798476753,0.8444812972176157,0.8474295190713101,0.85283459246975,0.8531416989128432,0.8554757078803513,0.8576254529820035,0.8594680916405626,0.8591609851974694,0.8595295129291812,0.8597751980836558,0.8611878877218844,0.8622934709170198,0.8622320496284012,0.8629076838032061,0.8622320496284012,0.8626619986487316],"type":"scatter"}],                        {"template":{"data":{"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"text":"Accuracy score compared to number of boosting iteration"},"width":800,"height":500,"xaxis":{"title":{"text":"Number of boosting iterations"}},"yaxis":{"title":{"text":"Accuracy"}}},                        {"responsive": true}                    ).then(function(){
+                            
+    var gd = document.getElementById('bba4be5f-7cfd-4bfa-82e0-53cd302484b3');
+    var x = new MutationObserver(function (mutations, observer) {{
+            var display = window.getComputedStyle(gd).display;
+            if (!display || display === 'none') {{
+                console.log([gd, 'removed!']);
+                Plotly.purge(gd);
+                observer.disconnect();
+            }}
+    }});
+
+    // Listen for the removal of the full notebook cells
+    var notebookContainer = gd.closest('#notebook-container');
+    if (notebookContainer) {{
+        x.observe(notebookContainer, {childList: true});
+    }}
+
+    // Listen for the clearing of the current output cell
+    var outputEl = gd.closest('.output');
+    if (outputEl) {{
+        x.observe(outputEl, {childList: true});
+    }}
+
+                            })                };                });            </script>        </div>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 95-99
+
+Define a condition
+==================
+Now, we define a condition that will validate if the percent of decline between the maximal score achieved in any
+boosting iteration and the score achieved in the last iteration is above 0.02%.
+
+.. GENERATED FROM PYTHON SOURCE LINES 99-103
+
+.. code-block:: default
+
+    check = BoostingOverfit()
+    check.add_condition_test_score_percent_decline_not_greater_than(0.0002)
+    result = check.run(train_ds, validation_ds, clf)
+    result.show(show_additional_outputs=False)
 
 
 
@@ -379,1026 +516,105 @@ Classification model
     </head>
     <body>
     
-    <script src="" crossorigin="anonymous"></script>
+
+    <!-- Load require.js. Delete this if your page already loads require.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js" crossorigin="anonymous"></script>
+
     <script type="application/vnd.jupyter.widget-state+json">
     {
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "7cd66a08be1c4f73b4037ce1e36b1128": {
+        "4c64ea76964e4fa898d67406b50a85ef": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [
-              "rendered_html"
+              "rendered_html",
+              "jp-RenderedHTMLCommon",
+              "jp-RenderedHTML",
+              "jp-OutputArea-output"
             ],
             "children": [
-              "IPY_MODEL_0fadbf99ebc94ce590b1d6f7b23d2706",
-              "IPY_MODEL_7442368132fa44dea7b5e89460371673",
-              "IPY_MODEL_377fa61b00414982b0aa553d49601b7a"
+              "IPY_MODEL_9d6448a213054f07aa88d1fd364639dd",
+              "IPY_MODEL_9d776ee16a194240bcadb79ab3ff176a",
+              "IPY_MODEL_461698723db04bbaa38aac34ab241efe"
             ],
-            "layout": "IPY_MODEL_39a69d3d34844a30ae537411f02814f6"
+            "layout": "IPY_MODEL_6e7c8e5cfe0a490497ae491bc1a2c1fc"
           }
         },
-        "0fadbf99ebc94ce590b1d6f7b23d2706": {
+        "9d6448a213054f07aa88d1fd364639dd": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_b4b75a3fa2d840c9a3b761698cef3767",
-            "style": "IPY_MODEL_8092b687d71149ee986ffc94755c74c8",
-            "value": "<h4>Boosting Overfit</h4><p>Check for overfit caused by using too many iterations in a gradient boosted model. <a href=\"https://docs.deepchecks.com/0.6/checks_gallery/tabular/methodology/plot_boosting_overfit.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p><h5>Additional Outputs</h5><div><span>\n            The check limits the boosting model to using up to N estimators each time, and plotting the\n            Accuracy calculated for each subset of estimators for both the train dataset and the test dataset.\n        </span></div>"
+            "layout": "IPY_MODEL_e6201e3afdef4dfcad5e7acff1560f10",
+            "style": "IPY_MODEL_1e0818e785a94eeebbfbae1d271d21ce",
+            "value": "<h4><b>Boosting Overfit</b></h4>"
           }
         },
-        "b4b75a3fa2d840c9a3b761698cef3767": {
+        "e6201e3afdef4dfcad5e7acff1560f10": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "8092b687d71149ee986ffc94755c74c8": {
+        "1e0818e785a94eeebbfbae1d271d21ce": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "7442368132fa44dea7b5e89460371673": {
-          "model_name": "FigureModel",
-          "model_module": "jupyterlab-plotly",
-          "model_module_version": "^5.7.0",
-          "state": {
-            "_config": {
-              "plotlyServerURL": "https://plot.ly"
-            },
-            "_data": [
-              {
-                "mode": "lines+markers",
-                "name": "Training score",
-                "x": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  8,
-                  12,
-                  15,
-                  17,
-                  20,
-                  24,
-                  26,
-                  30,
-                  32,
-                  35,
-                  38,
-                  41,
-                  44,
-                  47,
-                  50
-                ],
-                "y": {
-                  "dtype": "float64",
-                  "shape": [
-                    20
-                  ]
-                },
-                "type": "scatter",
-                "uid": "fb265628-1dbf-47c7-8e3e-8b15b18786d0"
-              },
-              {
-                "mode": "lines+markers",
-                "name": "Test score",
-                "x": [
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  8,
-                  12,
-                  15,
-                  17,
-                  20,
-                  24,
-                  26,
-                  30,
-                  32,
-                  35,
-                  38,
-                  41,
-                  44,
-                  47,
-                  50
-                ],
-                "y": {
-                  "dtype": "float64",
-                  "shape": [
-                    20
-                  ]
-                },
-                "type": "scatter",
-                "uid": "f4f35c75-0dd0-4f80-a583-921028a266f7"
-              }
-            ],
-            "_dom_classes": [],
-            "_js2py_layoutDelta": {},
-            "_js2py_pointsCallback": {},
-            "_js2py_relayout": {},
-            "_js2py_restyle": {},
-            "_js2py_traceDeltas": {},
-            "_js2py_update": {},
-            "_layout": {
-              "height": 500,
-              "template": {
-                "data": {
-                  "barpolar": [
-                    {
-                      "marker": {
-                        "line": {
-                          "color": "#E5ECF6",
-                          "width": 0.5
-                        },
-                        "pattern": {
-                          "fillmode": "overlay",
-                          "size": 10,
-                          "solidity": 0.2
-                        }
-                      },
-                      "type": "barpolar"
-                    }
-                  ],
-                  "bar": [
-                    {
-                      "error_x": {
-                        "color": "#2a3f5f"
-                      },
-                      "error_y": {
-                        "color": "#2a3f5f"
-                      },
-                      "marker": {
-                        "line": {
-                          "color": "#E5ECF6",
-                          "width": 0.5
-                        },
-                        "pattern": {
-                          "fillmode": "overlay",
-                          "size": 10,
-                          "solidity": 0.2
-                        }
-                      },
-                      "type": "bar"
-                    }
-                  ],
-                  "carpet": [
-                    {
-                      "aaxis": {
-                        "endlinecolor": "#2a3f5f",
-                        "gridcolor": "white",
-                        "linecolor": "white",
-                        "minorgridcolor": "white",
-                        "startlinecolor": "#2a3f5f"
-                      },
-                      "baxis": {
-                        "endlinecolor": "#2a3f5f",
-                        "gridcolor": "white",
-                        "linecolor": "white",
-                        "minorgridcolor": "white",
-                        "startlinecolor": "#2a3f5f"
-                      },
-                      "type": "carpet"
-                    }
-                  ],
-                  "choropleth": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "type": "choropleth"
-                    }
-                  ],
-                  "contourcarpet": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "type": "contourcarpet"
-                    }
-                  ],
-                  "contour": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "contour"
-                    }
-                  ],
-                  "heatmapgl": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "heatmapgl"
-                    }
-                  ],
-                  "heatmap": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "heatmap"
-                    }
-                  ],
-                  "histogram2dcontour": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "histogram2dcontour"
-                    }
-                  ],
-                  "histogram2d": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "histogram2d"
-                    }
-                  ],
-                  "histogram": [
-                    {
-                      "marker": {
-                        "pattern": {
-                          "fillmode": "overlay",
-                          "size": 10,
-                          "solidity": 0.2
-                        }
-                      },
-                      "type": "histogram"
-                    }
-                  ],
-                  "mesh3d": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "type": "mesh3d"
-                    }
-                  ],
-                  "parcoords": [
-                    {
-                      "line": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "parcoords"
-                    }
-                  ],
-                  "pie": [
-                    {
-                      "automargin": true,
-                      "type": "pie"
-                    }
-                  ],
-                  "scatter3d": [
-                    {
-                      "line": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scatter3d"
-                    }
-                  ],
-                  "scattercarpet": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scattercarpet"
-                    }
-                  ],
-                  "scattergeo": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scattergeo"
-                    }
-                  ],
-                  "scattergl": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scattergl"
-                    }
-                  ],
-                  "scattermapbox": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scattermapbox"
-                    }
-                  ],
-                  "scatterpolargl": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scatterpolargl"
-                    }
-                  ],
-                  "scatterpolar": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scatterpolar"
-                    }
-                  ],
-                  "scatter": [
-                    {
-                      "fillpattern": {
-                        "fillmode": "overlay",
-                        "size": 10,
-                        "solidity": 0.2
-                      },
-                      "type": "scatter"
-                    }
-                  ],
-                  "scatterternary": [
-                    {
-                      "marker": {
-                        "colorbar": {
-                          "outlinewidth": 0,
-                          "ticks": ""
-                        }
-                      },
-                      "type": "scatterternary"
-                    }
-                  ],
-                  "surface": [
-                    {
-                      "colorbar": {
-                        "outlinewidth": 0,
-                        "ticks": ""
-                      },
-                      "colorscale": [
-                        [
-                          0.0,
-                          "#0d0887"
-                        ],
-                        [
-                          0.1111111111111111,
-                          "#46039f"
-                        ],
-                        [
-                          0.2222222222222222,
-                          "#7201a8"
-                        ],
-                        [
-                          0.3333333333333333,
-                          "#9c179e"
-                        ],
-                        [
-                          0.4444444444444444,
-                          "#bd3786"
-                        ],
-                        [
-                          0.5555555555555556,
-                          "#d8576b"
-                        ],
-                        [
-                          0.6666666666666666,
-                          "#ed7953"
-                        ],
-                        [
-                          0.7777777777777778,
-                          "#fb9f3a"
-                        ],
-                        [
-                          0.8888888888888888,
-                          "#fdca26"
-                        ],
-                        [
-                          1.0,
-                          "#f0f921"
-                        ]
-                      ],
-                      "type": "surface"
-                    }
-                  ],
-                  "table": [
-                    {
-                      "cells": {
-                        "fill": {
-                          "color": "#EBF0F8"
-                        },
-                        "line": {
-                          "color": "white"
-                        }
-                      },
-                      "header": {
-                        "fill": {
-                          "color": "#C8D4E3"
-                        },
-                        "line": {
-                          "color": "white"
-                        }
-                      },
-                      "type": "table"
-                    }
-                  ]
-                },
-                "layout": {
-                  "annotationdefaults": {
-                    "arrowcolor": "#2a3f5f",
-                    "arrowhead": 0,
-                    "arrowwidth": 1
-                  },
-                  "autotypenumbers": "strict",
-                  "coloraxis": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "colorscale": {
-                    "diverging": [
-                      [
-                        0,
-                        "#8e0152"
-                      ],
-                      [
-                        0.1,
-                        "#c51b7d"
-                      ],
-                      [
-                        0.2,
-                        "#de77ae"
-                      ],
-                      [
-                        0.3,
-                        "#f1b6da"
-                      ],
-                      [
-                        0.4,
-                        "#fde0ef"
-                      ],
-                      [
-                        0.5,
-                        "#f7f7f7"
-                      ],
-                      [
-                        0.6,
-                        "#e6f5d0"
-                      ],
-                      [
-                        0.7,
-                        "#b8e186"
-                      ],
-                      [
-                        0.8,
-                        "#7fbc41"
-                      ],
-                      [
-                        0.9,
-                        "#4d9221"
-                      ],
-                      [
-                        1,
-                        "#276419"
-                      ]
-                    ],
-                    "sequential": [
-                      [
-                        0.0,
-                        "#0d0887"
-                      ],
-                      [
-                        0.1111111111111111,
-                        "#46039f"
-                      ],
-                      [
-                        0.2222222222222222,
-                        "#7201a8"
-                      ],
-                      [
-                        0.3333333333333333,
-                        "#9c179e"
-                      ],
-                      [
-                        0.4444444444444444,
-                        "#bd3786"
-                      ],
-                      [
-                        0.5555555555555556,
-                        "#d8576b"
-                      ],
-                      [
-                        0.6666666666666666,
-                        "#ed7953"
-                      ],
-                      [
-                        0.7777777777777778,
-                        "#fb9f3a"
-                      ],
-                      [
-                        0.8888888888888888,
-                        "#fdca26"
-                      ],
-                      [
-                        1.0,
-                        "#f0f921"
-                      ]
-                    ],
-                    "sequentialminus": [
-                      [
-                        0.0,
-                        "#0d0887"
-                      ],
-                      [
-                        0.1111111111111111,
-                        "#46039f"
-                      ],
-                      [
-                        0.2222222222222222,
-                        "#7201a8"
-                      ],
-                      [
-                        0.3333333333333333,
-                        "#9c179e"
-                      ],
-                      [
-                        0.4444444444444444,
-                        "#bd3786"
-                      ],
-                      [
-                        0.5555555555555556,
-                        "#d8576b"
-                      ],
-                      [
-                        0.6666666666666666,
-                        "#ed7953"
-                      ],
-                      [
-                        0.7777777777777778,
-                        "#fb9f3a"
-                      ],
-                      [
-                        0.8888888888888888,
-                        "#fdca26"
-                      ],
-                      [
-                        1.0,
-                        "#f0f921"
-                      ]
-                    ]
-                  },
-                  "colorway": [
-                    "#636efa",
-                    "#EF553B",
-                    "#00cc96",
-                    "#ab63fa",
-                    "#FFA15A",
-                    "#19d3f3",
-                    "#FF6692",
-                    "#B6E880",
-                    "#FF97FF",
-                    "#FECB52"
-                  ],
-                  "font": {
-                    "color": "#2a3f5f"
-                  },
-                  "geo": {
-                    "bgcolor": "white",
-                    "lakecolor": "white",
-                    "landcolor": "#E5ECF6",
-                    "showlakes": true,
-                    "showland": true,
-                    "subunitcolor": "white"
-                  },
-                  "hoverlabel": {
-                    "align": "left"
-                  },
-                  "hovermode": "closest",
-                  "mapbox": {
-                    "style": "light"
-                  },
-                  "paper_bgcolor": "white",
-                  "plot_bgcolor": "#E5ECF6",
-                  "polar": {
-                    "angularaxis": {
-                      "gridcolor": "white",
-                      "linecolor": "white",
-                      "ticks": ""
-                    },
-                    "bgcolor": "#E5ECF6",
-                    "radialaxis": {
-                      "gridcolor": "white",
-                      "linecolor": "white",
-                      "ticks": ""
-                    }
-                  },
-                  "scene": {
-                    "xaxis": {
-                      "backgroundcolor": "#E5ECF6",
-                      "gridcolor": "white",
-                      "gridwidth": 2,
-                      "linecolor": "white",
-                      "showbackground": true,
-                      "ticks": "",
-                      "zerolinecolor": "white"
-                    },
-                    "yaxis": {
-                      "backgroundcolor": "#E5ECF6",
-                      "gridcolor": "white",
-                      "gridwidth": 2,
-                      "linecolor": "white",
-                      "showbackground": true,
-                      "ticks": "",
-                      "zerolinecolor": "white"
-                    },
-                    "zaxis": {
-                      "backgroundcolor": "#E5ECF6",
-                      "gridcolor": "white",
-                      "gridwidth": 2,
-                      "linecolor": "white",
-                      "showbackground": true,
-                      "ticks": "",
-                      "zerolinecolor": "white"
-                    }
-                  },
-                  "shapedefaults": {
-                    "line": {
-                      "color": "#2a3f5f"
-                    }
-                  },
-                  "ternary": {
-                    "aaxis": {
-                      "gridcolor": "white",
-                      "linecolor": "white",
-                      "ticks": ""
-                    },
-                    "baxis": {
-                      "gridcolor": "white",
-                      "linecolor": "white",
-                      "ticks": ""
-                    },
-                    "bgcolor": "#E5ECF6",
-                    "caxis": {
-                      "gridcolor": "white",
-                      "linecolor": "white",
-                      "ticks": ""
-                    }
-                  },
-                  "title": {
-                    "x": 0.05
-                  },
-                  "xaxis": {
-                    "automargin": true,
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "ticks": "",
-                    "title": {
-                      "standoff": 15
-                    },
-                    "zerolinecolor": "white",
-                    "zerolinewidth": 2
-                  },
-                  "yaxis": {
-                    "automargin": true,
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "ticks": "",
-                    "title": {
-                      "standoff": 15
-                    },
-                    "zerolinecolor": "white",
-                    "zerolinewidth": 2
-                  }
-                }
-              },
-              "title": {
-                "text": "Accuracy score compared to number of boosting iteration"
-              },
-              "width": 800,
-              "xaxis": {
-                "title": {
-                  "text": "Number of boosting iterations"
-                }
-              },
-              "yaxis": {
-                "title": {
-                  "text": "Accuracy"
-                }
-              }
-            },
-            "_py2js_addTraces": {},
-            "_py2js_animate": {},
-            "_py2js_deleteTraces": {},
-            "_py2js_moveTraces": {},
-            "_py2js_relayout": {},
-            "_py2js_removeLayoutProps": {},
-            "_py2js_removeTraceProps": {},
-            "_py2js_restyle": {},
-            "_py2js_update": {},
-            "_view_count": 0
-          },
-          "buffers": [
-            {
-              "encoding": "base64",
-              "path": [
-                "_data",
-                0,
-                "y",
-                "buffer"
-              ],
-              "data": "HZBGwUlL6D8E3LDx2wnqP/RYLknk1Oo/TkCdD5746j+YcD9rZ/7qPzyIUI3qJ+s/nrl3xNMZ6z8ZB8lPHB/rP8eDN1sOPus/W+R7EqFJ6z/rDfbA8VPrP6YdVZZ/XOs/SSP4Z9hr6z+OHNC6X3DrP9MVqA3ndOs/rGaN7+t36z82WT2V+oDrPzuQB548gus/WdGNqrN86z+PLj4LiorrPw=="
-            },
-            {
-              "encoding": "base64",
-              "path": [
-                "_data",
-                1,
-                "y",
-                "buffer"
-              ],
-              "data": "XDnAl9Vw6D8vob2E9hLqP1q+JmAlz+o/CwlpKGb36j8eRDSk/QXrP95/nHcxJus/7nDCgiQe6z8zWxhrrSPrP60+njDMNus/FOdYelM76z/B5/XR70zrPzpd73GCWOs/O8t7lw5g6z9OBkcTpm7rP3DEq3Skbes/HFe8prR36z/ZSH8JRIHrPz+DrS0/fus/6TmlFDd56z8/g60tP37rPw=="
-            }
-          ]
-        },
-        "377fa61b00414982b0aa553d49601b7a": {
+        "9d776ee16a194240bcadb79ab3ff176a": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_896cc00ef9dc4214a0e9529ba1970a88",
-            "style": "IPY_MODEL_a1e37e7bd8184e819a6dc43467ecdeac"
+            "layout": "IPY_MODEL_f2b160c5c9b64350a548b7fe26936d35",
+            "style": "IPY_MODEL_3f2ce62e9c134942898597513d0c9777",
+            "value": "<p>Check for overfit caused by using too many iterations in a gradient boosted model.</p>"
           }
         },
-        "896cc00ef9dc4214a0e9529ba1970a88": {
+        "f2b160c5c9b64350a548b7fe26936d35": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "a1e37e7bd8184e819a6dc43467ecdeac": {
+        "3f2ce62e9c134942898597513d0c9777": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "39a69d3d34844a30ae537411f02814f6": {
+        "461698723db04bbaa38aac34ab241efe": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_5af29a42552044c6ae3f35d68da83714",
+            "style": "IPY_MODEL_70c439589fca4b55b75c1228629ed14a",
+            "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_134cc table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_134cc thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_134cc tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_134cc th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_134cc td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_134cc\">\n  <thead>\n    <tr>\n      <th id=\"T_134cc_level0_col0\" class=\"col_heading level0 col0\" >Status</th>\n      <th id=\"T_134cc_level0_col1\" class=\"col_heading level0 col1\" >Condition</th>\n      <th id=\"T_134cc_level0_col2\" class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_134cc_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_134cc_row0_col1\" class=\"data row0 col1\" >Test score over iterations doesn't decline by more than 0.02% from the best score</td>\n      <td id=\"T_134cc_row0_col2\" class=\"data row0 col2\" >Found score decline above threshold: -0.03%</td>\n    </tr>\n  </tbody>\n</table>\n"
+          }
+        },
+        "5af29a42552044c6ae3f35d68da83714": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "70c439589fca4b55b75c1228629ed14a": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "6e7c8e5cfe0a490497ae491bc1a2c1fc": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1408,7 +624,7 @@ Classification model
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "7cd66a08be1c4f73b4037ce1e36b1128"}
+    {"version_major": 2, "version_minor": 0, "model_id": "4c64ea76964e4fa898d67406b50a85ef"}
     </script>
 
     </body>
@@ -1420,7 +636,7 @@ Classification model
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  10.228 seconds)
+   **Total running time of the script:** ( 0 minutes  14.165 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_tabular_methodology_plot_boosting_overfit.py:
