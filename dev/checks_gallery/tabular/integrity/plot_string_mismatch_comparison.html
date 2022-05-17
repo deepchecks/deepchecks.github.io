@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>String Mismatch Comparison &#8212; Deepchecks 14abff1 documentation</title>
+    <title>String Mismatch Comparison &#8212; Deepchecks 27e3e05 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -433,92 +433,481 @@ form, they are considered to be the same.</p>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>String Mismatch Comparison</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
 
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
-    integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
-</script>
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
 
-<script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-<script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
-<script type="text/javascript">
-    if (typeof require !== 'undefined') {
-        require.undef("plotly");
-        requirejs.config({
-            paths: {'plotly': ['https://cdn.plot.ly/plotly-2.8.3.min']}
-        });
-        require(
-            ['plotly'],
-            function(Plotly) {
-                window._Plotly = Plotly;
-                window.Plotly = Plotly;
-                console.log('Loaded plotly successfully');
-            },
-            function() {console.log('Failed to load plotly')}
-        );
-    } else {
-        console.log('requirejs is not present');
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
+</head>
+<body>
+
+<script src="" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "63423172e6d74c57b4d974ce20e78938": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [
+          "rendered_html",
+          "jp-RenderedHTMLCommon",
+          "jp-RenderedHTML",
+          "jp-OutputArea-output"
+        ],
+        "children": [
+          "IPY_MODEL_f0141f73d0e444f9bc6068815045c55b",
+          "IPY_MODEL_0a050321f3ab4906a2ad67abf2c532ae",
+          "IPY_MODEL_869c8a36ca1e4d94baad5c869e1eee6d",
+          "IPY_MODEL_e4284e9810bc4597b161d0ee0a3d16eb"
+        ],
+        "layout": "IPY_MODEL_ddb5b908d26943a487b725914fef8320"
+      }
+    },
+    "f0141f73d0e444f9bc6068815045c55b": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_7b802f36f8c3457e9c906233f5c938a6",
+        "style": "IPY_MODEL_d00a87d4f9624c909ff1e160d0906e06",
+        "value": "<h4><b>String Mismatch Comparison</b></h4>"
+      }
+    },
+    "7b802f36f8c3457e9c906233f5c938a6": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "d00a87d4f9624c909ff1e160d0906e06": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "0a050321f3ab4906a2ad67abf2c532ae": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_6f68de6e765e4ff1b85369aa7b300009",
+        "style": "IPY_MODEL_fc32f6ca886042bea03a588c27d85855",
+        "value": "<p>Detect different variants of string categories between the same categorical column in two datasets.</p>"
+      }
+    },
+    "6f68de6e765e4ff1b85369aa7b300009": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "fc32f6ca886042bea03a588c27d85855": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "869c8a36ca1e4d94baad5c869e1eee6d": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_862476a65e89477c8706383046e9f8c8",
+        "style": "IPY_MODEL_861b43e14af34e24a48890b0c7e05243"
+      }
+    },
+    "862476a65e89477c8706383046e9f8c8": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "861b43e14af34e24a48890b0c7e05243": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "e4284e9810bc4597b161d0ee0a3d16eb": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "children": [
+          "IPY_MODEL_25ef4d830d844cbab8ea5b61b7e2e346",
+          "IPY_MODEL_ab14253ed18e44ef99ec47c91236b68b",
+          "IPY_MODEL_6fa20c2390b94442b5e4102a46cab29d"
+        ],
+        "layout": "IPY_MODEL_204da23c1cdd45f9ac66c7c8db4589cd"
+      }
+    },
+    "25ef4d830d844cbab8ea5b61b7e2e346": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_e7b5893119bd42339c6c5c148645b385",
+        "style": "IPY_MODEL_b094185fa522488d897249df0b12816b",
+        "value": "<h5><b>Additional Outputs</b></h5>"
+      }
+    },
+    "e7b5893119bd42339c6c5c148645b385": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "b094185fa522488d897249df0b12816b": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "ab14253ed18e44ef99ec47c91236b68b": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_8a30ce97b3944ef79bd8f743399dee54",
+        "style": "IPY_MODEL_5d38dd33a89245d4b7c213c98d4a9b44",
+        "value": "<div>* showing only the top 10 columns, you can change it using n_top_columns param</div>"
+      }
+    },
+    "8a30ce97b3944ef79bd8f743399dee54": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "5d38dd33a89245d4b7c213c98d4a9b44": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "6fa20c2390b94442b5e4102a46cab29d": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_d66f60d4c619442ab38d200527096445",
+        "style": "IPY_MODEL_0a4ea618bd384344b7d1608d9f03e26b",
+        "value": "<style type=\"text/css\">\n#T_11619_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11619_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11619_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11619_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_11619_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_11619_\">\n  <thead>\n    <tr>\n      <th class=\"index_name level0\" >Column name</th>\n      <th class=\"col_heading level0 col0\" >col1</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level1\" >Base form</th>\n      <th class=\"col_heading level1 col0\" >deep</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_11619_level0_row0\" class=\"row_heading level0 row0\" >Common variants</th>\n      <td id=\"T_11619_row0_col0\" class=\"data row0 col0\" >['deep', 'Deep']</td>\n    </tr>\n    <tr>\n      <th id=\"T_11619_level0_row1\" class=\"row_heading level0 row1\" >Variants only in test</th>\n      <td id=\"T_11619_row1_col0\" class=\"data row1 col0\" >['?deep', '$deeP$']</td>\n    </tr>\n    <tr>\n      <th id=\"T_11619_level0_row2\" class=\"row_heading level0 row2\" >% Unique variants out of all dataset samples (count)</th>\n      <td id=\"T_11619_row2_col0\" class=\"data row2 col0\" >25% (2)</td>\n    </tr>\n    <tr>\n      <th id=\"T_11619_level0_row3\" class=\"row_heading level0 row3\" >Variants only in train</th>\n      <td id=\"T_11619_row3_col0\" class=\"data row3 col0\" >['deep!!!']</td>\n    </tr>\n    <tr>\n      <th id=\"T_11619_level0_row4\" class=\"row_heading level0 row4\" >% Unique variants out of all baseline samples (count)</th>\n      <td id=\"T_11619_row4_col0\" class=\"data row4 col0\" >14.29% (1)</td>\n    </tr>\n  </tbody>\n</table>\n"
+      }
+    },
+    "d66f60d4c619442ab38d200527096445": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "0a4ea618bd384344b7d1608d9f03e26b": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "204da23c1cdd45f9ac66c7c8db4589cd": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "ddb5b908d26943a487b725914fef8320": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
     }
+  }
+}
 </script>
-<h4><b>String Mismatch Comparison</b></h4><p>Detect different variants of string categories between the same categorical column in two datasets.</p><h5><b>Additional Outputs</b></h5><div>* showing only the top 10 columns, you can change it using n_top_columns param</div><style type="text/css">
-#T_e8e69_ table {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_e8e69_ thead {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_e8e69_ tbody {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_e8e69_ th {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_e8e69_ td {
-  text-align: left;
-  white-space: pre-wrap;
-}
-</style>
-<table id="T_e8e69_">
-  <thead>
-    <tr>
-      <th class="index_name level0" >Column name</th>
-      <th class="col_heading level0 col0" >col1</th>
-    </tr>
-    <tr>
-      <th class="index_name level1" >Base form</th>
-      <th class="col_heading level1 col0" >deep</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th id="T_e8e69_level0_row0" class="row_heading level0 row0" >Common variants</th>
-      <td id="T_e8e69_row0_col0" class="data row0 col0" >['deep', 'Deep']</td>
-    </tr>
-    <tr>
-      <th id="T_e8e69_level0_row1" class="row_heading level0 row1" >Variants only in test</th>
-      <td id="T_e8e69_row1_col0" class="data row1 col0" >['?deep', '$deeP$']</td>
-    </tr>
-    <tr>
-      <th id="T_e8e69_level0_row2" class="row_heading level0 row2" >% Unique variants out of all dataset samples (count)</th>
-      <td id="T_e8e69_row2_col0" class="data row2 col0" >25% (2)</td>
-    </tr>
-    <tr>
-      <th id="T_e8e69_level0_row3" class="row_heading level0 row3" >Variants only in train</th>
-      <td id="T_e8e69_row3_col0" class="data row3 col0" >['deep!!!']</td>
-    </tr>
-    <tr>
-      <th id="T_e8e69_level0_row4" class="row_heading level0 row4" >% Unique variants out of all baseline samples (count)</th>
-      <td id="T_e8e69_row4_col0" class="data row4 col0" >14.29% (1)</td>
-    </tr>
-  </tbody>
-</table>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "63423172e6d74c57b4d974ce20e78938"}
+</script>
 
+</body>
+</html>
 </div>
 <br />
 <br /></section>
@@ -817,7 +1206,7 @@ form, they are considered to be the same.</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "8e761e5b0da049d2b799ff076eebebca": {
+    "1a9258d1c3d84ae6bdb4ff56880c5d69": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -829,83 +1218,83 @@ form, they are considered to be the same.</p>
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_f45fcb8cc6d74d42904dd24b778f5db4",
-          "IPY_MODEL_a05bb44443cf4261bb6ba470b6d88acb",
-          "IPY_MODEL_dd780a8a487b497b9c447aca78e4bfeb"
+          "IPY_MODEL_9ca511a1ce9640f898482dadda22414d",
+          "IPY_MODEL_2b4cf7cd39de4a9eb9906b108ee4933a",
+          "IPY_MODEL_86f2572fdcb4486b9a2067b298b7b7c1"
         ],
-        "layout": "IPY_MODEL_bcbb9775964c4859898538661b3f7831"
+        "layout": "IPY_MODEL_bb637eb1a55948318609c50250ba626b"
       }
     },
-    "f45fcb8cc6d74d42904dd24b778f5db4": {
+    "9ca511a1ce9640f898482dadda22414d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_614c1e2419ab49878a8996efa3d326dc",
-        "style": "IPY_MODEL_1bcfc133396045e4b18a90225b0abd8e",
+        "layout": "IPY_MODEL_5963c05ef7fd410ca20335265b590098",
+        "style": "IPY_MODEL_4f6d47d66e384c5db8a87760675c2c0c",
         "value": "<h4><b>String Mismatch Comparison</b></h4>"
       }
     },
-    "614c1e2419ab49878a8996efa3d326dc": {
+    "5963c05ef7fd410ca20335265b590098": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1bcfc133396045e4b18a90225b0abd8e": {
+    "4f6d47d66e384c5db8a87760675c2c0c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a05bb44443cf4261bb6ba470b6d88acb": {
+    "2b4cf7cd39de4a9eb9906b108ee4933a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_40d041a531034dea8c4316cc2f0d6387",
-        "style": "IPY_MODEL_f9f6c256d6144941b645c76e4db91892",
+        "layout": "IPY_MODEL_aebe467dc1a8430a84f1dac851642a9d",
+        "style": "IPY_MODEL_f9a66e17b3564b3596d24b36da899a61",
         "value": "<p>Detect different variants of string categories between the same categorical column in two datasets.</p>"
       }
     },
-    "40d041a531034dea8c4316cc2f0d6387": {
+    "aebe467dc1a8430a84f1dac851642a9d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f9f6c256d6144941b645c76e4db91892": {
+    "f9a66e17b3564b3596d24b36da899a61": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "dd780a8a487b497b9c447aca78e4bfeb": {
+    "86f2572fdcb4486b9a2067b298b7b7c1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_148941be00ad4a2cbb6b2449fb003bad",
-        "style": "IPY_MODEL_912531ace22741b8b4cc684a3e6fc3c3",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_e5716_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5716_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5716_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5716_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_e5716_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_e5716_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_e5716_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_e5716_row0_col1\" class=\"data row0 col1\" >No new variants allowed in test data</td>\n      <td id=\"T_e5716_row0_col2\" class=\"data row0 col2\" >Found columns with ratio of variants above threshold: {'col1': '25%'}</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_4b905b4e079b4ac6ab7a1015d79a472b",
+        "style": "IPY_MODEL_86b675f6f72b48819b4112b2f7ba02ef",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_ac977_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ac977_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ac977_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ac977_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ac977_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_ac977_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_ac977_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_ac977_row0_col1\" class=\"data row0 col1\" >No new variants allowed in test data</td>\n      <td id=\"T_ac977_row0_col2\" class=\"data row0 col2\" >Found columns with ratio of variants above threshold: {'col1': '25%'}</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "148941be00ad4a2cbb6b2449fb003bad": {
+    "4b905b4e079b4ac6ab7a1015d79a472b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "912531ace22741b8b4cc684a3e6fc3c3": {
+    "86b675f6f72b48819b4112b2f7ba02ef": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "bcbb9775964c4859898538661b3f7831": {
+    "bb637eb1a55948318609c50250ba626b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -915,14 +1304,14 @@ form, they are considered to be the same.</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "8e761e5b0da049d2b799ff076eebebca"}
+{"version_major": 2, "version_minor": 0, "model_id": "1a9258d1c3d84ae6bdb4ff56880c5d69"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.049 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.083 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-integrity-plot-string-mismatch-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/1345cecd7edefa0697b07d1d00f1ab98/plot_string_mismatch_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_string_mismatch_comparison.py</span></code></a></p>
@@ -976,7 +1365,7 @@ form, they are considered to be the same.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/14abff1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/27e3e05.<br>
 </p>
     </div>
     

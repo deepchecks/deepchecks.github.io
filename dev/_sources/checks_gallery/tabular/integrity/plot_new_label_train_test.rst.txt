@@ -85,79 +85,457 @@ New Label
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>New Label Train Test</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+            }
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
-        integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-    </script>
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
 
-    <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-    <script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
-    <script type="text/javascript">
-        if (typeof require !== 'undefined') {
-            require.undef("plotly");
-            requirejs.config({
-                paths: {'plotly': ['https://cdn.plot.ly/plotly-2.8.3.min']}
-            });
-            require(
-                ['plotly'],
-                function(Plotly) {
-                    window._Plotly = Plotly;
-                    window.Plotly = Plotly;
-                    console.log('Loaded plotly successfully');
-                },
-                function() {console.log('Failed to load plotly')}
-            );
-        } else {
-            console.log('requirejs is not present');
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+        <script>
+            (!window.navigator.onLine ? alert('needs internet connection') : '');
+        </script>
+    </head>
+    <body>
+    
+    <script src="" crossorigin="anonymous"></script>
+    <script type="application/vnd.jupyter.widget-state+json">
+    {
+      "version_major": 2,
+      "version_minor": 0,
+      "state": {
+        "1c462998f6434031aba20e21e5054108": {
+          "model_name": "VBoxModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [
+              "rendered_html",
+              "jp-RenderedHTMLCommon",
+              "jp-RenderedHTML",
+              "jp-OutputArea-output"
+            ],
+            "children": [
+              "IPY_MODEL_151a19b15d98456fb0b03a48d7c4245b",
+              "IPY_MODEL_980069fbed1448d4ad91758ad344b93f",
+              "IPY_MODEL_385fe4871bf247b2a2c733bf1b71ceac",
+              "IPY_MODEL_00d9d738d0344037a6a22f9b0277bc01"
+            ],
+            "layout": "IPY_MODEL_4aa9cb5fc73844eca8d016fea13f45dd"
+          }
+        },
+        "151a19b15d98456fb0b03a48d7c4245b": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_85e970d312ad4103a9250bdba75d48fb",
+            "style": "IPY_MODEL_8eabc13ce0fa4f37a8abd7b2de74a868",
+            "value": "<h4><b>New Label Train Test</b></h4>"
+          }
+        },
+        "85e970d312ad4103a9250bdba75d48fb": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "8eabc13ce0fa4f37a8abd7b2de74a868": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "980069fbed1448d4ad91758ad344b93f": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_066eda3a75294869bba9ef540a58e3f5",
+            "style": "IPY_MODEL_223e7f1dfffa4e12953af8a1f7fc0a98",
+            "value": "<p>Find new labels in test.</p>"
+          }
+        },
+        "066eda3a75294869bba9ef540a58e3f5": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "223e7f1dfffa4e12953af8a1f7fc0a98": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "385fe4871bf247b2a2c733bf1b71ceac": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_61efcd22a3bc42c987235407c7bc65e9",
+            "style": "IPY_MODEL_2cb0de8e6d174454811cbc7eabbb26f6"
+          }
+        },
+        "61efcd22a3bc42c987235407c7bc65e9": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "2cb0de8e6d174454811cbc7eabbb26f6": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "00d9d738d0344037a6a22f9b0277bc01": {
+          "model_name": "VBoxModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "children": [
+              "IPY_MODEL_83e29735c8794449a54bc02187fcfb89",
+              "IPY_MODEL_097e746735934c6ea8bd8c85ce4e8ca1"
+            ],
+            "layout": "IPY_MODEL_c9bb22bf7cb643a197d4e7243e8fdf53"
+          }
+        },
+        "83e29735c8794449a54bc02187fcfb89": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_b7687251d8f9427c8eb4261a683e4a5b",
+            "style": "IPY_MODEL_ef727d1c847f42ad83d58984b537e23f",
+            "value": "<h5><b>Additional Outputs</b></h5>"
+          }
+        },
+        "b7687251d8f9427c8eb4261a683e4a5b": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "ef727d1c847f42ad83d58984b537e23f": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "097e746735934c6ea8bd8c85ce4e8ca1": {
+          "model_name": "HTMLModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {
+            "_dom_classes": [],
+            "layout": "IPY_MODEL_5ed4a73e4b17427db965d6316c3dd5f4",
+            "style": "IPY_MODEL_e2732013101b4ea4ad5b3d42e0c448d0",
+            "value": "<style type=\"text/css\">\n#T_286cb_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_286cb_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_286cb_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_286cb_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_286cb_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_286cb_\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th class=\"col_heading level0 col0\" >Percent new labels in sample</th>\n      <th class=\"col_heading level0 col1\" >New labels</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Label column</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_286cb_level0_row0\" class=\"row_heading level0 row0\" >col2</th>\n      <td id=\"T_286cb_row0_col0\" class=\"data row0 col0\" >66.67%</td>\n      <td id=\"T_286cb_row0_col1\" class=\"data row0 col1\" >[4, 5]</td>\n    </tr>\n  </tbody>\n</table>\n"
+          }
+        },
+        "5ed4a73e4b17427db965d6316c3dd5f4": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "e2732013101b4ea4ad5b3d42e0c448d0": {
+          "model_name": "DescriptionStyleModel",
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "state": {}
+        },
+        "c9bb22bf7cb643a197d4e7243e8fdf53": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
+        },
+        "4aa9cb5fc73844eca8d016fea13f45dd": {
+          "model_name": "LayoutModel",
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "state": {}
         }
+      }
+    }
     </script>
-    <h4><b>New Label Train Test</b></h4><p>Find new labels in test.</p><h5><b>Additional Outputs</b></h5><style type="text/css">
-    #T_bfddb_ table {
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    #T_bfddb_ thead {
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    #T_bfddb_ tbody {
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    #T_bfddb_ th {
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    #T_bfddb_ td {
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    </style>
-    <table id="T_bfddb_">
-      <thead>
-        <tr>
-          <th class="blank level0" >&nbsp;</th>
-          <th class="col_heading level0 col0" >Percent new labels in sample</th>
-          <th class="col_heading level0 col1" >New labels</th>
-        </tr>
-        <tr>
-          <th class="index_name level0" >Label column</th>
-          <th class="blank col0" >&nbsp;</th>
-          <th class="blank col1" >&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th id="T_bfddb_level0_row0" class="row_heading level0 row0" >col2</th>
-          <td id="T_bfddb_row0_col0" class="data row0 col0" >66.67%</td>
-          <td id="T_bfddb_row0_col1" class="data row0 col1" >[4, 5]</td>
-        </tr>
-      </tbody>
-    </table>
+    <script type="application/vnd.jupyter.widget-view+json">
+    {"version_major": 2, "version_minor": 0, "model_id": "1c462998f6434031aba20e21e5054108"}
+    </script>
 
+    </body>
+    </html>
     </div>
     <br />
     <br />
@@ -165,7 +543,7 @@ New Label
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.015 seconds)
+   **Total running time of the script:** ( 0 minutes  0.042 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_tabular_integrity_plot_new_label_train_test.py:

@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Weights &amp; Biases (wandb) &#8212; Deepchecks 14abff1 documentation</title>
+    <title>Weights &amp; Biases (wandb) &#8212; Deepchecks 27e3e05 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -674,74 +674,458 @@ receive with different parameters or model/data.</p>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Whole Dataset Drift</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
 
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
-    integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
-</script>
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
 
-<script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-<script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
-<script type="text/javascript">
-    if (typeof require !== 'undefined') {
-        require.undef("plotly");
-        requirejs.config({
-            paths: {'plotly': ['https://cdn.plot.ly/plotly-2.8.3.min']}
-        });
-        require(
-            ['plotly'],
-            function(Plotly) {
-                window._Plotly = Plotly;
-                window.Plotly = Plotly;
-                console.log('Loaded plotly successfully');
-            },
-            function() {console.log('Failed to load plotly')}
-        );
-    } else {
-        console.log('requirejs is not present');
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
+</head>
+<body>
+
+<script src="" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "75a77210bbca4e15bdc8130fa3c1e137": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [
+          "rendered_html",
+          "jp-RenderedHTMLCommon",
+          "jp-RenderedHTML",
+          "jp-OutputArea-output"
+        ],
+        "children": [
+          "IPY_MODEL_f89896e17b664ba8bc8611c01ca2dd88",
+          "IPY_MODEL_181ed09b2eb44bd8a4c732e7f34b6f54",
+          "IPY_MODEL_9c239bd756b04f69bb33f412b878ffc7",
+          "IPY_MODEL_a7c0e76cec834bac9b93f3e9d0d94f99"
+        ],
+        "layout": "IPY_MODEL_657320ae5b634f50af84e115f0091b41"
+      }
+    },
+    "f89896e17b664ba8bc8611c01ca2dd88": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_4c509d1fe6184b9eb28118124b4fa060",
+        "style": "IPY_MODEL_5fa56e32d0c344a79b09cc1d366a624f",
+        "value": "<h4><b>Whole Dataset Drift</b></h4>"
+      }
+    },
+    "4c509d1fe6184b9eb28118124b4fa060": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "5fa56e32d0c344a79b09cc1d366a624f": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "181ed09b2eb44bd8a4c732e7f34b6f54": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_bd506d7649b145adaba6a5cab0b4d65f",
+        "style": "IPY_MODEL_5849e938c3e74b1cb41bc7851071154b",
+        "value": "<p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them.</p>"
+      }
+    },
+    "bd506d7649b145adaba6a5cab0b4d65f": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "5849e938c3e74b1cb41bc7851071154b": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "9c239bd756b04f69bb33f412b878ffc7": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_9ab9afe0250041809a4855d236df9104",
+        "style": "IPY_MODEL_a84d730071ca46b6a4d298d50337dedc",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_d56ff_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d56ff_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d56ff_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d56ff_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d56ff_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_d56ff_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_d56ff_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_d56ff_row0_col1\" class=\"data row0 col1\" >Drift value is not greater than 0.25</td>\n      <td id=\"T_d56ff_row0_col2\" class=\"data row0 col2\" ></td>\n    </tr>\n  </tbody>\n</table>\n"
+      }
+    },
+    "9ab9afe0250041809a4855d236df9104": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "a84d730071ca46b6a4d298d50337dedc": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "a7c0e76cec834bac9b93f3e9d0d94f99": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "children": [
+          "IPY_MODEL_24d16c3eeeda476d8195fafa4d5b744b",
+          "IPY_MODEL_a88179ef26fe43eb9b97880279e5a33b"
+        ],
+        "layout": "IPY_MODEL_7fe939005f7f46b88b9a7ae64675b982"
+      }
+    },
+    "24d16c3eeeda476d8195fafa4d5b744b": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_58196ac23a1840d083aeab16f9c1616f",
+        "style": "IPY_MODEL_a87bf8d6e4044af09deefbf016e274c7",
+        "value": "<h5><b>Additional Outputs</b></h5>"
+      }
+    },
+    "58196ac23a1840d083aeab16f9c1616f": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "a87bf8d6e4044af09deefbf016e274c7": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "a88179ef26fe43eb9b97880279e5a33b": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_e378b5625d45441794d9e0f8849c5356",
+        "style": "IPY_MODEL_a58f594f4eeb4371a61969fdca17e8c0",
+        "value": "<p><b>&#x2713;</b>Nothing to display</p>"
+      }
+    },
+    "e378b5625d45441794d9e0f8849c5356": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "a58f594f4eeb4371a61969fdca17e8c0": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "7fe939005f7f46b88b9a7ae64675b982": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "657320ae5b634f50af84e115f0091b41": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
     }
+  }
+}
 </script>
-<h4><b>Whole Dataset Drift</b></h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them.</p><h5><b>Conditions Summary</b></h5><style type="text/css">
-#T_afcf9_ table {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_afcf9_ thead {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_afcf9_ tbody {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_afcf9_ th {
-  text-align: left;
-  white-space: pre-wrap;
-}
-#T_afcf9_ td {
-  text-align: left;
-  white-space: pre-wrap;
-}
-</style>
-<table id="T_afcf9_">
-  <thead>
-    <tr>
-      <th class="col_heading level0 col0" >Status</th>
-      <th class="col_heading level0 col1" >Condition</th>
-      <th class="col_heading level0 col2" >More Info</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td id="T_afcf9_row0_col0" class="data row0 col0" ><div style="color: green;text-align: center">✓</div></td>
-      <td id="T_afcf9_row0_col1" class="data row0 col1" >Drift value is not greater than 0.25</td>
-      <td id="T_afcf9_row0_col2" class="data row0 col2" ></td>
-    </tr>
-  </tbody>
-</table>
-<h5><b>Additional Outputs</b></h5><p><b>&#x2713;</b>Nothing to display</p>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "75a77210bbca4e15bdc8130fa3c1e137"}
+</script>
+
+</body>
+</html>
 </div>
 <br />
 <br /><p>the value can be observed</p>
@@ -808,8 +1192,8 @@ wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb:
 wandb: You can sync this run to the cloud by running:
-wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130635-dow88hs4
-wandb: Find logs at: ./wandb/offline-run-20220517_130635-dow88hs4/logs
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130859-sptf7l5u
+wandb: Find logs at: ./wandb/offline-run-20220517_130859-sptf7l5u/logs
 </pre></div>
 </div>
 <section id="exporting-a-suite-s-output-suiteresult-to-wandb">
@@ -835,48 +1219,48 @@ results there.</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s]
 Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s, Check=Model Info]
-Full Suite:   3%|#                                   | 1/36 [00:00&lt;00:00, 74.36 Check/s, Check=Columns Info]
-Full Suite:   6%|##                                  | 2/36 [00:00&lt;00:00, 35.14 Check/s, Check=Confusion Matrix Report]
-Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:01, 31.46 Check/s, Check=Performance Report]
-Full Suite:  11%|####                                | 4/36 [00:00&lt;00:02, 12.85 Check/s, Check=Performance Report]
-Full Suite:  11%|####                                | 4/36 [00:00&lt;00:02, 12.85 Check/s, Check=Roc Report]
-Full Suite:  14%|#####                               | 5/36 [00:00&lt;00:02, 12.85 Check/s, Check=Simple Model Comparison]
-Full Suite:  17%|######                              | 6/36 [00:00&lt;00:02, 13.79 Check/s, Check=Simple Model Comparison]
-Full Suite:  17%|######                              | 6/36 [00:00&lt;00:02, 13.79 Check/s, Check=Model Error Analysis]
-Full Suite:  19%|#######                             | 7/36 [00:00&lt;00:02, 13.79 Check/s, Check=Calibration Score]
-Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 11.33 Check/s, Check=Calibration Score]
-Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 11.33 Check/s, Check=Regression Systematic Error]
-Full Suite:  25%|#########                           | 9/36 [00:00&lt;00:02, 11.33 Check/s, Check=Regression Error Distribution]
-Full Suite:  28%|##########                          | 10/36 [00:00&lt;00:02, 11.33 Check/s, Check=Boosting Overfit]
-Full Suite:  31%|###########                         | 11/36 [00:00&lt;00:02, 11.33 Check/s, Check=Unused Features]
-Full Suite:  33%|############                        | 12/36 [00:00&lt;00:02, 11.33 Check/s, Check=Model Inference Time]
-Full Suite:  36%|#############                       | 13/36 [00:00&lt;00:02, 11.33 Check/s, Check=Train Test Feature Drift]
-Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 17.95 Check/s, Check=Train Test Feature Drift]
-Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 17.95 Check/s, Check=Train Test Label Drift]
-Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:01, 17.95 Check/s, Check=Whole Dataset Drift]   Calculating permutation feature importance. Expected to finish in 1 seconds
+Full Suite:   3%|#                                   | 1/36 [00:00&lt;00:00, 70.72 Check/s, Check=Columns Info]
+Full Suite:   6%|##                                  | 2/36 [00:00&lt;00:01, 33.69 Check/s, Check=Confusion Matrix Report]
+Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:01, 29.70 Check/s, Check=Confusion Matrix Report]
+Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:01, 29.70 Check/s, Check=Performance Report]
+Full Suite:  11%|####                                | 4/36 [00:00&lt;00:01, 29.70 Check/s, Check=Roc Report]
+Full Suite:  14%|#####                               | 5/36 [00:00&lt;00:01, 29.70 Check/s, Check=Simple Model Comparison]
+Full Suite:  17%|######                              | 6/36 [00:00&lt;00:02, 11.58 Check/s, Check=Simple Model Comparison]
+Full Suite:  17%|######                              | 6/36 [00:00&lt;00:02, 11.58 Check/s, Check=Model Error Analysis]
+Full Suite:  19%|#######                             | 7/36 [00:00&lt;00:02, 11.58 Check/s, Check=Calibration Score]
+Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 10.28 Check/s, Check=Calibration Score]
+Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 10.28 Check/s, Check=Regression Systematic Error]
+Full Suite:  25%|#########                           | 9/36 [00:00&lt;00:02, 10.28 Check/s, Check=Regression Error Distribution]
+Full Suite:  28%|##########                          | 10/36 [00:00&lt;00:02, 10.28 Check/s, Check=Boosting Overfit]
+Full Suite:  31%|###########                         | 11/36 [00:00&lt;00:02, 10.28 Check/s, Check=Unused Features]
+Full Suite:  33%|############                        | 12/36 [00:00&lt;00:02, 10.28 Check/s, Check=Model Inference Time]
+Full Suite:  36%|#############                       | 13/36 [00:00&lt;00:02, 10.28 Check/s, Check=Train Test Feature Drift]
+Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 16.35 Check/s, Check=Train Test Feature Drift]
+Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 16.35 Check/s, Check=Train Test Label Drift]
+Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:01, 16.35 Check/s, Check=Whole Dataset Drift]   Calculating permutation feature importance. Expected to finish in 1 seconds
 
-Full Suite:  44%|################                    | 16/36 [00:00&lt;00:01, 18.02 Check/s, Check=Whole Dataset Drift]
-Full Suite:  44%|################                    | 16/36 [00:00&lt;00:01, 18.02 Check/s, Check=Dominant Frequency Change]
-Full Suite:  47%|#################                   | 17/36 [00:00&lt;00:01, 18.02 Check/s, Check=Category Mismatch Train Test]
-Full Suite:  50%|##################                  | 18/36 [00:00&lt;00:00, 18.02 Check/s, Check=New Label Train Test]
-Full Suite:  53%|###################                 | 19/36 [00:00&lt;00:00, 18.02 Check/s, Check=String Mismatch Comparison]
-Full Suite:  56%|####################                | 20/36 [00:00&lt;00:00, 18.02 Check/s, Check=Datasets Size Comparison]
-Full Suite:  58%|#####################               | 21/36 [00:01&lt;00:00, 18.02 Check/s, Check=Date Train Test Leakage Duplicates]
-Full Suite:  61%|######################              | 22/36 [00:01&lt;00:00, 18.02 Check/s, Check=Date Train Test Leakage Overlap]
-Full Suite:  64%|#######################             | 23/36 [00:01&lt;00:00, 18.02 Check/s, Check=Single Feature Contribution Train Test]
-Full Suite:  67%|########################            | 24/36 [00:01&lt;00:00, 18.02 Check/s, Check=Train Test Samples Mix]
-Full Suite:  69%|#########################           | 25/36 [00:01&lt;00:00, 33.69 Check/s, Check=Train Test Samples Mix]
-Full Suite:  69%|#########################           | 25/36 [00:01&lt;00:00, 33.69 Check/s, Check=Identifier Leakage]
-Full Suite:  72%|##########################          | 26/36 [00:01&lt;00:00, 33.69 Check/s, Check=Index Train Test Leakage]
-Full Suite:  75%|###########################         | 27/36 [00:01&lt;00:00, 33.69 Check/s, Check=Is Single Value]
-Full Suite:  78%|############################        | 28/36 [00:01&lt;00:00, 33.69 Check/s, Check=Mixed Nulls]
-Full Suite:  81%|#############################       | 29/36 [00:01&lt;00:00, 33.69 Check/s, Check=Mixed Data Types]
-Full Suite:  83%|##############################      | 30/36 [00:01&lt;00:00, 33.69 Check/s, Check=String Mismatch]
-Full Suite:  86%|###############################     | 31/36 [00:01&lt;00:00, 33.69 Check/s, Check=Data Duplicates]
-Full Suite:  89%|################################    | 32/36 [00:01&lt;00:00, 33.69 Check/s, Check=String Length Out Of Bounds]
-Full Suite:  92%|#################################   | 33/36 [00:01&lt;00:00, 33.69 Check/s, Check=Special Characters]
-Full Suite:  94%|##################################  | 34/36 [00:01&lt;00:00, 33.69 Check/s, Check=Conflicting Labels]
-Full Suite:  97%|################################### | 35/36 [00:01&lt;00:00, 33.69 Check/s, Check=Outlier Sample Detection]
+Full Suite:  44%|################                    | 16/36 [00:01&lt;00:01, 16.25 Check/s, Check=Whole Dataset Drift]
+Full Suite:  44%|################                    | 16/36 [00:01&lt;00:01, 16.25 Check/s, Check=Dominant Frequency Change]
+Full Suite:  47%|#################                   | 17/36 [00:01&lt;00:01, 16.25 Check/s, Check=Category Mismatch Train Test]
+Full Suite:  50%|##################                  | 18/36 [00:01&lt;00:01, 16.25 Check/s, Check=New Label Train Test]
+Full Suite:  53%|###################                 | 19/36 [00:01&lt;00:01, 16.25 Check/s, Check=String Mismatch Comparison]
+Full Suite:  56%|####################                | 20/36 [00:01&lt;00:00, 16.25 Check/s, Check=Datasets Size Comparison]
+Full Suite:  58%|#####################               | 21/36 [00:01&lt;00:00, 16.25 Check/s, Check=Date Train Test Leakage Duplicates]
+Full Suite:  61%|######################              | 22/36 [00:01&lt;00:00, 16.25 Check/s, Check=Date Train Test Leakage Overlap]
+Full Suite:  64%|#######################             | 23/36 [00:01&lt;00:00, 16.25 Check/s, Check=Single Feature Contribution Train Test]
+Full Suite:  67%|########################            | 24/36 [00:01&lt;00:00, 29.28 Check/s, Check=Single Feature Contribution Train Test]
+Full Suite:  67%|########################            | 24/36 [00:01&lt;00:00, 29.28 Check/s, Check=Train Test Samples Mix]
+Full Suite:  69%|#########################           | 25/36 [00:01&lt;00:00, 29.28 Check/s, Check=Identifier Leakage]
+Full Suite:  72%|##########################          | 26/36 [00:01&lt;00:00, 29.28 Check/s, Check=Index Train Test Leakage]
+Full Suite:  75%|###########################         | 27/36 [00:01&lt;00:00, 29.28 Check/s, Check=Is Single Value]
+Full Suite:  78%|############################        | 28/36 [00:01&lt;00:00, 29.28 Check/s, Check=Mixed Nulls]
+Full Suite:  81%|#############################       | 29/36 [00:01&lt;00:00, 29.28 Check/s, Check=Mixed Data Types]
+Full Suite:  83%|##############################      | 30/36 [00:01&lt;00:00, 29.28 Check/s, Check=String Mismatch]
+Full Suite:  86%|###############################     | 31/36 [00:01&lt;00:00, 29.28 Check/s, Check=Data Duplicates]
+Full Suite:  89%|################################    | 32/36 [00:01&lt;00:00, 29.28 Check/s, Check=String Length Out Of Bounds]
+Full Suite:  92%|#################################   | 33/36 [00:01&lt;00:00, 29.28 Check/s, Check=Special Characters]
+Full Suite:  94%|##################################  | 34/36 [00:01&lt;00:00, 29.28 Check/s, Check=Conflicting Labels]
+Full Suite:  97%|################################### | 35/36 [00:01&lt;00:00, 29.28 Check/s, Check=Outlier Sample Detection]
 
 wandb: Tracking run with wandb version 0.12.16
 wandb: W&amp;B syncing is set to `offline` in this directory.
@@ -886,8 +1270,8 @@ wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb:
 wandb: You can sync this run to the cloud by running:
-wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130641-34yxgut2
-wandb: Find logs at: ./wandb/offline-run-20220517_130641-34yxgut2/logs
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130905-r96y6b73
+wandb: Find logs at: ./wandb/offline-run-20220517_130905-r96y6b73/logs
 </pre></div>
 </div>
 <p>You can also set all the kwargs the wandb.init will get:</p>
@@ -903,11 +1287,11 @@ wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
 wandb:
 wandb: You can sync this run to the cloud by running:
-wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130646-2qxm15bv
-wandb: Find logs at: ./wandb/offline-run-20220517_130646-2qxm15bv/logs
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220517_130911-3ge4c2jz
+wandb: Find logs at: ./wandb/offline-run-20220517_130911-3ge4c2jz/logs
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  18.603 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  20.610 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-general-exporting-results-examples-plot-exports-output-to-wandb-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../../_downloads/d0e5301684966b091eacb0a58845e2e7/plot_exports_output_to_wandb.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_exports_output_to_wandb.py</span></code></a></p>
@@ -961,7 +1345,7 @@ wandb: Find logs at: ./wandb/offline-run-20220517_130646-2qxm15bv/logs
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/14abff1.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/27e3e05.<br>
 </p>
     </div>
     
