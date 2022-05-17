@@ -18,7 +18,7 @@
 .. _sphx_glr_user-guide_vision_auto_tutorials_plot_extractors_validating.py:
 
 
-Test Your Vision Data Class During Development
+Test Your Deepchecks Vision Data Class
 ================================================
 
 "Data Classes" are used to transform the structure of your data to the
@@ -63,7 +63,7 @@ In the first step we load the DataLoader and our model
  .. code-block:: none
 
     Downloading https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt to yolov5s.pt...
-      0%|          | 0.00/14.1M [00:00<?, ?B/s]     49%|####8     | 6.88M/14.1M [00:00<00:00, 72.1MB/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 110MB/s] 
+      0%|          | 0.00/14.1M [00:00<?, ?B/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 180MB/s]
 
 
 
@@ -79,12 +79,13 @@ and model's output are not in the format expected by deepchecks, so when we
 validate them on our data we will see in the results the functions we overrided
 are not passing, and then we will implement a correct functions.
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-53
+.. GENERATED FROM PYTHON SOURCE LINES 39-55
 
 .. code-block:: default
 
 
     from deepchecks.vision.detection_data import DetectionData
+    import torch
 
 
     class CocoDetectionData(DetectionData):
@@ -92,7 +93,7 @@ are not passing, and then we will implement a correct functions.
             return batch[0]
 
         def batch_to_labels(self, batch):
-            return batch[1]
+            return [torch.round(x) for x in batch[1]]
 
         def infer_on_batch(self, batch, model, device):
             return model.to(device)(batch[0])
@@ -104,7 +105,8 @@ are not passing, and then we will implement a correct functions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-60
+
+.. GENERATED FROM PYTHON SOURCE LINES 56-62
 
 Running the extractors validation
 ---------------------------------
@@ -113,7 +115,7 @@ the extractors on our data. The function will print for us the validation
 results. At the end, if all your extractors are valid the output should look
 in `this <#The-end-result>`__.
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-65
+.. GENERATED FROM PYTHON SOURCE LINES 62-68
 
 .. code-block:: default
 
@@ -126,6 +128,7 @@ in `this <#The-end-result>`__.
 
 
 
+
 .. rst-class:: sphx-glr-script-out
 
  Out:
@@ -137,50 +140,45 @@ in `this <#The-end-result>`__.
     --------------------
     Label formatter: Pass!
     Prediction formatter: Check requires detection predictions to be a list with an entry for each sample
-    Image formatter: The data inside the iterable must be a numpy array.
+    Image formatter: Fail! The data inside the iterable must be a numpy array.
 
     Content validation
     ------------------
     For validating the content within the structure you have to manually observe the classes, image, label and prediction.
-    Examples of classes observed in the batch's labels: [[596, 253, 107, 25, 76, 247, 193, 148, 0, 544, 223, 218, 20, 174, 18, 512], [431, 180, 112, 214, 218, 562, 209, 546, 34, 224], [75, 72], [179, 2], [60, 0]]
+    Examples of classes observed in the batch's labels: [[597, 253, 107, 26, 76, 247, 193, 149, 0, 545, 223, 218, 20, 174, 19, 512], [431, 181, 112, 215, 219, 563, 209, 546, 35, 224], [76, 73], [180, 2], [60, 0]]
     Visual images & label & prediction: Unable to show due to invalid image formatter.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-83
+.. GENERATED FROM PYTHON SOURCE LINES 69-84
 
 Understand validation results
 -----------------------------
-When looking at the result first thing we see is that it's separated into 2 parts.
+When looking at the result we can see is that it is separated into 2 parts.
 
-First one is about the structure we expect to get. This validation is automatic
+First part is about the structure we expect to get. This validation is automatic
 since it's purely technical and doesn't check content correctness. For example,
 in our validation above we see that the label extractor is passing, meaning the
-labels are returning in the expected format. Second part is about the content,
-which can't be automatically validated and requires your attention. This part
-includes looking visually at data outputted by the formatters to validate it is
-right. In the validation above we see a list of classes that doesn't seem to make
-sense. This is because although our labels are in the right structure, the content
-inside is not valid.
+labels are provided in the expected format.
 
-We know that the classes in our data are represented by class id which is an int,
-therefore we understand the labels does not contain the data in the right order.
+Second part is about the content, which cannot be automatically validated and requires your attention. This part
+includes looking visually at data outputted by the formatters to validate it is
+correct. In the validation above we see a list of classes that doesn't seem to make much
+sense - it contains class_ids in values ranging from 0 to 596 while in the COCO dataset there are only 80 classes.
+
 For the next step we'll fix the label extractor and then validate again:
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-106
+.. GENERATED FROM PYTHON SOURCE LINES 84-106
 
 .. code-block:: default
-
-
-    import torch
 
 
     class CocoDetectionData(DetectionData):
         def batch_to_labels(self, batch):
             # Translate labels to deepchecks format.
-            # the label_id here is in the last position of the tensor, and the DetectionLabelFormatter expects it
-            # at the first position.
+            # Originally the label_id was at the last position of the tensor while Deepchecks expects it
+            # to be at the first position.
             formatted_labels = []
             for tensor in batch[1]:
                 tensor = torch.index_select(tensor, 1, torch.LongTensor([4, 0, 1, 2, 3])) if len(tensor) > 0 else tensor
@@ -193,7 +191,9 @@ For the next step we'll fix the label extractor and then validate again:
         def infer_on_batch(self, batch, model, device):
             return model.to(device)(batch[0])
 
+
     validate_extractors(CocoDetectionData(data_loader), model)
+
 
 
 
@@ -210,7 +210,7 @@ For the next step we'll fix the label extractor and then validate again:
     --------------------
     Label formatter: Pass!
     Prediction formatter: Check requires detection predictions to be a list with an entry for each sample
-    Image formatter: The data inside the iterable must be a numpy array.
+    Image formatter: Fail! The data inside the iterable must be a numpy array.
 
     Content validation
     ------------------
@@ -224,38 +224,33 @@ For the next step we'll fix the label extractor and then validate again:
 .. GENERATED FROM PYTHON SOURCE LINES 107-109
 
 Now we can see in the content section that our classes are indeed as we expect
-them to be, class ids of type int. Now we can continue and fix the prediction extractor
+them to be, values between 0 and 79. Now we can continue and fix the prediction extractor
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-138
+.. GENERATED FROM PYTHON SOURCE LINES 109-133
 
 .. code-block:: default
 
 
     class CocoDetectionData(DetectionData):
         def infer_on_batch(self, batch, model, device):
-            # Convert from yolo Detections object to List (per image) of Tensors of the shape [N, 6]"""
+            # Convert from yolo Detections object to List (per image) of Tensors of the shape [B, 6]"""
             return_list = []
             predictions = model.to(device)(batch[0])
-
-            # yolo Detections objects have List[torch.Tensor] xyxy output in .pred
             for single_image_tensor in predictions.pred:
                 return_list.append(single_image_tensor)
-
             return return_list
 
         # using the same label extractor
         def batch_to_labels(self, batch):
-            # Translate labels to deepchecks format.
-            # the label_id here is in the last position of the tensor, and the DetectionLabelFormatter expects it
-            # at the first position.
             formatted_labels = []
             for tensor in batch[1]:
                 tensor = torch.index_select(tensor, 1, torch.LongTensor([4, 0, 1, 2, 3])) if len(tensor) > 0 else tensor
                 formatted_labels.append(tensor)
             return formatted_labels
-    
+
         def batch_to_images(self, batch):
             return batch[0]
+
 
     validate_extractors(CocoDetectionData(data_loader), model)
 
@@ -274,7 +269,7 @@ them to be, class ids of type int. Now we can continue and fix the prediction ex
     --------------------
     Label formatter: Pass!
     Prediction formatter: Pass!
-    Image formatter: The data inside the iterable must be a numpy array.
+    Image formatter: Fail! The data inside the iterable must be a numpy array.
 
     Content validation
     ------------------
@@ -285,12 +280,12 @@ them to be, class ids of type int. Now we can continue and fix the prediction ex
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-141
+.. GENERATED FROM PYTHON SOURCE LINES 134-136
 
 Now our prediction formatter also have valid structure. But in order to really
 validate it we also need visual assertion and for that we need the image extractor to work.
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-176
+.. GENERATED FROM PYTHON SOURCE LINES 136-166
 
 .. code-block:: default
 
@@ -308,18 +303,12 @@ validate it we also need visual assertion and for that we need the image extract
             # Convert from yolo Detections object to List (per image) of Tensors of the shape [N, 6]"""
             return_list = []
             predictions = model.to(device)(batch[0])
-
-            # yolo Detections objects have List[torch.Tensor] xyxy output in .pred
             for single_image_tensor in predictions.pred:
                 return_list.append(single_image_tensor)
-
             return return_list
 
         # using the same label extractor
         def batch_to_labels(self, batch):
-            # Translate labels to deepchecks format.
-            # the label_id here is in the last position of the tensor, and the DetectionLabelFormatter expects it
-            # at the first position.
             formatted_labels = []
             for tensor in batch[1]:
                 tensor = torch.index_select(tensor, 1, torch.LongTensor([4, 0, 1, 2, 3])) if len(tensor) > 0 else tensor
@@ -328,6 +317,7 @@ validate it we also need visual assertion and for that we need the image extract
 
 
     validate_extractors(CocoDetectionData(data_loader), model)
+
 
 
 
@@ -362,16 +352,15 @@ validate it we also need visual assertion and for that we need the image extract
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-183
+.. GENERATED FROM PYTHON SOURCE LINES 167-172
 
 Now that that image extractor is valid it displays for us visually the label and prediction.
-When we look at the label we see it is correct, but when we look at the prediction something
-is broken.
+When we look at the label we see it is correct, but when we look at the bounding box predictions something
+seems broken.
 
-We need to fix the prediction so the prediction will be returned in
-[x, y, w, h, confidence, class] format.
+We need to fix the prediction so the prediction will be returned in [x, y, w, h, confidence, class] format.
 
-.. GENERATED FROM PYTHON SOURCE LINES 183-216
+.. GENERATED FROM PYTHON SOURCE LINES 172-202
 
 .. code-block:: default
 
@@ -394,9 +383,6 @@ We need to fix the prediction so the prediction will be returned in
 
         # using the same label extractor
         def batch_to_labels(self, batch):
-            # Translate labels to deepchecks format.
-            # the label_id here is in the last position of the tensor, and the DetectionLabelFormatter expects it
-            # at the first position.
             formatted_labels = []
             for tensor in batch[1]:
                 tensor = torch.index_select(tensor, 1, torch.LongTensor([4, 0, 1, 2, 3])) if len(tensor) > 0 else tensor
@@ -405,7 +391,6 @@ We need to fix the prediction so the prediction will be returned in
 
         # using the same image extractor
         def batch_to_images(self, batch):
-            # Yolo works on PIL and ImageFormatter expects images as numpy arrays
             return [np.array(x) for x in batch[0]]
 
 
@@ -415,12 +400,13 @@ We need to fix the prediction so the prediction will be returned in
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-219
+
+.. GENERATED FROM PYTHON SOURCE LINES 203-205
 
 The end result
 --------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-220
+.. GENERATED FROM PYTHON SOURCE LINES 205-206
 
 .. code-block:: default
 
@@ -461,7 +447,7 @@ The end result
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  31.441 seconds)
+   **Total running time of the script:** ( 2 minutes  44.413 seconds)
 
 
 .. _sphx_glr_download_user-guide_vision_auto_tutorials_plot_extractors_validating.py:
