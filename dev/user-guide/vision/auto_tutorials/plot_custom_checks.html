@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks 8a325c9 documentation</title>
+    <title>Writing Custom Computer Vision Checks &#8212; Deepchecks 524ac70 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -741,8 +741,548 @@ functions when implementing the check in order to be able to reuse them later.</
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.19 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.20 Batch/s]
 Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.30 Batch/s]
+
+
+Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.65 Batch/s]
+Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.44 Batch/s]
+
+
+Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Averages Check</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+    <script>
+        (!window.navigator.onLine ? alert('needs internet connection') : '');
+    </script>
+</head>
+<body>
+
+<script src="" crossorigin="anonymous"></script>
+<script type="application/vnd.jupyter.widget-state+json">
+{
+  "version_major": 2,
+  "version_minor": 0,
+  "state": {
+    "bfd1cb5b8a844dd2956ab90950979073": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [
+          "rendered_html",
+          "jp-RenderedHTMLCommon",
+          "jp-RenderedHTML",
+          "jp-OutputArea-output"
+        ],
+        "children": [
+          "IPY_MODEL_f531bed28a6e41d384e1612f625f48bb",
+          "IPY_MODEL_9a6a3df03085490680011f8f4b168a2c",
+          "IPY_MODEL_b2f74f74023a414e96b0f94c918ad01a",
+          "IPY_MODEL_d8de7b5216334406be3cf92a59254dd6"
+        ],
+        "layout": "IPY_MODEL_002acc61a5134758874e833819e33ac0"
+      }
+    },
+    "f531bed28a6e41d384e1612f625f48bb": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_792f27b3934248979b7ffdef64518e31",
+        "style": "IPY_MODEL_d7cab1d7c72a408894a6cdc4b39b1f74",
+        "value": "<h4><b>Color Averages Check</b></h4>"
+      }
+    },
+    "792f27b3934248979b7ffdef64518e31": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "d7cab1d7c72a408894a6cdc4b39b1f74": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "9a6a3df03085490680011f8f4b168a2c": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_d18065bf886b49a89c9480e75f38fad4",
+        "style": "IPY_MODEL_c474fefc06614e498d824776a99a40c6",
+        "value": "<p>Check if the average of each color channel is the same between the train and test dataset.</p>"
+      }
+    },
+    "d18065bf886b49a89c9480e75f38fad4": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "c474fefc06614e498d824776a99a40c6": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "b2f74f74023a414e96b0f94c918ad01a": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_a3aee293c11346259612a7ffc2e701a6",
+        "style": "IPY_MODEL_ca4156fc2016486282339e7bc105f223"
+      }
+    },
+    "a3aee293c11346259612a7ffc2e701a6": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "ca4156fc2016486282339e7bc105f223": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "d8de7b5216334406be3cf92a59254dd6": {
+      "model_name": "VBoxModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "children": [
+          "IPY_MODEL_1b9eb4d626fc4c99ad394e636c99656e",
+          "IPY_MODEL_d0eac0f08f454cd48f68fe2e1d4b3e1c"
+        ],
+        "layout": "IPY_MODEL_6c440d3914f743c888e0570286455725"
+      }
+    },
+    "1b9eb4d626fc4c99ad394e636c99656e": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_da6b1dbdc3b44ec4adaf4a187921c89e",
+        "style": "IPY_MODEL_06aa99b1cd3f4f458816f45a53710596",
+        "value": "<h5><b>Additional Outputs</b></h5>"
+      }
+    },
+    "da6b1dbdc3b44ec4adaf4a187921c89e": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "06aa99b1cd3f4f458816f45a53710596": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "d0eac0f08f454cd48f68fe2e1d4b3e1c": {
+      "model_name": "HTMLModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {
+        "_dom_classes": [],
+        "layout": "IPY_MODEL_c584f44ebfc441e09404c42b72dc27b6",
+        "style": "IPY_MODEL_35fd0abdf93d4fe3aedff0f8ca3444a0",
+        "value": "<p><b>&#x2713;</b>Nothing to display</p>"
+      }
+    },
+    "c584f44ebfc441e09404c42b72dc27b6": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "35fd0abdf93d4fe3aedff0f8ca3444a0": {
+      "model_name": "DescriptionStyleModel",
+      "model_module": "@jupyter-widgets/controls",
+      "model_module_version": "1.5.0",
+      "state": {}
+    },
+    "6c440d3914f743c888e0570286455725": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    },
+    "002acc61a5134758874e833819e33ac0": {
+      "model_name": "LayoutModel",
+      "model_module": "@jupyter-widgets/base",
+      "model_module_version": "1.2.0",
+      "state": {}
+    }
+  }
+}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "bfd1cb5b8a844dd2956ab90950979073"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><p>Our check ran successfully, but we got the print “Nothing found”. This is because we haven’t defined to the check
+anything to display, so the default behavior is to print “Nothing found”. In order to access the value that we have
+defined earlier we can use the “value” property on the result.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;Train&#39;: {&#39;R&#39;: 120.59282480343832, &#39;G&#39;: 117.66383923861159, &#39;B&#39;: 102.58390542973886}, &#39;Test&#39;: {&#39;R&#39;: 114.69132386085319, &#39;G&#39;: 107.46618940457067, &#39;B&#39;: 97.39751220459796}}
+</pre></div>
+</div>
+<p>favorite checks from our <a class="reference internal" href="../../../api/deepchecks.vision.html"><span class="doc">API ref</span></a>.</p>
+</section>
+<section id="check-display">
+<h2>Check Display<a class="headerlink" href="#check-display" title="Permalink to this headline">#</a></h2>
+<p>Most of the times we will want our checks to have a visual display that will quickly summarize the check result. We
+can pass objects for display to the CheckResult. Objects for display should be of type: html string, dataframe or a
+function that plots a graph. Let’s define a graph that will be displayed using <a class="reference external" href="https://plotly.com/">Plotly</a>. We
+will inherit from the original check to shorten the code an update only the compute method.</p>
+<p><strong>Good to know: ``display`` can receive a single object to display or a list of objects</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+
+<span class="k">class</span> <span class="nc">ColorAveragesCheck</span><span class="p">(</span><a href="../../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">TrainTestCheck</span></a><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if the average of each color channel is the same between the train and test dataset.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_names</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Init the check and enable customization of the channel_names.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">channel_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">channel_names</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">initialize_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the color_averages dict and pixel counter dict.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span> <span class="o">=</span> <span class="n">init_color_averages_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span> <span class="o">=</span> <span class="n">init_pixel_counts_dict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">dataset_kind</span><span class="p">:</span> <span class="n">DatasetKind</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add the batch color counts to the color_averages dict, and update counter.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum_pixel_values</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># add to the color_averages dict</span>
+        <span class="c1"># count the number of pixels we have summed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count_pixels_in_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the color averages and return them. Also display a histogram comparing train and test.&quot;&quot;&quot;</span>
+        <span class="c1"># Divide by the number of pixels to get the average pixel value per color channel</span>
+        <span class="k">for</span> <span class="n">dataset_kind</span> <span class="ow">in</span> <span class="n">DatasetKind</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="c1"># Return the color averages in a dict by channel name</span>
+        <span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="n">d_kind</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channel_names</span><span class="p">,</span> <span class="n">color_averages</span><span class="p">))</span>
+                        <span class="k">for</span> <span class="n">d_kind</span><span class="p">,</span> <span class="n">color_averages</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># **New Code Here**!!!</span>
+        <span class="c1"># ========================</span>
+        <span class="c1"># Display a histogram comparing train and test</span>
+        <span class="n">color_averages_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">return_value</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">color_averages_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="s1">&#39;Pixel Value&#39;</span><span class="p">]</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">color_averages_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Dataset&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pixel Value&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span>
+                           <span class="n">histfunc</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rgb(255,0,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,255,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,0,255)&#39;</span><span class="p">],</span>
+                           <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color Averages Histogram&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">CheckResult</span><span class="p">(</span><span class="n">return_value</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="p">[</span><span class="n">fig</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Let check it out:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">ColorAveragesCheck</span></a><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="../../../api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData" title="deepchecks.vision.datasets.detection.coco.COCOData" class="sphx-glr-backref-module-deepchecks-vision-datasets-detection-coco sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_ds</span></a><span class="p">,</span> <a href="../../../api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData" title="deepchecks.vision.datasets.detection.coco.COCOData" class="sphx-glr-backref-module-deepchecks-vision-datasets-detection-coco sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_ds</span></a><span class="p">)</span>
+<span class="n">result</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:   0%| | 0/1 [00:00&lt;?, ? /s]
+
+
+Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.25 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.35 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
@@ -1037,7 +1577,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "d54229cd166649a9b099bf2654e71158": {
+    "5f0204ff9c3e45a2b242d9b850377dbb": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1049,148 +1589,1128 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_25664f23ec9949b09cde9ea0b06407f7",
-          "IPY_MODEL_cc1d75d23d5c40519557936967a006b9",
-          "IPY_MODEL_67689f8a1b3f409da790bbb03c8aa101",
-          "IPY_MODEL_75480d1e3a2f4303991de670637c87e8"
+          "IPY_MODEL_3d703547dc6f420abde98f32ed38d244",
+          "IPY_MODEL_b22e933a4ea2415990392764559ca5a4",
+          "IPY_MODEL_422bb490c97e43b097814c46bbe5e2f9",
+          "IPY_MODEL_aca82c043ede4ecb9c4299f54b9481b0"
         ],
-        "layout": "IPY_MODEL_295549a7920c45d2b13a5f957824ee84"
+        "layout": "IPY_MODEL_040714eb55104ee29141a650c803df30"
       }
     },
-    "25664f23ec9949b09cde9ea0b06407f7": {
+    "3d703547dc6f420abde98f32ed38d244": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2b1fab976070413291107031c1bd2fea",
-        "style": "IPY_MODEL_73d781f47b8a46fd89725d18160426a1",
+        "layout": "IPY_MODEL_3f65836483234eef9dfd02df13526405",
+        "style": "IPY_MODEL_ea9eccea7f4543af8e1a570438cc0633",
         "value": "<h4><b>Color Averages Check</b></h4>"
       }
     },
-    "2b1fab976070413291107031c1bd2fea": {
+    "3f65836483234eef9dfd02df13526405": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "73d781f47b8a46fd89725d18160426a1": {
+    "ea9eccea7f4543af8e1a570438cc0633": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cc1d75d23d5c40519557936967a006b9": {
+    "b22e933a4ea2415990392764559ca5a4": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_9a02339182094c94a4341677cd377bcd",
-        "style": "IPY_MODEL_304aef6a3b1042b1925b368841aeab76",
+        "layout": "IPY_MODEL_9f849ad8086244fc829f5bb61cb55a7a",
+        "style": "IPY_MODEL_11a79eca70104b5f998935b0b166e768",
         "value": "<p>Check if the average of each color channel is the same between the train and test dataset.</p>"
       }
     },
-    "9a02339182094c94a4341677cd377bcd": {
+    "9f849ad8086244fc829f5bb61cb55a7a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "304aef6a3b1042b1925b368841aeab76": {
+    "11a79eca70104b5f998935b0b166e768": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "67689f8a1b3f409da790bbb03c8aa101": {
+    "422bb490c97e43b097814c46bbe5e2f9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_9995aebca4de4d39a690055b93fca73f",
-        "style": "IPY_MODEL_d035e276f2864cf78ca3cbdbd449ff21"
+        "layout": "IPY_MODEL_dcbb9bd7f26a4f639918b5f1dd65cedc",
+        "style": "IPY_MODEL_2898ce34caf54d258d820609bb256cca"
       }
     },
-    "9995aebca4de4d39a690055b93fca73f": {
+    "dcbb9bd7f26a4f639918b5f1dd65cedc": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d035e276f2864cf78ca3cbdbd449ff21": {
+    "2898ce34caf54d258d820609bb256cca": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "75480d1e3a2f4303991de670637c87e8": {
+    "aca82c043ede4ecb9c4299f54b9481b0": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_37bc6e3fdbf14847a5b8330a53f0f10d",
-          "IPY_MODEL_c66de1204fec418e8f16933833417836"
+          "IPY_MODEL_e1400c5735c442cb87a687f46ffc93b3",
+          "IPY_MODEL_605807ae323942e4875c0f44e92f116a"
         ],
-        "layout": "IPY_MODEL_37714ae15ae241169a82953e2d2d1850"
+        "layout": "IPY_MODEL_86d4eb272a3a4c7192822ffd8993ca64"
       }
     },
-    "37bc6e3fdbf14847a5b8330a53f0f10d": {
+    "e1400c5735c442cb87a687f46ffc93b3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_755a1e2cfae74b58a5664c5eab0b379c",
-        "style": "IPY_MODEL_a5e4c4726c034c58adfd76b7b583e338",
+        "layout": "IPY_MODEL_9b960321449f42cea7d2e1281f2347e0",
+        "style": "IPY_MODEL_032d9762718a4cb4bf1e61453a275317",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "755a1e2cfae74b58a5664c5eab0b379c": {
+    "9b960321449f42cea7d2e1281f2347e0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a5e4c4726c034c58adfd76b7b583e338": {
+    "032d9762718a4cb4bf1e61453a275317": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c66de1204fec418e8f16933833417836": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
+    "605807ae323942e4875c0f44e92f116a": {
+      "model_name": "FigureModel",
+      "model_module": "jupyterlab-plotly",
+      "model_module_version": "^5.5.0",
       "state": {
+        "_config": {
+          "plotlyServerURL": "https://plot.ly"
+        },
+        "_data": [
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "avg",
+            "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
+            "legendgroup": "R",
+            "marker": {
+              "color": "rgb(255,0,0)",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "R",
+            "offsetgroup": "R",
+            "orientation": "v",
+            "showlegend": true,
+            "x": [
+              "Train",
+              "Test"
+            ],
+            "xaxis": "x",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                2
+              ]
+            },
+            "yaxis": "y",
+            "type": "histogram",
+            "uid": "021ff0ac-7d48-4dcc-a063-a7b3a3c95517"
+          },
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "avg",
+            "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
+            "legendgroup": "G",
+            "marker": {
+              "color": "rgb(0,255,0)",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "G",
+            "offsetgroup": "G",
+            "orientation": "v",
+            "showlegend": true,
+            "x": [
+              "Train",
+              "Test"
+            ],
+            "xaxis": "x",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                2
+              ]
+            },
+            "yaxis": "y",
+            "type": "histogram",
+            "uid": "7ea8a416-775f-420f-936e-6561ba6e3e03"
+          },
+          {
+            "alignmentgroup": "True",
+            "bingroup": "x",
+            "histfunc": "avg",
+            "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
+            "legendgroup": "B",
+            "marker": {
+              "color": "rgb(0,0,255)",
+              "pattern": {
+                "shape": ""
+              }
+            },
+            "name": "B",
+            "offsetgroup": "B",
+            "orientation": "v",
+            "showlegend": true,
+            "x": [
+              "Train",
+              "Test"
+            ],
+            "xaxis": "x",
+            "y": {
+              "dtype": "float64",
+              "shape": [
+                2
+              ]
+            },
+            "yaxis": "y",
+            "type": "histogram",
+            "uid": "7bc24035-567e-443b-8134-689fe5924287"
+          }
+        ],
         "_dom_classes": [],
-        "layout": "IPY_MODEL_251814c10c084a42b7fa310734ec4afe",
-        "style": "IPY_MODEL_d4ee55a53758409d9a2854de1240dc2d",
-        "value": "<p><b>&#x2713;</b>Nothing to display</p>"
-      }
+        "_js2py_layoutDelta": {},
+        "_js2py_pointsCallback": {},
+        "_js2py_relayout": {},
+        "_js2py_restyle": {},
+        "_js2py_traceDeltas": {},
+        "_js2py_update": {},
+        "_layout": {
+          "barmode": "group",
+          "legend": {
+            "title": {
+              "text": "Channel"
+            },
+            "tracegroupgap": 0
+          },
+          "template": {
+            "data": {
+              "barpolar": [
+                {
+                  "marker": {
+                    "line": {
+                      "color": "#E5ECF6",
+                      "width": 0.5
+                    },
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "barpolar"
+                }
+              ],
+              "bar": [
+                {
+                  "error_x": {
+                    "color": "#2a3f5f"
+                  },
+                  "error_y": {
+                    "color": "#2a3f5f"
+                  },
+                  "marker": {
+                    "line": {
+                      "color": "#E5ECF6",
+                      "width": 0.5
+                    },
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "bar"
+                }
+              ],
+              "carpet": [
+                {
+                  "aaxis": {
+                    "endlinecolor": "#2a3f5f",
+                    "gridcolor": "white",
+                    "linecolor": "white",
+                    "minorgridcolor": "white",
+                    "startlinecolor": "#2a3f5f"
+                  },
+                  "baxis": {
+                    "endlinecolor": "#2a3f5f",
+                    "gridcolor": "white",
+                    "linecolor": "white",
+                    "minorgridcolor": "white",
+                    "startlinecolor": "#2a3f5f"
+                  },
+                  "type": "carpet"
+                }
+              ],
+              "choropleth": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "choropleth"
+                }
+              ],
+              "contourcarpet": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "contourcarpet"
+                }
+              ],
+              "contour": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "contour"
+                }
+              ],
+              "heatmapgl": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "heatmapgl"
+                }
+              ],
+              "heatmap": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "heatmap"
+                }
+              ],
+              "histogram2dcontour": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "histogram2dcontour"
+                }
+              ],
+              "histogram2d": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "histogram2d"
+                }
+              ],
+              "histogram": [
+                {
+                  "marker": {
+                    "pattern": {
+                      "fillmode": "overlay",
+                      "size": 10,
+                      "solidity": 0.2
+                    }
+                  },
+                  "type": "histogram"
+                }
+              ],
+              "mesh3d": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "type": "mesh3d"
+                }
+              ],
+              "parcoords": [
+                {
+                  "line": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "parcoords"
+                }
+              ],
+              "pie": [
+                {
+                  "automargin": true,
+                  "type": "pie"
+                }
+              ],
+              "scatter3d": [
+                {
+                  "line": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatter3d"
+                }
+              ],
+              "scattercarpet": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattercarpet"
+                }
+              ],
+              "scattergeo": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattergeo"
+                }
+              ],
+              "scattergl": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattergl"
+                }
+              ],
+              "scattermapbox": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scattermapbox"
+                }
+              ],
+              "scatterpolargl": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterpolargl"
+                }
+              ],
+              "scatterpolar": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterpolar"
+                }
+              ],
+              "scatter": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatter"
+                }
+              ],
+              "scatterternary": [
+                {
+                  "marker": {
+                    "colorbar": {
+                      "outlinewidth": 0,
+                      "ticks": ""
+                    }
+                  },
+                  "type": "scatterternary"
+                }
+              ],
+              "surface": [
+                {
+                  "colorbar": {
+                    "outlinewidth": 0,
+                    "ticks": ""
+                  },
+                  "colorscale": [
+                    [
+                      0.0,
+                      "#0d0887"
+                    ],
+                    [
+                      0.1111111111111111,
+                      "#46039f"
+                    ],
+                    [
+                      0.2222222222222222,
+                      "#7201a8"
+                    ],
+                    [
+                      0.3333333333333333,
+                      "#9c179e"
+                    ],
+                    [
+                      0.4444444444444444,
+                      "#bd3786"
+                    ],
+                    [
+                      0.5555555555555556,
+                      "#d8576b"
+                    ],
+                    [
+                      0.6666666666666666,
+                      "#ed7953"
+                    ],
+                    [
+                      0.7777777777777778,
+                      "#fb9f3a"
+                    ],
+                    [
+                      0.8888888888888888,
+                      "#fdca26"
+                    ],
+                    [
+                      1.0,
+                      "#f0f921"
+                    ]
+                  ],
+                  "type": "surface"
+                }
+              ],
+              "table": [
+                {
+                  "cells": {
+                    "fill": {
+                      "color": "#EBF0F8"
+                    },
+                    "line": {
+                      "color": "white"
+                    }
+                  },
+                  "header": {
+                    "fill": {
+                      "color": "#C8D4E3"
+                    },
+                    "line": {
+                      "color": "white"
+                    }
+                  },
+                  "type": "table"
+                }
+              ]
+            },
+            "layout": {
+              "annotationdefaults": {
+                "arrowcolor": "#2a3f5f",
+                "arrowhead": 0,
+                "arrowwidth": 1
+              },
+              "autotypenumbers": "strict",
+              "coloraxis": {
+                "colorbar": {
+                  "outlinewidth": 0,
+                  "ticks": ""
+                }
+              },
+              "colorscale": {
+                "diverging": [
+                  [
+                    0,
+                    "#8e0152"
+                  ],
+                  [
+                    0.1,
+                    "#c51b7d"
+                  ],
+                  [
+                    0.2,
+                    "#de77ae"
+                  ],
+                  [
+                    0.3,
+                    "#f1b6da"
+                  ],
+                  [
+                    0.4,
+                    "#fde0ef"
+                  ],
+                  [
+                    0.5,
+                    "#f7f7f7"
+                  ],
+                  [
+                    0.6,
+                    "#e6f5d0"
+                  ],
+                  [
+                    0.7,
+                    "#b8e186"
+                  ],
+                  [
+                    0.8,
+                    "#7fbc41"
+                  ],
+                  [
+                    0.9,
+                    "#4d9221"
+                  ],
+                  [
+                    1,
+                    "#276419"
+                  ]
+                ],
+                "sequential": [
+                  [
+                    0.0,
+                    "#0d0887"
+                  ],
+                  [
+                    0.1111111111111111,
+                    "#46039f"
+                  ],
+                  [
+                    0.2222222222222222,
+                    "#7201a8"
+                  ],
+                  [
+                    0.3333333333333333,
+                    "#9c179e"
+                  ],
+                  [
+                    0.4444444444444444,
+                    "#bd3786"
+                  ],
+                  [
+                    0.5555555555555556,
+                    "#d8576b"
+                  ],
+                  [
+                    0.6666666666666666,
+                    "#ed7953"
+                  ],
+                  [
+                    0.7777777777777778,
+                    "#fb9f3a"
+                  ],
+                  [
+                    0.8888888888888888,
+                    "#fdca26"
+                  ],
+                  [
+                    1.0,
+                    "#f0f921"
+                  ]
+                ],
+                "sequentialminus": [
+                  [
+                    0.0,
+                    "#0d0887"
+                  ],
+                  [
+                    0.1111111111111111,
+                    "#46039f"
+                  ],
+                  [
+                    0.2222222222222222,
+                    "#7201a8"
+                  ],
+                  [
+                    0.3333333333333333,
+                    "#9c179e"
+                  ],
+                  [
+                    0.4444444444444444,
+                    "#bd3786"
+                  ],
+                  [
+                    0.5555555555555556,
+                    "#d8576b"
+                  ],
+                  [
+                    0.6666666666666666,
+                    "#ed7953"
+                  ],
+                  [
+                    0.7777777777777778,
+                    "#fb9f3a"
+                  ],
+                  [
+                    0.8888888888888888,
+                    "#fdca26"
+                  ],
+                  [
+                    1.0,
+                    "#f0f921"
+                  ]
+                ]
+              },
+              "colorway": [
+                "#636efa",
+                "#EF553B",
+                "#00cc96",
+                "#ab63fa",
+                "#FFA15A",
+                "#19d3f3",
+                "#FF6692",
+                "#B6E880",
+                "#FF97FF",
+                "#FECB52"
+              ],
+              "font": {
+                "color": "#2a3f5f"
+              },
+              "geo": {
+                "bgcolor": "white",
+                "lakecolor": "white",
+                "landcolor": "#E5ECF6",
+                "showlakes": true,
+                "showland": true,
+                "subunitcolor": "white"
+              },
+              "hoverlabel": {
+                "align": "left"
+              },
+              "hovermode": "closest",
+              "mapbox": {
+                "style": "light"
+              },
+              "paper_bgcolor": "white",
+              "plot_bgcolor": "#E5ECF6",
+              "polar": {
+                "angularaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "bgcolor": "#E5ECF6",
+                "radialaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                }
+              },
+              "scene": {
+                "xaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                },
+                "yaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                },
+                "zaxis": {
+                  "backgroundcolor": "#E5ECF6",
+                  "gridcolor": "white",
+                  "gridwidth": 2,
+                  "linecolor": "white",
+                  "showbackground": true,
+                  "ticks": "",
+                  "zerolinecolor": "white"
+                }
+              },
+              "shapedefaults": {
+                "line": {
+                  "color": "#2a3f5f"
+                }
+              },
+              "ternary": {
+                "aaxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "baxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                },
+                "bgcolor": "#E5ECF6",
+                "caxis": {
+                  "gridcolor": "white",
+                  "linecolor": "white",
+                  "ticks": ""
+                }
+              },
+              "title": {
+                "x": 0.05
+              },
+              "xaxis": {
+                "automargin": true,
+                "gridcolor": "white",
+                "linecolor": "white",
+                "ticks": "",
+                "title": {
+                  "standoff": 15
+                },
+                "zerolinecolor": "white",
+                "zerolinewidth": 2
+              },
+              "yaxis": {
+                "automargin": true,
+                "gridcolor": "white",
+                "linecolor": "white",
+                "ticks": "",
+                "title": {
+                  "standoff": 15
+                },
+                "zerolinecolor": "white",
+                "zerolinewidth": 2
+              }
+            }
+          },
+          "title": {
+            "text": "Color Averages Histogram"
+          },
+          "xaxis": {
+            "anchor": "y",
+            "domain": [
+              0.0,
+              1.0
+            ],
+            "title": {
+              "text": "Dataset"
+            }
+          },
+          "yaxis": {
+            "anchor": "x",
+            "domain": [
+              0.0,
+              1.0
+            ],
+            "title": {
+              "text": "avg of Pixel Value"
+            }
+          }
+        },
+        "_py2js_addTraces": {},
+        "_py2js_animate": {},
+        "_py2js_deleteTraces": {},
+        "_py2js_moveTraces": {},
+        "_py2js_relayout": {},
+        "_py2js_removeLayoutProps": {},
+        "_py2js_removeTraceProps": {},
+        "_py2js_restyle": {},
+        "_py2js_update": {},
+        "_view_count": 0
+      },
+      "buffers": [
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            0,
+            "y",
+            "buffer"
+          ],
+          "data": "ncFx1/AlXkDFU2+mPqxcQA=="
+        },
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            1,
+            "y",
+            "buffer"
+          ],
+          "data": "2uiSV3xqXUDblxUM1t1aQA=="
+        },
+        {
+          "encoding": "base64",
+          "path": [
+            "_data",
+            2,
+            "y",
+            "buffer"
+          ],
+          "data": "2yvhtF6lWUCVoAfXcFlYQA=="
+        }
+      ]
     },
-    "251814c10c084a42b7fa310734ec4afe": {
+    "86d4eb272a3a4c7192822ffd8993ca64": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d4ee55a53758409d9a2854de1240dc2d": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "37714ae15ae241169a82953e2d2d1850": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "295549a7920c45d2b13a5f957824ee84": {
+    "040714eb55104ee29141a650c803df30": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1200,34 +2720,22 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "d54229cd166649a9b099bf2654e71158"}
+{"version_major": 2, "version_minor": 0, "model_id": "5f0204ff9c3e45a2b242d9b850377dbb"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p>Our check ran successfully, but we got the print “Nothing found”. This is because we haven’t defined to the check
-anything to display, so the default behavior is to print “Nothing found”. In order to access the value that we have
-defined earlier we can use the “value” property on the result.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;Train&#39;: {&#39;R&#39;: 120.59282480343832, &#39;G&#39;: 117.66383923861159, &#39;B&#39;: 102.58390542973886}, &#39;Test&#39;: {&#39;R&#39;: 114.69132386085319, &#39;G&#39;: 107.46618940457067, &#39;B&#39;: 97.39751220459796}}
-</pre></div>
-</div>
-<p>favorite checks from our <a class="reference internal" href="../../../api/deepchecks.vision.html"><span class="doc">API ref</span></a>.</p>
+<br /><p>Voilà! Now we have a check that prints a graph and has a value. We can add this check
+to any Suite, and it will run within it.</p>
 </section>
-<section id="check-display">
-<h2>Check Display<a class="headerlink" href="#check-display" title="Permalink to this headline">#</a></h2>
-<p>Most of the times we will want our checks to have a visual display that will quickly summarize the check result. We
-can pass objects for display to the CheckResult. Objects for display should be of type: html string, dataframe or a
-function that plots a graph. Let’s define a graph that will be displayed using <a class="reference external" href="https://plotly.com/">Plotly</a>. We
-will inherit from the original check to shorten the code an update only the compute method.</p>
-<p><strong>Good to know: ``display`` can receive a single object to display or a list of objects</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<section id="defining-a-condition">
+<h2>Defining a Condition<a class="headerlink" href="#defining-a-condition" title="Permalink to this headline">#</a></h2>
+<p>Finally, we can add a condition to our check. A condition is a function that receives the result of the check and
+returns a condition result object. To read more on conditions, check out the condition <a class="reference external" href="../../user-guide/general/customizations/configure_check_conditions">user guide</a>. In this case, we’ll define a condition
+verifying that the color averages haven’t changed by more than 10%.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.core</span> <span class="kn">import</span> <span class="n">ConditionResult</span>
 
 
 <span class="k">class</span> <span class="nc">ColorAveragesCheck</span><span class="p">(</span><a href="../../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">TrainTestCheck</span></a><span class="p">):</span>
@@ -1260,8 +2768,6 @@ will inherit from the original check to shorten the code an update only the comp
         <span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="n">d_kind</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channel_names</span><span class="p">,</span> <span class="n">color_averages</span><span class="p">))</span>
                         <span class="k">for</span> <span class="n">d_kind</span><span class="p">,</span> <span class="n">color_averages</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
-        <span class="c1"># **New Code Here**!!!</span>
-        <span class="c1"># ========================</span>
         <span class="c1"># Display a histogram comparing train and test</span>
         <span class="n">color_averages_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">return_value</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
         <span class="n">color_averages_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="s1">&#39;Pixel Value&#39;</span><span class="p">]</span>
@@ -1269,6 +2775,28 @@ will inherit from the original check to shorten the code an update only the comp
                            <span class="n">histfunc</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rgb(255,0,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,255,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,0,255)&#39;</span><span class="p">],</span>
                            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color Averages Histogram&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">CheckResult</span><span class="p">(</span><span class="n">return_value</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="p">[</span><span class="n">fig</span><span class="p">])</span>
+
+    <span class="c1"># **New Code Here**!!!</span>
+    <span class="c1"># ========================</span>
+    <span class="k">def</span> <span class="nf">add_condition_color_average_change_not_greater_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConditionResult</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Add a condition verifying that the color averages haven&#39;t changed by more than change_ratio%.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="n">check_result</span><span class="p">:</span> <span class="n">CheckResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConditionResult</span><span class="p">:</span>
+            <span class="n">failing_channels</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># Iterate over the color averages and verify that they haven&#39;t changed by more than change_ratio</span>
+            <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="n">channel</span><span class="p">]</span> <span class="o">-</span>
+                       <span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="n">channel</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">change_ratio</span><span class="p">:</span>
+                    <span class="n">failing_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+
+            <span class="c1"># If there are failing channels, return a condition result with the failing channels</span>
+            <span class="k">if</span> <span class="n">failing_channels</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ConditionResult</span><span class="p">(</span><span class="n">ConditionCategory</span><span class="o">.</span><span class="n">FAIL</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;The color averages have changes by more than threshold in the channels&#39;</span>
+                                              <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">failing_channels</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ConditionResult</span><span class="p">(</span><span class="n">ConditionCategory</span><span class="o">.</span><span class="n">PASS</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_condition</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Change in color averages not greater than </span><span class="si">{</span><span class="n">change_ratio</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Let check it out:</p>
@@ -1281,12 +2809,12 @@ will inherit from the original check to shorten the code an update only the comp
 
 
 Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.24 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.33 Batch/s]
+Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.22 Batch/s]
+Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.34 Batch/s]
 
 
 Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.62 Batch/s]
+Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.63 Batch/s]
 Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.43 Batch/s]
 
 
@@ -1577,7 +3105,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "7a87fa3e508f414da97ccfb50650ab01": {
+    "6eca42fdcf85495db85f637d75150b51": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1589,119 +3117,119 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_78ed22be8d604014be3e7c569c3976fc",
-          "IPY_MODEL_0b2181b07eb74e6ebd48a883437ac257",
-          "IPY_MODEL_1ef9f76791bc4aa7808cd5064456530a",
-          "IPY_MODEL_ccdef8214bd749a58e724cdc44ce8776"
+          "IPY_MODEL_edfe419717074b3fa27d8b51fe6182c8",
+          "IPY_MODEL_8bf5ccb7bccd4981a6e78bfaa0fa5836",
+          "IPY_MODEL_1ff1d987e7f84977baa19dfa97dc4d9d",
+          "IPY_MODEL_30b3ebfe069f418b8e9e69af13e4b7c9"
         ],
-        "layout": "IPY_MODEL_5c72257d9def4a81b8e8349af57a9dac"
+        "layout": "IPY_MODEL_ab53e4da4bee4067b28ae6ea8783f662"
       }
     },
-    "78ed22be8d604014be3e7c569c3976fc": {
+    "edfe419717074b3fa27d8b51fe6182c8": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_9753f7589d5443f78fdf628282e4095b",
-        "style": "IPY_MODEL_accdbad421b14858b5a2568287dd819b",
+        "layout": "IPY_MODEL_585f8e36033a4f4cba7282d5f1af2b71",
+        "style": "IPY_MODEL_1bb9e096a6c2495dabed6d21b5be3dcf",
         "value": "<h4><b>Color Averages Check</b></h4>"
       }
     },
-    "9753f7589d5443f78fdf628282e4095b": {
+    "585f8e36033a4f4cba7282d5f1af2b71": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "accdbad421b14858b5a2568287dd819b": {
+    "1bb9e096a6c2495dabed6d21b5be3dcf": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0b2181b07eb74e6ebd48a883437ac257": {
+    "8bf5ccb7bccd4981a6e78bfaa0fa5836": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_6ff4c7fbaf764286918d82c6bb035955",
-        "style": "IPY_MODEL_5bfd5a497bfc4bdd9383bc426194f95d",
+        "layout": "IPY_MODEL_581b15df3368413ea5f91b781b253a81",
+        "style": "IPY_MODEL_cc7043a7bca34a67aac45250182b9a9e",
         "value": "<p>Check if the average of each color channel is the same between the train and test dataset.</p>"
       }
     },
-    "6ff4c7fbaf764286918d82c6bb035955": {
+    "581b15df3368413ea5f91b781b253a81": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5bfd5a497bfc4bdd9383bc426194f95d": {
+    "cc7043a7bca34a67aac45250182b9a9e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1ef9f76791bc4aa7808cd5064456530a": {
+    "1ff1d987e7f84977baa19dfa97dc4d9d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cb2a5164ca5f45089b80426484034cc5",
-        "style": "IPY_MODEL_75da8642757f45aa951041ca83b810b4"
+        "layout": "IPY_MODEL_89136a537f2f49f3848eb4d135de646d",
+        "style": "IPY_MODEL_cb0dc09a389645d997708d758c993ac7"
       }
     },
-    "cb2a5164ca5f45089b80426484034cc5": {
+    "89136a537f2f49f3848eb4d135de646d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "75da8642757f45aa951041ca83b810b4": {
+    "cb0dc09a389645d997708d758c993ac7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ccdef8214bd749a58e724cdc44ce8776": {
+    "30b3ebfe069f418b8e9e69af13e4b7c9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_815308e69bad4a778747c122f8750dce",
-          "IPY_MODEL_ea2b529aeb3844deaabec631b186acc0"
+          "IPY_MODEL_65a51b6c03f9428787d052f86d887e7f",
+          "IPY_MODEL_42e200a332c54d25a7442d3dfdeaee41"
         ],
-        "layout": "IPY_MODEL_416b8e2aaecb4b91be55b668a2adf842"
+        "layout": "IPY_MODEL_fc436a4373f34890bee91f5594926a91"
       }
     },
-    "815308e69bad4a778747c122f8750dce": {
+    "65a51b6c03f9428787d052f86d887e7f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_031130242adf4785a2e85a937668b266",
-        "style": "IPY_MODEL_9df8b303653949faa129364300d953a4",
+        "layout": "IPY_MODEL_5595f2fd8de04e4884107001d0d157f7",
+        "style": "IPY_MODEL_3012f7ea53c24fa384f3b27352ddecd9",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "031130242adf4785a2e85a937668b266": {
+    "5595f2fd8de04e4884107001d0d157f7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9df8b303653949faa129364300d953a4": {
+    "3012f7ea53c24fa384f3b27352ddecd9": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ea2b529aeb3844deaabec631b186acc0": {
+    "42e200a332c54d25a7442d3dfdeaee41": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1739,7 +3267,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "a6a4f3c2-f2ae-4a51-a6af-68d7f5194c7d"
+            "uid": "164fa06f-acc7-493f-901b-20df34887d8a"
           },
           {
             "alignmentgroup": "True",
@@ -1770,7 +3298,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "16f48f74-c41e-48ff-a349-bef4ad25bb82"
+            "uid": "b372410b-fcf7-425d-80a8-1a3e23e62fa8"
           },
           {
             "alignmentgroup": "True",
@@ -1801,7 +3329,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "e9612738-badf-4fee-8bac-149ddfbe249c"
+            "uid": "5122bfb2-912d-47d2-9ec2-67618c9d0f12"
           }
         ],
         "_dom_classes": [],
@@ -2704,1541 +4232,13 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
         }
       ]
     },
-    "416b8e2aaecb4b91be55b668a2adf842": {
+    "fc436a4373f34890bee91f5594926a91": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5c72257d9def4a81b8e8349af57a9dac": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    }
-  }
-}
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "7a87fa3e508f414da97ccfb50650ab01"}
-</script>
-
-</body>
-</html>
-</div>
-<br />
-<br /><p>Voilà! Now we have a check that prints a graph and has a value. We can add this check
-to any Suite, and it will run within it.</p>
-</section>
-<section id="defining-a-condition">
-<h2>Defining a Condition<a class="headerlink" href="#defining-a-condition" title="Permalink to this headline">#</a></h2>
-<p>Finally, we can add a condition to our check. A condition is a function that receives the result of the check and
-returns a condition result object. To read more on conditions, check out the condition <a class="reference external" href="../../user-guide/general/customizations/configure_check_conditions">user guide</a>. In this case, we’ll define a condition
-verifying that the color averages haven’t changed by more than 10%.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.core</span> <span class="kn">import</span> <span class="n">ConditionResult</span>
-
-
-<span class="k">class</span> <span class="nc">ColorAveragesCheck</span><span class="p">(</span><a href="../../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">TrainTestCheck</span></a><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if the average of each color channel is the same between the train and test dataset.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_names</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Init the check and enable customization of the channel_names.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">channel_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">channel_names</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">initialize_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the color_averages dict and pixel counter dict.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span> <span class="o">=</span> <span class="n">init_color_averages_dict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span> <span class="o">=</span> <span class="n">init_pixel_counts_dict</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">dataset_kind</span><span class="p">:</span> <span class="n">DatasetKind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add the batch color counts to the color_averages dict, and update counter.&quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum_pixel_values</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># add to the color_averages dict</span>
-        <span class="c1"># count the number of pixels we have summed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count_pixels_in_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <a href="../../../api/generated/deepchecks.vision.Context.html#deepchecks.vision.Context" title="deepchecks.vision.Context" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">Context</span></a><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the color averages and return them. Also display a histogram comparing train and test.&quot;&quot;&quot;</span>
-        <span class="c1"># Divide by the number of pixels to get the average pixel value per color channel</span>
-        <span class="k">for</span> <span class="n">dataset_kind</span> <span class="ow">in</span> <span class="n">DatasetKind</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_count</span><span class="p">[</span><span class="n">dataset_kind</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
-        <span class="c1"># Return the color averages in a dict by channel name</span>
-        <span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="n">d_kind</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channel_names</span><span class="p">,</span> <span class="n">color_averages</span><span class="p">))</span>
-                        <span class="k">for</span> <span class="n">d_kind</span><span class="p">,</span> <span class="n">color_averages</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_color_averages</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-
-        <span class="c1"># Display a histogram comparing train and test</span>
-        <span class="n">color_averages_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">return_value</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-        <span class="n">color_averages_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="s1">&#39;Pixel Value&#39;</span><span class="p">]</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">color_averages_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Dataset&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pixel Value&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span>
-                           <span class="n">histfunc</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rgb(255,0,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,255,0)&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb(0,0,255)&#39;</span><span class="p">],</span>
-                           <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Color Averages Histogram&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">CheckResult</span><span class="p">(</span><span class="n">return_value</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="p">[</span><span class="n">fig</span><span class="p">])</span>
-
-    <span class="c1"># **New Code Here**!!!</span>
-    <span class="c1"># ========================</span>
-    <span class="k">def</span> <span class="nf">add_condition_color_average_change_not_greater_than</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConditionResult</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Add a condition verifying that the color averages haven&#39;t changed by more than change_ratio%.&quot;&quot;&quot;</span>
-
-        <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="n">check_result</span><span class="p">:</span> <span class="n">CheckResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConditionResult</span><span class="p">:</span>
-            <span class="n">failing_channels</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="c1"># Iterate over the color averages and verify that they haven&#39;t changed by more than change_ratio</span>
-            <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TRAIN</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="n">channel</span><span class="p">]</span> <span class="o">-</span>
-                       <span class="n">check_result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">DatasetKind</span><span class="o">.</span><span class="n">TEST</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="n">channel</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">change_ratio</span><span class="p">:</span>
-                    <span class="n">failing_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
-
-            <span class="c1"># If there are failing channels, return a condition result with the failing channels</span>
-            <span class="k">if</span> <span class="n">failing_channels</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">ConditionResult</span><span class="p">(</span><span class="n">ConditionCategory</span><span class="o">.</span><span class="n">FAIL</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;The color averages have changes by more than threshold in the channels&#39;</span>
-                                              <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">failing_channels</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">ConditionResult</span><span class="p">(</span><span class="n">ConditionCategory</span><span class="o">.</span><span class="n">PASS</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_condition</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Change in color averages not greater than </span><span class="si">{</span><span class="n">change_ratio</span><span class="si">:</span><span class="s1">.2%</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">condition</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Let check it out:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.vision.TrainTestCheck.html#deepchecks.vision.TrainTestCheck" title="deepchecks.vision.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-vision sphx-glr-backref-type-py-class"><span class="n">ColorAveragesCheck</span></a><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="../../../api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData" title="deepchecks.vision.datasets.detection.coco.COCOData" class="sphx-glr-backref-module-deepchecks-vision-datasets-detection-coco sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_ds</span></a><span class="p">,</span> <a href="../../../api/generated/deepchecks.vision.datasets.detection.coco.COCOData.html#deepchecks.vision.datasets.detection.coco.COCOData" title="deepchecks.vision.datasets.detection.coco.COCOData" class="sphx-glr-backref-module-deepchecks-vision-datasets-detection-coco sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_ds</span></a><span class="p">)</span>
-<span class="n">result</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:   0%| | 0/1 [00:00&lt;?, ? /s]
-
-
-Ingesting Batches - Train Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Train Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.28 Batch/s]
-Ingesting Batches - Train Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.37 Batch/s]
-
-
-Ingesting Batches - Test Dataset:   0%|  | 0/2 [00:00&lt;?, ? Batch/s]
-Ingesting Batches - Test Dataset:  50%|# | 1/2 [00:00&lt;00:00,  2.63 Batch/s]
-Ingesting Batches - Test Dataset: 100%|##| 2/2 [00:00&lt;00:00,  2.44 Batch/s]
-
-
-Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
-</pre></div>
-</div>
-<div class="output_subarea output_html rendered_html output_result">
-<!--
-    ~ ----------------------------------------------------------------------------
-    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
-    ~
-    ~ This file is part of Deepchecks.
-    ~ Deepchecks is distributed under the terms of the GNU Affero General
-    ~ Public License (version 3 or later).
-    ~ You should have received a copy of the GNU Affero General Public License
-    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
-    ~ ----------------------------------------------------------------------------
-    ~
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Color Averages Check</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #212529;
-            text-align: left;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        div.nbinput.container div.prompt *,
-        div.nboutput.container div.prompt *,
-        div.nbinput.container div.input_area pre,
-        div.nboutput.container div.output_area pre,
-        div.nbinput.container div.input_area .highlight,
-        div.nboutput.container div.output_area .highlight {
-            border: none;
-            padding: 0;
-            margin: 0;
-            box-shadow: none;
-        }
-
-        div.nbinput.container > div[class*=highlight],
-        div.nboutput.container > div[class*=highlight] {
-            margin: 0;
-        }
-
-        div.nbinput.container div.prompt *,
-        div.nboutput.container div.prompt * {
-            background: none;
-        }
-
-        div.nboutput.container div.output_area .highlight,
-        div.nboutput.container div.output_area pre {
-            background: unset;
-        }
-
-        div.nboutput.container div.output_area div.highlight {
-            color: unset;  /* override Pygments text color */
-        }
-
-        /* avoid gaps between output lines */
-        div.nboutput.container div[class*=highlight] pre {
-            line-height: normal;
-        }
-
-        /* input/output containers */
-        div.nbinput.container,
-        div.nboutput.container {
-            display: -webkit-flex;
-            display: flex;
-            align-items: flex-start;
-            margin: 0;
-            width: 100%;
-        }
-        @media (max-width: 540px) {
-            div.nbinput.container,
-            div.nboutput.container {
-                flex-direction: column;
-            }
-        }
-
-        /* input container */
-        div.nbinput.container {
-            padding-top: 5px;
-        }
-
-        /* last container */
-        div.nblast.container {
-            padding-bottom: 5px;
-        }
-
-        /* input prompt */
-        div.nbinput.container div.prompt pre {
-            color: #307FC1;
-        }
-
-        /* output prompt */
-        div.nboutput.container div.prompt pre {
-            color: #BF5B3D;
-        }
-
-        /* all prompts */
-        div.nbinput.container div.prompt,
-        div.nboutput.container div.prompt {
-            width: 4.5ex;
-            padding-top: 5px;
-            position: relative;
-            user-select: none;
-        }
-
-        div.nbinput.container div.prompt > div,
-        div.nboutput.container div.prompt > div {
-            position: absolute;
-            right: 0;
-            margin-right: 0.3ex;
-        }
-
-        @media (max-width: 540px) {
-            div.nbinput.container div.prompt,
-            div.nboutput.container div.prompt {
-                width: unset;
-                text-align: left;
-                padding: 0.4em;
-            }
-            div.nboutput.container div.prompt.empty {
-                padding: 0;
-            }
-
-            div.nbinput.container div.prompt > div,
-            div.nboutput.container div.prompt > div {
-                position: unset;
-            }
-        }
-
-        /* disable scrollbars on prompts */
-        div.nbinput.container div.prompt pre,
-        div.nboutput.container div.prompt pre {
-            overflow: hidden;
-        }
-
-        /* input/output area */
-        div.nbinput.container div.input_area,
-        div.nboutput.container div.output_area {
-            -webkit-flex: 1;
-            flex: 1;
-            overflow: auto;
-        }
-        @media (max-width: 540px) {
-            div.nbinput.container div.input_area,
-            div.nboutput.container div.output_area {
-                width: 100%;
-            }
-        }
-
-        /* input area */
-        div.nbinput.container div.input_area {
-            border: 1px solid #e0e0e0;
-            border-radius: 2px;
-            /*background: #f5f5f5;*/
-        }
-
-        /* override MathJax center alignment in output cells */
-        div.nboutput.container div[class*=MathJax] {
-            text-align: left !important;
-        }
-
-        /* override sphinx.ext.imgmath center alignment in output cells */
-        div.nboutput.container div.math p {
-            text-align: left;
-        }
-
-        /* standard error */
-        div.nboutput.container div.output_area.stderr {
-            background: #fdd;
-        }
-
-        /* ANSI colors */
-        .ansi-black-fg { color: #3E424D; }
-        .ansi-black-bg { background-color: #3E424D; }
-        .ansi-black-intense-fg { color: #282C36; }
-        .ansi-black-intense-bg { background-color: #282C36; }
-        .ansi-red-fg { color: #E75C58; }
-        .ansi-red-bg { background-color: #E75C58; }
-        .ansi-red-intense-fg { color: #B22B31; }
-        .ansi-red-intense-bg { background-color: #B22B31; }
-        .ansi-green-fg { color: #00A250; }
-        .ansi-green-bg { background-color: #00A250; }
-        .ansi-green-intense-fg { color: #007427; }
-        .ansi-green-intense-bg { background-color: #007427; }
-        .ansi-yellow-fg { color: #DDB62B; }
-        .ansi-yellow-bg { background-color: #DDB62B; }
-        .ansi-yellow-intense-fg { color: #B27D12; }
-        .ansi-yellow-intense-bg { background-color: #B27D12; }
-        .ansi-blue-fg { color: #208FFB; }
-        .ansi-blue-bg { background-color: #208FFB; }
-        .ansi-blue-intense-fg { color: #0065CA; }
-        .ansi-blue-intense-bg { background-color: #0065CA; }
-        .ansi-magenta-fg { color: #D160C4; }
-        .ansi-magenta-bg { background-color: #D160C4; }
-        .ansi-magenta-intense-fg { color: #A03196; }
-        .ansi-magenta-intense-bg { background-color: #A03196; }
-        .ansi-cyan-fg { color: #60C6C8; }
-        .ansi-cyan-bg { background-color: #60C6C8; }
-        .ansi-cyan-intense-fg { color: #258F8F; }
-        .ansi-cyan-intense-bg { background-color: #258F8F; }
-        .ansi-white-fg { color: #C5C1B4; }
-        .ansi-white-bg { background-color: #C5C1B4; }
-        .ansi-white-intense-fg { color: #A1A6B2; }
-        .ansi-white-intense-bg { background-color: #A1A6B2; }
-
-        .ansi-default-inverse-fg { color: #FFFFFF; }
-        .ansi-default-inverse-bg { background-color: #000000; }
-
-        .ansi-bold { font-weight: bold; }
-        .ansi-underline { text-decoration: underline; }
-
-
-        div.nbinput.container div.input_area div[class*=highlight] > pre,
-        div.nboutput.container div.output_area div[class*=highlight] > pre,
-        div.nboutput.container div.output_area div[class*=highlight].math,
-        div.nboutput.container div.output_area.rendered_html,
-        div.nboutput.container div.output_area > div.output_javascript,
-        div.nboutput.container div.output_area:not(.rendered_html) > img{
-            padding: 5px;
-            margin: 0;
-        }
-
-        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-        div.nbinput.container div.input_area > div[class^='highlight'],
-        div.nboutput.container div.output_area > div[class^='highlight']{
-            overflow-y: hidden;
-        }
-
-        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-        .prompt .copybtn {
-            display: none;
-        }
-
-        /* Some additional styling taken form the Jupyter notebook CSS */
-        div.rendered_html table {
-        border: none;
-        border-collapse: collapse;
-        border-spacing: 0;
-        color: black;
-        font-size: 12px;
-        table-layout: fixed;
-        }
-        div.rendered_html thead {
-        border-bottom: 1px solid black;
-        vertical-align: bottom;
-        }
-        div.rendered_html tr,
-        div.rendered_html th,
-        div.rendered_html td {
-        text-align: right;
-        vertical-align: middle;
-        padding: 0.5em 0.5em;
-        line-height: normal;
-        white-space: normal;
-        max-width: none;
-        border: none;
-        }
-        div.rendered_html th {
-        font-weight: bold;
-        }
-        div.rendered_html tbody tr:nth-child(odd) {
-        background: #f5f5f5;
-        }
-        div.rendered_html tbody tr:hover {
-        background: rgba(66, 165, 245, 0.2);
-        }
-    </style>
-    <script>
-        (!window.navigator.onLine ? alert('needs internet connection') : '');
-    </script>
-</head>
-<body>
-
-<script src="" crossorigin="anonymous"></script>
-<script type="application/vnd.jupyter.widget-state+json">
-{
-  "version_major": 2,
-  "version_minor": 0,
-  "state": {
-    "f15fc84e7dd049febe052ec9c9a10c59": {
-      "model_name": "VBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [
-          "rendered_html",
-          "jp-RenderedHTMLCommon",
-          "jp-RenderedHTML",
-          "jp-OutputArea-output"
-        ],
-        "children": [
-          "IPY_MODEL_eb477ac794654bdc84b49af9feb13145",
-          "IPY_MODEL_7a9692143e0f45f8ad1fb2113db08664",
-          "IPY_MODEL_b6f5629329a149238257d990f8a5862a",
-          "IPY_MODEL_dd5d6fde580e45379eb05807c6603101"
-        ],
-        "layout": "IPY_MODEL_0246891f40de4d7da5c8e4dfd08eed10"
-      }
-    },
-    "eb477ac794654bdc84b49af9feb13145": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_5ff2781027a44c3dae30ea9b007356f4",
-        "style": "IPY_MODEL_c6da094691aa4883888b91ff81491b60",
-        "value": "<h4><b>Color Averages Check</b></h4>"
-      }
-    },
-    "5ff2781027a44c3dae30ea9b007356f4": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "c6da094691aa4883888b91ff81491b60": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "7a9692143e0f45f8ad1fb2113db08664": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_fde8d8a3bc8d48f590a18fe4baa517a5",
-        "style": "IPY_MODEL_0ec6ff5f0fc446268bc3fff724706c2d",
-        "value": "<p>Check if the average of each color channel is the same between the train and test dataset.</p>"
-      }
-    },
-    "fde8d8a3bc8d48f590a18fe4baa517a5": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "0ec6ff5f0fc446268bc3fff724706c2d": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "b6f5629329a149238257d990f8a5862a": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_b619e337b9ed479e86e23b378db42dd1",
-        "style": "IPY_MODEL_b72916951157404cbef583a548320215"
-      }
-    },
-    "b619e337b9ed479e86e23b378db42dd1": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "b72916951157404cbef583a548320215": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "dd5d6fde580e45379eb05807c6603101": {
-      "model_name": "VBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "children": [
-          "IPY_MODEL_e257ec8b15f04e09984fe6c38570b569",
-          "IPY_MODEL_a7339b418a6746a98b7f66e13fc87285"
-        ],
-        "layout": "IPY_MODEL_f4059cf2aefc4382858e33668a72a352"
-      }
-    },
-    "e257ec8b15f04e09984fe6c38570b569": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_a9fb20c8b1fc4a0b8a57ba2322989c8b",
-        "style": "IPY_MODEL_cdde9a28000d47dd9b05e4a5f7c31947",
-        "value": "<h5><b>Additional Outputs</b></h5>"
-      }
-    },
-    "a9fb20c8b1fc4a0b8a57ba2322989c8b": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "cdde9a28000d47dd9b05e4a5f7c31947": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "a7339b418a6746a98b7f66e13fc87285": {
-      "model_name": "FigureModel",
-      "model_module": "jupyterlab-plotly",
-      "model_module_version": "^5.5.0",
-      "state": {
-        "_config": {
-          "plotlyServerURL": "https://plot.ly"
-        },
-        "_data": [
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "avg",
-            "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
-            "legendgroup": "R",
-            "marker": {
-              "color": "rgb(255,0,0)",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "R",
-            "offsetgroup": "R",
-            "orientation": "v",
-            "showlegend": true,
-            "x": [
-              "Train",
-              "Test"
-            ],
-            "xaxis": "x",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                2
-              ]
-            },
-            "yaxis": "y",
-            "type": "histogram",
-            "uid": "9c6898dd-8745-4b65-8d9e-e9c3f85034de"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "avg",
-            "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
-            "legendgroup": "G",
-            "marker": {
-              "color": "rgb(0,255,0)",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "G",
-            "offsetgroup": "G",
-            "orientation": "v",
-            "showlegend": true,
-            "x": [
-              "Train",
-              "Test"
-            ],
-            "xaxis": "x",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                2
-              ]
-            },
-            "yaxis": "y",
-            "type": "histogram",
-            "uid": "cf484d1f-d10a-4aba-b451-331975f3140e"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "avg",
-            "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>",
-            "legendgroup": "B",
-            "marker": {
-              "color": "rgb(0,0,255)",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "B",
-            "offsetgroup": "B",
-            "orientation": "v",
-            "showlegend": true,
-            "x": [
-              "Train",
-              "Test"
-            ],
-            "xaxis": "x",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                2
-              ]
-            },
-            "yaxis": "y",
-            "type": "histogram",
-            "uid": "07e71bcb-5e9a-4715-955a-a2384e6fb6c7"
-          }
-        ],
-        "_dom_classes": [],
-        "_js2py_layoutDelta": {},
-        "_js2py_pointsCallback": {},
-        "_js2py_relayout": {},
-        "_js2py_restyle": {},
-        "_js2py_traceDeltas": {},
-        "_js2py_update": {},
-        "_layout": {
-          "barmode": "group",
-          "legend": {
-            "title": {
-              "text": "Channel"
-            },
-            "tracegroupgap": 0
-          },
-          "template": {
-            "data": {
-              "barpolar": [
-                {
-                  "marker": {
-                    "line": {
-                      "color": "#E5ECF6",
-                      "width": 0.5
-                    },
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "barpolar"
-                }
-              ],
-              "bar": [
-                {
-                  "error_x": {
-                    "color": "#2a3f5f"
-                  },
-                  "error_y": {
-                    "color": "#2a3f5f"
-                  },
-                  "marker": {
-                    "line": {
-                      "color": "#E5ECF6",
-                      "width": 0.5
-                    },
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "bar"
-                }
-              ],
-              "carpet": [
-                {
-                  "aaxis": {
-                    "endlinecolor": "#2a3f5f",
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "minorgridcolor": "white",
-                    "startlinecolor": "#2a3f5f"
-                  },
-                  "baxis": {
-                    "endlinecolor": "#2a3f5f",
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "minorgridcolor": "white",
-                    "startlinecolor": "#2a3f5f"
-                  },
-                  "type": "carpet"
-                }
-              ],
-              "choropleth": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "choropleth"
-                }
-              ],
-              "contourcarpet": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "contourcarpet"
-                }
-              ],
-              "contour": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "contour"
-                }
-              ],
-              "heatmapgl": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "heatmapgl"
-                }
-              ],
-              "heatmap": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "heatmap"
-                }
-              ],
-              "histogram2dcontour": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "histogram2dcontour"
-                }
-              ],
-              "histogram2d": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "histogram2d"
-                }
-              ],
-              "histogram": [
-                {
-                  "marker": {
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "histogram"
-                }
-              ],
-              "mesh3d": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "mesh3d"
-                }
-              ],
-              "parcoords": [
-                {
-                  "line": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "parcoords"
-                }
-              ],
-              "pie": [
-                {
-                  "automargin": true,
-                  "type": "pie"
-                }
-              ],
-              "scatter3d": [
-                {
-                  "line": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatter3d"
-                }
-              ],
-              "scattercarpet": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattercarpet"
-                }
-              ],
-              "scattergeo": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattergeo"
-                }
-              ],
-              "scattergl": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattergl"
-                }
-              ],
-              "scattermapbox": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattermapbox"
-                }
-              ],
-              "scatterpolargl": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterpolargl"
-                }
-              ],
-              "scatterpolar": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterpolar"
-                }
-              ],
-              "scatter": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatter"
-                }
-              ],
-              "scatterternary": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterternary"
-                }
-              ],
-              "surface": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "surface"
-                }
-              ],
-              "table": [
-                {
-                  "cells": {
-                    "fill": {
-                      "color": "#EBF0F8"
-                    },
-                    "line": {
-                      "color": "white"
-                    }
-                  },
-                  "header": {
-                    "fill": {
-                      "color": "#C8D4E3"
-                    },
-                    "line": {
-                      "color": "white"
-                    }
-                  },
-                  "type": "table"
-                }
-              ]
-            },
-            "layout": {
-              "annotationdefaults": {
-                "arrowcolor": "#2a3f5f",
-                "arrowhead": 0,
-                "arrowwidth": 1
-              },
-              "autotypenumbers": "strict",
-              "coloraxis": {
-                "colorbar": {
-                  "outlinewidth": 0,
-                  "ticks": ""
-                }
-              },
-              "colorscale": {
-                "diverging": [
-                  [
-                    0,
-                    "#8e0152"
-                  ],
-                  [
-                    0.1,
-                    "#c51b7d"
-                  ],
-                  [
-                    0.2,
-                    "#de77ae"
-                  ],
-                  [
-                    0.3,
-                    "#f1b6da"
-                  ],
-                  [
-                    0.4,
-                    "#fde0ef"
-                  ],
-                  [
-                    0.5,
-                    "#f7f7f7"
-                  ],
-                  [
-                    0.6,
-                    "#e6f5d0"
-                  ],
-                  [
-                    0.7,
-                    "#b8e186"
-                  ],
-                  [
-                    0.8,
-                    "#7fbc41"
-                  ],
-                  [
-                    0.9,
-                    "#4d9221"
-                  ],
-                  [
-                    1,
-                    "#276419"
-                  ]
-                ],
-                "sequential": [
-                  [
-                    0.0,
-                    "#0d0887"
-                  ],
-                  [
-                    0.1111111111111111,
-                    "#46039f"
-                  ],
-                  [
-                    0.2222222222222222,
-                    "#7201a8"
-                  ],
-                  [
-                    0.3333333333333333,
-                    "#9c179e"
-                  ],
-                  [
-                    0.4444444444444444,
-                    "#bd3786"
-                  ],
-                  [
-                    0.5555555555555556,
-                    "#d8576b"
-                  ],
-                  [
-                    0.6666666666666666,
-                    "#ed7953"
-                  ],
-                  [
-                    0.7777777777777778,
-                    "#fb9f3a"
-                  ],
-                  [
-                    0.8888888888888888,
-                    "#fdca26"
-                  ],
-                  [
-                    1.0,
-                    "#f0f921"
-                  ]
-                ],
-                "sequentialminus": [
-                  [
-                    0.0,
-                    "#0d0887"
-                  ],
-                  [
-                    0.1111111111111111,
-                    "#46039f"
-                  ],
-                  [
-                    0.2222222222222222,
-                    "#7201a8"
-                  ],
-                  [
-                    0.3333333333333333,
-                    "#9c179e"
-                  ],
-                  [
-                    0.4444444444444444,
-                    "#bd3786"
-                  ],
-                  [
-                    0.5555555555555556,
-                    "#d8576b"
-                  ],
-                  [
-                    0.6666666666666666,
-                    "#ed7953"
-                  ],
-                  [
-                    0.7777777777777778,
-                    "#fb9f3a"
-                  ],
-                  [
-                    0.8888888888888888,
-                    "#fdca26"
-                  ],
-                  [
-                    1.0,
-                    "#f0f921"
-                  ]
-                ]
-              },
-              "colorway": [
-                "#636efa",
-                "#EF553B",
-                "#00cc96",
-                "#ab63fa",
-                "#FFA15A",
-                "#19d3f3",
-                "#FF6692",
-                "#B6E880",
-                "#FF97FF",
-                "#FECB52"
-              ],
-              "font": {
-                "color": "#2a3f5f"
-              },
-              "geo": {
-                "bgcolor": "white",
-                "lakecolor": "white",
-                "landcolor": "#E5ECF6",
-                "showlakes": true,
-                "showland": true,
-                "subunitcolor": "white"
-              },
-              "hoverlabel": {
-                "align": "left"
-              },
-              "hovermode": "closest",
-              "mapbox": {
-                "style": "light"
-              },
-              "paper_bgcolor": "white",
-              "plot_bgcolor": "#E5ECF6",
-              "polar": {
-                "angularaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "bgcolor": "#E5ECF6",
-                "radialaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                }
-              },
-              "scene": {
-                "xaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                },
-                "yaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                },
-                "zaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                }
-              },
-              "shapedefaults": {
-                "line": {
-                  "color": "#2a3f5f"
-                }
-              },
-              "ternary": {
-                "aaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "baxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "bgcolor": "#E5ECF6",
-                "caxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                }
-              },
-              "title": {
-                "x": 0.05
-              },
-              "xaxis": {
-                "automargin": true,
-                "gridcolor": "white",
-                "linecolor": "white",
-                "ticks": "",
-                "title": {
-                  "standoff": 15
-                },
-                "zerolinecolor": "white",
-                "zerolinewidth": 2
-              },
-              "yaxis": {
-                "automargin": true,
-                "gridcolor": "white",
-                "linecolor": "white",
-                "ticks": "",
-                "title": {
-                  "standoff": 15
-                },
-                "zerolinecolor": "white",
-                "zerolinewidth": 2
-              }
-            }
-          },
-          "title": {
-            "text": "Color Averages Histogram"
-          },
-          "xaxis": {
-            "anchor": "y",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "title": {
-              "text": "Dataset"
-            }
-          },
-          "yaxis": {
-            "anchor": "x",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "title": {
-              "text": "avg of Pixel Value"
-            }
-          }
-        },
-        "_py2js_addTraces": {},
-        "_py2js_animate": {},
-        "_py2js_deleteTraces": {},
-        "_py2js_moveTraces": {},
-        "_py2js_relayout": {},
-        "_py2js_removeLayoutProps": {},
-        "_py2js_removeTraceProps": {},
-        "_py2js_restyle": {},
-        "_py2js_update": {},
-        "_view_count": 0
-      },
-      "buffers": [
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            0,
-            "y",
-            "buffer"
-          ],
-          "data": "ncFx1/AlXkDFU2+mPqxcQA=="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            1,
-            "y",
-            "buffer"
-          ],
-          "data": "2uiSV3xqXUDblxUM1t1aQA=="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            2,
-            "y",
-            "buffer"
-          ],
-          "data": "2yvhtF6lWUCVoAfXcFlYQA=="
-        }
-      ]
-    },
-    "f4059cf2aefc4382858e33668a72a352": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "0246891f40de4d7da5c8e4dfd08eed10": {
+    "ab53e4da4bee4067b28ae6ea8783f662": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -4248,7 +4248,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "f15fc84e7dd049febe052ec9c9a10c59"}
+{"version_major": 2, "version_minor": 0, "model_id": "6eca42fdcf85495db85f637d75150b51"}
 </script>
 
 </body>
@@ -4269,7 +4269,7 @@ Computing Check:   0%| | 0/1 [00:00&lt;?, ? Check/s]
 deepchecks subpackage. Each has its own run signature, according to the objects on which it will run.</p>
 <p>The first two classes of checks run some logic on the image data, and so the check structure is designed to enable
 accumulating and computation on batches outputted by the dataloader.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.786 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.708 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-vision-auto-tutorials-plot-custom-checks-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/ce7169556009ee03643f57b8b1cc46d1/plot_custom_checks.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_checks.py</span></code></a></p>
@@ -4323,7 +4323,7 @@ accumulating and computation on batches outputted by the dataloader.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/8a325c9.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/524ac70.<br>
 </p>
     </div>
     
