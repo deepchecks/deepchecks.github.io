@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Train Test Prediction Drift &#8212; Deepchecks 40df64d documentation</title>
+    <title>Train Test Prediction Drift &#8212; Deepchecks f76ba17 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -358,11 +358,13 @@ Page: checks_gallery/tabular/model_evaluation/plot_train_test_prediction_drift&l
   <a class="reference internal nav-link" href="#what-is-prediction-drift">
    What Is Prediction Drift?
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-does-the-traintestpredictiondrift-check-work">
-   How Does the TrainTestPredictionDrift Check Work?
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-deepchecks-detects-prediction-drift">
+     How Deepchecks Detects Prediction Drift
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#generate-data">
@@ -407,49 +409,34 @@ to download the full example code</p>
 <p>This notebooks provides an overview for using and understanding the tabular prediction drift check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#what-is-prediction-drift">What is prediction drift?</a></p></li>
+<li><p><a class="reference external" href="#what-is-prediction-drift">What Is Prediction Drift?</a></p></li>
 <li><p><a class="reference external" href="#generate-data">Generate Data</a></p></li>
 <li><p><a class="reference external" href="#build-model">Build Model</a></p></li>
 <li><p><a class="reference external" href="#run-check">Run check</a></p></li>
 </ul>
 <section id="what-is-prediction-drift">
 <h2>What Is Prediction Drift?<a class="headerlink" href="#what-is-prediction-drift" title="Permalink to this headline">#</a></h2>
-<p>The term drift (and all it’s derivatives) is used to describe any change in the data compared
-to the data the model was trained on. Prediction drift refers to the case in which a change
-in the data (data/feature drift) has happened and as a result, the distribution of the
-models’ prediction has changed.</p>
-<p>Calculating prediction drift is especially useful in cases
+<p>Drift is simply a change in the distribution of data over time, and it is
+also one of the top reasons why machine learning model’s performance degrades
+over time.</p>
+<p>Prediction drift is when drift occurs in the prediction itself.
+Calculating prediction drift is especially useful in cases
 in which labels are not available for the test dataset, and so a drift in the predictions
 is our only indication that a changed has happened in the data that actually affects model
-predictions. If labels are available, it’s also recommended to run the <a class="reference external" href="/examples/tabular/checks/distribution/examples/plot_train_test_label_drift.html">Label Drift Check</a>.</p>
-<p>There are two main causes for prediction drift:</p>
-<ul class="simple">
-<li><p>A change in the sample population. In this case, the underline phenomenon we’re trying
-to predict behaves the same, but we’re not getting the same types of samples. For example,
-Iris Virginica stops growing and is not being predicted by the model trained to classify Iris species.</p></li>
-<li><p>Concept drift, which means that the underline relation between the data and
-the label has changed.
-For example, we’re trying to predict income based on food spending, but ongoing inflation effect prices.
-It’s important to note that concept drift won’t necessarily result in prediction drift, unless it affects features that
-are of high importance to the model.</p></li>
-</ul>
-</section>
-<section id="how-does-the-traintestpredictiondrift-check-work">
-<h2>How Does the TrainTestPredictionDrift Check Work?<a class="headerlink" href="#how-does-the-traintestpredictiondrift-check-work" title="Permalink to this headline">#</a></h2>
-<p>There are many methods to detect drift, that usually include statistical methods
-that aim to measure difference between 2 distributions.
-We experimented with various approaches and found that for detecting drift between 2
-one-dimensional distributions, the following 2 methods give the best results:</p>
-<ul class="simple">
-<li><p>For regression problems, the <a class="reference external" href="https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V">ramer’s V</a></p></li>
-<li><p>For classification problems, the <a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein Distance (Earth Mover’s Distance)</a></p></li>
-</ul>
+predictions. If labels are available, it’s also recommended to run the
+<a class="reference internal" href="../train_test_validation/plot_train_test_label_drift.html"><span class="doc">Label Drift check</span></a>.</p>
+<p>For more information on drift, please visit our <a class="reference internal" href="../../../user-guide/general/drift_guide.html"><span class="doc">drift guide</span></a>.</p>
+<section id="how-deepchecks-detects-prediction-drift">
+<h3>How Deepchecks Detects Prediction Drift<a class="headerlink" href="#how-deepchecks-detects-prediction-drift" title="Permalink to this headline">#</a></h3>
+<p>This check detects prediction drift by using <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
+on the prediction output.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span>
 
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">TrainTestPredictionDrift</span>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">adult</span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="generate-data">
 <h2>Generate data<a class="headerlink" href="#generate-data" title="Permalink to this headline">#</a></h2>
@@ -784,7 +771,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "4bb6488508744ffa823d24075bfc8c55": {
+    "7edc1f57064c47dda07c1ecdbfe0a96b": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -796,143 +783,143 @@ one-dimensional distributions, the following 2 methods give the best results:</p
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_23e9399d993148a485fbeb08f8adb941",
-          "IPY_MODEL_6a6597848eef429fafc3f8665407339b",
-          "IPY_MODEL_e68c6aa701a24734bfecacbcec1fdef9",
-          "IPY_MODEL_4f5343a05c744d699b6e5d232d82880c"
+          "IPY_MODEL_f25f4d32da35497ab2f51c8686ac2d64",
+          "IPY_MODEL_c4b5595a8c474391b489bf5063af1359",
+          "IPY_MODEL_a63ccc9beb5d44e4b14a8240f7bebf91",
+          "IPY_MODEL_e47d0e7d22cb4cbaa4427356a790aae8"
         ],
-        "layout": "IPY_MODEL_807235adaf254aa8ae9d8a1cd65926f5"
+        "layout": "IPY_MODEL_cf22bdc4ee394f6e9f7f7b5ec1929a83"
       }
     },
-    "23e9399d993148a485fbeb08f8adb941": {
+    "f25f4d32da35497ab2f51c8686ac2d64": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_5e6dca14a1924278b83f99d8a629b4ec",
-        "style": "IPY_MODEL_df1d9ff9f887403c8fd7bec751f23288",
+        "layout": "IPY_MODEL_e78d3ffe0e5b4a67a4a1bf9b61ea0d62",
+        "style": "IPY_MODEL_d89d59d402c24b0786b8c2164b6297bf",
         "value": "<h4><b>Train Test Prediction Drift</b></h4>"
       }
     },
-    "5e6dca14a1924278b83f99d8a629b4ec": {
+    "e78d3ffe0e5b4a67a4a1bf9b61ea0d62": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "df1d9ff9f887403c8fd7bec751f23288": {
+    "d89d59d402c24b0786b8c2164b6297bf": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6a6597848eef429fafc3f8665407339b": {
+    "c4b5595a8c474391b489bf5063af1359": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b173601f11044fc1af9eeb975de78dab",
-        "style": "IPY_MODEL_2606121675f24d6dba1e7de601e52b2a",
+        "layout": "IPY_MODEL_95946ecc678446b6b686400f281bd3a6",
+        "style": "IPY_MODEL_d498eaec265640298da91e0ee9c7c30e",
         "value": "<p>    Calculate prediction drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "b173601f11044fc1af9eeb975de78dab": {
+    "95946ecc678446b6b686400f281bd3a6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2606121675f24d6dba1e7de601e52b2a": {
+    "d498eaec265640298da91e0ee9c7c30e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e68c6aa701a24734bfecacbcec1fdef9": {
+    "a63ccc9beb5d44e4b14a8240f7bebf91": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_52c1533cdc0347939876591d9e96b661",
-        "style": "IPY_MODEL_0b778b5c66ce4584b8f8a0672fa226ae"
+        "layout": "IPY_MODEL_aad3b8b1ebba40038fe67cc6c80712e6",
+        "style": "IPY_MODEL_78353ae784a04cbabff31457984baed5"
       }
     },
-    "52c1533cdc0347939876591d9e96b661": {
+    "aad3b8b1ebba40038fe67cc6c80712e6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0b778b5c66ce4584b8f8a0672fa226ae": {
+    "78353ae784a04cbabff31457984baed5": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4f5343a05c744d699b6e5d232d82880c": {
+    "e47d0e7d22cb4cbaa4427356a790aae8": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_5a4f1af5359847a1b19ab799d7ab9a28",
-          "IPY_MODEL_3e4338d57acc44fdb84f321e507a048c",
-          "IPY_MODEL_35f4d2617d334ac487be0dcb49b22e81"
+          "IPY_MODEL_737b47485c9f4080a90573a4265a7974",
+          "IPY_MODEL_a92ba5458b3c47dd870b3e56667a68bd",
+          "IPY_MODEL_ce04c14e3be2433caca8dd2dd86029dc"
         ],
-        "layout": "IPY_MODEL_0faf33c8122c4477b1c44fe8f034204a"
+        "layout": "IPY_MODEL_cccd17e1e98f4eabaf6ab88f7f5f5c64"
       }
     },
-    "5a4f1af5359847a1b19ab799d7ab9a28": {
+    "737b47485c9f4080a90573a4265a7974": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e93103b4bccc456fa167b45da0c9d393",
-        "style": "IPY_MODEL_3b336fe122ec49c6a31f29928707fe3b",
+        "layout": "IPY_MODEL_0459844ec9554a9a86d5d3f29161c7cb",
+        "style": "IPY_MODEL_a453f36962aa49318bdc42bc0582ad92",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "e93103b4bccc456fa167b45da0c9d393": {
+    "0459844ec9554a9a86d5d3f29161c7cb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3b336fe122ec49c6a31f29928707fe3b": {
+    "a453f36962aa49318bdc42bc0582ad92": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3e4338d57acc44fdb84f321e507a048c": {
+    "a92ba5458b3c47dd870b3e56667a68bd": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_4408893e56254129872fcc9da8c2b125",
-        "style": "IPY_MODEL_b11de784579c4af994818e1cfe6d7b4e",
+        "layout": "IPY_MODEL_d05047cea3d04e79a048c297cdc5105a",
+        "style": "IPY_MODEL_27e77b1165e34c48b67118d83da7166d",
         "value": "<div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the predictions.\n        </span></div>"
       }
     },
-    "4408893e56254129872fcc9da8c2b125": {
+    "d05047cea3d04e79a048c297cdc5105a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b11de784579c4af994818e1cfe6d7b4e": {
+    "27e77b1165e34c48b67118d83da7166d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "35f4d2617d334ac487be0dcb49b22e81": {
+    "ce04c14e3be2433caca8dd2dd86029dc": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -958,7 +945,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "afad86b0-75c7-4ed0-9c93-f8251e7cebba"
+            "uid": "c0e72eee-ed47-4672-8cc9-0e08287b819f"
           },
           {
             "base": 0.1,
@@ -977,7 +964,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "0ea43ef3-dda9-4dbb-9180-a3e6db9c6c41"
+            "uid": "2fa72e1a-6ff9-40e4-8ab9-1d6c70060320"
           },
           {
             "base": 0.2,
@@ -996,7 +983,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "73abc643-ff15-410f-8683-798ef764f1a5"
+            "uid": "44a58058-e64f-4954-83a4-4841549b7f01"
           },
           {
             "marker": {
@@ -1016,7 +1003,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "8fbd542d-7912-4630-854f-554d53b343cd"
+            "uid": "ea83b493-501a-40c1-b75c-e9cb6f7ae2ba"
           },
           {
             "marker": {
@@ -1036,7 +1023,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "fc40d6f6-0992-4afa-818e-d38d9f0674f6"
+            "uid": "b0e8584d-2e92-472a-b080-ff561a9cf704"
           }
         ],
         "_dom_classes": [],
@@ -1997,13 +1984,13 @@ one-dimensional distributions, the following 2 methods give the best results:</p
         }
       ]
     },
-    "0faf33c8122c4477b1c44fe8f034204a": {
+    "cccd17e1e98f4eabaf6ab88f7f5f5c64": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "807235adaf254aa8ae9d8a1cd65926f5": {
+    "cf22bdc4ee394f6e9f7f7b5ec1929a83": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2013,14 +2000,14 @@ one-dimensional distributions, the following 2 methods give the best results:</p
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "4bb6488508744ffa823d24075bfc8c55"}
+{"version_major": 2, "version_minor": 0, "model_id": "7edc1f57064c47dda07c1ecdbfe0a96b"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.372 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.385 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-train-test-prediction-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/7cc0797a7e402cbc5db3de95c6e379f8/plot_train_test_prediction_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_train_test_prediction_drift.py</span></code></a></p>
@@ -2074,7 +2061,7 @@ one-dimensional distributions, the following 2 methods give the best results:</p
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/40df64d.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/f76ba17.<br>
 </p>
     </div>
     

@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Train Test Label Drift &#8212; Deepchecks 40df64d documentation</title>
+    <title>Train Test Label Drift &#8212; Deepchecks f76ba17 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -355,8 +355,20 @@ Page: checks_gallery/tabular/train_test_validation/plot_train_test_label_drift&l
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generate-data-classification-label">
-   Generate data - Classification label
+  <a class="reference internal nav-link" href="#what-is-label-drift">
+   What Is Label Drift?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-deepchecks-detects-label-drift">
+     How Deepchecks Detects Label Drift
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-check-on-a-classification-label">
+   Run Check on a Classification Label
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -365,13 +377,20 @@ Page: checks_gallery/tabular/train_test_validation/plot_train_test_label_drift&l
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generate-data-regression-label">
-   Generate data - Regression label
+  <a class="reference internal nav-link" href="#run-check-on-a-regression-label">
+   Run Check on a Regression Label
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Run check
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   Run check
+  <a class="reference internal nav-link" href="#add-a-condition">
+   Add a Condition
   </a>
  </li>
 </ul>
@@ -399,6 +418,25 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="train-test-label-drift">
 <span id="sphx-glr-checks-gallery-tabular-train-test-validation-plot-train-test-label-drift-py"></span><h1>Train Test Label Drift<a class="headerlink" href="#train-test-label-drift" title="Permalink to this headline">#</a></h1>
+<p>This notebooks provides an overview for using and understanding label drift check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-label-drift">What Is Label Drift?</a></p></li>
+<li><p><a class="reference external" href="#run-check-on-a-classification-label">Run Check on a Classification Label</a></p></li>
+<li><p><a class="reference external" href="#run-check-on-a-regression-label">Run Check on a Regression Label</a></p></li>
+<li><p><a class="reference external" href="#run-check">Add a Condition</a></p></li>
+</ul>
+<section id="what-is-label-drift">
+<h2>What Is Label Drift?<a class="headerlink" href="#what-is-label-drift" title="Permalink to this headline">#</a></h2>
+<p>Drift is simply a change in the distribution of data over time, and it is
+also one of the top reasons why machine learning model’s performance degrades
+over time.</p>
+<p>Label drift is when drift occurs in the label itself.</p>
+<p>For more information on drift, please visit our <a class="reference internal" href="../../../user-guide/general/drift_guide.html"><span class="doc">drift guide</span></a>.</p>
+<section id="how-deepchecks-detects-label-drift">
+<h3>How Deepchecks Detects Label Drift<a class="headerlink" href="#how-deepchecks-detects-label-drift" title="Permalink to this headline">#</a></h3>
+<p>This check detects label drift by using <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
+on the label column.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pprint</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -408,9 +446,14 @@ to download the full example code</p>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">TrainTestLabelDrift</span>
 </pre></div>
 </div>
-<section id="generate-data-classification-label">
-<h2>Generate data - Classification label<a class="headerlink" href="#generate-data-classification-label" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</section>
+</section>
+<section id="run-check-on-a-classification-label">
+<h2>Run Check on a Classification Label<a class="headerlink" href="#run-check-on-a-classification-label" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate data:</span>
+<span class="c1"># --------------</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#Create test_data with drift in label:</span>
@@ -783,7 +826,7 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c2b609368f10437c8a912b889c037f12": {
+    "5ecf440c3c154349822bff88f403d570": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -795,143 +838,143 @@ to download the full example code</p>
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_546f2e4903d34ecf8728ded18bb192ee",
-          "IPY_MODEL_9a50c2ae56e5454892012070c455c5ce",
-          "IPY_MODEL_c8ebb1707f904a1b843fa533a245e7fb",
-          "IPY_MODEL_a849bef2fe73406bb0c2875162c859ab"
+          "IPY_MODEL_1b966fbfb1074821af6de21d6d12271a",
+          "IPY_MODEL_75c337c81b824ec8854c5e35aa0f2d69",
+          "IPY_MODEL_192035f65a5849cdb4e3b2c00b26e886",
+          "IPY_MODEL_304845a8f83743d4bfb77400c32c30c9"
         ],
-        "layout": "IPY_MODEL_539cf1dd71924b6e811c83beb54c8458"
+        "layout": "IPY_MODEL_f010a53cfa3a4191b55f39c2c48b25ae"
       }
     },
-    "546f2e4903d34ecf8728ded18bb192ee": {
+    "1b966fbfb1074821af6de21d6d12271a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_f6ce3dc41bf84517b70f5b653ada46fc",
-        "style": "IPY_MODEL_7de90ec5dc5b481fa996b358d813a5b5",
+        "layout": "IPY_MODEL_046228ba2f564f199faa451ab2cab91b",
+        "style": "IPY_MODEL_5cea8296d577464ca7740abac7e95b01",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "f6ce3dc41bf84517b70f5b653ada46fc": {
+    "046228ba2f564f199faa451ab2cab91b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7de90ec5dc5b481fa996b358d813a5b5": {
+    "5cea8296d577464ca7740abac7e95b01": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9a50c2ae56e5454892012070c455c5ce": {
+    "75c337c81b824ec8854c5e35aa0f2d69": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c56c73b7be37416788e76a84f7887ff1",
-        "style": "IPY_MODEL_bea7514ad3204c7997961572ae8895ec",
+        "layout": "IPY_MODEL_2f26eb15fc814f488513e9a25a96c3b6",
+        "style": "IPY_MODEL_b86e1623490047d69de49161ecede763",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "c56c73b7be37416788e76a84f7887ff1": {
+    "2f26eb15fc814f488513e9a25a96c3b6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "bea7514ad3204c7997961572ae8895ec": {
+    "b86e1623490047d69de49161ecede763": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c8ebb1707f904a1b843fa533a245e7fb": {
+    "192035f65a5849cdb4e3b2c00b26e886": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1ade4d24805746aeb1dadcb592b1ab1d",
-        "style": "IPY_MODEL_116fa7edcd1e4187bcb509775bc45593"
+        "layout": "IPY_MODEL_17d207183dd7414398a7800b8326f078",
+        "style": "IPY_MODEL_f906d555191d49f2a7423ae3c089c3d7"
       }
     },
-    "1ade4d24805746aeb1dadcb592b1ab1d": {
+    "17d207183dd7414398a7800b8326f078": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "116fa7edcd1e4187bcb509775bc45593": {
+    "f906d555191d49f2a7423ae3c089c3d7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a849bef2fe73406bb0c2875162c859ab": {
+    "304845a8f83743d4bfb77400c32c30c9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_bf9f41c29f9e4c2fb931ee2f4a2c9845",
-          "IPY_MODEL_39b011b464124410b156e54c3a25bc23",
-          "IPY_MODEL_515663f1ff6e434ca3e56bbfec27f141"
+          "IPY_MODEL_7b23642d43404e3dbc2e640644d2f466",
+          "IPY_MODEL_139bc3e208a94cde898a52c9cd8b993d",
+          "IPY_MODEL_ca82095eea8e482190f69bfc29535988"
         ],
-        "layout": "IPY_MODEL_16aab0b65c7e49409c7d12580e7e958e"
+        "layout": "IPY_MODEL_310dc982678a44ba889755b80664e5b9"
       }
     },
-    "bf9f41c29f9e4c2fb931ee2f4a2c9845": {
+    "7b23642d43404e3dbc2e640644d2f466": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_552a126c7ba0499aad9f40eea0691cda",
-        "style": "IPY_MODEL_17fddaf08daf406e8925c0b49e68baed",
+        "layout": "IPY_MODEL_db99fa8a6f184897b807718b0a66a514",
+        "style": "IPY_MODEL_6411efd4c6bc487482cee3f06707bb11",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "552a126c7ba0499aad9f40eea0691cda": {
+    "db99fa8a6f184897b807718b0a66a514": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "17fddaf08daf406e8925c0b49e68baed": {
+    "6411efd4c6bc487482cee3f06707bb11": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "39b011b464124410b156e54c3a25bc23": {
+    "139bc3e208a94cde898a52c9cd8b993d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_927e5768a0ab4b0b9f48a2b705754748",
-        "style": "IPY_MODEL_3a71ed0a63eb4842af066f4d3f27e0af",
+        "layout": "IPY_MODEL_95482edb5dc84ab18c4f3b6b7c930d76",
+        "style": "IPY_MODEL_2c6672a8ca254292b5dc4f51978cb49e",
         "value": "<div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the label.\n        </span></div>"
       }
     },
-    "927e5768a0ab4b0b9f48a2b705754748": {
+    "95482edb5dc84ab18c4f3b6b7c930d76": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3a71ed0a63eb4842af066f4d3f27e0af": {
+    "2c6672a8ca254292b5dc4f51978cb49e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "515663f1ff6e434ca3e56bbfec27f141": {
+    "ca82095eea8e482190f69bfc29535988": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -957,7 +1000,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "389bf108-60ba-4abe-bfb4-abe623e93737"
+            "uid": "39f27f8c-a9c0-456a-b013-abead48184c8"
           },
           {
             "base": 0.1,
@@ -976,7 +1019,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "be3d8676-8ec1-48cc-a9f5-b2b5712e767e"
+            "uid": "03bf4d89-f34d-4af0-b67e-95657e7f20d2"
           },
           {
             "marker": {
@@ -998,7 +1041,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "533a6ef0-d4a1-4016-a086-63ffdce7285c"
+            "uid": "cb7a84dc-1765-4908-833c-e13fe2c3461e"
           },
           {
             "marker": {
@@ -1020,7 +1063,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "5a573ac0-8f2a-4144-a227-32f53980d3df"
+            "uid": "f40f1512-405e-499f-a9e4-c10d352fc0ed"
           }
         ],
         "_dom_classes": [],
@@ -2001,13 +2044,13 @@ to download the full example code</p>
         }
       ]
     },
-    "16aab0b65c7e49409c7d12580e7e958e": {
+    "310dc982678a44ba889755b80664e5b9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "539cf1dd71924b6e811c83beb54c8458": {
+    "f010a53cfa3a4191b55f39c2c48b25ae": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2017,7 +2060,7 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c2b609368f10437c8a912b889c037f12"}
+{"version_major": 2, "version_minor": 0, "model_id": "5ecf440c3c154349822bff88f403d570"}
 </script>
 
 </body>
@@ -2025,9 +2068,12 @@ to download the full example code</p>
 </div>
 <br />
 <br /></section>
-<section id="generate-data-regression-label">
-<h2>Generate data - Regression label<a class="headerlink" href="#generate-data-regression-label" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<section id="run-check-on-a-regression-label">
+<h2>Run Check on a Regression Label<a class="headerlink" href="#run-check-on-a-regression-label" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate data:</span>
+<span class="c1"># --------------</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">test_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">])</span>
@@ -2044,9 +2090,8 @@ to download the full example code</p>
 0 categorical features were inferred
 </pre></div>
 </div>
-</section>
 <section id="id1">
-<h2>Run check<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<h3>Run check<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">TrainTestLabelDrift</span><span class="p">()</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
 <span class="n">result</span>
@@ -2336,7 +2381,7 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "0543e7c9f486418ca1aa2415f098567f": {
+    "c11fec62fbc340c1b331a514560ef972": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -2348,143 +2393,143 @@ to download the full example code</p>
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_f991d9eaea50402ea2a1352761693ef1",
-          "IPY_MODEL_767aba067c8d4e8692021e63fb2bbce0",
-          "IPY_MODEL_6f3cfca0b76f406b8560a7e4474a0965",
-          "IPY_MODEL_72872c70127947f086902c662b7df54a"
+          "IPY_MODEL_20bea9e5721a4126a51afceebabe031c",
+          "IPY_MODEL_dadd8bc7f38e4237af9f003a863b5136",
+          "IPY_MODEL_df547ac36e854572a8658a8b8100cc02",
+          "IPY_MODEL_f3834b284759404a9c509d0b1cbd9107"
         ],
-        "layout": "IPY_MODEL_415b310c643f41128dab40396432d95f"
+        "layout": "IPY_MODEL_73e5fa3190894bcda551bd549a34f849"
       }
     },
-    "f991d9eaea50402ea2a1352761693ef1": {
+    "20bea9e5721a4126a51afceebabe031c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_418c92f752b242948e87d8c8c7ca93a9",
-        "style": "IPY_MODEL_dfcbd483dc814224baa8ecf3024bfc64",
+        "layout": "IPY_MODEL_4bde49b2d6eb4b7c81228cc2c6b8b4e9",
+        "style": "IPY_MODEL_9c1672b0bf044ef98048ee5694378761",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "418c92f752b242948e87d8c8c7ca93a9": {
+    "4bde49b2d6eb4b7c81228cc2c6b8b4e9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dfcbd483dc814224baa8ecf3024bfc64": {
+    "9c1672b0bf044ef98048ee5694378761": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "767aba067c8d4e8692021e63fb2bbce0": {
+    "dadd8bc7f38e4237af9f003a863b5136": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cfeb086fc61d47ae83eae5274166ff9f",
-        "style": "IPY_MODEL_8a651af0a9d24e0c9c3f26ae10b29c96",
+        "layout": "IPY_MODEL_ff138de43d0246c3a514801ae1d99471",
+        "style": "IPY_MODEL_5e1555cad49246fe85397de39734c2dc",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "cfeb086fc61d47ae83eae5274166ff9f": {
+    "ff138de43d0246c3a514801ae1d99471": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8a651af0a9d24e0c9c3f26ae10b29c96": {
+    "5e1555cad49246fe85397de39734c2dc": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6f3cfca0b76f406b8560a7e4474a0965": {
+    "df547ac36e854572a8658a8b8100cc02": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_26dd7155224144dcb56ee37ecbe8025f",
-        "style": "IPY_MODEL_f9740829df824d8db8c97427912dea62"
+        "layout": "IPY_MODEL_c5fbd1a1b9e748e6aad6e7768dc3fe78",
+        "style": "IPY_MODEL_33e0ac52d23a4a059eaed0001f4f8a9e"
       }
     },
-    "26dd7155224144dcb56ee37ecbe8025f": {
+    "c5fbd1a1b9e748e6aad6e7768dc3fe78": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f9740829df824d8db8c97427912dea62": {
+    "33e0ac52d23a4a059eaed0001f4f8a9e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "72872c70127947f086902c662b7df54a": {
+    "f3834b284759404a9c509d0b1cbd9107": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_3398c6d96f48493ea678bb86f2ade911",
-          "IPY_MODEL_95ebdf50b3f740ee96eb456f57e888e4",
-          "IPY_MODEL_5cec4ed478c64d3f918fdf9b0bfa8472"
+          "IPY_MODEL_4530f540f45b4f3586f3ef2b7391260d",
+          "IPY_MODEL_4af93d1e25c74b8d89358ebb7e0714d3",
+          "IPY_MODEL_3d83d2d08eb54dec9a9a02e047658c88"
         ],
-        "layout": "IPY_MODEL_55e5b2b4e4654ffeab91d5581cb903c6"
+        "layout": "IPY_MODEL_c6ec9699125143a4b6a765f437b5ec08"
       }
     },
-    "3398c6d96f48493ea678bb86f2ade911": {
+    "4530f540f45b4f3586f3ef2b7391260d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cc7f91f568cc438dbc6851c92b618bb1",
-        "style": "IPY_MODEL_e52fe9c10fb7402c9b2500432571999e",
+        "layout": "IPY_MODEL_70b14b407d254ee1a9c983f86a0a26b6",
+        "style": "IPY_MODEL_67db8cdece67435baff32ec4cd8e59bc",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "cc7f91f568cc438dbc6851c92b618bb1": {
+    "70b14b407d254ee1a9c983f86a0a26b6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e52fe9c10fb7402c9b2500432571999e": {
+    "67db8cdece67435baff32ec4cd8e59bc": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "95ebdf50b3f740ee96eb456f57e888e4": {
+    "4af93d1e25c74b8d89358ebb7e0714d3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_a9214365e9ea4dd780db927cf217b63f",
-        "style": "IPY_MODEL_dbb0a0f8e4944734a68b3e09752b7cad",
+        "layout": "IPY_MODEL_715c5ff4ae09403b89dc89179b87f39c",
+        "style": "IPY_MODEL_4df55cc63ed742f8bf831007aa376ec7",
         "value": "<div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the label.\n        </span></div>"
       }
     },
-    "a9214365e9ea4dd780db927cf217b63f": {
+    "715c5ff4ae09403b89dc89179b87f39c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dbb0a0f8e4944734a68b3e09752b7cad": {
+    "4df55cc63ed742f8bf831007aa376ec7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5cec4ed478c64d3f918fdf9b0bfa8472": {
+    "3d83d2d08eb54dec9a9a02e047658c88": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2510,7 +2555,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "6a6ea1d4-971c-4939-99d8-62370f551532"
+            "uid": "9ab73924-7dee-4c24-bbd1-e4deb54534f2"
           },
           {
             "base": 0.1,
@@ -2529,7 +2574,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "fbf3aa6c-7572-4153-a8fb-5aeb68a4a458"
+            "uid": "d26e43ea-a77a-4e69-a813-4c6805a02fa9"
           },
           {
             "base": 0.2,
@@ -2548,7 +2593,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "1fb93638-4dae-4681-95f8-6885568a406a"
+            "uid": "9de6300c-2746-4714-87f9-82cf322387fd"
           },
           {
             "base": 0.3,
@@ -2567,7 +2612,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "2332589f-f244-4b71-a6f0-ae169c626e5f"
+            "uid": "35e68d07-434a-49b3-8438-9027b1773f56"
           },
           {
             "fill": "tozeroy",
@@ -2739,7 +2784,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "a1b1a5f6-200c-4794-ad84-7270d9d56f01"
+            "uid": "0df01cb4-9980-44e2-9cd3-8f25c7385c33"
           },
           {
             "line": {
@@ -2759,7 +2804,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "4348cd5d-83d6-4719-b8c9-4e7f715345c3"
+            "uid": "b657b10e-74d8-4b99-a1dd-e12442483eb7"
           },
           {
             "line": {
@@ -2778,7 +2823,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "d92c57d0-75a4-45b5-8fea-3f5fd1df6961"
+            "uid": "e5c43f9b-9d06-4526-ad53-d6797738764c"
           },
           {
             "fill": "tozeroy",
@@ -2950,7 +2995,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "a01f7345-0b77-43c0-96d8-549eecd3d5e9"
+            "uid": "7554ac3b-2dd9-4b11-b96a-960f1c187aeb"
           },
           {
             "line": {
@@ -2970,7 +3015,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "33c6f8f3-8196-4543-9a31-da7a84738c22"
+            "uid": "b12a0452-6d63-4b5d-92d5-e023c4be8692"
           },
           {
             "line": {
@@ -2989,7 +3034,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c1d8f9f6-0144-4df0-a566-7be1444c9f1e"
+            "uid": "6af753a7-031a-4a59-be6c-b70dbb65df6a"
           }
         ],
         "_dom_classes": [],
@@ -3951,13 +3996,13 @@ to download the full example code</p>
         }
       ]
     },
-    "55e5b2b4e4654ffeab91d5581cb903c6": {
+    "c6ec9699125143a4b6a765f437b5ec08": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "415b310c643f41128dab40396432d95f": {
+    "73e5fa3190894bcda551bd549a34f849": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3967,14 +4012,17 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "0543e7c9f486418ca1aa2415f098567f"}
+{"version_major": 2, "version_minor": 0, "model_id": "c11fec62fbc340c1b331a514560ef972"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p>Add condition</p>
+<br /></section>
+</section>
+<section id="add-a-condition">
+<h2>Add a Condition<a class="headerlink" href="#add-a-condition" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check_cond</span> <span class="o">=</span> <span class="n">TrainTestLabelDrift</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_drift_score_not_greater_than</span><span class="p">()</span>
 <span class="n">check_cond</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
 </pre></div>
@@ -4263,7 +4311,7 @@ to download the full example code</p>
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "fbdd64fcba9c431d93d38953b68c580b": {
+    "85165c4fcf7a4feab5ae02171700dd33": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -4275,144 +4323,144 @@ to download the full example code</p>
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_7547ac8fc2574c9e88981d7ff7cac3af",
-          "IPY_MODEL_cf0c9f2800974852887b67a12c2c993b",
-          "IPY_MODEL_c10d015da85142d28d53c0f8c5fca24b",
-          "IPY_MODEL_01726c578e6c4e3e94d5ca8ee026c4ec"
+          "IPY_MODEL_e3285633a96f4bb3b05cd020f9e52c2a",
+          "IPY_MODEL_d2692ec458d048019234a4e5637750c0",
+          "IPY_MODEL_0e0686ad4c254518b3a0ab23884bba98",
+          "IPY_MODEL_42b619741aaa4fa994fbea97e926810f"
         ],
-        "layout": "IPY_MODEL_6f8bd14de7264c6f82a2e0652772f126"
+        "layout": "IPY_MODEL_87279186fa604d67860dcad76cff9226"
       }
     },
-    "7547ac8fc2574c9e88981d7ff7cac3af": {
+    "e3285633a96f4bb3b05cd020f9e52c2a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0e216b246d2349e9a7f7cb2fa64466c2",
-        "style": "IPY_MODEL_ae85711cd81742b2938aaca10893e7ee",
+        "layout": "IPY_MODEL_353f9cafc3974b8ab54be4df7e3e594a",
+        "style": "IPY_MODEL_e1eb408678eb42ab94aadf24b23c11a3",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "0e216b246d2349e9a7f7cb2fa64466c2": {
+    "353f9cafc3974b8ab54be4df7e3e594a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ae85711cd81742b2938aaca10893e7ee": {
+    "e1eb408678eb42ab94aadf24b23c11a3": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cf0c9f2800974852887b67a12c2c993b": {
+    "d2692ec458d048019234a4e5637750c0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_06c0d24bd7704c60b94ff46b5c689947",
-        "style": "IPY_MODEL_6f64b83405f849c6aeca677703228809",
+        "layout": "IPY_MODEL_04646eb5bd754a7e94e855a18daf9e0d",
+        "style": "IPY_MODEL_bfe3aa6cbb7d47c98d1e634253360c5a",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "06c0d24bd7704c60b94ff46b5c689947": {
+    "04646eb5bd754a7e94e855a18daf9e0d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6f64b83405f849c6aeca677703228809": {
+    "bfe3aa6cbb7d47c98d1e634253360c5a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c10d015da85142d28d53c0f8c5fca24b": {
+    "0e0686ad4c254518b3a0ab23884bba98": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c42cbc9212d946859404fc9c2e2f6f6a",
-        "style": "IPY_MODEL_5607e909c48547f89be77cd175b87244",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_24358_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_24358_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_24358_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_24358_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_24358_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_24358_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_24358_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_24358_row0_col1\" class=\"data row0 col1\" >categorical drift score <= 0.2 and numerical drift score <= 0.1 for label drift</td>\n      <td id=\"T_24358_row0_col2\" class=\"data row0 col2\" >Label's drift score Earth Mover's Distance is 0.34</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_a36546454dcf43208cab532c9a59c9cb",
+        "style": "IPY_MODEL_ba86156a745642ce9a25e10411b2f35c",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_9e4f4_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9e4f4_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9e4f4_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9e4f4_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9e4f4_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_9e4f4_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_9e4f4_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_9e4f4_row0_col1\" class=\"data row0 col1\" >categorical drift score <= 0.2 and numerical drift score <= 0.1 for label drift</td>\n      <td id=\"T_9e4f4_row0_col2\" class=\"data row0 col2\" >Label's drift score Earth Mover's Distance is 0.34</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "c42cbc9212d946859404fc9c2e2f6f6a": {
+    "a36546454dcf43208cab532c9a59c9cb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5607e909c48547f89be77cd175b87244": {
+    "ba86156a745642ce9a25e10411b2f35c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "01726c578e6c4e3e94d5ca8ee026c4ec": {
+    "42b619741aaa4fa994fbea97e926810f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_c13e46a42c47409ea83d14fd0655e80b",
-          "IPY_MODEL_c615f2229ceb4f53b1f2aa2e06730f6f",
-          "IPY_MODEL_7f2f7a3ef587453b819cc9dba383bfce"
+          "IPY_MODEL_e39481eec6f746aca9abec896a07208f",
+          "IPY_MODEL_ed956f6520a94198a61f1edac760cc12",
+          "IPY_MODEL_46a53e6f91a846afa3c2defde8f16d96"
         ],
-        "layout": "IPY_MODEL_7d6f799ca54944919b68492006389bd2"
+        "layout": "IPY_MODEL_723d1dcd0c0b43a3a546903142f48272"
       }
     },
-    "c13e46a42c47409ea83d14fd0655e80b": {
+    "e39481eec6f746aca9abec896a07208f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_59443df751a94938a2f235981cca833b",
-        "style": "IPY_MODEL_c2cac2fc57994efe9d19bf670afac778",
+        "layout": "IPY_MODEL_69dd008841604bbb8403e92b02cb650a",
+        "style": "IPY_MODEL_7496d987b80346fca08001f729bc6aa2",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "59443df751a94938a2f235981cca833b": {
+    "69dd008841604bbb8403e92b02cb650a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "c2cac2fc57994efe9d19bf670afac778": {
+    "7496d987b80346fca08001f729bc6aa2": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c615f2229ceb4f53b1f2aa2e06730f6f": {
+    "ed956f6520a94198a61f1edac760cc12": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_deeab76e1b6e45e0a0ad640372068c9c",
-        "style": "IPY_MODEL_6e87818ec59d416a908dd39f0b54b69a",
+        "layout": "IPY_MODEL_06e1a07593af4dc2bf05ab7e1d8cfc7c",
+        "style": "IPY_MODEL_f2e48aa8893e4e8a8d5af7840fa31ec6",
         "value": "<div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the label.\n        </span></div>"
       }
     },
-    "deeab76e1b6e45e0a0ad640372068c9c": {
+    "06e1a07593af4dc2bf05ab7e1d8cfc7c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6e87818ec59d416a908dd39f0b54b69a": {
+    "f2e48aa8893e4e8a8d5af7840fa31ec6": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7f2f7a3ef587453b819cc9dba383bfce": {
+    "46a53e6f91a846afa3c2defde8f16d96": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -4438,7 +4486,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "a3ed8f9e-7a7b-481a-9949-9b63e993fa20"
+            "uid": "b98c3379-5972-45d8-8196-11ec5a98d1ec"
           },
           {
             "base": 0.1,
@@ -4457,7 +4505,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "7605ec21-49f2-44c8-936a-9457b36e91f8"
+            "uid": "72c9c2cc-05f1-4a77-8d08-307cd9725b4e"
           },
           {
             "base": 0.2,
@@ -4476,7 +4524,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "5bdf6532-6c9c-448d-97ff-2a72f93af663"
+            "uid": "cc0b8f72-f3d7-492a-9b07-8908249c98e5"
           },
           {
             "base": 0.3,
@@ -4495,7 +4543,7 @@ to download the full example code</p>
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "55364fa3-443e-420f-ae44-fc1c356bc3a5"
+            "uid": "ee2e8a03-b2f3-4193-833c-ea62e7f69013"
           },
           {
             "fill": "tozeroy",
@@ -4667,7 +4715,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "71eb0142-f31e-43e7-8583-f5111269b534"
+            "uid": "25c0a8f4-05fd-4863-8fc9-ce000112ce58"
           },
           {
             "line": {
@@ -4687,7 +4735,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c945b5ab-f0f9-4b6e-bad0-62b77154c9c7"
+            "uid": "82513872-9ceb-45d6-9b12-4cf3407222cf"
           },
           {
             "line": {
@@ -4706,7 +4754,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "b3b78d42-90af-452e-9911-cee53042cf67"
+            "uid": "de1a9477-fb92-420a-b3a8-8cfed6e22c25"
           },
           {
             "fill": "tozeroy",
@@ -4878,7 +4926,7 @@ to download the full example code</p>
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "164c9460-b69a-42c3-8a67-3154c5fd37ac"
+            "uid": "65d3cf70-3de9-4c81-974b-43d681374047"
           },
           {
             "line": {
@@ -4898,7 +4946,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "50eed251-1b42-4608-9b55-f6b4fcff155c"
+            "uid": "fa4a86cd-2cbc-4ff2-834f-1f3820a32cc4"
           },
           {
             "line": {
@@ -4917,7 +4965,7 @@ to download the full example code</p>
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "8a9fe3c3-6b68-45a6-86fa-acd268534a9f"
+            "uid": "442e135a-93aa-4820-8bfc-7b6df37dad63"
           }
         ],
         "_dom_classes": [],
@@ -5879,13 +5927,13 @@ to download the full example code</p>
         }
       ]
     },
-    "7d6f799ca54944919b68492006389bd2": {
+    "723d1dcd0c0b43a3a546903142f48272": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6f8bd14de7264c6f82a2e0652772f126": {
+    "87279186fa604d67860dcad76cff9226": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -5895,14 +5943,14 @@ to download the full example code</p>
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "fbdd64fcba9c431d93d38953b68c580b"}
+{"version_major": 2, "version_minor": 0, "model_id": "85165c4fcf7a4feab5ae02171700dd33"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.375 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.312 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-train-test-validation-plot-train-test-label-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/56f4b0edd5484651af2648f597eeb9c7/plot_train_test_label_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_train_test_label_drift.py</span></code></a></p>
@@ -5956,7 +6004,7 @@ to download the full example code</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/40df64d.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/f76ba17.<br>
 </p>
     </div>
     
