@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Image Property Drift Check &#8212; Deepchecks e87b2cd documentation</title>
+    <title>Image Property Drift Check &#8212; Deepchecks 40df64d documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -355,21 +355,9 @@ Page: checks_gallery/vision/train_test_validation/plot_image_property_drift&labe
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-image-drift">
-   What Is Image Drift?
+  <a class="reference internal nav-link" href="#how-does-the-imagepropertydrift-check-work">
+   How Does the ImagePropertyDrift Check Work?
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-deepchecks-detects-image-drift">
-     How Deepchecks Detects Image Drift
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-properties-to-detect-image-drift">
-     Using Properties to Detect Image Drift
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#which-image-properties-are-used">
@@ -438,33 +426,24 @@ to download the full example code</p>
 <p>This notebooks provides an overview for using and understanding the image property drift check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#what-is-image-drift">What Is Image Drift?</a></p></li>
+<li><p><a class="reference external" href="#how-does-the-imagepropertydrift-check-work">How Does the ImagePropertyDrift Check Work?</a></p></li>
 <li><p><a class="reference external" href="#which-image-properties-are-used">Which Image Properties Are Used?</a></p></li>
 <li><p><a class="reference external" href="#prepare-data">Prepare data</a></p></li>
 <li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
 <li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
 <li><p><a class="reference external" href="#check-parameters">Check Parameters</a></p></li>
 </ul>
-<section id="what-is-image-drift">
-<h2>What Is Image Drift?<a class="headerlink" href="#what-is-image-drift" title="Permalink to this headline">#</a></h2>
-<p>Drift is simply a change in the distribution of data over time, and it is
-also one of the top reasons why machine learning model’s performance degrades
-over time.</p>
-<p>Image drift is a data drift that occurs in images in the dataset.</p>
-<p>For more information on drift, please visit our <a class="reference internal" href="../../../user-guide/general/drift_guide.html"><span class="doc">drift guide</span></a>.</p>
-<section id="how-deepchecks-detects-image-drift">
-<h3>How Deepchecks Detects Image Drift<a class="headerlink" href="#how-deepchecks-detects-image-drift" title="Permalink to this headline">#</a></h3>
-<p>This check detects image property drift by using <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
-on each image property separately.
-Another possible method for drift detection is by <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-domain-classifier"><span class="std std-ref">a domain classifier</span></a>
-which is used in the <a class="reference internal" href="plot_image_dataset_drift.html"><span class="doc">Image Dataset Drift check</span></a>.</p>
-</section>
-<section id="using-properties-to-detect-image-drift">
-<h3>Using Properties to Detect Image Drift<a class="headerlink" href="#using-properties-to-detect-image-drift" title="Permalink to this headline">#</a></h3>
-<p>In computer vision specifically, we can’t measure drift on images directly, as the individual pixel has little
-value when estimating drift. Therefore, we calculate drift on different <a class="reference internal" href="../../../user-guide/vision/vision_properties.html"><span class="doc">properties of the image</span></a>,
-on which we can directly measure drift.</p>
-</section>
+<section id="how-does-the-imagepropertydrift-check-work">
+<h2>How Does the ImagePropertyDrift Check Work?<a class="headerlink" href="#how-does-the-imagepropertydrift-check-work" title="Permalink to this headline">#</a></h2>
+<p>Data drift is simply a change in the distribution of data over time. It is also one
+of the top reasons that a machine learning model performance degrades over time.</p>
+<p>In the context of machine learning, drift between the training set and the test set
+will likely make the model prone to errors. In other words, if the model was trained
+on data that is different from the current test data, it will probably make more mistakes
+predicting the target variable.</p>
+<p>The Image Property Drift check calculates a drift score for each image property in
+the test dataset, by comparing its distribution to the train dataset. For this, we
+use the Earth Movers Distance (Wasserstein distance).</p>
 </section>
 <section id="which-image-properties-are-used">
 <h2>Which Image Properties Are Used?<a class="headerlink" href="#which-image-properties-are-used" title="Permalink to this headline">#</a></h2>
@@ -532,19 +511,19 @@ comparison to the other channels [b / (r + g + b)].</p></td>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 1615.68 /s]
+|#####| 1/1 [00:00&lt;00:00, 2199.43 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.45s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.67s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.40s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.63s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.40s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.63s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
@@ -552,15 +531,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.22s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.49s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.38s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.61s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.38s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.61s/ Batch]
 
 
 
@@ -570,12 +549,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.77 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  2.98 Check/s]
 
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.77 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  2.98 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -862,7 +841,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "25fa67c5e48b4652b34de08398163ce4": {
+    "51f526bee37d473580222d357aaf393e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -874,149 +853,149 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_21595a12988d49d3b23e5ff4d100f71c",
-          "IPY_MODEL_b43be13a9f4f40c88f06e23da8132d77",
-          "IPY_MODEL_b28aced13564452fa83849483e3f7c86",
-          "IPY_MODEL_0513c26fdaa649b7aee02d8a689320e8"
+          "IPY_MODEL_ba4aeb1621694f6584b8f7bfc2189c1e",
+          "IPY_MODEL_778a59cd3f204f8984643c8baba8f126",
+          "IPY_MODEL_ad98ac1cfcb6431bb23be809c73bfd7e",
+          "IPY_MODEL_f9b0d7ea335b4956aa3eca71d1d9d92e"
         ],
-        "layout": "IPY_MODEL_3f937af64edb4bb7bc8f0dcb00fdcc0a"
+        "layout": "IPY_MODEL_46b4af61a6c1417f8d04c698d2d4e9e4"
       }
     },
-    "21595a12988d49d3b23e5ff4d100f71c": {
+    "ba4aeb1621694f6584b8f7bfc2189c1e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_74ec125e743a4d3fa8980297cdfb4f5b",
-        "style": "IPY_MODEL_aba75d5e38f94edaaffd850159f71c04",
+        "layout": "IPY_MODEL_e4a0f5a23ec14a1c9920e332ab6d44d7",
+        "style": "IPY_MODEL_d8b4ce48977c4927b29b7cf2d7837154",
         "value": "<h4><b>Image Property Drift</b></h4>"
       }
     },
-    "74ec125e743a4d3fa8980297cdfb4f5b": {
+    "e4a0f5a23ec14a1c9920e332ab6d44d7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "aba75d5e38f94edaaffd850159f71c04": {
+    "d8b4ce48977c4927b29b7cf2d7837154": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b43be13a9f4f40c88f06e23da8132d77": {
+    "778a59cd3f204f8984643c8baba8f126": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e5bc58c7c76b41acbe98266e3d690360",
-        "style": "IPY_MODEL_c25c5e9916b847a9acfb71ebbfdae1f8",
+        "layout": "IPY_MODEL_e3d07909ddab46e180df6574628e5189",
+        "style": "IPY_MODEL_1c3cafdb74724133adfa9c4c4a1c6d5b",
         "value": "<p>    Calculate drift between train dataset and test dataset per image property, using statistical measures.</p>"
       }
     },
-    "e5bc58c7c76b41acbe98266e3d690360": {
+    "e3d07909ddab46e180df6574628e5189": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "c25c5e9916b847a9acfb71ebbfdae1f8": {
+    "1c3cafdb74724133adfa9c4c4a1c6d5b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b28aced13564452fa83849483e3f7c86": {
+    "ad98ac1cfcb6431bb23be809c73bfd7e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d4a09747fceb4edf98f450d23bd30b61",
-        "style": "IPY_MODEL_4c0269b407da4d6b892232ae3ba3422f"
+        "layout": "IPY_MODEL_b45eae620132483881cc3b83149ff027",
+        "style": "IPY_MODEL_50a40f314d6b42369a256d9f318142c0"
       }
     },
-    "d4a09747fceb4edf98f450d23bd30b61": {
+    "b45eae620132483881cc3b83149ff027": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4c0269b407da4d6b892232ae3ba3422f": {
+    "50a40f314d6b42369a256d9f318142c0": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0513c26fdaa649b7aee02d8a689320e8": {
+    "f9b0d7ea335b4956aa3eca71d1d9d92e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_d1a5e53493fa4e6e843ff16842a56b37",
-          "IPY_MODEL_760509ed6aaf47139dcdfd7a88f591fa",
-          "IPY_MODEL_d890098fb01243ac93d488b3714090cc",
-          "IPY_MODEL_e237fc437d3a48e99ce2566220e8f8fc",
-          "IPY_MODEL_22501afbcce748958ffe3349af90c1ce",
-          "IPY_MODEL_4920d680976246a29a6e8e51508f7a43",
-          "IPY_MODEL_2a0adb1a0c6444539cf3655a9706cd7e",
-          "IPY_MODEL_615ee85c0ec24e3295816a5f6e07be09",
-          "IPY_MODEL_047afadbd30a4a69a93b4aa72957498f"
+          "IPY_MODEL_655ea666164348b2943ef969ab33d5fd",
+          "IPY_MODEL_fe4e4f0ffd454319bd85104775b65ac2",
+          "IPY_MODEL_0547a795dc584292a570c535786c6764",
+          "IPY_MODEL_0a7e0876436d41f5b1a0bc90af1929bb",
+          "IPY_MODEL_fc26bdaedf25433b890eed9ed5b234f7",
+          "IPY_MODEL_161e03ff78a94b208cfd0b3b22f36541",
+          "IPY_MODEL_aa18e0f91d82478eab6baac882e819a4",
+          "IPY_MODEL_d31e23620a1146a6874edbc110b0091f",
+          "IPY_MODEL_c8a6999d386c46aaa002137219061cb8"
         ],
-        "layout": "IPY_MODEL_ddbced6c03f84d9eacae665ae650284b"
+        "layout": "IPY_MODEL_a770bd56daa24c88ace220ad8a13774e"
       }
     },
-    "d1a5e53493fa4e6e843ff16842a56b37": {
+    "655ea666164348b2943ef969ab33d5fd": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ed092bf3f2094ef8a369e654f8a8a83b",
-        "style": "IPY_MODEL_d5813b65b45f42d8b4769f95eb689412",
+        "layout": "IPY_MODEL_a3b840fb6d154b94ac8156d22f7d3f13",
+        "style": "IPY_MODEL_83661588d3c842e69099bcded35f4a8f",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "ed092bf3f2094ef8a369e654f8a8a83b": {
+    "a3b840fb6d154b94ac8156d22f7d3f13": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d5813b65b45f42d8b4769f95eb689412": {
+    "83661588d3c842e69099bcded35f4a8f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "760509ed6aaf47139dcdfd7a88f591fa": {
+    "fe4e4f0ffd454319bd85104775b65ac2": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c2d0fdd3e95b4b869a244d92e0c5c867",
-        "style": "IPY_MODEL_c80406a60b0b48ad9a9352cc46d31bf1",
+        "layout": "IPY_MODEL_c3a4c8d8040742a6837ef104eea342b6",
+        "style": "IPY_MODEL_23cbe8f8a31a43a6a4102b3ddd8fbbab",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following image properties: ['Area', 'Aspect Ratio', 'Brightness', 'Mean Blue Relative Intensity', 'Mean Green Relative Intensity', 'Mean Red Relative Intensity', 'RMS Contrast'].<br></span></div>"
       }
     },
-    "c2d0fdd3e95b4b869a244d92e0c5c867": {
+    "c3a4c8d8040742a6837ef104eea342b6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "c80406a60b0b48ad9a9352cc46d31bf1": {
+    "23cbe8f8a31a43a6a4102b3ddd8fbbab": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d890098fb01243ac93d488b3714090cc": {
+    "0547a795dc584292a570c535786c6764": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1042,7 +1021,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "01496981-ebcf-43ad-a32d-682de71f648c"
+            "uid": "1753a3f6-e79a-4bef-9835-aa125bbb5463"
           },
           {
             "fill": "tozeroy",
@@ -1214,7 +1193,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "52056f11-992f-4afe-be3e-047b78760790"
+            "uid": "4b33c0a9-f638-4de9-8460-8f830c54f878"
           },
           {
             "line": {
@@ -1234,7 +1213,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "54fdcb1f-0439-4c86-b6da-5eab3a815e43"
+            "uid": "fdb7302f-42eb-4742-afdb-a70911208519"
           },
           {
             "line": {
@@ -1253,7 +1232,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "5f5bb605-b4da-4a9f-b786-d92c473a4710"
+            "uid": "0a902b55-9b40-4f9d-8fdd-c7b3db5544fc"
           },
           {
             "fill": "tozeroy",
@@ -1425,7 +1404,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "afcd5b1a-6949-4be5-b572-1bab9e0511ac"
+            "uid": "99121f81-22ee-4850-a06b-696859b74af1"
           },
           {
             "line": {
@@ -1445,7 +1424,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "fff2d5fd-bf73-4fa3-91c5-309772ba4cf0"
+            "uid": "25957585-d573-4f7b-9f15-07a19a8acf75"
           },
           {
             "line": {
@@ -1464,7 +1443,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "86da4b54-0b61-4a4a-9dfc-2aec9329bf8e"
+            "uid": "ac90e870-292b-4325-aaa7-4db72049f203"
           }
         ],
         "_dom_classes": [],
@@ -2426,7 +2405,7 @@ Computing Check:
         }
       ]
     },
-    "e237fc437d3a48e99ce2566220e8f8fc": {
+    "0a7e0876436d41f5b1a0bc90af1929bb": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2452,7 +2431,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "8d03bba4-e076-4a44-8951-d5b2f000f85d"
+            "uid": "45206e2e-dce3-4ddc-81e6-90f268608758"
           },
           {
             "fill": "tozeroy",
@@ -2624,7 +2603,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "9aa159cb-b9b6-4230-92ad-14519dc82050"
+            "uid": "0167150d-4d08-439f-a275-c56a762cf095"
           },
           {
             "line": {
@@ -2644,7 +2623,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f533510d-bc6c-4dfa-a88b-9763e9883480"
+            "uid": "49149f01-bf4d-4b34-b10e-ac0ae0e142d3"
           },
           {
             "line": {
@@ -2663,7 +2642,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "fcdc6b6e-c6e5-46bd-8ff2-c02c30d41e2e"
+            "uid": "29312cc5-4888-43ca-8736-939cbd98a172"
           },
           {
             "fill": "tozeroy",
@@ -2835,7 +2814,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "d1f48aa3-a7b9-4c37-be1d-37f3dc28ca92"
+            "uid": "8ed20f64-f1c1-42aa-8314-4fd223895f9e"
           },
           {
             "line": {
@@ -2855,7 +2834,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "676107e1-bd7b-45c7-b5df-6cbbf2997b04"
+            "uid": "29358b0a-789b-43ba-97ba-3a9b5e71170d"
           },
           {
             "line": {
@@ -2874,7 +2853,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f7ca093d-a117-400c-acc4-a042a00ce706"
+            "uid": "fe47c338-2561-40f5-a491-3dac493dbbdd"
           }
         ],
         "_dom_classes": [],
@@ -3836,7 +3815,7 @@ Computing Check:
         }
       ]
     },
-    "22501afbcce748958ffe3349af90c1ce": {
+    "fc26bdaedf25433b890eed9ed5b234f7": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -3862,7 +3841,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "b8eca3c8-3c38-4c8b-a9a9-2db9b4dae013"
+            "uid": "eae7f066-fd1f-4142-ba45-2485c31f6446"
           },
           {
             "fill": "tozeroy",
@@ -4034,7 +4013,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "55f6faa1-3b02-4b78-a667-65aa7cf04351"
+            "uid": "bb313999-fcb1-499f-9a81-209026ff7027"
           },
           {
             "line": {
@@ -4054,7 +4033,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "8a834468-6543-47a2-929e-4f83c821255c"
+            "uid": "5ee0cbae-8b79-43fe-8a54-c305b988b949"
           },
           {
             "line": {
@@ -4073,7 +4052,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "81ffbb0c-0f35-4cf3-9667-96d0b2439f54"
+            "uid": "519f06e8-d999-43a8-bc96-9fd659dfed6e"
           },
           {
             "fill": "tozeroy",
@@ -4245,7 +4224,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "88d24bc0-a96e-46cd-bad9-4867364724d7"
+            "uid": "fa98864f-19e9-46c2-9390-fffd8ceb7187"
           },
           {
             "line": {
@@ -4265,7 +4244,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "67d3d96b-0307-4a49-86ec-53a138114731"
+            "uid": "3b467084-84d5-4873-af36-beef38fd4a9d"
           },
           {
             "line": {
@@ -4284,7 +4263,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "8f788216-e853-40f8-8fc5-716446226fe0"
+            "uid": "a9076410-eced-4299-8fec-b48ac781599e"
           }
         ],
         "_dom_classes": [],
@@ -5246,7 +5225,7 @@ Computing Check:
         }
       ]
     },
-    "4920d680976246a29a6e8e51508f7a43": {
+    "161e03ff78a94b208cfd0b3b22f36541": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -5272,7 +5251,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "e9b197cc-9662-4d22-8086-bd3fd8493d5f"
+            "uid": "4b18944d-15cb-4c34-a82a-93ff8bd54e24"
           },
           {
             "fill": "tozeroy",
@@ -5444,7 +5423,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e6eab839-5620-4cfb-a55b-897bfbfdc6f0"
+            "uid": "b63ceb91-d31b-4e6b-b7b4-9e9c14ac9bdc"
           },
           {
             "line": {
@@ -5464,7 +5443,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f81f1cb0-1659-456b-950a-143bc9bd0120"
+            "uid": "3300c17e-8987-42b4-8c7e-fb3d49ec297e"
           },
           {
             "line": {
@@ -5483,7 +5462,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "9ea9233b-b4e0-4e95-8f3b-62d3b25dbd0e"
+            "uid": "21d33ea1-d6aa-4e1e-8f4e-528b7ff0f529"
           },
           {
             "fill": "tozeroy",
@@ -5655,7 +5634,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "9c6c69b2-6eff-4921-b9c5-fade1b42a67d"
+            "uid": "969ab49f-3245-4e24-b714-7643212c29d2"
           },
           {
             "line": {
@@ -5675,7 +5654,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "9f9a943c-b155-4091-b721-341e3bbd11eb"
+            "uid": "48712e83-2c51-433c-98c4-011c054da058"
           },
           {
             "line": {
@@ -5694,7 +5673,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "64569f42-f168-43c9-bec7-c835cedd1cd3"
+            "uid": "84822afd-b05d-432d-9176-146fbd523a0d"
           }
         ],
         "_dom_classes": [],
@@ -6656,7 +6635,7 @@ Computing Check:
         }
       ]
     },
-    "2a0adb1a0c6444539cf3655a9706cd7e": {
+    "aa18e0f91d82478eab6baac882e819a4": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -6682,7 +6661,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "649c5e21-b702-4d4f-bdb3-c4df30753e3c"
+            "uid": "3ff50668-ddde-415b-8435-971b09a85fe5"
           },
           {
             "fill": "tozeroy",
@@ -6854,7 +6833,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "3a6d0f66-b147-4b71-825e-97bdf18f6ac5"
+            "uid": "ee8f5c95-8ae5-4942-85d4-e8ea0d5404f9"
           },
           {
             "line": {
@@ -6874,7 +6853,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "36c2d382-6e70-4544-a169-082a76fcba83"
+            "uid": "1198cca1-ed87-4425-8800-8f15ce62b1ab"
           },
           {
             "line": {
@@ -6893,7 +6872,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e3f1b374-f9ce-41cc-a415-aacce45d09e7"
+            "uid": "5e88faac-db77-4b88-9d23-0c081bcffd3d"
           },
           {
             "fill": "tozeroy",
@@ -7065,7 +7044,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "a0d5ff4c-ad69-4d0c-ab59-439ac17edd17"
+            "uid": "ea79006c-0d2c-462a-b604-b74be90ed805"
           },
           {
             "line": {
@@ -7085,7 +7064,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "60030d95-97b5-496c-86ef-512ab5c9d1a2"
+            "uid": "5a566d43-68ba-4adb-88d9-dad427fd34a5"
           },
           {
             "line": {
@@ -7104,7 +7083,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e7668e07-15c1-4c09-99ac-cee28a457032"
+            "uid": "8e96550f-b7f4-4578-9383-f1e1be3b47a8"
           }
         ],
         "_dom_classes": [],
@@ -8066,7 +8045,7 @@ Computing Check:
         }
       ]
     },
-    "615ee85c0ec24e3295816a5f6e07be09": {
+    "d31e23620a1146a6874edbc110b0091f": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -8092,7 +8071,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "cb3b40d4-63d3-47fb-812a-a2129047b9c7"
+            "uid": "59ee412c-89d7-4802-8c98-ecd5bb9aab7c"
           },
           {
             "fill": "tozeroy",
@@ -8264,7 +8243,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f75ffc38-f499-42c7-8118-9173d04d3df7"
+            "uid": "c6d8d895-b079-43f0-8b3a-e393b42e399e"
           },
           {
             "line": {
@@ -8284,7 +8263,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "21cca089-666a-4f0b-a52c-ccb38ab0ef48"
+            "uid": "d2e1d621-b694-4928-bacf-9e6f99d078d3"
           },
           {
             "line": {
@@ -8303,7 +8282,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "a6edfe31-9a1a-4cd3-b61e-cc8cf52907b6"
+            "uid": "d34d968f-3b20-4960-84d9-2f52e72b85ee"
           },
           {
             "fill": "tozeroy",
@@ -8475,7 +8454,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "65d0813f-7af1-433b-8f6a-6c701fea785d"
+            "uid": "f5893c9b-0fd7-4138-90f3-36b4566495ab"
           },
           {
             "line": {
@@ -8495,7 +8474,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "966b40ef-72ac-459b-a621-aa1adc9a8e28"
+            "uid": "dc6050e4-9feb-4f24-89bf-2fc9a8c0f572"
           },
           {
             "line": {
@@ -8514,7 +8493,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "ee4ab6b4-0386-4723-911f-7624fc497aea"
+            "uid": "a7b26137-3b16-46db-90c0-7a567768c792"
           }
         ],
         "_dom_classes": [],
@@ -9476,7 +9455,7 @@ Computing Check:
         }
       ]
     },
-    "047afadbd30a4a69a93b4aa72957498f": {
+    "c8a6999d386c46aaa002137219061cb8": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -9502,7 +9481,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "0a9add88-f56f-461b-a375-beb121213155"
+            "uid": "c9824891-614f-4745-8817-91a9542f66cf"
           },
           {
             "fill": "tozeroy",
@@ -9674,7 +9653,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "6fafabf6-42c1-4e65-a06e-84dc89b2d9a6"
+            "uid": "44ef86b4-7ad0-4200-85fa-886feeb4ecb9"
           },
           {
             "line": {
@@ -9694,7 +9673,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "bf6173d5-d28e-4d9d-a2fc-5a4588caeb66"
+            "uid": "24c624ea-a847-490d-bd82-653ff82d2391"
           },
           {
             "line": {
@@ -9713,7 +9692,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "7f204500-82f4-4902-83b9-d053960c66a2"
+            "uid": "bd296e1f-a83c-4beb-81cd-c715602c85c8"
           },
           {
             "fill": "tozeroy",
@@ -9885,7 +9864,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "fbbc3c31-1d1e-46dc-904c-baa755ad4b6b"
+            "uid": "d59bbb56-0292-4fe5-beed-5d1ac6411752"
           },
           {
             "line": {
@@ -9905,7 +9884,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "954a891f-09cc-4d6d-8c3b-ec1a06b961da"
+            "uid": "d3ef6bd2-3521-452e-b2fb-4c9dc7fa0e27"
           },
           {
             "line": {
@@ -9924,7 +9903,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e35b7374-d88c-4dce-bd85-b4a11ea59b63"
+            "uid": "ffe7a922-7b21-4703-a2a1-f6ae167c8f43"
           }
         ],
         "_dom_classes": [],
@@ -10886,13 +10865,13 @@ Computing Check:
         }
       ]
     },
-    "ddbced6c03f84d9eacae665ae650284b": {
+    "a770bd56daa24c88ace220ad8a13774e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3f937af64edb4bb7bc8f0dcb00fdcc0a": {
+    "46b4af61a6c1417f8d04c698d2d4e9e4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -10902,7 +10881,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "25fa67c5e48b4652b34de08398163ce4"}
+{"version_major": 2, "version_minor": 0, "model_id": "51f526bee37d473580222d357aaf393e"}
 </script>
 
 </body>
@@ -10933,19 +10912,19 @@ filtration)</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2227.46 /s]
+|#####| 1/1 [00:00&lt;00:00, 1700.85 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  2.91 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  2.53 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  2.47 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  2.18 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  2.47 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  2.18 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -10953,15 +10932,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  2.58 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  2.26 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  2.78 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  2.63 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  2.78 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  2.63 Batch/s]
 
 
 
@@ -10971,12 +10950,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.91 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  3.32 Check/s]
 
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.91 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  3.32 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -11263,7 +11242,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "4c963319162c4a0b9ce95cea66f89f32": {
+    "36d32f6296be440e9b3e3c3f16fdbc2b": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -11275,149 +11254,149 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_197b6b51dfc745acbf0704c73fb41b79",
-          "IPY_MODEL_fe6f45f6330246a8bfde4d6676d86592",
-          "IPY_MODEL_c51b4d60a7924e828cb0aec1d9706059",
-          "IPY_MODEL_5bbe5f9622574968a2c04ce3567dab0e"
+          "IPY_MODEL_502b1642f44a4968927f201ff4ac26f9",
+          "IPY_MODEL_353a3a637b5342e69f3fba15c508b9c9",
+          "IPY_MODEL_753cb8d45a704cf49ef9c2e97808bf6f",
+          "IPY_MODEL_337b1b5e8bc94f1fbaea8a2d9e4549a9"
         ],
-        "layout": "IPY_MODEL_3c142e95c28f4ce1b3ff3952bcaa179c"
+        "layout": "IPY_MODEL_c7e785a677f540a4899d7b2a5ccc4a28"
       }
     },
-    "197b6b51dfc745acbf0704c73fb41b79": {
+    "502b1642f44a4968927f201ff4ac26f9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2ce613d99a2e4e439f39595b0618bc6f",
-        "style": "IPY_MODEL_9ab0d78e861c4f58b68e1329eb408b49",
+        "layout": "IPY_MODEL_7a779ede199549b38c241f7b1b5e2d85",
+        "style": "IPY_MODEL_22a1d4c382064456a8b6ea7f27ad0e72",
         "value": "<h4><b>Image Property Drift</b></h4>"
       }
     },
-    "2ce613d99a2e4e439f39595b0618bc6f": {
+    "7a779ede199549b38c241f7b1b5e2d85": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9ab0d78e861c4f58b68e1329eb408b49": {
+    "22a1d4c382064456a8b6ea7f27ad0e72": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "fe6f45f6330246a8bfde4d6676d86592": {
+    "353a3a637b5342e69f3fba15c508b9c9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_a1ba96bd03484cd3b942ba523b8dd32b",
-        "style": "IPY_MODEL_31673d9c65364fbcaa3d942a13f37db2",
+        "layout": "IPY_MODEL_6282e07001a4469a9456ef2158eef807",
+        "style": "IPY_MODEL_751c68219dad4c4e983b0e3b79532d1f",
         "value": "<p>    Calculate drift between train dataset and test dataset per image property, using statistical measures.</p>"
       }
     },
-    "a1ba96bd03484cd3b942ba523b8dd32b": {
+    "6282e07001a4469a9456ef2158eef807": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "31673d9c65364fbcaa3d942a13f37db2": {
+    "751c68219dad4c4e983b0e3b79532d1f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c51b4d60a7924e828cb0aec1d9706059": {
+    "753cb8d45a704cf49ef9c2e97808bf6f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_910442dadb364224865e339874bdb948",
-        "style": "IPY_MODEL_986f9681af974234a58bca4dd518e044"
+        "layout": "IPY_MODEL_de7f67be251344cebec1b4fa6623d285",
+        "style": "IPY_MODEL_0ec46d93ab5e4d3dba4a73bd78e81f2e"
       }
     },
-    "910442dadb364224865e339874bdb948": {
+    "de7f67be251344cebec1b4fa6623d285": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "986f9681af974234a58bca4dd518e044": {
+    "0ec46d93ab5e4d3dba4a73bd78e81f2e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5bbe5f9622574968a2c04ce3567dab0e": {
+    "337b1b5e8bc94f1fbaea8a2d9e4549a9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_dc6e0f6211f0472ba85d054d0520fbd6",
-          "IPY_MODEL_9d4379ecda424b83a1ff15ade8060a11",
-          "IPY_MODEL_46aae6abf23f4fae92ad74106b113938",
-          "IPY_MODEL_57df5de7bdea4f1db246ade0df8c63fa",
-          "IPY_MODEL_5c92c1cc0c1d4959b8236ea4da68f7c0",
-          "IPY_MODEL_8de5eee2a90545c2b7f24ee0f3ee4cc9",
-          "IPY_MODEL_948de7dee60340f295317e3e643e5100",
-          "IPY_MODEL_bfe96349d865413aa5d1c3800ea3e49c",
-          "IPY_MODEL_4065d685522442c79eeae118d6e3d93f"
+          "IPY_MODEL_3175f8f442734907b0124036e255e825",
+          "IPY_MODEL_df83589ba8874f00a954a9c39a256d7b",
+          "IPY_MODEL_007359c91f594296b5ec04cb56aa339e",
+          "IPY_MODEL_7a9e7cbe1f5b47ee8382d71a16ffed13",
+          "IPY_MODEL_da7734e0044244e29902a6ca76e4da3e",
+          "IPY_MODEL_50c4abb946db42b79207657db6d35b9f",
+          "IPY_MODEL_b4ed1ceee40245d6a6acba572e8a68ce",
+          "IPY_MODEL_9526b56d76e4431d9cc4111d84a2ac0e",
+          "IPY_MODEL_14c9d0bce05b4e38a24c1e3de5060e0a"
         ],
-        "layout": "IPY_MODEL_6093c8b76a4941af96c4fd04a372b794"
+        "layout": "IPY_MODEL_b7d9d97c147e4ced9b1acb50d3ece339"
       }
     },
-    "dc6e0f6211f0472ba85d054d0520fbd6": {
+    "3175f8f442734907b0124036e255e825": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_116bc34bfd8d4bd7843de18e2607d42b",
-        "style": "IPY_MODEL_eaea74da01e84be6bb887a2817fed85a",
+        "layout": "IPY_MODEL_fa60a421f9b54b4aa9951cac60372584",
+        "style": "IPY_MODEL_722f427e68bf445f902501dec08b3751",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "116bc34bfd8d4bd7843de18e2607d42b": {
+    "fa60a421f9b54b4aa9951cac60372584": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "eaea74da01e84be6bb887a2817fed85a": {
+    "722f427e68bf445f902501dec08b3751": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9d4379ecda424b83a1ff15ade8060a11": {
+    "df83589ba8874f00a954a9c39a256d7b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_82894c2b367248dc9d4fbaddf8f12230",
-        "style": "IPY_MODEL_009fe9601cc04ab99b8b742c12bee82f",
+        "layout": "IPY_MODEL_a0c83003da9c4de88eaff66f606a8ca5",
+        "style": "IPY_MODEL_f4fbb3c14161411bb9b92fa30cd8abec",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following image properties: ['Area', 'Aspect Ratio', 'Brightness', 'Mean Blue Relative Intensity', 'Mean Green Relative Intensity', 'Mean Red Relative Intensity', 'RMS Contrast'].<br></span></div>"
       }
     },
-    "82894c2b367248dc9d4fbaddf8f12230": {
+    "a0c83003da9c4de88eaff66f606a8ca5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "009fe9601cc04ab99b8b742c12bee82f": {
+    "f4fbb3c14161411bb9b92fa30cd8abec": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "46aae6abf23f4fae92ad74106b113938": {
+    "007359c91f594296b5ec04cb56aa339e": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -11443,7 +11422,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "9dd696d6-85eb-4d10-bb90-194df31ab03c"
+            "uid": "daf6f1c0-79a1-4b8a-bce3-207c08dd5467"
           },
           {
             "base": 0.1,
@@ -11462,7 +11441,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "f8e4e689-4462-4206-9882-940e22442841"
+            "uid": "9b3569e2-7056-4792-b499-afb72e81eb9d"
           },
           {
             "base": 0.2,
@@ -11481,7 +11460,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "9e32fb76-dcac-4138-ab47-96fd86fbd08d"
+            "uid": "8421a6d5-c634-4b93-8b12-40fd0368a26c"
           },
           {
             "base": 0.3,
@@ -11500,7 +11479,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "41b38f3a-2a96-459c-910c-0461b10ecdfe"
+            "uid": "0fb69447-2ffd-4d64-9461-727a1d56ff7a"
           },
           {
             "marker": {
@@ -11522,7 +11501,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "4c551c4f-e10f-4970-885f-468e6a5cc052"
+            "uid": "1674ee6e-e960-4dfb-8019-ae669c783726"
           },
           {
             "marker": {
@@ -11544,7 +11523,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "3ff1ddb9-15db-4f38-9dc2-756fe8042627"
+            "uid": "b2218284-0bf2-454d-8869-ab333173915d"
           }
         ],
         "_dom_classes": [],
@@ -12542,7 +12521,7 @@ Computing Check:
         }
       ]
     },
-    "57df5de7bdea4f1db246ade0df8c63fa": {
+    "7a9e7cbe1f5b47ee8382d71a16ffed13": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -12568,7 +12547,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "fd10e3d2-6783-47cb-b423-2c3dd0e059e8"
+            "uid": "ef286b14-7a10-4d4e-bf3c-ddcc426ccb1e"
           },
           {
             "base": 0.1,
@@ -12587,7 +12566,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "29bc7b2d-ab4b-43e0-b3bc-1bce76a4927f"
+            "uid": "85ee05fd-870d-4444-8841-3070be7a42df"
           },
           {
             "base": 0.2,
@@ -12606,7 +12585,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "5508b688-e195-47ec-b9d3-8f696e8e554b"
+            "uid": "d4ff7c0e-a4f4-4432-bbd8-24d56a63cd4c"
           },
           {
             "base": 0.3,
@@ -12625,7 +12604,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "a059eceb-d413-436d-9925-96e33a5255c1"
+            "uid": "afe3e6d7-0386-4fce-81ab-9990479bac8a"
           },
           {
             "marker": {
@@ -12647,7 +12626,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "ef4a0a2f-a573-4d4c-b804-8751c887d54e"
+            "uid": "59ac3f65-f1da-46ec-8a4e-b035e88f7db4"
           },
           {
             "marker": {
@@ -12669,7 +12648,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "f59551e5-a771-4ab0-a1ac-7a09aa00e00f"
+            "uid": "55cfceb5-cd98-4104-a031-a945e3297426"
           }
         ],
         "_dom_classes": [],
@@ -13667,7 +13646,7 @@ Computing Check:
         }
       ]
     },
-    "5c92c1cc0c1d4959b8236ea4da68f7c0": {
+    "da7734e0044244e29902a6ca76e4da3e": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -13693,7 +13672,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "f5f112c1-8822-45ec-af7c-f67c226c3397"
+            "uid": "9423f9db-c7d2-4d36-bf03-43826d2c414a"
           },
           {
             "base": 0.1,
@@ -13712,7 +13691,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "c5bd1e88-1c0c-4259-8e12-799df5df0c0d"
+            "uid": "6dd17782-f0b5-4f07-8ec8-656bbe3cb0e9"
           },
           {
             "marker": {
@@ -13734,7 +13713,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "188cfad1-915c-49b8-ab5d-b0d798f868e8"
+            "uid": "e3eaa252-1b53-4d4c-afb5-5c2a70f9912c"
           },
           {
             "marker": {
@@ -13756,7 +13735,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "b91f4b68-143e-4120-8d9a-07ecb5f7d007"
+            "uid": "ca4402d5-79d4-49da-94f8-77ce77ab0531"
           }
         ],
         "_dom_classes": [],
@@ -14754,7 +14733,7 @@ Computing Check:
         }
       ]
     },
-    "8de5eee2a90545c2b7f24ee0f3ee4cc9": {
+    "50c4abb946db42b79207657db6d35b9f": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -14780,7 +14759,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "af12a337-6aba-4dc1-b966-a311409c83aa"
+            "uid": "d76cb91d-2dd0-482c-a24e-371856899aa0"
           },
           {
             "base": 0.1,
@@ -14799,7 +14778,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "f62663dc-752a-4ee8-92a5-078a66e619b8"
+            "uid": "f1b49ad3-5958-4839-bf3e-62e90cc9432f"
           },
           {
             "marker": {
@@ -14821,7 +14800,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "83f512ca-b36c-4b71-ab7d-80a34f6c5e88"
+            "uid": "74ab7dcf-8887-4c6f-abbe-026ff844551d"
           },
           {
             "marker": {
@@ -14843,7 +14822,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "e164202f-2186-4a00-b277-d46787a8097e"
+            "uid": "89d4c5cc-6b78-473b-bfca-3464b9109ffe"
           }
         ],
         "_dom_classes": [],
@@ -15841,7 +15820,7 @@ Computing Check:
         }
       ]
     },
-    "948de7dee60340f295317e3e643e5100": {
+    "b4ed1ceee40245d6a6acba572e8a68ce": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -15867,7 +15846,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "4d0841f5-f0ec-428d-a1c5-677a97c73521"
+            "uid": "1bd11750-8caf-4173-af57-90e8e05a4a1c"
           },
           {
             "base": 0.1,
@@ -15886,7 +15865,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "695fcaed-d4a0-41f2-8334-a8d2178e4f7f"
+            "uid": "9a1f7dd6-1d89-45e8-bc13-502ea85ea417"
           },
           {
             "marker": {
@@ -15908,7 +15887,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "232c69e8-8e43-4999-a584-5aa92d0e21bc"
+            "uid": "ba18f363-9e23-46f3-87c2-85170046cb0c"
           },
           {
             "marker": {
@@ -15930,7 +15909,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "ed048c57-29ef-4299-aebf-cc32907f8479"
+            "uid": "0fd9e4eb-5577-46b6-9a1a-bc8b1503c1dd"
           }
         ],
         "_dom_classes": [],
@@ -16928,7 +16907,7 @@ Computing Check:
         }
       ]
     },
-    "bfe96349d865413aa5d1c3800ea3e49c": {
+    "9526b56d76e4431d9cc4111d84a2ac0e": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -16954,7 +16933,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "5a6f8437-0cc7-4c90-86d7-c7961dad29db"
+            "uid": "d98e22f0-05f0-4265-b1bc-05041fb41fa1"
           },
           {
             "base": 0.1,
@@ -16973,7 +16952,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "2b2559d9-14ce-4bd5-bc88-8020cce7df61"
+            "uid": "d8c128a6-7ce3-405a-a4a2-d32132c8baf2"
           },
           {
             "marker": {
@@ -16995,7 +16974,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "24b70745-a526-4416-a09b-54282a50f3de"
+            "uid": "f139aab7-84dd-4fa9-84b0-4f632bd36ef1"
           },
           {
             "marker": {
@@ -17017,7 +16996,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "88ef9a86-0490-475f-86e4-da8a56fe5de9"
+            "uid": "ead45766-9ca1-415d-9c8b-8543cc9160f8"
           }
         ],
         "_dom_classes": [],
@@ -18015,7 +17994,7 @@ Computing Check:
         }
       ]
     },
-    "4065d685522442c79eeae118d6e3d93f": {
+    "14c9d0bce05b4e38a24c1e3de5060e0a": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -18041,7 +18020,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "142ed4a3-fde7-4cb9-bf6a-f21eb2bfa6be"
+            "uid": "d3a7d861-0c0a-454b-9973-675ad28e3a25"
           },
           {
             "marker": {
@@ -18063,7 +18042,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "5b9135ac-3349-451b-8dd2-6402b9ccc0eb"
+            "uid": "92fd66b5-85e5-4308-9c19-6729cd0959db"
           },
           {
             "marker": {
@@ -18085,7 +18064,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "3d721f09-34c5-4eb0-9b62-f065e46d2c19"
+            "uid": "79471c3c-6757-4cc0-a823-af70f11d41c2"
           }
         ],
         "_dom_classes": [],
@@ -19083,13 +19062,13 @@ Computing Check:
         }
       ]
     },
-    "6093c8b76a4941af96c4fd04a372b794": {
+    "b7d9d97c147e4ced9b1acb50d3ece339": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3c142e95c28f4ce1b3ff3952bcaa179c": {
+    "c7e785a677f540a4899d7b2a5ccc4a28": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -19099,7 +19078,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "4c963319162c4a0b9ce95cea66f89f32"}
+{"version_major": 2, "version_minor": 0, "model_id": "36d32f6296be440e9b3e3c3f16fdbc2b"}
 </script>
 
 </body>
@@ -19124,19 +19103,19 @@ exceed allowed threshold.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 1693.30 /s]
+|#####| 1/1 [00:00&lt;00:00, 2048.00 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.69s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.78s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.54s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.69s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.54s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.69s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
@@ -19144,15 +19123,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.25s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.52s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.37s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.65s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.37s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.65s/ Batch]
 
 
 
@@ -19162,12 +19141,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.75 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  3.05 Check/s]
 
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  3.75 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  3.05 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -19458,7 +19437,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "49d69afabf8f4c19a88a7ef381c57324": {
+    "2bc8ba9fabb845bfa8274fca7c05fa8e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -19470,83 +19449,83 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_a7ab9add6a6846838e3ddc3a3962f6ef",
-          "IPY_MODEL_63c89ff2b846442384fb67ca7ec70e4e",
-          "IPY_MODEL_441549259e1c4f43bf386e611af1013d"
+          "IPY_MODEL_2870480645954e3c9e63f00f6f01ad1e",
+          "IPY_MODEL_f391e4367c8d44afb1b355b2d83ff605",
+          "IPY_MODEL_50b8ae4c802347b0ab6a7fef78e64f18"
         ],
-        "layout": "IPY_MODEL_5fdfd774283740d588c4d8a68a469e5c"
+        "layout": "IPY_MODEL_5043e3f379ff424aa187908752dbd34c"
       }
     },
-    "a7ab9add6a6846838e3ddc3a3962f6ef": {
+    "2870480645954e3c9e63f00f6f01ad1e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_aac3fbdfd21948a1845f172218532585",
-        "style": "IPY_MODEL_a4adbdb2c0584b58ab5e936e68d37c0e",
+        "layout": "IPY_MODEL_2dfa8d54deea488f910a84379505e026",
+        "style": "IPY_MODEL_8453763244cc4e3ea95261ba173a8368",
         "value": "<h4><b>Image Property Drift</b></h4>"
       }
     },
-    "aac3fbdfd21948a1845f172218532585": {
+    "2dfa8d54deea488f910a84379505e026": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "a4adbdb2c0584b58ab5e936e68d37c0e": {
+    "8453763244cc4e3ea95261ba173a8368": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "63c89ff2b846442384fb67ca7ec70e4e": {
+    "f391e4367c8d44afb1b355b2d83ff605": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_08939a7d18584874a16ec3015c08e330",
-        "style": "IPY_MODEL_04394586d16d4e9089398eab69efe68d",
+        "layout": "IPY_MODEL_30949ddf148e4f6db757bcfa2a90ba21",
+        "style": "IPY_MODEL_d2687f792b3a4173bc99eecebb2cf81d",
         "value": "<p>    Calculate drift between train dataset and test dataset per image property, using statistical measures.</p>"
       }
     },
-    "08939a7d18584874a16ec3015c08e330": {
+    "30949ddf148e4f6db757bcfa2a90ba21": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "04394586d16d4e9089398eab69efe68d": {
+    "d2687f792b3a4173bc99eecebb2cf81d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "441549259e1c4f43bf386e611af1013d": {
+    "50b8ae4c802347b0ab6a7fef78e64f18": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d815eb48b7724903a5a1d54db82f778c",
-        "style": "IPY_MODEL_d801571f09634692b6a32253df41877a",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_77c66_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_77c66_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_77c66_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_77c66_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_77c66_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_77c66_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_77c66_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_77c66_row0_col1\" class=\"data row0 col1\" >Earth Mover's Distance <= 0.001 for image properties drift</td>\n      <td id=\"T_77c66_row0_col2\" class=\"data row0 col2\" >Earth Mover's Distance is above the threshold for the next properties:\nAspect Ratio=0.07;\nArea=0.05;\nBrightness=0.07;\nRMS Contrast=0.02;\nMean Red Relative Intensity=0.03;\nMean Green Relative Intensity=0.06;\nMean Blue Relative Intensity=0.05</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_f96e1b3cf17d48bf9fbb9f281d55d49c",
+        "style": "IPY_MODEL_249cbe9ecc6846bb9f993bb8dfbe9c91",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_3ae20_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3ae20_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3ae20_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3ae20_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3ae20_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_3ae20_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_3ae20_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_3ae20_row0_col1\" class=\"data row0 col1\" >Earth Mover's Distance <= 0.001 for image properties drift</td>\n      <td id=\"T_3ae20_row0_col2\" class=\"data row0 col2\" >Earth Mover's Distance is above the threshold for the next properties:\nAspect Ratio=0.07;\nArea=0.05;\nBrightness=0.07;\nRMS Contrast=0.02;\nMean Red Relative Intensity=0.03;\nMean Green Relative Intensity=0.06;\nMean Blue Relative Intensity=0.05</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "d815eb48b7724903a5a1d54db82f778c": {
+    "f96e1b3cf17d48bf9fbb9f281d55d49c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d801571f09634692b6a32253df41877a": {
+    "249cbe9ecc6846bb9f993bb8dfbe9c91": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5fdfd774283740d588c4d8a68a469e5c": {
+    "5043e3f379ff424aa187908752dbd34c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -19556,7 +19535,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "49d69afabf8f4c19a88a7ef381c57324"}
+{"version_major": 2, "version_minor": 0, "model_id": "2bc8ba9fabb845bfa8274fca7c05fa8e"}
 </script>
 
 </body>
@@ -19611,35 +19590,35 @@ Computing Check:
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2279.51 /s]
+|#####| 1/1 [00:00&lt;00:00, 2356.35 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
+|##5  | 1/2 [00:00&lt;00:00,  3.63 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#####| 2/2 [00:00&lt;00:00,  3.73 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#####| 2/2 [00:00&lt;00:00,  3.73 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|     | 0/2 [00:00&lt;?, ? Batch/s]
+
+
+Ingesting Batches - Test Dataset:
 |##5  | 1/2 [00:00&lt;00:00,  4.30 Batch/s]
 
-Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  4.51 Batch/s]
 
-Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  4.51 Batch/s]
+Ingesting Batches - Test Dataset:
+|#####| 2/2 [00:00&lt;00:00,  4.26 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|     | 0/2 [00:00&lt;?, ? Batch/s]
-
-
-Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  5.16 Batch/s]
-
-
-Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  4.67 Batch/s]
-
-
-Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  4.67 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  4.26 Batch/s]
 
 
 
@@ -19649,7 +19628,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 11.61 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 10.59 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -19936,7 +19915,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "af4415b33b1b43e588a3481aa58f8e74": {
+    "9c72c52358324f1ba8a3a961a741a61a": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -19948,144 +19927,144 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_239907931a5f475896558888003c3685",
-          "IPY_MODEL_26f8cc140297460383ce0dbaa706bcb5",
-          "IPY_MODEL_3f819e67433746ea8debcbb88bdf4eb7",
-          "IPY_MODEL_47440e72d6b84e95aef115184b260c1a"
+          "IPY_MODEL_c49a49d77db54b9598b4e50e960c611f",
+          "IPY_MODEL_cf4ef03068c44dbf891b362547c139b6",
+          "IPY_MODEL_00b3d222e6834a1baafb34b94db0496a",
+          "IPY_MODEL_5c381781d7b2450ca9bbfc7795116ebf"
         ],
-        "layout": "IPY_MODEL_bfa3e03d611b45f7a0c7d05d7e7aac4f"
+        "layout": "IPY_MODEL_4995d01c828147d29e21bac9425918cd"
       }
     },
-    "239907931a5f475896558888003c3685": {
+    "c49a49d77db54b9598b4e50e960c611f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_de9ad1dd113e4478bd6292a2b79afaf1",
-        "style": "IPY_MODEL_1e88d313220f4830a80941ceccae1ca6",
+        "layout": "IPY_MODEL_cab3fe9f00a6447ea505be9b9e1e1150",
+        "style": "IPY_MODEL_1ab633ebfbaa437cb20161f3e5b1b0cb",
         "value": "<h4><b>Image Property Drift</b></h4>"
       }
     },
-    "de9ad1dd113e4478bd6292a2b79afaf1": {
+    "cab3fe9f00a6447ea505be9b9e1e1150": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1e88d313220f4830a80941ceccae1ca6": {
+    "1ab633ebfbaa437cb20161f3e5b1b0cb": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "26f8cc140297460383ce0dbaa706bcb5": {
+    "cf4ef03068c44dbf891b362547c139b6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_847c03cc432e470987d996616cdccf97",
-        "style": "IPY_MODEL_5f8f72b7dd53439291dd71215924c203",
+        "layout": "IPY_MODEL_f6ccc7b18d5245a6bd1b7199a67ab57b",
+        "style": "IPY_MODEL_76f9e3bb55c94192bb54cc887a8fde64",
         "value": "<p>    Calculate drift between train dataset and test dataset per image property, using statistical measures.</p>"
       }
     },
-    "847c03cc432e470987d996616cdccf97": {
+    "f6ccc7b18d5245a6bd1b7199a67ab57b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5f8f72b7dd53439291dd71215924c203": {
+    "76f9e3bb55c94192bb54cc887a8fde64": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3f819e67433746ea8debcbb88bdf4eb7": {
+    "00b3d222e6834a1baafb34b94db0496a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1f6f1e7973f44914a715e8cf49b4d095",
-        "style": "IPY_MODEL_215f2fca59964ba39309aa028db0664e"
+        "layout": "IPY_MODEL_9d4adb9e07ee48acab9ae2cb866b069b",
+        "style": "IPY_MODEL_2d91756dd8014420bed8b05914c561a0"
       }
     },
-    "1f6f1e7973f44914a715e8cf49b4d095": {
+    "9d4adb9e07ee48acab9ae2cb866b069b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "215f2fca59964ba39309aa028db0664e": {
+    "2d91756dd8014420bed8b05914c561a0": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "47440e72d6b84e95aef115184b260c1a": {
+    "5c381781d7b2450ca9bbfc7795116ebf": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_32f922c7fbf54fcdac575cc6ac9cf34e",
-          "IPY_MODEL_b39f4b18c9fb4d32964220bf09368125",
-          "IPY_MODEL_d5a47e4fa14c499ca7679601c5e59503",
-          "IPY_MODEL_8082b028385d4979972ee30db14468c2"
+          "IPY_MODEL_8d0e3e8976aa48e390dcf92f79a5e045",
+          "IPY_MODEL_1eeef80ff8ee42aeb34983ac087203ae",
+          "IPY_MODEL_32822df0bf044d23bdac4a3569d3628c",
+          "IPY_MODEL_0c55f3270fc5497295bb8530753a3f6f"
         ],
-        "layout": "IPY_MODEL_d6ea388cad694b65a9785693a9ed5da7"
+        "layout": "IPY_MODEL_8aa546072e2e42d9ad6985e631966881"
       }
     },
-    "32f922c7fbf54fcdac575cc6ac9cf34e": {
+    "8d0e3e8976aa48e390dcf92f79a5e045": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_962da4a4a0a4470491a495d8622385dd",
-        "style": "IPY_MODEL_61bda255df464d159bd9f6c0f8ce1ecc",
+        "layout": "IPY_MODEL_7067c6444b1f4203946f5d755d463950",
+        "style": "IPY_MODEL_2a00680a72714fc5a106cd33b141f47a",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "962da4a4a0a4470491a495d8622385dd": {
+    "7067c6444b1f4203946f5d755d463950": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "61bda255df464d159bd9f6c0f8ce1ecc": {
+    "2a00680a72714fc5a106cd33b141f47a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b39f4b18c9fb4d32964220bf09368125": {
+    "1eeef80ff8ee42aeb34983ac087203ae": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_58d73cdf0b50456cb5f9891fb664cfa7",
-        "style": "IPY_MODEL_4a6278ab51df4d938fe0be4dd919a608",
+        "layout": "IPY_MODEL_29d4b243dd91459893c7c949a16294d6",
+        "style": "IPY_MODEL_77b1ddf2a952480aaf74e4eb2c776044",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following image properties: ['Area', 'Aspect Ratio'].<br></span></div>"
       }
     },
-    "58d73cdf0b50456cb5f9891fb664cfa7": {
+    "29d4b243dd91459893c7c949a16294d6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4a6278ab51df4d938fe0be4dd919a608": {
+    "77b1ddf2a952480aaf74e4eb2c776044": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d5a47e4fa14c499ca7679601c5e59503": {
+    "32822df0bf044d23bdac4a3569d3628c": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -20111,7 +20090,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "5c7afab6-de62-47ec-8bd2-affc690bd8e1"
+            "uid": "86afa9e4-374f-4342-a059-deb9f7397eaf"
           },
           {
             "fill": "tozeroy",
@@ -20283,7 +20262,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "24973491-739c-4dc6-b234-6e70f24c9aa6"
+            "uid": "2428e0a0-7e70-4c77-bb79-b6076ffd6365"
           },
           {
             "line": {
@@ -20303,7 +20282,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "2dac2c33-1e77-41ca-ab05-4af358e21881"
+            "uid": "b0d51ac3-1c03-40ac-ab6d-588f07ea15cb"
           },
           {
             "line": {
@@ -20322,7 +20301,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "bd11d53e-3be7-4324-b633-55669c4d719f"
+            "uid": "26df0cab-bff8-4abb-be48-295e25815635"
           },
           {
             "fill": "tozeroy",
@@ -20494,7 +20473,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "cfee18f2-9669-4e18-a44d-d7b6003b70a0"
+            "uid": "938c639b-5c60-4118-aadb-e75723264593"
           },
           {
             "line": {
@@ -20514,7 +20493,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c65b01f7-f247-4678-b06c-c87f164b2e08"
+            "uid": "148f2154-bc9f-40b6-a90e-518c6b986c50"
           },
           {
             "line": {
@@ -20533,7 +20512,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c61dace9-305b-4bf6-a720-49d46c82cfe0"
+            "uid": "8b4899e0-22c7-44ca-abdb-e2a3faa59af3"
           }
         ],
         "_dom_classes": [],
@@ -21495,7 +21474,7 @@ Computing Check:
         }
       ]
     },
-    "8082b028385d4979972ee30db14468c2": {
+    "0c55f3270fc5497295bb8530753a3f6f": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -21521,7 +21500,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "1b4f5665-cc26-4eed-a772-8d43180cd0e4"
+            "uid": "2699f44d-20a9-44fe-a408-f84b792ce569"
           },
           {
             "fill": "tozeroy",
@@ -21693,7 +21672,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "15e44a89-7d75-49cd-9870-7c6ea540e57c"
+            "uid": "416947af-a820-43f3-b652-fa77474fd025"
           },
           {
             "line": {
@@ -21713,7 +21692,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "6b4fbf6b-428e-467e-b317-e820d7df04f2"
+            "uid": "2913759b-14c5-4395-97ea-54a0fb3cf308"
           },
           {
             "line": {
@@ -21732,7 +21711,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "220f1aa6-0ec6-4001-9f4e-f7faa2f2a165"
+            "uid": "51b709a3-a500-4945-9e3b-ac6ecf730c2b"
           },
           {
             "fill": "tozeroy",
@@ -21904,7 +21883,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "4b9ac74d-584a-45f4-88ed-abeff6c0b1cf"
+            "uid": "84c5e961-a6b4-4eb1-9517-55eb772e4689"
           },
           {
             "line": {
@@ -21924,7 +21903,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "acb2a69b-a860-4a35-a402-5df146c79249"
+            "uid": "adb467f2-8772-4d17-ba5e-f6f21ef027a7"
           },
           {
             "line": {
@@ -21943,7 +21922,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "8f11e34a-a37c-4e79-86b3-34801567fb60"
+            "uid": "a76a8889-543a-4198-afc0-73451141864d"
           }
         ],
         "_dom_classes": [],
@@ -22905,13 +22884,13 @@ Computing Check:
         }
       ]
     },
-    "d6ea388cad694b65a9785693a9ed5da7": {
+    "8aa546072e2e42d9ad6985e631966881": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "bfa3e03d611b45f7a0c7d05d7e7aac4f": {
+    "4995d01c828147d29e21bac9425918cd": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -22921,14 +22900,14 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "af4415b33b1b43e588a3481aa58f8e74"}
+{"version_major": 2, "version_minor": 0, "model_id": "9c72c52358324f1ba8a3a961a741a61a"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.625 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  18.020 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-vision-train-test-validation-plot-image-property-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/f17f030989c92cd2bfee389c86a14175/plot_image_property_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_image_property_drift.py</span></code></a></p>
@@ -22983,7 +22962,7 @@ Computing Check:
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/e87b2cd.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/40df64d.<br>
 </p>
     </div>
     

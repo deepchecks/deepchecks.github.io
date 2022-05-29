@@ -25,33 +25,46 @@ This notebooks provides an overview for using and understanding the tabular pred
 
 **Structure:**
 
-* `What Is Prediction Drift? <#what-is-prediction-drift>`__
+* `What is prediction drift? <#what-is-prediction-drift>`__
 * `Generate Data <#generate-data>`__
 * `Build Model <#build-model>`__
 * `Run check <#run-check>`__
 
 What Is Prediction Drift?
-========================
-Drift is simply a change in the distribution of data over time, and it is
-also one of the top reasons why machine learning model's performance degrades
-over time.
+===========================
+The term drift (and all it's derivatives) is used to describe any change in the data compared
+to the data the model was trained on. Prediction drift refers to the case in which a change
+in the data (data/feature drift) has happened and as a result, the distribution of the
+models' prediction has changed.
 
-Prediction drift is when drift occurs in the prediction itself.
 Calculating prediction drift is especially useful in cases
 in which labels are not available for the test dataset, and so a drift in the predictions
 is our only indication that a changed has happened in the data that actually affects model
-predictions. If labels are available, it's also recommended to run the
-:doc:`Label Drift check </checks_gallery/tabular/train_test_validation/plot_train_test_label_drift>`.
+predictions. If labels are available, it's also recommended to run the `Label Drift Check
+</examples/tabular/checks/distribution/examples/plot_train_test_label_drift.html>`__.
 
-For more information on drift, please visit our :doc:`drift guide </user-guide/general/drift_guide>`.
+There are two main causes for prediction drift:
 
-How Deepchecks Detects Prediction Drift
-------------------------------------
+* A change in the sample population. In this case, the underline phenomenon we're trying
+  to predict behaves the same, but we're not getting the same types of samples. For example,
+  Iris Virginica stops growing and is not being predicted by the model trained to classify Iris species.
+* Concept drift, which means that the underline relation between the data and
+  the label has changed.
+  For example, we're trying to predict income based on food spending, but ongoing inflation effect prices.
+  It's important to note that concept drift won't necessarily result in prediction drift, unless it affects features that
+  are of high importance to the model.
 
-This check detects prediction drift by using :ref:`univariate measures <drift_detection_by_univariate_measure>`
-on the prediction output.
+How Does the TrainTestPredictionDrift Check Work?
+=================================================
+There are many methods to detect drift, that usually include statistical methods
+that aim to measure difference between 2 distributions.
+We experimented with various approaches and found that for detecting drift between 2
+one-dimensional distributions, the following 2 methods give the best results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-45
+* For regression problems, the `ramer's V <https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V>`__
+* For classification problems, the `Wasserstein Distance (Earth Mover's Distance) <https://en.wikipedia.org/wiki/Wasserstein_metric>`__
+
+.. GENERATED FROM PYTHON SOURCE LINES 52-59
 
 .. code-block:: default
 
@@ -69,12 +82,12 @@ on the prediction output.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 60-62
 
 Generate data
 =============
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-55
+.. GENERATED FROM PYTHON SOURCE LINES 62-69
 
 .. code-block:: default
 
@@ -92,11 +105,11 @@ Generate data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-57
+.. GENERATED FROM PYTHON SOURCE LINES 70-71
 
 Introducing drift:
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-62
+.. GENERATED FROM PYTHON SOURCE LINES 71-76
 
 .. code-block:: default
 
@@ -112,12 +125,12 @@ Introducing drift:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-65
+.. GENERATED FROM PYTHON SOURCE LINES 77-79
 
 Build Model
 ===========
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-73
+.. GENERATED FROM PYTHON SOURCE LINES 79-87
 
 .. code-block:: default
 
@@ -136,7 +149,7 @@ Build Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-92
+.. GENERATED FROM PYTHON SOURCE LINES 88-106
 
 .. code-block:: default
 
@@ -165,12 +178,12 @@ Build Model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-95
+.. GENERATED FROM PYTHON SOURCE LINES 107-109
 
 Run check
 =========
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-99
+.. GENERATED FROM PYTHON SOURCE LINES 109-113
 
 .. code-block:: default
 
@@ -469,7 +482,7 @@ Run check
       "version_major": 2,
       "version_minor": 0,
       "state": {
-        "2138920bba7b43329e73a00e5a0e8621": {
+        "4bb6488508744ffa823d24075bfc8c55": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
@@ -481,143 +494,143 @@ Run check
               "jp-OutputArea-output"
             ],
             "children": [
-              "IPY_MODEL_5bc39a9534784eac8fa38ed86fc18097",
-              "IPY_MODEL_38276c53b40d4026a3cdf1d9ecb12616",
-              "IPY_MODEL_4825c68a8a594d03b10dc73bec168a59",
-              "IPY_MODEL_86b91a3c4174465ea58b761f2f5bb09b"
+              "IPY_MODEL_23e9399d993148a485fbeb08f8adb941",
+              "IPY_MODEL_6a6597848eef429fafc3f8665407339b",
+              "IPY_MODEL_e68c6aa701a24734bfecacbcec1fdef9",
+              "IPY_MODEL_4f5343a05c744d699b6e5d232d82880c"
             ],
-            "layout": "IPY_MODEL_42a578a57d254c698bbd4c3f541256ae"
+            "layout": "IPY_MODEL_807235adaf254aa8ae9d8a1cd65926f5"
           }
         },
-        "5bc39a9534784eac8fa38ed86fc18097": {
+        "23e9399d993148a485fbeb08f8adb941": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_13c8a46b9d6843a1b6c25ff8771ad5d8",
-            "style": "IPY_MODEL_824d97f9960c4292af4a1d897d607f14",
+            "layout": "IPY_MODEL_5e6dca14a1924278b83f99d8a629b4ec",
+            "style": "IPY_MODEL_df1d9ff9f887403c8fd7bec751f23288",
             "value": "<h4><b>Train Test Prediction Drift</b></h4>"
           }
         },
-        "13c8a46b9d6843a1b6c25ff8771ad5d8": {
+        "5e6dca14a1924278b83f99d8a629b4ec": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "824d97f9960c4292af4a1d897d607f14": {
+        "df1d9ff9f887403c8fd7bec751f23288": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "38276c53b40d4026a3cdf1d9ecb12616": {
+        "6a6597848eef429fafc3f8665407339b": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_643e1a8c10a44f06a357da292e87f61b",
-            "style": "IPY_MODEL_bd3615175f6a4568a43aea94270cf47d",
+            "layout": "IPY_MODEL_b173601f11044fc1af9eeb975de78dab",
+            "style": "IPY_MODEL_2606121675f24d6dba1e7de601e52b2a",
             "value": "<p>    Calculate prediction drift between train dataset and test dataset, using statistical measures.</p>"
           }
         },
-        "643e1a8c10a44f06a357da292e87f61b": {
+        "b173601f11044fc1af9eeb975de78dab": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "bd3615175f6a4568a43aea94270cf47d": {
+        "2606121675f24d6dba1e7de601e52b2a": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "4825c68a8a594d03b10dc73bec168a59": {
+        "e68c6aa701a24734bfecacbcec1fdef9": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_1ff949dead224cb5be888df499aa65b0",
-            "style": "IPY_MODEL_9c133993dfcf477ca79aa43c3c6b835c"
+            "layout": "IPY_MODEL_52c1533cdc0347939876591d9e96b661",
+            "style": "IPY_MODEL_0b778b5c66ce4584b8f8a0672fa226ae"
           }
         },
-        "1ff949dead224cb5be888df499aa65b0": {
+        "52c1533cdc0347939876591d9e96b661": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "9c133993dfcf477ca79aa43c3c6b835c": {
+        "0b778b5c66ce4584b8f8a0672fa226ae": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "86b91a3c4174465ea58b761f2f5bb09b": {
+        "4f5343a05c744d699b6e5d232d82880c": {
           "model_name": "VBoxModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
             "children": [
-              "IPY_MODEL_13ad7fedc55e47c98f489668e6d8f8f7",
-              "IPY_MODEL_76158f81e941493dbfc0b0b24187b44f",
-              "IPY_MODEL_1b6659ea0f0d46fb90554f30dacadd0f"
+              "IPY_MODEL_5a4f1af5359847a1b19ab799d7ab9a28",
+              "IPY_MODEL_3e4338d57acc44fdb84f321e507a048c",
+              "IPY_MODEL_35f4d2617d334ac487be0dcb49b22e81"
             ],
-            "layout": "IPY_MODEL_d0b15b43e2164570978ff872d78192f2"
+            "layout": "IPY_MODEL_0faf33c8122c4477b1c44fe8f034204a"
           }
         },
-        "13ad7fedc55e47c98f489668e6d8f8f7": {
+        "5a4f1af5359847a1b19ab799d7ab9a28": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_0e1a2ee8b8a744378731a8194f21ff65",
-            "style": "IPY_MODEL_f45c96151fcb42fa83c7188821f2c81e",
+            "layout": "IPY_MODEL_e93103b4bccc456fa167b45da0c9d393",
+            "style": "IPY_MODEL_3b336fe122ec49c6a31f29928707fe3b",
             "value": "<h5><b>Additional Outputs</b></h5>"
           }
         },
-        "0e1a2ee8b8a744378731a8194f21ff65": {
+        "e93103b4bccc456fa167b45da0c9d393": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "f45c96151fcb42fa83c7188821f2c81e": {
+        "3b336fe122ec49c6a31f29928707fe3b": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "76158f81e941493dbfc0b0b24187b44f": {
+        "3e4338d57acc44fdb84f321e507a048c": {
           "model_name": "HTMLModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {
             "_dom_classes": [],
-            "layout": "IPY_MODEL_bee4517717624f6c9393a66dce2ae124",
-            "style": "IPY_MODEL_56f2fb7072b44ef38dfced033ee36450",
+            "layout": "IPY_MODEL_4408893e56254129872fcc9da8c2b125",
+            "style": "IPY_MODEL_b11de784579c4af994818e1cfe6d7b4e",
             "value": "<div><span>\n            The Drift score is a measure for the difference between two distributions, in this check - the test\n            and train distributions.<br> The check shows the drift score and distributions for the predictions.\n        </span></div>"
           }
         },
-        "bee4517717624f6c9393a66dce2ae124": {
+        "4408893e56254129872fcc9da8c2b125": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "56f2fb7072b44ef38dfced033ee36450": {
+        "b11de784579c4af994818e1cfe6d7b4e": {
           "model_name": "DescriptionStyleModel",
           "model_module": "@jupyter-widgets/controls",
           "model_module_version": "1.5.0",
           "state": {}
         },
-        "1b6659ea0f0d46fb90554f30dacadd0f": {
+        "35f4d2617d334ac487be0dcb49b22e81": {
           "model_name": "FigureModel",
           "model_module": "jupyterlab-plotly",
           "model_module_version": "^5.5.0",
@@ -643,7 +656,7 @@ Run check
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "49ff4a0e-6ce3-4604-ba90-6e70fec180ae"
+                "uid": "afad86b0-75c7-4ed0-9c93-f8251e7cebba"
               },
               {
                 "base": 0.1,
@@ -662,7 +675,7 @@ Run check
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "de86fa62-3004-440c-8b20-2f59e43d0885"
+                "uid": "0ea43ef3-dda9-4dbb-9180-a3e6db9c6c41"
               },
               {
                 "base": 0.2,
@@ -681,7 +694,7 @@ Run check
                 ],
                 "yaxis": "y",
                 "type": "bar",
-                "uid": "7e23beb7-4d3d-4568-9c3a-78958825ae1f"
+                "uid": "73abc643-ff15-410f-8683-798ef764f1a5"
               },
               {
                 "marker": {
@@ -701,7 +714,7 @@ Run check
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "77a9f6f3-4380-4648-a48f-1cb9f4080a73"
+                "uid": "8fbd542d-7912-4630-854f-554d53b343cd"
               },
               {
                 "marker": {
@@ -721,7 +734,7 @@ Run check
                 },
                 "yaxis": "y2",
                 "type": "bar",
-                "uid": "b30a942c-266e-43c4-8950-c332fd008bfd"
+                "uid": "fc40d6f6-0992-4afa-818e-d38d9f0674f6"
               }
             ],
             "_dom_classes": [],
@@ -1682,13 +1695,13 @@ Run check
             }
           ]
         },
-        "d0b15b43e2164570978ff872d78192f2": {
+        "0faf33c8122c4477b1c44fe8f034204a": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
           "state": {}
         },
-        "42a578a57d254c698bbd4c3f541256ae": {
+        "807235adaf254aa8ae9d8a1cd65926f5": {
           "model_name": "LayoutModel",
           "model_module": "@jupyter-widgets/base",
           "model_module_version": "1.2.0",
@@ -1698,7 +1711,7 @@ Run check
     }
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "2138920bba7b43329e73a00e5a0e8621"}
+    {"version_major": 2, "version_minor": 0, "model_id": "4bb6488508744ffa823d24075bfc8c55"}
     </script>
 
     </body>
@@ -1710,7 +1723,7 @@ Run check
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.456 seconds)
+   **Total running time of the script:** ( 0 minutes  6.372 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_tabular_model_evaluation_plot_train_test_prediction_drift.py:

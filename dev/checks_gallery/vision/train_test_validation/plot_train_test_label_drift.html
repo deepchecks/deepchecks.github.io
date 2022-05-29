@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Train Test Label Drift &#8212; Deepchecks e87b2cd documentation</title>
+    <title>Train Test Label Drift &#8212; Deepchecks 40df64d documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -355,15 +355,15 @@ Page: checks_gallery/vision/train_test_validation/plot_train_test_label_drift&la
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-label-drift">
-   What Is Label Drift?
+  <a class="reference internal nav-link" href="#what-is-a-label-drift">
+   What is a label drift?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-does-the-traintestlabeldrift-check-work">
+   How Does the TrainTestLabelDrift Check Work?
   </a>
   <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-deepchecks-detects-label-drift">
-     How Deepchecks Detects Label Drift
-    </a>
-   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#using-label-properties-to-detect-label-drift">
      Using Label Properties to Detect Label Drift
@@ -481,31 +481,44 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="train-test-label-drift">
 <span id="sphx-glr-checks-gallery-vision-train-test-validation-plot-train-test-label-drift-py"></span><h1>Train Test Label Drift<a class="headerlink" href="#train-test-label-drift" title="Permalink to this headline">#</a></h1>
-<p>This notebooks provides an overview for using and understanding label drift check.</p>
+<p>This notebooks provides an overview for using and understanding the vision label drift check.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#what-is-label-drift">What Is Label Drift?</a></p></li>
+<li><p><a class="reference external" href="#what-is-a-label-drift">What is a label drift?</a></p></li>
 <li><p><a class="reference external" href="#which-label-properties-are-used">Which Label Properties Are Used?</a></p></li>
 <li><p><a class="reference external" href="#run-the-check-on-a-classification-task-mnist">Run check on a Classification task</a></p></li>
 <li><p><a class="reference external" href="#run-the-check-on-an-object-detection-task-coco">Run check on an Object Detection task</a></p></li>
 </ul>
-<section id="what-is-label-drift">
-<h2>What Is Label Drift?<a class="headerlink" href="#what-is-label-drift" title="Permalink to this headline">#</a></h2>
-<p>Drift is simply a change in the distribution of data over time, and it is
-also one of the top reasons why machine learning model’s performance degrades
-over time.</p>
-<p>Label drift is when drift occurs in the label itself.</p>
-<p>For more information on drift, please visit our <a class="reference internal" href="../../../user-guide/general/drift_guide.html"><span class="doc">drift guide</span></a>.</p>
-<section id="how-deepchecks-detects-label-drift">
-<h3>How Deepchecks Detects Label Drift<a class="headerlink" href="#how-deepchecks-detects-label-drift" title="Permalink to this headline">#</a></h3>
-<p>This check detects label drift by using <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
-on the label properties.</p>
+<section id="what-is-a-label-drift">
+<h2>What is a label drift?<a class="headerlink" href="#what-is-a-label-drift" title="Permalink to this headline">#</a></h2>
+<p>The term drift (and all it’s derivatives) is used to describe any change in the data
+compared to the data the model was trained on. Specifically, label drift indicates
+changes in the label we are trying to predict.</p>
+<p>Causes of label drift include:</p>
+<ul class="simple">
+<li><p>Natural drift in the data, such as a certain class becoming more prevalent in the test set.
+For example, cronuts becoming more popular in a food classification dataset.</p></li>
+<li><p>Labeling issues, such as an analyst drawing incorrect bounding boxes for an object
+detection task.</p></li>
+</ul>
 </section>
+<section id="how-does-the-traintestlabeldrift-check-work">
+<h2>How Does the TrainTestLabelDrift Check Work?<a class="headerlink" href="#how-does-the-traintestlabeldrift-check-work" title="Permalink to this headline">#</a></h2>
+<p>There are many methods to detect drift, that usually include statistical methods
+that aim to measure difference between 2 distributions.
+We experimented with various approaches and found that for detecting drift between 2
+one-dimensional distributions, the following 2 methods give the best results:</p>
+<ul class="simple">
+<li><p>For numerical features, the <a class="reference external" href="https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V">Cramer’s V</a></p></li>
+<li><p>For categorical features, the <a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein Distance (Earth Mover’s Distance)</a></p></li>
+</ul>
+<p>However, one does not simply measure drift on a label, as they may be complex structures. These methods are implemented
+on label properties, as described in the next section.</p>
 <section id="using-label-properties-to-detect-label-drift">
 <h3>Using Label Properties to Detect Label Drift<a class="headerlink" href="#using-label-properties-to-detect-label-drift" title="Permalink to this headline">#</a></h3>
 <p>In computer vision specifically, our labels may be complex, and measuring their drift
-is not a straightforward task. Therefore, we calculate drift on different <a class="reference internal" href="../../../user-guide/vision/vision_properties.html"><span class="doc">properties of the label</span></a>,
-on which we can directly measure drift.</p>
+is not a straightforward task. Therefore, we calculate drift on different properties of the
+labels, on which we can directly measure drift.</p>
 <section id="which-label-properties-are-used">
 <h4>Which Label Properties Are Used?<a class="headerlink" href="#which-label-properties-are-used" title="Permalink to this headline">#</a></h4>
 <table class="table">
@@ -568,28 +581,40 @@ on which we can directly measure drift.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 58.89 /s]
+|#####| 1/1 [00:00&lt;00:00, 49.72 /s]
 
 Ingesting Batches - Train Dataset:
 |                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###########################                                                                                                                                  | 27/157 [00:00&lt;00:00, 267.26 Batch/s]
+|################                                                                                                                                             | 16/157 [00:00&lt;00:00, 155.50 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|######################################################                                                                                                       | 54/157 [00:00&lt;00:00, 266.33 Batch/s]
+|#################################                                                                                                                            | 33/157 [00:00&lt;00:00, 159.31 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#################################################################################                                                                            | 81/157 [00:00&lt;00:00, 265.76 Batch/s]
+|#################################################                                                                                                            | 49/157 [00:00&lt;00:00, 155.47 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################################################################################################                                                 | 108/157 [00:00&lt;00:00, 265.65 Batch/s]
+|#################################################################                                                                                            | 65/157 [00:00&lt;00:00, 157.02 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#######################################################################################################################################                      | 135/157 [00:00&lt;00:00, 266.65 Batch/s]
+|#################################################################################                                                                            | 81/157 [00:00&lt;00:00, 156.20 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 266.65 Batch/s]
+|#################################################################################################                                                            | 97/157 [00:00&lt;00:00, 157.22 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#################################################################################################################9                                           | 114/157 [00:00&lt;00:00, 158.41 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|##################################################################################################################################                           | 130/157 [00:00&lt;00:00, 157.83 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|##################################################################################################################################################           | 146/157 [00:00&lt;00:00, 158.21 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 158.21 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -597,27 +622,27 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##        | 2/10 [00:00&lt;00:00, 17.26 Batch/s]
+|##        | 2/10 [00:00&lt;00:00, 10.56 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|####      | 4/10 [00:00&lt;00:00, 17.18 Batch/s]
+|####      | 4/10 [00:00&lt;00:00, 10.66 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|######    | 6/10 [00:00&lt;00:00, 17.30 Batch/s]
+|######    | 6/10 [00:00&lt;00:00, 10.65 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|########  | 8/10 [00:00&lt;00:00, 17.53 Batch/s]
+|########  | 8/10 [00:00&lt;00:00, 10.68 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##########| 10/10 [00:00&lt;00:00, 17.69 Batch/s]
+|##########| 10/10 [00:00&lt;00:00, 10.65 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##########| 10/10 [00:00&lt;00:00, 17.69 Batch/s]
+|##########| 10/10 [00:00&lt;00:00, 10.65 Batch/s]
 
 
 
@@ -627,7 +652,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 17.63 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 14.56 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -914,7 +939,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c0cc5f8efdf64720883239f20a0e0617": {
+    "8ce44d5788944558802e53591e9a8b3a": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -926,144 +951,144 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_e54dd1d1e79e4b4e983bc6e8acccbc6c",
-          "IPY_MODEL_42dbfc3bde334a0f958669294b65d6a2",
-          "IPY_MODEL_962066a2de9149fba8238dedcb16d211",
-          "IPY_MODEL_aae2179f46d84156aa0e2e1ea6db08ab"
+          "IPY_MODEL_f3ac15fb7a8448c2b6ac6060659198f6",
+          "IPY_MODEL_61acc5bb8ea34119b2daf0402ed5bd6a",
+          "IPY_MODEL_525e2ff64b764aaf899ed9fe4fc6eb77",
+          "IPY_MODEL_6397350a1fad467db8fbb66aa6171cea"
         ],
-        "layout": "IPY_MODEL_38bfe2c686f245238c101152423fd6cc"
+        "layout": "IPY_MODEL_ab9e499ce46d42cabe08b04d5087a59d"
       }
     },
-    "e54dd1d1e79e4b4e983bc6e8acccbc6c": {
+    "f3ac15fb7a8448c2b6ac6060659198f6": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d432d9def5bc47338d4a268ace584b08",
-        "style": "IPY_MODEL_3200d20902fd409587c5768105a11905",
+        "layout": "IPY_MODEL_6010879ad5ef433d96fe157f1fd8f755",
+        "style": "IPY_MODEL_4052844470594db591d6e34fa7808d7b",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "d432d9def5bc47338d4a268ace584b08": {
+    "6010879ad5ef433d96fe157f1fd8f755": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3200d20902fd409587c5768105a11905": {
+    "4052844470594db591d6e34fa7808d7b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "42dbfc3bde334a0f958669294b65d6a2": {
+    "61acc5bb8ea34119b2daf0402ed5bd6a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0016f139bc694c11aa45514f6cb38265",
-        "style": "IPY_MODEL_699d8b23aa9e448f997411e44a6853f8",
+        "layout": "IPY_MODEL_f1963bd52d054377b7536609bbfd745b",
+        "style": "IPY_MODEL_5c60728b277c4bdab253fd47a3307ad2",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "0016f139bc694c11aa45514f6cb38265": {
+    "f1963bd52d054377b7536609bbfd745b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "699d8b23aa9e448f997411e44a6853f8": {
+    "5c60728b277c4bdab253fd47a3307ad2": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "962066a2de9149fba8238dedcb16d211": {
+    "525e2ff64b764aaf899ed9fe4fc6eb77": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_11d81f2744e04718bbeb673f1f45bf74",
-        "style": "IPY_MODEL_588519086ce94642bd96a52f3202c3df"
+        "layout": "IPY_MODEL_2f4477f8f3a040ffaea028df78e5d5a0",
+        "style": "IPY_MODEL_ed260004dd8a4353924585f3bfaf6940"
       }
     },
-    "11d81f2744e04718bbeb673f1f45bf74": {
+    "2f4477f8f3a040ffaea028df78e5d5a0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "588519086ce94642bd96a52f3202c3df": {
+    "ed260004dd8a4353924585f3bfaf6940": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "aae2179f46d84156aa0e2e1ea6db08ab": {
+    "6397350a1fad467db8fbb66aa6171cea": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_bee635ef0308429aaa0d4df876fdab62",
-          "IPY_MODEL_dccb6ac6f0bd48fc8c9600d814fe4ff4",
-          "IPY_MODEL_9a40925f71d64c8594b519ea9c17ff19",
-          "IPY_MODEL_c7836d856ce14ca38509af2a9cad4ae0"
+          "IPY_MODEL_9787b56ef1d74bec89ff2803fb23b762",
+          "IPY_MODEL_3160a0a15a2f4fac8837abbfcd204495",
+          "IPY_MODEL_fc7b469d81c04661a437366904016e51",
+          "IPY_MODEL_00b7b397fe684c7982b09ea060a6170e"
         ],
-        "layout": "IPY_MODEL_9777d61fd0b944219676a61c7af067ab"
+        "layout": "IPY_MODEL_a7bbdff7cd7c4d80a45ae34ae5e9a5c0"
       }
     },
-    "bee635ef0308429aaa0d4df876fdab62": {
+    "9787b56ef1d74bec89ff2803fb23b762": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_166df48453e24ed1a6430fb43c85a95f",
-        "style": "IPY_MODEL_9a8a6067ec5a417c95dd59393eba955c",
+        "layout": "IPY_MODEL_6eb0f94c6c114d5290bb3a202403dec2",
+        "style": "IPY_MODEL_676e39ca818b42ae9a80ada64f493d26",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "166df48453e24ed1a6430fb43c85a95f": {
+    "6eb0f94c6c114d5290bb3a202403dec2": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9a8a6067ec5a417c95dd59393eba955c": {
+    "676e39ca818b42ae9a80ada64f493d26": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "dccb6ac6f0bd48fc8c9600d814fe4ff4": {
+    "3160a0a15a2f4fac8837abbfcd204495": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_01d187dfda5942f8914b20b9044d9de1",
-        "style": "IPY_MODEL_f07911af84dc45daa85551657e18c23a",
+        "layout": "IPY_MODEL_b37bd24dc03049f69821b4aea86dc6aa",
+        "style": "IPY_MODEL_91ae83de8aa44e4d8205554824e2a55e",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['Samples Per Class'].</span></div>"
       }
     },
-    "01d187dfda5942f8914b20b9044d9de1": {
+    "b37bd24dc03049f69821b4aea86dc6aa": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f07911af84dc45daa85551657e18c23a": {
+    "91ae83de8aa44e4d8205554824e2a55e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9a40925f71d64c8594b519ea9c17ff19": {
+    "fc7b469d81c04661a437366904016e51": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1089,7 +1114,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "72edcab9-79ab-4b5a-bb9b-8a8ba016eec8"
+            "uid": "59c099e0-c351-4ee7-ba8f-ef388eb6c921"
           },
           {
             "marker": {
@@ -1117,7 +1142,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "5cb91f45-6cd1-447b-b966-7328a0b7cd91"
+            "uid": "24ea5a00-1257-40ce-a937-2bbce221d567"
           },
           {
             "marker": {
@@ -1145,7 +1170,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "865be45f-3e73-418f-931d-2928f4496d2e"
+            "uid": "869de744-6ef3-43bb-a1fe-6bbf8f948b5e"
           }
         ],
         "_dom_classes": [],
@@ -2106,36 +2131,36 @@ Computing Check:
         }
       ]
     },
-    "c7836d856ce14ca38509af2a9cad4ae0": {
+    "00b7b397fe684c7982b09ea060a6170e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ba6ab56c31e34b04a980230cfeb7d8c9",
-        "style": "IPY_MODEL_855d7824b6c64dcc9acdd695f4d4240a",
+        "layout": "IPY_MODEL_bf41ad6269ec4359b3e118e5f988c92b",
+        "style": "IPY_MODEL_f11f79c0133445d6aa4b08a9e5168e0b",
         "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "ba6ab56c31e34b04a980230cfeb7d8c9": {
+    "bf41ad6269ec4359b3e118e5f988c92b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "855d7824b6c64dcc9acdd695f4d4240a": {
+    "f11f79c0133445d6aa4b08a9e5168e0b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9777d61fd0b944219676a61c7af067ab": {
+    "a7bbdff7cd7c4d80a45ae34ae5e9a5c0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "38bfe2c686f245238c101152423fd6cc": {
+    "ab9e499ce46d42cabe08b04d5087a59d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -2145,7 +2170,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c0cc5f8efdf64720883239f20a0e0617"}
+{"version_major": 2, "version_minor": 0, "model_id": "8ce44d5788944558802e53591e9a8b3a"}
 </script>
 
 </body>
@@ -2170,45 +2195,60 @@ performance of a simple model trained on MNIST.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00,  7.94 /s]
+|#####| 1/1 [00:00&lt;00:00,  5.02 /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00,  7.94 /s]
+|#####| 1/1 [00:00&lt;00:00,  5.02 /s]
 
 Ingesting Batches - Train Dataset:
 |                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###############                                                                                                                                              | 15/157 [00:00&lt;00:00, 145.64 Batch/s]
+|##########                                                                                                                                                   | 10/157 [00:00&lt;00:01, 95.74 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##############################                                                                                                                               | 30/157 [00:00&lt;00:00, 146.22 Batch/s]
+|####################                                                                                                                                         | 20/157 [00:00&lt;00:01, 91.57 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################                                                                                                                | 45/157 [00:00&lt;00:00, 146.11 Batch/s]
+|##############################                                                                                                                               | 30/157 [00:00&lt;00:01, 94.16 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################################################                                                                                                 | 60/157 [00:00&lt;00:00, 146.14 Batch/s]
+|########################################                                                                                                                     | 40/157 [00:00&lt;00:01, 95.45 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###########################################################################                                                                                  | 75/157 [00:00&lt;00:00, 146.66 Batch/s]
+|##################################################                                                                                                           | 50/157 [00:00&lt;00:01, 95.43 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###########################################################################################                                                                  | 91/157 [00:00&lt;00:00, 148.50 Batch/s]
+|############################################################                                                                                                 | 60/157 [00:00&lt;00:01, 95.27 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###########################################################################################################                                                  | 107/157 [00:00&lt;00:00, 149.08 Batch/s]
+|######################################################################                                                                                       | 70/157 [00:00&lt;00:00, 95.83 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################################################################################################################                                   | 122/157 [00:00&lt;00:00, 148.98 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 95.13 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################################################################################################################################                   | 138/157 [00:00&lt;00:00, 149.39 Batch/s]
+|##########################################################################################                                                                   | 90/157 [00:00&lt;00:00, 96.28 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################################################################################################################################################   | 154/157 [00:01&lt;00:00, 150.19 Batch/s]
+|####################################################################################################                                                         | 100/157 [00:01&lt;00:00, 96.98 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 150.19 Batch/s]
+|##############################################################################################################                                               | 110/157 [00:01&lt;00:00, 96.47 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|########################################################################################################################                                     | 120/157 [00:01&lt;00:00, 96.42 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|##################################################################################################################################                           | 130/157 [00:01&lt;00:00, 96.46 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|############################################################################################################################################                 | 140/157 [00:01&lt;00:00, 96.88 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|######################################################################################################################################################       | 150/157 [00:01&lt;00:00, 96.24 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 96.24 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -2216,27 +2256,47 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##        | 2/10 [00:00&lt;00:00, 10.52 Batch/s]
+|#         | 1/10 [00:00&lt;00:01,  7.06 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|####      | 4/10 [00:00&lt;00:00, 10.67 Batch/s]
+|##        | 2/10 [00:00&lt;00:01,  6.95 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|######    | 6/10 [00:00&lt;00:00, 10.78 Batch/s]
+|###       | 3/10 [00:00&lt;00:01,  6.87 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|########  | 8/10 [00:00&lt;00:00, 10.78 Batch/s]
+|####      | 4/10 [00:00&lt;00:00,  6.85 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##########| 10/10 [00:00&lt;00:00, 10.75 Batch/s]
+|#####     | 5/10 [00:00&lt;00:00,  6.92 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##########| 10/10 [00:00&lt;00:00, 10.75 Batch/s]
+|######    | 6/10 [00:00&lt;00:00,  6.97 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|#######   | 7/10 [00:01&lt;00:00,  6.89 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|########  | 8/10 [00:01&lt;00:00,  6.92 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|######### | 9/10 [00:01&lt;00:00,  6.98 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|##########| 10/10 [00:01&lt;00:00,  7.00 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|##########| 10/10 [00:01&lt;00:00,  7.00 Batch/s]
 
 
 
@@ -2246,7 +2306,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 12.63 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 10.20 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -2533,7 +2593,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "dcef982b3ae04d70ac301c179aa21229": {
+    "28a3b4907d8942a783b47bc2641ae52c": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -2545,120 +2605,120 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_ba6810ced82c4fd485a93348d79cd5d7",
-          "IPY_MODEL_5e51c161c5274a2aa710ba8550c1edda",
-          "IPY_MODEL_4c66de3958a44e98a879704f07be1ad9",
-          "IPY_MODEL_cf104df1b7bc4feb90d06248c7206637"
+          "IPY_MODEL_93f0e7eb8346462783ac3e79ba0c7c80",
+          "IPY_MODEL_4d255fef952045d6ad90b1fe5d319127",
+          "IPY_MODEL_8eb969fcf712432f8dcb8f41f3532eee",
+          "IPY_MODEL_af266a3ccc5c4a659178f873621f529e"
         ],
-        "layout": "IPY_MODEL_60335518f2c44ec1b069d3011154d205"
+        "layout": "IPY_MODEL_e3fa3a27430b4db89f9519cfd3d2216f"
       }
     },
-    "ba6810ced82c4fd485a93348d79cd5d7": {
+    "93f0e7eb8346462783ac3e79ba0c7c80": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_5c1d240783c64190a5b2191330c477e3",
-        "style": "IPY_MODEL_7fbe1db2042f4b63af6746973dbc7cd1",
+        "layout": "IPY_MODEL_f3e3f086cd5c46c3982ad5bae623aa00",
+        "style": "IPY_MODEL_c034e4512a75484e96270360e69e737b",
         "value": "<h4><b>Class Performance</b></h4>"
       }
     },
-    "5c1d240783c64190a5b2191330c477e3": {
+    "f3e3f086cd5c46c3982ad5bae623aa00": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7fbe1db2042f4b63af6746973dbc7cd1": {
+    "c034e4512a75484e96270360e69e737b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5e51c161c5274a2aa710ba8550c1edda": {
+    "4d255fef952045d6ad90b1fe5d319127": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3b535137f0e144e5bba6336617ce28ad",
-        "style": "IPY_MODEL_63e1daabe5624ad9878da05a9763dcc0",
+        "layout": "IPY_MODEL_59b174264199452aaf3b855f3a691df5",
+        "style": "IPY_MODEL_a403e8ab5841485caaca79bf4cc967eb",
         "value": "<p>Summarize given metrics on a dataset and model.</p>"
       }
     },
-    "3b535137f0e144e5bba6336617ce28ad": {
+    "59b174264199452aaf3b855f3a691df5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "63e1daabe5624ad9878da05a9763dcc0": {
+    "a403e8ab5841485caaca79bf4cc967eb": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4c66de3958a44e98a879704f07be1ad9": {
+    "8eb969fcf712432f8dcb8f41f3532eee": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_da240732d4dc4941a58c0a3caa6c2cc4",
-        "style": "IPY_MODEL_45916c4c473343ec8a092b2ff8e07290"
+        "layout": "IPY_MODEL_96684fe1e9774763883cca732d56e563",
+        "style": "IPY_MODEL_859c9da77f1b47c0bd4c70439be99764"
       }
     },
-    "da240732d4dc4941a58c0a3caa6c2cc4": {
+    "96684fe1e9774763883cca732d56e563": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "45916c4c473343ec8a092b2ff8e07290": {
+    "859c9da77f1b47c0bd4c70439be99764": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "cf104df1b7bc4feb90d06248c7206637": {
+    "af266a3ccc5c4a659178f873621f529e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_bc288663281d48a581e84f1cf2b63a0a",
-          "IPY_MODEL_14f45ee967714e43a2eb198822d63929",
-          "IPY_MODEL_f0f1a4f703ac4d719cf6e556b5a2cd63"
+          "IPY_MODEL_767060f82c6049eaaf96866be33678e5",
+          "IPY_MODEL_5e43b793312f4e9db40b688993d5d47a",
+          "IPY_MODEL_789c0d289057447f867e9a29690121d0"
         ],
-        "layout": "IPY_MODEL_df09df8b7b2f45009c3008783f22bcdb"
+        "layout": "IPY_MODEL_12299b192931431288bbde54747f9c72"
       }
     },
-    "bc288663281d48a581e84f1cf2b63a0a": {
+    "767060f82c6049eaaf96866be33678e5": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_f25331934e68449fafcd237585070b8a",
-        "style": "IPY_MODEL_ee41e8f926a14a9cb1cb5a3c5f635617",
+        "layout": "IPY_MODEL_7cb577adf50b4f5191a81dd06f9a6de2",
+        "style": "IPY_MODEL_36a8e23fca92419c9ee5013fb0f3843c",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "f25331934e68449fafcd237585070b8a": {
+    "7cb577adf50b4f5191a81dd06f9a6de2": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ee41e8f926a14a9cb1cb5a3c5f635617": {
+    "36a8e23fca92419c9ee5013fb0f3843c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "14f45ee967714e43a2eb198822d63929": {
+    "5e43b793312f4e9db40b688993d5d47a": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2685,15 +2745,15 @@ Computing Check:
             "showlegend": true,
             "x": [
               "6",
+              "4",
               "1",
+              "2",
+              "0",
               "7",
               "3",
-              "0",
-              "4",
-              "2",
               "5",
-              "8",
-              "9"
+              "9",
+              "8"
             ],
             "xaxis": "x",
             "y": {
@@ -2704,7 +2764,7 @@ Computing Check:
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "c67ef153-6f5e-4878-85a4-0027a926e6b6"
+            "uid": "e8363268-7044-4df6-9e39-a816e78c2ecc"
           },
           {
             "alignmentgroup": "True",
@@ -2723,16 +2783,16 @@ Computing Check:
             "orientation": "v",
             "showlegend": false,
             "x": [
-              "5",
               "8",
-              "0",
-              "9",
-              "4",
-              "2",
-              "1",
-              "6",
               "3",
-              "7"
+              "5",
+              "1",
+              "0",
+              "7",
+              "4",
+              "6",
+              "9",
+              "2"
             ],
             "xaxis": "x2",
             "y": {
@@ -2743,7 +2803,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "248b248b-d062-4f27-af23-a9cbb22cf393"
+            "uid": "386c107f-8b63-4de9-8bb3-e7bda5d97ed6"
           },
           {
             "alignmentgroup": "True",
@@ -2763,13 +2823,13 @@ Computing Check:
             "showlegend": true,
             "x": [
               "1",
-              "0",
               "4",
-              "3",
-              "7",
+              "0",
               "6",
               "2",
               "5",
+              "3",
+              "7",
               "8",
               "9"
             ],
@@ -2782,7 +2842,7 @@ Computing Check:
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "1b06f022-cc14-499d-bfd5-773b93b2c28c"
+            "uid": "4dd3bc3e-a871-49fa-a039-72302f0ea4e0"
           },
           {
             "alignmentgroup": "True",
@@ -2802,15 +2862,15 @@ Computing Check:
             "showlegend": false,
             "x": [
               "8",
-              "5",
-              "9",
-              "1",
-              "6",
-              "2",
               "3",
-              "4",
+              "1",
               "0",
-              "7"
+              "6",
+              "5",
+              "4",
+              "7",
+              "9",
+              "2"
             ],
             "xaxis": "x2",
             "y": {
@@ -2821,7 +2881,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "1289c5d3-1901-45bc-8a93-cd8d27cac8f1"
+            "uid": "ff277624-93f0-4536-a2e5-2b411c3cb32c"
           }
         ],
         "_dom_classes": [],
@@ -3747,7 +3807,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "9nq9Xq/X7z9ya+LHUcjvP6D7uZ/7ue8/HY+dL2aq7z+dP8v5s5zvPzGxEVoQme8//kdjUvth7z/dP99LITfvP08eCNmHDe8/fGNOZf0F7z8="
+          "data": "+nw+n8/n7z92yws8YLvvP71T13Jws+8/XZNxw5CL7z+EDz744IPvP26hiKYvbO8/Oh47X8xU7z+f6QSbVFHvPwgHoyL97O4/oyLAZeTq7j8="
         },
         {
           "encoding": "base64",
@@ -3757,7 +3817,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "velNb3rT7z9cbQxNd7DvP3TAyW2JlO8/i3MidcGR7z9HIiA+mpDvPyz4pXS9gu8/REmzsPt87z/8Av6r4mjvP/RVjCMyZ+8/eUXTKl8M7z8="
+          "data": "GDFdEB+w7z+XxDL18aDvP5tvi0YAn+8/JaMcic6e7z8jOxS2ZpzvP8OD/73vXO8/6HtTpAJG7z/JX2wtaELvP5V89cskNu8/gJ0/bF8i7z8="
         },
         {
           "encoding": "base64",
@@ -3767,7 +3827,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "fjDncenb7z9YfMVXfMXvP01EN0JDve8/mHRqHuSu7z94iHeId4jvP2OZP5e7f+8/3BF3xB1x7z9o+3vsDm3vP5V89cskNu8/gJnTnm4M7z8="
+          "data": "fjDncenb7z/EW/DZmsXvP4lpT2Qgve8/32KZP5e77z/ijrgj7ojvP/t77A5tf+8/nCzoZh127z/fIN8g3yDvP1kRSUOAFO8/83OnLFAE7z8="
         },
         {
           "encoding": "base64",
@@ -3777,40 +3837,40 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "fyTs6Kbd7z/EeTTJDr/vP20nuM6Zve8/6zNtjb+b7z9HIiA+mpDvP3Q8aUWViO8/sBuiXBB37z9rrbXWWmvvP2OMMcYYY+8/dTD3dY397j8="
+          "data": "cpfl4oHd7z85YNU0U67vP+nXpODTou8/nI/B+Ric7z9wB4lvB4nvP66TmtJ5iO8/fWniMFZb7z8AAAAAAEDvP49wFQTQM+8/E6t9AMoz7z8="
         }
       ]
     },
-    "f0f1a4f703ac4d719cf6e556b5a2cd63": {
+    "789c0d289057447f867e9a29690121d0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_fba4930a3ded4416ac8aaa270f49af77",
-        "style": "IPY_MODEL_7a6a4ae834c2417984b1691aeb8726e5",
+        "layout": "IPY_MODEL_945bc912bad444268ceb7005503bce88",
+        "style": "IPY_MODEL_e9467755affc41e3b7f57d2356d42147",
         "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "fba4930a3ded4416ac8aaa270f49af77": {
+    "945bc912bad444268ceb7005503bce88": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7a6a4ae834c2417984b1691aeb8726e5": {
+    "e9467755affc41e3b7f57d2356d42147": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "df09df8b7b2f45009c3008783f22bcdb": {
+    "12299b192931431288bbde54747f9c72": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "60335518f2c44ec1b069d3011154d205": {
+    "e3fa3a27430b4db89f9519cfd3d2216f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3820,7 +3880,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "dcef982b3ae04d70ac301c179aa21229"}
+{"version_major": 2, "version_minor": 0, "model_id": "28a3b4907d8942a783b47bc2641ae52c"}
 </script>
 
 </body>
@@ -3890,31 +3950,40 @@ a 1/10 chances.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 60.92 /s]
+|#####| 1/1 [00:00&lt;00:00, 50.96 /s]
 
 Ingesting Batches - Train Dataset:
 |                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################                                                                                                                                   | 26/157 [00:00&lt;00:00, 258.19 Batch/s]
+|################                                                                                                                                             | 16/157 [00:00&lt;00:00, 154.39 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|####################################################                                                                                                         | 52/157 [00:00&lt;00:00, 252.04 Batch/s]
+|################################                                                                                                                             | 32/157 [00:00&lt;00:00, 148.54 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##############################################################################                                                                               | 78/157 [00:00&lt;00:00, 250.96 Batch/s]
+|################################################                                                                                                             | 48/157 [00:00&lt;00:00, 150.69 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|########################################################################################################                                                     | 104/157 [00:00&lt;00:00, 251.92 Batch/s]
+|################################################################                                                                                             | 64/157 [00:00&lt;00:00, 151.01 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##################################################################################################################################                           | 130/157 [00:00&lt;00:00, 251.26 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 151.57 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################################################################################################################################################ | 156/157 [00:00&lt;00:00, 250.01 Batch/s]
+|################################################################################################                                                             | 96/157 [00:00&lt;00:00, 151.62 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 250.01 Batch/s]
+|###############################################################################################################9                                             | 112/157 [00:00&lt;00:00, 151.96 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|################################################################################################################################                             | 128/157 [00:00&lt;00:00, 151.98 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|################################################################################################################################################             | 144/157 [00:00&lt;00:00, 152.17 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 152.17 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -3922,31 +3991,47 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|#########################                                                                                                                                    | 25/157 [00:00&lt;00:00, 248.21 Batch/s]
+|################                                                                                                                                             | 16/157 [00:00&lt;00:00, 152.57 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|###################################################                                                                                                          | 51/157 [00:00&lt;00:00, 250.70 Batch/s]
+|################################                                                                                                                             | 32/157 [00:00&lt;00:00, 149.26 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#############################################################################                                                                                | 77/157 [00:00&lt;00:00, 252.40 Batch/s]
+|################################################                                                                                                             | 48/157 [00:00&lt;00:00, 150.09 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#######################################################################################################                                                      | 103/157 [00:00&lt;00:00, 252.61 Batch/s]
+|################################################################                                                                                             | 64/157 [00:00&lt;00:00, 150.37 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#################################################################################################################################                            | 129/157 [00:00&lt;00:00, 252.89 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 150.85 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|###########################################################################################################################################################  | 155/157 [00:00&lt;00:00, 253.05 Batch/s]
+|################################################################################################                                                             | 96/157 [00:00&lt;00:00, 149.66 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 253.05 Batch/s]
+|##############################################################################################################9                                              | 111/157 [00:00&lt;00:00, 148.92 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|##############################################################################################################################                               | 126/157 [00:00&lt;00:00, 145.06 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|#############################################################################################################################################                | 141/157 [00:00&lt;00:00, 141.47 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|############################################################################################################################################################ | 156/157 [00:01&lt;00:00, 143.41 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 143.41 Batch/s]
 
 
 
@@ -3956,7 +4041,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 17.47 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 14.42 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -4243,7 +4328,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "3430132456b34b4ab5f452e8c8d0b3b9": {
+    "fee35256781244faa5036c3d5c958c2e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -4255,144 +4340,144 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_cab7fe30c20146ccba03100bc7f2ce86",
-          "IPY_MODEL_4b38d331fc8045fab40f37243cbe01ae",
-          "IPY_MODEL_b7c90ae238e7411e8ba02a6efab570b4",
-          "IPY_MODEL_ffd4d45ccfc04571a58830bb22a1f560"
+          "IPY_MODEL_619f572654dd46fda2053bc8e788aa58",
+          "IPY_MODEL_c1c861b6392c4868b1c9f1d372068607",
+          "IPY_MODEL_19cf932f3b53473ea6248bd277a3f718",
+          "IPY_MODEL_6e6327b2c1ee408887908031527ae834"
         ],
-        "layout": "IPY_MODEL_421567a207544a8aa3d82f350f32effc"
+        "layout": "IPY_MODEL_47e07d04930b4792962563a10d4dd1d5"
       }
     },
-    "cab7fe30c20146ccba03100bc7f2ce86": {
+    "619f572654dd46fda2053bc8e788aa58": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_a2f104242b3248db87ffb3f49fa1ffa4",
-        "style": "IPY_MODEL_70ce2bf795944e899f84bc31cc7820a2",
+        "layout": "IPY_MODEL_6da20b6fe05f4c638019007b64737cd1",
+        "style": "IPY_MODEL_4e1ab406e9904ea38f786433afc2f1ff",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "a2f104242b3248db87ffb3f49fa1ffa4": {
+    "6da20b6fe05f4c638019007b64737cd1": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "70ce2bf795944e899f84bc31cc7820a2": {
+    "4e1ab406e9904ea38f786433afc2f1ff": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4b38d331fc8045fab40f37243cbe01ae": {
+    "c1c861b6392c4868b1c9f1d372068607": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_fb69caf37dba4bc6a2cacda6d35b3047",
-        "style": "IPY_MODEL_cd9e9d5b8b7a484ca0682ed322dba76b",
+        "layout": "IPY_MODEL_a9ed8247ae2843c6b8062fa3e20d3263",
+        "style": "IPY_MODEL_1dea04eb0f684529a599e889b7a5b350",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "fb69caf37dba4bc6a2cacda6d35b3047": {
+    "a9ed8247ae2843c6b8062fa3e20d3263": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "cd9e9d5b8b7a484ca0682ed322dba76b": {
+    "1dea04eb0f684529a599e889b7a5b350": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b7c90ae238e7411e8ba02a6efab570b4": {
+    "19cf932f3b53473ea6248bd277a3f718": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_3eb9d1194c8a41939c4013b4babe813e",
-        "style": "IPY_MODEL_ede9aedd412d486b8cf496f0ca809317"
+        "layout": "IPY_MODEL_ac0e27bb96734b529980be18855fada9",
+        "style": "IPY_MODEL_6aeab35bd49b4ab3b4fb245334e300fe"
       }
     },
-    "3eb9d1194c8a41939c4013b4babe813e": {
+    "ac0e27bb96734b529980be18855fada9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "ede9aedd412d486b8cf496f0ca809317": {
+    "6aeab35bd49b4ab3b4fb245334e300fe": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ffd4d45ccfc04571a58830bb22a1f560": {
+    "6e6327b2c1ee408887908031527ae834": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_306f120aa19042109d3d95b3f375c684",
-          "IPY_MODEL_e3659f13b19b403585c3100bb3f04e7e",
-          "IPY_MODEL_679d043c10ba4097b2c5a29587153f33",
-          "IPY_MODEL_41aa7220a5944539b709a343a2045958"
+          "IPY_MODEL_c6e7bc3a8e6b4c36b0a201f5a984839e",
+          "IPY_MODEL_8d5bcda584d54021a9e84a51358e846d",
+          "IPY_MODEL_3871ee8dc19d4e219763a4e9b99308f8",
+          "IPY_MODEL_3918873add0b4df1be187c4397c4eed0"
         ],
-        "layout": "IPY_MODEL_364437f3e2794763acb430af7e728865"
+        "layout": "IPY_MODEL_41f40fb05e05414c8d3850bbb844516c"
       }
     },
-    "306f120aa19042109d3d95b3f375c684": {
+    "c6e7bc3a8e6b4c36b0a201f5a984839e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cb4194bc10b24f6f85bcef78cc64a6c2",
-        "style": "IPY_MODEL_7c04be1469294ba88615e0b070c1ad8a",
+        "layout": "IPY_MODEL_f331719e101a4929b521497be47b5d1a",
+        "style": "IPY_MODEL_e8089dacef4e4297ba15a0fbdb541bfe",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "cb4194bc10b24f6f85bcef78cc64a6c2": {
+    "f331719e101a4929b521497be47b5d1a": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7c04be1469294ba88615e0b070c1ad8a": {
+    "e8089dacef4e4297ba15a0fbdb541bfe": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e3659f13b19b403585c3100bb3f04e7e": {
+    "8d5bcda584d54021a9e84a51358e846d": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_6277315363d94bdaa505372402b8b0c6",
-        "style": "IPY_MODEL_83eddfc01d664f28a63110882f315a54",
+        "layout": "IPY_MODEL_ba61c70b35774560926510633dd1dd3d",
+        "style": "IPY_MODEL_7b77608a37624257ab580fe353aa574c",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['Samples Per Class'].</span></div>"
       }
     },
-    "6277315363d94bdaa505372402b8b0c6": {
+    "ba61c70b35774560926510633dd1dd3d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "83eddfc01d664f28a63110882f315a54": {
+    "7b77608a37624257ab580fe353aa574c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "679d043c10ba4097b2c5a29587153f33": {
+    "3871ee8dc19d4e219763a4e9b99308f8": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -4418,7 +4503,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "1a1e6fa6-5d5c-4e96-9cb5-dbd34a1795d7"
+            "uid": "78139597-1a09-4ec5-8251-97187ddcad78"
           },
           {
             "base": 0.1,
@@ -4437,7 +4522,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "b5198a62-dd8d-41fb-ad61-202147c6e3eb"
+            "uid": "0502247f-9279-40e0-ba74-3658b8129595"
           },
           {
             "marker": {
@@ -4465,7 +4550,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "2e745cac-c04a-4137-9602-090bcab13b56"
+            "uid": "0e7322cf-5f14-4b95-bbd9-e8d9b83618ff"
           },
           {
             "marker": {
@@ -4493,7 +4578,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "0768fba6-0c8b-4db1-a56d-b06a3ae62c4c"
+            "uid": "52e81429-4294-4eed-b7f6-cc5e75c3505d"
           }
         ],
         "_dom_classes": [],
@@ -5454,36 +5539,36 @@ Computing Check:
         }
       ]
     },
-    "41aa7220a5944539b709a343a2045958": {
+    "3918873add0b4df1be187c4397c4eed0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_75734dbedf4d4e438092ad862f2b5bd1",
-        "style": "IPY_MODEL_f003b483e2a24912aab3e947af3db202",
+        "layout": "IPY_MODEL_c02774e7315d4709986c91c4448e732e",
+        "style": "IPY_MODEL_fcdcccf3d59f486ea667a519cbc12d64",
         "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "75734dbedf4d4e438092ad862f2b5bd1": {
+    "c02774e7315d4709986c91c4448e732e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f003b483e2a24912aab3e947af3db202": {
+    "fcdcccf3d59f486ea667a519cbc12d64": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "364437f3e2794763acb430af7e728865": {
+    "41f40fb05e05414c8d3850bbb844516c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "421567a207544a8aa3d82f350f32effc": {
+    "47e07d04930b4792962563a10d4dd1d5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -5493,7 +5578,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "3430132456b34b4ab5f452e8c8d0b3b9"}
+{"version_major": 2, "version_minor": 0, "model_id": "fee35256781244faa5036c3d5c958c2e"}
 </script>
 
 </body>
@@ -5514,31 +5599,40 @@ distribution, such as the one that occurred here.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 58.25 /s]
+|#####| 1/1 [00:00&lt;00:00, 50.05 /s]
 
 Ingesting Batches - Train Dataset:
 |                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################                                                                                                                                   | 26/157 [00:00&lt;00:00, 254.44 Batch/s]
+|################                                                                                                                                             | 16/157 [00:00&lt;00:00, 152.70 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|####################################################                                                                                                         | 52/157 [00:00&lt;00:00, 254.42 Batch/s]
+|################################                                                                                                                             | 32/157 [00:00&lt;00:00, 152.98 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##############################################################################                                                                               | 78/157 [00:00&lt;00:00, 254.56 Batch/s]
+|################################################                                                                                                             | 48/157 [00:00&lt;00:00, 152.25 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|########################################################################################################                                                     | 104/157 [00:00&lt;00:00, 255.23 Batch/s]
+|################################################################                                                                                             | 64/157 [00:00&lt;00:00, 152.10 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##################################################################################################################################                           | 130/157 [00:00&lt;00:00, 255.81 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 152.48 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################################################################################################################################################ | 156/157 [00:00&lt;00:00, 255.63 Batch/s]
+|################################################################################################                                                             | 96/157 [00:00&lt;00:00, 152.70 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 255.63 Batch/s]
+|###############################################################################################################9                                             | 112/157 [00:00&lt;00:00, 152.84 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|################################################################################################################################                             | 128/157 [00:00&lt;00:00, 151.00 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|################################################################################################################################################             | 144/157 [00:00&lt;00:00, 151.58 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 151.58 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -5546,31 +5640,43 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##########################                                                                                                                                   | 26/157 [00:00&lt;00:00, 253.90 Batch/s]
+|################                                                                                                                                             | 16/157 [00:00&lt;00:00, 151.59 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|####################################################                                                                                                         | 52/157 [00:00&lt;00:00, 250.82 Batch/s]
+|################################                                                                                                                             | 32/157 [00:00&lt;00:00, 151.68 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##############################################################################                                                                               | 78/157 [00:00&lt;00:00, 250.93 Batch/s]
+|################################################                                                                                                             | 48/157 [00:00&lt;00:00, 151.62 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|########################################################################################################                                                     | 104/157 [00:00&lt;00:00, 249.28 Batch/s]
+|################################################################                                                                                             | 64/157 [00:00&lt;00:00, 151.14 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##################################################################################################################################                           | 130/157 [00:00&lt;00:00, 250.45 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 150.44 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|############################################################################################################################################################ | 156/157 [00:00&lt;00:00, 251.06 Batch/s]
+|################################################################################################                                                             | 96/157 [00:00&lt;00:00, 150.64 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#############################################################################################################################################################| 157/157 [00:00&lt;00:00, 251.06 Batch/s]
+|###############################################################################################################9                                             | 112/157 [00:00&lt;00:00, 151.13 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|################################################################################################################################                             | 128/157 [00:00&lt;00:00, 150.96 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|################################################################################################################################################             | 144/157 [00:00&lt;00:00, 148.99 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 148.99 Batch/s]
 
 
 
@@ -5580,7 +5686,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 17.01 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 13.36 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -5867,7 +5973,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "1f6a850f3eb14d9cb31434ff0a8001c3": {
+    "f7c93f8d4ef642868d3f6114782c204b": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -5879,145 +5985,145 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_b9c943d6d4304eef8a8c2e39f006bcde",
-          "IPY_MODEL_bf4b0a8ba69c4b41a1318395b19fa33d",
-          "IPY_MODEL_317ea4e0f4eb4690b3cfa9cada02c928",
-          "IPY_MODEL_1dc09e2eceb7458880c49d80f1281336"
+          "IPY_MODEL_8f366c16f7ee4c309a6df36dad0e5620",
+          "IPY_MODEL_fb35b183f0e04d2fb370d76fe8707e3c",
+          "IPY_MODEL_bb934063530e4e1193294882f841ebec",
+          "IPY_MODEL_fd0be2e4b2604415bf3ed43618e4c4c9"
         ],
-        "layout": "IPY_MODEL_488f18b30841493c83cd5a18ea1e1106"
+        "layout": "IPY_MODEL_c1ffc70fa5a94360be811e37aa1d2328"
       }
     },
-    "b9c943d6d4304eef8a8c2e39f006bcde": {
+    "8f366c16f7ee4c309a6df36dad0e5620": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_60c53ecd176743658aa41d70ea91facd",
-        "style": "IPY_MODEL_8449319217a44476bc09ff3dfd9abbcc",
+        "layout": "IPY_MODEL_97481b66f29e403aab723d5896a27b2c",
+        "style": "IPY_MODEL_26a27978547a4ec89fa28dba590d943c",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "60c53ecd176743658aa41d70ea91facd": {
+    "97481b66f29e403aab723d5896a27b2c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8449319217a44476bc09ff3dfd9abbcc": {
+    "26a27978547a4ec89fa28dba590d943c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "bf4b0a8ba69c4b41a1318395b19fa33d": {
+    "fb35b183f0e04d2fb370d76fe8707e3c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c6b49a5271904388b4e0904e5c2a6ba3",
-        "style": "IPY_MODEL_43578c733504445ea8e59bced53e19ab",
+        "layout": "IPY_MODEL_38a3c7731600470f94f50275d2c9df45",
+        "style": "IPY_MODEL_1a5230474fe44dc39bc19e89e8801ad9",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "c6b49a5271904388b4e0904e5c2a6ba3": {
+    "38a3c7731600470f94f50275d2c9df45": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "43578c733504445ea8e59bced53e19ab": {
+    "1a5230474fe44dc39bc19e89e8801ad9": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "317ea4e0f4eb4690b3cfa9cada02c928": {
+    "bb934063530e4e1193294882f841ebec": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_dc4f0b2b441d4ed18101d870e22c889f",
-        "style": "IPY_MODEL_1e914d9b2da64f9cafc060c30dc81134",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_223e5_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_223e5_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_223e5_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_223e5_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_223e5_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_223e5_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_223e5_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_223e5_row0_col1\" class=\"data row0 col1\" >categorical drift score <= 0.15 and numerical drift score <= 0.075</td>\n      <td id=\"T_223e5_row0_col2\" class=\"data row0 col2\" >Found categorical label properties with Cramer's V above threshold: {'Samples Per Class': '0.18'}\n</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_8f623156b87445c6898c8aeea49f6b87",
+        "style": "IPY_MODEL_151183a8e6ae4c979e45530296bac251",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_485cb_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_485cb_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_485cb_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_485cb_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_485cb_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_485cb_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_485cb_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_485cb_row0_col1\" class=\"data row0 col1\" >categorical drift score <= 0.15 and numerical drift score <= 0.075</td>\n      <td id=\"T_485cb_row0_col2\" class=\"data row0 col2\" >Found categorical label properties with Cramer's V above threshold: {'Samples Per Class': '0.18'}\n</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "dc4f0b2b441d4ed18101d870e22c889f": {
+    "8f623156b87445c6898c8aeea49f6b87": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1e914d9b2da64f9cafc060c30dc81134": {
+    "151183a8e6ae4c979e45530296bac251": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1dc09e2eceb7458880c49d80f1281336": {
+    "fd0be2e4b2604415bf3ed43618e4c4c9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_044e55ef64904030b9269b895559fa01",
-          "IPY_MODEL_720242874c834ca58132941f52fb5abd",
-          "IPY_MODEL_e2bc117f77ef4124aebcc747dd24eaa1",
-          "IPY_MODEL_c327a8daf5bf43a2a4bab1b5a6d06b5c"
+          "IPY_MODEL_6cf0aca303fc4678a8bde3ee0402c4bb",
+          "IPY_MODEL_4bf2343d0f44422dac71d0ed26bcc45f",
+          "IPY_MODEL_4634b1d169a74c958ae4dda0e326f096",
+          "IPY_MODEL_d0f5b1b025e64c2a9715ad7f466b23fa"
         ],
-        "layout": "IPY_MODEL_b12152a410214506ad6c3e450beec5f0"
+        "layout": "IPY_MODEL_aa8fecd0892d4df6bcb8d55e8099393d"
       }
     },
-    "044e55ef64904030b9269b895559fa01": {
+    "6cf0aca303fc4678a8bde3ee0402c4bb": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8a9eb3362870401ab35953584253999b",
-        "style": "IPY_MODEL_1656a0a92dc04980acce556d90753a32",
+        "layout": "IPY_MODEL_1a3bac6d33574931a64c9cc2b1a06e99",
+        "style": "IPY_MODEL_fc2bb08c618e45d490d194fbc49f189b",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "8a9eb3362870401ab35953584253999b": {
+    "1a3bac6d33574931a64c9cc2b1a06e99": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1656a0a92dc04980acce556d90753a32": {
+    "fc2bb08c618e45d490d194fbc49f189b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "720242874c834ca58132941f52fb5abd": {
+    "4bf2343d0f44422dac71d0ed26bcc45f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8a82b9c13c9e44c9b8361fa3ce05083c",
-        "style": "IPY_MODEL_8cf0f274aecc4549ad53716938ab58ec",
+        "layout": "IPY_MODEL_c87894fccbb04bc78596a6b629529acc",
+        "style": "IPY_MODEL_9be9ce28cab34a2f85ac1970f555549d",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['Samples Per Class'].</span></div>"
       }
     },
-    "8a82b9c13c9e44c9b8361fa3ce05083c": {
+    "c87894fccbb04bc78596a6b629529acc": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8cf0f274aecc4549ad53716938ab58ec": {
+    "9be9ce28cab34a2f85ac1970f555549d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e2bc117f77ef4124aebcc747dd24eaa1": {
+    "4634b1d169a74c958ae4dda0e326f096": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -6043,7 +6149,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "7b25a2cd-e84a-4219-9d9f-67dc140dd99d"
+            "uid": "5441c68c-565a-4e5e-955e-4f6163926af3"
           },
           {
             "base": 0.1,
@@ -6062,7 +6168,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "714a42f3-75ab-413c-8f9d-22148b509e5b"
+            "uid": "c65488dd-4cb3-48cd-aa6d-03a5bc03ea67"
           },
           {
             "marker": {
@@ -6090,7 +6196,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "8676f203-a4a9-4c01-a514-4389baac383d"
+            "uid": "4c9f72cf-2b6d-4bc4-84df-edd5a3b38cd4"
           },
           {
             "marker": {
@@ -6118,7 +6224,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "314984f6-fb4d-457b-88c5-422d040095dc"
+            "uid": "45089fc3-6506-4426-b6a8-4e1a6330c829"
           }
         ],
         "_dom_classes": [],
@@ -7079,36 +7185,36 @@ Computing Check:
         }
       ]
     },
-    "c327a8daf5bf43a2a4bab1b5a6d06b5c": {
+    "d0f5b1b025e64c2a9715ad7f466b23fa": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_f4dc629be8684e908d80a864f4a9815d",
-        "style": "IPY_MODEL_e53dfa58f73a46039cf25b5b6411a426",
+        "layout": "IPY_MODEL_e6ad2f2d712f4b269fee8f7be1e02274",
+        "style": "IPY_MODEL_1f81a5a626bc409caf3f3180711c53da",
         "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "f4dc629be8684e908d80a864f4a9815d": {
+    "e6ad2f2d712f4b269fee8f7be1e02274": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e53dfa58f73a46039cf25b5b6411a426": {
+    "1f81a5a626bc409caf3f3180711c53da": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b12152a410214506ad6c3e450beec5f0": {
+    "aa8fecd0892d4df6bcb8d55e8099393d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "488f18b30841493c83cd5a18ea1e1106": {
+    "c1ffc70fa5a94360be811e37aa1d2328": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -7118,7 +7224,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "1f6a850f3eb14d9cb31434ff0a8001c3"}
+{"version_major": 2, "version_minor": 0, "model_id": "f7c93f8d4ef642868d3f6114782c204b"}
 </script>
 
 </body>
@@ -7140,43 +7246,58 @@ distribution between the train and test sets</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 30.36 /s]
+|#####| 1/1 [00:00&lt;00:00, 23.85 /s]
 
 Ingesting Batches - Train Dataset:
 |                                                                                                                                                             | 0/157 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############9                                                                                                                                               | 14/157 [00:00&lt;00:01, 139.79 Batch/s]
+|##########                                                                                                                                                   | 10/157 [00:00&lt;00:01, 94.84 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################9                                                                                                                                | 29/157 [00:00&lt;00:00, 141.25 Batch/s]
+|####################                                                                                                                                         | 20/157 [00:00&lt;00:01, 95.53 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|############################################                                                                                                                 | 44/157 [00:00&lt;00:00, 143.55 Batch/s]
+|##############################                                                                                                                               | 30/157 [00:00&lt;00:01, 94.78 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|###########################################################                                                                                                  | 59/157 [00:00&lt;00:00, 144.41 Batch/s]
+|########################################                                                                                                                     | 40/157 [00:00&lt;00:01, 94.53 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##########################################################################                                                                                   | 74/157 [00:00&lt;00:00, 144.10 Batch/s]
+|##################################################                                                                                                           | 50/157 [00:00&lt;00:01, 93.99 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#########################################################################################                                                                    | 89/157 [00:00&lt;00:00, 144.29 Batch/s]
+|############################################################                                                                                                 | 60/157 [00:00&lt;00:01, 94.27 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|########################################################################################################                                                     | 104/157 [00:00&lt;00:00, 143.06 Batch/s]
+|######################################################################                                                                                       | 70/157 [00:00&lt;00:00, 93.85 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#######################################################################################################################                                      | 119/157 [00:00&lt;00:00, 143.93 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 93.07 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|######################################################################################################################################                       | 134/157 [00:00&lt;00:00, 143.67 Batch/s]
+|##########################################################################################                                                                   | 90/157 [00:00&lt;00:00, 93.51 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####################################################################################################################################################        | 149/157 [00:01&lt;00:00, 144.94 Batch/s]
+|####################################################################################################                                                         | 100/157 [00:01&lt;00:00, 92.51 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 144.94 Batch/s]
+|##############################################################################################################                                               | 110/157 [00:01&lt;00:00, 92.66 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|########################################################################################################################                                     | 120/157 [00:01&lt;00:00, 92.99 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|##################################################################################################################################                           | 130/157 [00:01&lt;00:00, 93.19 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|############################################################################################################################################                 | 140/157 [00:01&lt;00:00, 89.13 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|######################################################################################################################################################       | 150/157 [00:01&lt;00:00, 90.38 Batch/s]
+
+Ingesting Batches - Train Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 90.38 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -7184,47 +7305,67 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|###############                                                                                                                                              | 15/157 [00:00&lt;00:00, 147.37 Batch/s]
+|##########                                                                                                                                                   | 10/157 [00:00&lt;00:01, 95.41 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##############################                                                                                                                               | 30/157 [00:00&lt;00:00, 147.43 Batch/s]
+|####################                                                                                                                                         | 20/157 [00:00&lt;00:01, 95.17 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#############################################                                                                                                                | 45/157 [00:00&lt;00:00, 147.43 Batch/s]
+|##############################                                                                                                                               | 30/157 [00:00&lt;00:01, 94.91 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|############################################################                                                                                                 | 60/157 [00:00&lt;00:00, 146.79 Batch/s]
+|########################################                                                                                                                     | 40/157 [00:00&lt;00:01, 95.09 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|###########################################################################                                                                                  | 75/157 [00:00&lt;00:00, 145.51 Batch/s]
+|##################################################                                                                                                           | 50/157 [00:00&lt;00:01, 95.20 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|##########################################################################################                                                                   | 90/157 [00:00&lt;00:00, 145.99 Batch/s]
+|############################################################                                                                                                 | 60/157 [00:00&lt;00:01, 95.24 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#########################################################################################################                                                    | 105/157 [00:00&lt;00:00, 145.97 Batch/s]
+|######################################################################                                                                                       | 70/157 [00:00&lt;00:00, 94.93 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|########################################################################################################################                                     | 120/157 [00:00&lt;00:00, 145.81 Batch/s]
+|################################################################################                                                                             | 80/157 [00:00&lt;00:00, 95.00 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#######################################################################################################################################                      | 135/157 [00:00&lt;00:00, 146.01 Batch/s]
+|##########################################################################################                                                                   | 90/157 [00:00&lt;00:00, 94.78 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|######################################################################################################################################################       | 150/157 [00:01&lt;00:00, 146.43 Batch/s]
+|####################################################################################################                                                         | 100/157 [00:01&lt;00:00, 92.98 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 146.43 Batch/s]
+|##############################################################################################################                                               | 110/157 [00:01&lt;00:00, 93.58 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|########################################################################################################################                                     | 120/157 [00:01&lt;00:00, 94.36 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|##################################################################################################################################                           | 130/157 [00:01&lt;00:00, 94.66 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|############################################################################################################################################                 | 140/157 [00:01&lt;00:00, 94.20 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|######################################################################################################################################################       | 150/157 [00:01&lt;00:00, 94.39 Batch/s]
+
+
+Ingesting Batches - Test Dataset:
+|#############################################################################################################################################################| 157/157 [00:01&lt;00:00, 94.39 Batch/s]
 
 
 
@@ -7234,7 +7375,7 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 12.72 Check/s]
+|#####| 1/1 [00:00&lt;00:00, 10.20 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -7521,7 +7662,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "5340a72ce3c94a2aa43c046e96eacfba": {
+    "edc584b8161b4d0d9cb07b3791244c87": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -7533,120 +7674,120 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_0285a4f9894f4f77ae21cb2371d7b4a6",
-          "IPY_MODEL_86e058f4596147fea222d8b0ea8e82d2",
-          "IPY_MODEL_8445faff81a64b7cab42994e795f34c1",
-          "IPY_MODEL_c81a4be0ed3744168597d8f570483654"
+          "IPY_MODEL_1ca9ebf139b34b57ba31d922e411790f",
+          "IPY_MODEL_19cbe558730a4d43810690357e2ef982",
+          "IPY_MODEL_eb91558ed7554e47aab0677fe221aa99",
+          "IPY_MODEL_51a7c075f5044dbe9db5f61ef0543332"
         ],
-        "layout": "IPY_MODEL_12f99d863cb5470a96e7c5c49b285139"
+        "layout": "IPY_MODEL_1046056127bd47b799de0fa8a5b341b7"
       }
     },
-    "0285a4f9894f4f77ae21cb2371d7b4a6": {
+    "1ca9ebf139b34b57ba31d922e411790f": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_629bcd4c3a8b4cdb8cbc88ab468a86bf",
-        "style": "IPY_MODEL_6601af404ac040d7a42ae3c418827238",
+        "layout": "IPY_MODEL_1d1ed4ad8c124c4fb4600bd076e1f462",
+        "style": "IPY_MODEL_3f956866768c465c9752e06f1424bbae",
         "value": "<h4><b>Class Performance</b></h4>"
       }
     },
-    "629bcd4c3a8b4cdb8cbc88ab468a86bf": {
+    "1d1ed4ad8c124c4fb4600bd076e1f462": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6601af404ac040d7a42ae3c418827238": {
+    "3f956866768c465c9752e06f1424bbae": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "86e058f4596147fea222d8b0ea8e82d2": {
+    "19cbe558730a4d43810690357e2ef982": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1915bbf958a2494598308bade6f3ab38",
-        "style": "IPY_MODEL_69773ae71c0a4b8ea454c4115c976c69",
+        "layout": "IPY_MODEL_dc9d544ea71f4b4388240a1fa7a4ac43",
+        "style": "IPY_MODEL_4028d1fc699c456cb64773d6462c1d7a",
         "value": "<p>Summarize given metrics on a dataset and model.</p>"
       }
     },
-    "1915bbf958a2494598308bade6f3ab38": {
+    "dc9d544ea71f4b4388240a1fa7a4ac43": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "69773ae71c0a4b8ea454c4115c976c69": {
+    "4028d1fc699c456cb64773d6462c1d7a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "8445faff81a64b7cab42994e795f34c1": {
+    "eb91558ed7554e47aab0677fe221aa99": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d5ed9f5028f14de082e3050760af278c",
-        "style": "IPY_MODEL_09987314aa994a99b91a5bbc1d26b134"
+        "layout": "IPY_MODEL_96f67bf7d48342b2af82c0ff26f1ebe7",
+        "style": "IPY_MODEL_a550c41a3b89463099d5bab12daf8991"
       }
     },
-    "d5ed9f5028f14de082e3050760af278c": {
+    "96f67bf7d48342b2af82c0ff26f1ebe7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "09987314aa994a99b91a5bbc1d26b134": {
+    "a550c41a3b89463099d5bab12daf8991": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c81a4be0ed3744168597d8f570483654": {
+    "51a7c075f5044dbe9db5f61ef0543332": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_eb1ab4ae0bd940e6a39efb705df9c009",
-          "IPY_MODEL_de288924665c498bb8b85c50849b44e9",
-          "IPY_MODEL_f7fff28fde914fa6b51dc39bafb4d739"
+          "IPY_MODEL_855bd5e3b62943abad7966297ba0a58e",
+          "IPY_MODEL_520e95f59441430fbf733017af8b8cd1",
+          "IPY_MODEL_cd20146a8052475db4e10df71c8ad1c1"
         ],
-        "layout": "IPY_MODEL_125c0331e1ea44c19f46109295904708"
+        "layout": "IPY_MODEL_2e93dab529de43d293e421e35c63d3b7"
       }
     },
-    "eb1ab4ae0bd940e6a39efb705df9c009": {
+    "855bd5e3b62943abad7966297ba0a58e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1a764ebae32341cfaff48426cafbb53e",
-        "style": "IPY_MODEL_7f00826e064b4315a6c14b2cc4ec22ee",
+        "layout": "IPY_MODEL_58731166d5bb4e8fbccb057b42dbd994",
+        "style": "IPY_MODEL_a4b2a8ec929243c6b28b9f8e7c664754",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "1a764ebae32341cfaff48426cafbb53e": {
+    "58731166d5bb4e8fbccb057b42dbd994": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7f00826e064b4315a6c14b2cc4ec22ee": {
+    "a4b2a8ec929243c6b28b9f8e7c664754": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "de288924665c498bb8b85c50849b44e9": {
+    "520e95f59441430fbf733017af8b8cd1": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -7672,16 +7813,16 @@ Computing Check:
             "orientation": "v",
             "showlegend": true,
             "x": [
-              "5",
-              "0",
               "8",
-              "1",
+              "0",
+              "5",
               "3",
-              "6",
-              "2",
+              "1",
               "4",
-              "9",
-              "7"
+              "2",
+              "6",
+              "7",
+              "9"
             ],
             "xaxis": "x",
             "y": {
@@ -7692,7 +7833,7 @@ Computing Check:
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "43b80e90-6cdc-4dcb-8803-edd18fa2824f"
+            "uid": "b349af3d-be7f-42a6-a7b1-4d6cb916d29c"
           },
           {
             "alignmentgroup": "True",
@@ -7711,15 +7852,15 @@ Computing Check:
             "orientation": "v",
             "showlegend": false,
             "x": [
+              "4",
               "1",
               "0",
-              "4",
               "6",
-              "7",
-              "5",
               "2",
-              "3",
+              "5",
               "8",
+              "7",
+              "3",
               "9"
             ],
             "xaxis": "x2",
@@ -7731,7 +7872,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "7be076b5-1092-46ad-a5b1-3fc26c5f1c6f"
+            "uid": "647f5b8a-06c7-4f8c-ba8c-678b67914450"
           },
           {
             "alignmentgroup": "True",
@@ -7754,11 +7895,11 @@ Computing Check:
               "3",
               "1",
               "5",
-              "9",
+              "7",
               "2",
               "6",
+              "9",
               "4",
-              "7",
               "0"
             ],
             "xaxis": "x",
@@ -7770,7 +7911,7 @@ Computing Check:
             },
             "yaxis": "y",
             "type": "histogram",
-            "uid": "fb8f6887-1583-4476-94c8-32fb54f8cffa"
+            "uid": "4918ff0a-3f85-4d9b-bd06-cf26fe516c04"
           },
           {
             "alignmentgroup": "True",
@@ -7789,13 +7930,13 @@ Computing Check:
             "orientation": "v",
             "showlegend": false,
             "x": [
-              "0",
               "4",
+              "0",
               "6",
-              "5",
-              "3",
-              "7",
               "2",
+              "3",
+              "5",
+              "7",
               "9",
               "8",
               "1"
@@ -7809,7 +7950,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "histogram",
-            "uid": "38ccb0f0-f5c3-477d-91c0-1cde058844fa"
+            "uid": "025cd9b1-c1d4-4561-b12d-bab9b53d3f3b"
           }
         ],
         "_dom_classes": [],
@@ -8735,7 +8876,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "/2h/tD/a7z+uybhhyMXvP5cMwTravO8/d7zYEnyb7z85LSRQc4/vP/uRsKObdu8/ThLDrpNv7z9BKAPEc2jvPwAAAAAAaO8/cr+ZcFkb7z8="
+          "data": "wQkxEtHV7z/y0hoPqsXvPwyLCKeVtO8/apqmaZqm7z83XDEUTpTvP4X0exFJSO8/qjmEUh5B7z/C8/YwJDzvPzjffPPNN+8/xpwxZ8wZ7z8="
         },
         {
           "encoding": "base64",
@@ -8745,7 +8886,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "LFIGnm7N7z+uybhhyMXvP8Av3Nobq+8//sm5JJap7z8AAAAAAJDvP9/5SF6Rhu8/98UEN19/7z9wv/3222/vP0OjeHPfQe8/JfEFZD4a7z8="
+          "data": "pxyEthDN7z8Op+JGNcbvP7zefzQmte8/ZM9AVDqy7z/Z4LNcfZfvPzpHvIeLau8/Bjc1Dlcx7z8AAAAAADDvPzC//PLLL+8/MYb9AGYK7z8="
         },
         {
           "encoding": "base64",
@@ -8755,7 +8896,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "PP0RC7jT7z/o8/l8Pp/vP5CCUYJ6mu8/OBCaNxCa7z9dsi1L75HvP6scL8FTkO8/bCKQayKQ7z9fxInK00LvP0Axet9JN+8/rQqKLwtsyT8="
+          "data": "LSH8SMTT7z9xC12OMM/vP5ZaqZVaqe8/05SPnc2i7z8T97IjNHHvP9Z5b3IoYu8/VVVVVVVV7z91ScuXYkzvP0wDI9b06+4/otey2oSMyT8="
         },
         {
           "encoding": "base64",
@@ -8765,40 +8906,40 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "YRRwaD7X7z+gz8Ity83vP5QHQvZhw+8/Q+SPJc2H7z9/f39/f3/vPz4n01cJY+8/Gp8O3WRh7z/5fHw+Ph/vP3+j7H6j7O4/td4MJqgd4j8="
+          "data": "FTXXc4fe7z9hFHBoPtfvP38GFNMKzO8/VPfKpQuJ7z9nZ2dnZ2fvP6agHjHRYu8/ty7vgCNF7z/4Pnwfvg/vP2M+9WI+9e4/twZ4QVL+4T8="
         }
       ]
     },
-    "f7fff28fde914fa6b51dc39bafb4d739": {
+    "cd20146a8052475db4e10df71c8ad1c1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_41745082d2c548709f2e5255e5e826ef",
-        "style": "IPY_MODEL_4528b019090d403a90ab57789c7f557f",
+        "layout": "IPY_MODEL_2d3651076e9e4662b40d9b5597d80179",
+        "style": "IPY_MODEL_6c63ed7054974de786747558f06cae2a",
         "value": "<div><p style=\"font-size:0.9em;line-height:1;\"><i>Note - data sampling: Running on 10000 <b>train</b> data samples out of 60000. Sample size can be controlled with the \"n_samples\" parameter.</i></p></div>"
       }
     },
-    "41745082d2c548709f2e5255e5e826ef": {
+    "2d3651076e9e4662b40d9b5597d80179": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4528b019090d403a90ab57789c7f557f": {
+    "6c63ed7054974de786747558f06cae2a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "125c0331e1ea44c19f46109295904708": {
+    "2e93dab529de43d293e421e35c63d3b7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "12f99d863cb5470a96e7c5c49b285139": {
+    "1046056127bd47b799de0fa8a5b341b7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -8808,7 +8949,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "5340a72ce3c94a2aa43c046e96eacfba"}
+{"version_major": 2, "version_minor": 0, "model_id": "edc584b8161b4d0d9cb07b3791244c87"}
 </script>
 
 </body>
@@ -8837,19 +8978,19 @@ Computing Check:
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2294.48 /s]
+|#####| 1/1 [00:00&lt;00:00, 2148.72 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  4.78 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  4.17 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  5.06 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  4.31 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  5.06 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  4.31 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -8857,15 +8998,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  5.83 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  4.94 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  5.44 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  4.61 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  5.44 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  4.61 Batch/s]
 
 
 
@@ -8875,12 +9016,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  8.00 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  6.36 Check/s]
 
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  8.00 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  6.36 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -9167,7 +9308,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "eb4f8686081b4532bb12ef0b01875bda": {
+    "d6fecfcd3c14450e9f9e2e5166276ba5": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -9179,145 +9320,145 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_e7a5d4541412430ab409357322780c2f",
-          "IPY_MODEL_0fb648573153433fa7f9fa36862f19c4",
-          "IPY_MODEL_3de20cfc0a554a0f8c385ca8d02eb234",
-          "IPY_MODEL_7fb657d016644dce8d0b9149ced0d0f7"
+          "IPY_MODEL_a14c23ee8f134fe49d05c7cb3437ad57",
+          "IPY_MODEL_084fb7eedc7d40db8535d4215adf2f92",
+          "IPY_MODEL_dfe34aef31504ebe824c50aca55f17f8",
+          "IPY_MODEL_d7fdd45410744ae2bfad359cf062c0ce"
         ],
-        "layout": "IPY_MODEL_7b650f754c87454daf5a17d5f3f547bf"
+        "layout": "IPY_MODEL_b8f12ac56b2f4ac9b1ac184b050db83d"
       }
     },
-    "e7a5d4541412430ab409357322780c2f": {
+    "a14c23ee8f134fe49d05c7cb3437ad57": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c6232466542244bb94c1ed005c60f390",
-        "style": "IPY_MODEL_5c86fdca4a43432aa9ac5369b37e33f2",
+        "layout": "IPY_MODEL_4378f7d98e7e4ecabb5090ca9793e6ff",
+        "style": "IPY_MODEL_5201a0024a444bf9b5c3c74e32e405c3",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "c6232466542244bb94c1ed005c60f390": {
+    "4378f7d98e7e4ecabb5090ca9793e6ff": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5c86fdca4a43432aa9ac5369b37e33f2": {
+    "5201a0024a444bf9b5c3c74e32e405c3": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0fb648573153433fa7f9fa36862f19c4": {
+    "084fb7eedc7d40db8535d4215adf2f92": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0f52ab8d40ff4cfc999280b9fef8859d",
-        "style": "IPY_MODEL_b6935169f7224c519502929f69f2595c",
+        "layout": "IPY_MODEL_3cf9078f63024557b70f3b364f015c4c",
+        "style": "IPY_MODEL_2685eba0fae44107b55505923ad874af",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "0f52ab8d40ff4cfc999280b9fef8859d": {
+    "3cf9078f63024557b70f3b364f015c4c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b6935169f7224c519502929f69f2595c": {
+    "2685eba0fae44107b55505923ad874af": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "3de20cfc0a554a0f8c385ca8d02eb234": {
+    "dfe34aef31504ebe824c50aca55f17f8": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8edab80307ae41598b1233e1741848df",
-        "style": "IPY_MODEL_4929aac561d24c62ae6779025d064871"
+        "layout": "IPY_MODEL_829aeed368434adf8039bf53afdbfbd0",
+        "style": "IPY_MODEL_e8bfb2ae26114922abe9b0623e131acc"
       }
     },
-    "8edab80307ae41598b1233e1741848df": {
+    "829aeed368434adf8039bf53afdbfbd0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4929aac561d24c62ae6779025d064871": {
+    "e8bfb2ae26114922abe9b0623e131acc": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7fb657d016644dce8d0b9149ced0d0f7": {
+    "d7fdd45410744ae2bfad359cf062c0ce": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_ffdb4cdf14d84a8f95c4a7a79b72ae5b",
-          "IPY_MODEL_d18c88c0ce174650815ebbcb732290d7",
-          "IPY_MODEL_c006c3add8174d289c1d325a5993273e",
-          "IPY_MODEL_eb15a64b04b8459382663e3bdd483cd5",
-          "IPY_MODEL_c54edbd6722c4dbf806f9c60c008d533"
+          "IPY_MODEL_a96d1f6f1e8e45a8a641edd05852ec63",
+          "IPY_MODEL_f02517d48b054153a5bb786c85b7bba5",
+          "IPY_MODEL_78fe015970704f9d9934cbebd35467bf",
+          "IPY_MODEL_1dcffdca2a1d4e3f98bf4a0218310a6c",
+          "IPY_MODEL_095a37656cd145b6a1feb338857be4d9"
         ],
-        "layout": "IPY_MODEL_e136e06ea85e4556bdc53eb503c82972"
+        "layout": "IPY_MODEL_f2acd288fbb94881a62d6deb0c98cd12"
       }
     },
-    "ffdb4cdf14d84a8f95c4a7a79b72ae5b": {
+    "a96d1f6f1e8e45a8a641edd05852ec63": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_f57f1ea32b524a9aa44b96cf5a8fd32e",
-        "style": "IPY_MODEL_6d3ee55f3b7147edabce9a2a96ec26a2",
+        "layout": "IPY_MODEL_f4c86b0495d74a21998d67345277b0bb",
+        "style": "IPY_MODEL_45c4cc331bb74a279331a3d737c8c5eb",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "f57f1ea32b524a9aa44b96cf5a8fd32e": {
+    "f4c86b0495d74a21998d67345277b0bb": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "6d3ee55f3b7147edabce9a2a96ec26a2": {
+    "45c4cc331bb74a279331a3d737c8c5eb": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d18c88c0ce174650815ebbcb732290d7": {
+    "f02517d48b054153a5bb786c85b7bba5": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1f25f17cb12348e6a88a37ab9033c03d",
-        "style": "IPY_MODEL_fdf22a7f711342e786511806855618ba",
+        "layout": "IPY_MODEL_2ac704bcdf964c6b8e50b7ca81141972",
+        "style": "IPY_MODEL_ad964b230edd4c86ada53ffaece5927d",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['Samples Per Class', 'Bounding Box Area (in pixels)', 'Number of Bounding Boxes Per Image'].</span></div>"
       }
     },
-    "1f25f17cb12348e6a88a37ab9033c03d": {
+    "2ac704bcdf964c6b8e50b7ca81141972": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "fdf22a7f711342e786511806855618ba": {
+    "ad964b230edd4c86ada53ffaece5927d": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c006c3add8174d289c1d325a5993273e": {
+    "78fe015970704f9d9934cbebd35467bf": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -9343,7 +9484,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "718f438d-0126-456f-8dba-e85135c52579"
+            "uid": "f97f7cb7-aa76-4882-98d5-56e3e47b9514"
           },
           {
             "base": 0.1,
@@ -9362,7 +9503,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "1fb7fb1a-4dbb-40f7-ba23-0f88f4a4893d"
+            "uid": "8e11638e-1281-42c1-baec-812d1b298aea"
           },
           {
             "base": 0.2,
@@ -9381,7 +9522,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "3196feaa-1644-4b98-8f41-5100962083a8"
+            "uid": "76ba478b-dc90-4b12-b24a-ec45c5587d3a"
           },
           {
             "base": 0.3,
@@ -9392,7 +9533,7 @@ Computing Check:
             "orientation": "h",
             "showlegend": false,
             "x": [
-              0.11391681899736389
+              0.11391681899736383
             ],
             "xaxis": "x",
             "y": [
@@ -9400,7 +9541,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "a90c4847-3cde-48db-bc38-ef896301af03"
+            "uid": "26408178-d272-4278-a816-6f5687a64055"
           },
           {
             "marker": {
@@ -9428,7 +9569,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "1516f8d7-43b1-4995-8d51-70a6044ff34c"
+            "uid": "1e176c8c-369c-4f93-9d36-493a5d92042b"
           },
           {
             "marker": {
@@ -9456,7 +9597,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "38ce2abb-6a1c-49b3-940b-9dd231a1e936"
+            "uid": "f1485d34-8cde-448a-83fc-20f814713f20"
           }
         ],
         "_dom_classes": [],
@@ -10440,7 +10581,7 @@ Computing Check:
         }
       ]
     },
-    "eb15a64b04b8459382663e3bdd483cd5": {
+    "1dcffdca2a1d4e3f98bf4a0218310a6c": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -10466,7 +10607,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "981abe20-18fe-4421-b63f-ed554f4197b4"
+            "uid": "424aca5f-ec17-445d-94ae-68e2eb7dd2f8"
           },
           {
             "fill": "tozeroy",
@@ -10638,7 +10779,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "c013b9da-8125-4bb0-b496-d0a42b35b59f"
+            "uid": "4ec12820-7e56-4942-841a-5d1a48a6c78a"
           },
           {
             "line": {
@@ -10658,7 +10799,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "99d01fe5-8d65-4538-9c47-17d7ca8eee2e"
+            "uid": "22757bf8-0224-4b87-899d-e93af9f5c16c"
           },
           {
             "line": {
@@ -10677,7 +10818,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "69f8723b-9d44-4034-b35f-5b1fdfce2ffd"
+            "uid": "6a27b5fd-5521-4ab5-bb2f-1224cb8db547"
           },
           {
             "fill": "tozeroy",
@@ -10849,7 +10990,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "e88ca04a-3c4f-4b59-a993-f2e7cfffbe44"
+            "uid": "86fa0995-58ae-4ca9-a260-1beb0bdf9ad1"
           },
           {
             "line": {
@@ -10869,7 +11010,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "9b033c44-8706-4cdb-ba18-1b5dd2f56afb"
+            "uid": "011b8218-02c9-415c-a90d-627be6faa626"
           },
           {
             "line": {
@@ -10888,7 +11029,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "cba46bdc-c18a-4fc5-b0e2-21b23f0e91d8"
+            "uid": "347c9633-5f96-4203-9ce9-42953fb4ddb9"
           }
         ],
         "_dom_classes": [],
@@ -11850,7 +11991,7 @@ Computing Check:
         }
       ]
     },
-    "c54edbd6722c4dbf806f9c60c008d533": {
+    "095a37656cd145b6a1feb338857be4d9": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -11876,7 +12017,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "7aae0de7-9775-4e76-a159-74a323f293fd"
+            "uid": "c3337356-289e-4ced-b9c3-426c10c313b3"
           },
           {
             "fill": "tozeroy",
@@ -12048,7 +12189,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "f075ca4f-9622-4d91-baa2-22038ae227ce"
+            "uid": "ff0438f7-3f60-429c-ab6f-f095ce5d0dfd"
           },
           {
             "line": {
@@ -12064,11 +12205,11 @@ Computing Check:
             "xaxis": "x2",
             "y": [
               0,
-              1.072127107420932e-05
+              1.0721271074209318e-05
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "b5c8486f-212c-4a85-bd23-1a11d031fd2b"
+            "uid": "9bd7d2c6-58c7-418d-989c-18fe06ebe469"
           },
           {
             "line": {
@@ -12083,11 +12224,11 @@ Computing Check:
             "xaxis": "x2",
             "y": [
               0,
-              2.4616898753939892e-05
+              2.4616898753939895e-05
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "470e43b9-e772-4a5b-9aa3-567c750f657f"
+            "uid": "43658921-a006-41aa-ba63-b1f3f553073a"
           },
           {
             "fill": "tozeroy",
@@ -12259,7 +12400,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "0542fa52-9bd0-4eed-b8a2-277e2c721902"
+            "uid": "7c117d15-db5c-43e2-a3c8-c76b921cfeaa"
           },
           {
             "line": {
@@ -12279,7 +12420,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "80e70cfb-5e65-413a-af2e-10e7bc279d90"
+            "uid": "d98ece27-abb2-40b8-b08b-e3c1deab7c0d"
           },
           {
             "line": {
@@ -12298,7 +12439,7 @@ Computing Check:
             ],
             "yaxis": "y2",
             "type": "scatter",
-            "uid": "a246ed5e-f832-4f40-8588-766d44a42f34"
+            "uid": "382b25c8-2af3-4afa-9b67-c10508f6f210"
           }
         ],
         "_dom_classes": [],
@@ -13246,7 +13387,7 @@ Computing Check:
             "y",
             "buffer"
           ],
-          "data": "PtV+X3//+D7CkGo+8gT5PtNSNs+JBfk+u02mO8YI+T7eHFb3pwn5Pr2xlewQDPk+iCohxrUM+T4xuX/vEg/5PkLtxgYqEPk+59bu548R+T7o4/aufhT5Pv8BM4T3F/k+Csp+i40Y+T6MS+53TBz5PqBhCYlBHvk+odYxxH0i+T53jx7j5SL5PrsgTZi0J/k+rfhl9O0n+T4KbGsILi35Pn8MQPp9Lvk+tYzvTrAy+T4QaRO+hzX5Puvpf6CHOPk+RKKS5I05+T72HrJkKT/5Pv7m0U6yP/k+HOIi/5ZD+T5wGak5xkb5Pp+LlI9TR/k+JyJ1r2tR+T4Jmp0LM1L5PicuKIqDWfk+fI9C159b+T6Zb785CGf5PhnBEbpPbfk+1hxe8apy+T4MtCSVDHv5Pj+CZ14LhPk+SlDFSvOF+T4uJhTGVZL5PnvFTDe/k/k+zR4354+k+T6wgYq1Pqn5Phi9Gji8svk+pcNqK2y5+T4p6f2rMb/5PqYvw/boy/k+zEK3ZgzQ+T7MQrdmDND5PvRV8vlL1Pk+ewsHLK7W+T5VCe1n79j5PnxSAgjY2Pk+fFICCNjY+T6DpvjlqtT5Pr8hxx0H0Pk+d8Jt9a24+T5u+GUKnbf5PpmYzfMQnvk+RTecEExz+T6MgSI0VWT5Pn5xTwvVNfk+D7D8aBYf+T4XFieJ2r34PkZHotrfr/g+xFJzapOk+D6jiUUMevP3PvH9l0ozq/c+Fi3ArS1P9z5XQ0sZkUH2Pj/od9NgEfY+Wow84a1+9D46+rPdnFP0Pl09oHmY+fI+gD/TpaB18j7Knvfu2znyPitGG/09+fE+yTKMQE328D7P/GZvyE3wPiLCrjNaHO0+Y9JD5K/66j6P7uMxYn7nPo1+vUbwe+Y+UCCG5MxQ5j77HcoS90vkPjA45oZYEuI+Ry96APUf4D7BxzatCN/cPkKDNkpPmds+zbUMavaH2D64UjqLbenTPkz4NL3LtdE+N+fnhBE1zD5UdubQZXvFPr2cy3I38sI+Zm02JPuiwj4c1p8/nma+Pgw5TLIWOL4+vh/wkhkevD5NyRZZVnu7PuWk00rFQ7o+Um6UXKCkuT4GCakcZ/u4Pr4vWNefFrY+1jIwH28Ltj5pnOY6Aly0PhMM3myzk7E+ILdkJpJoqj6J5i9l3MakPqs58v5LYqM+b98HoO2Moj7ZrJrkUPWhPgRyI7Iho6A+PYQWAiMpoD70s/rXGH+fPt81g9QMP50+QwUX6mN/nD5dRfjADKGaPqmsniy8Kpo+ZxI7lNybmj59ZCA4lRKePouRBRRC1J8+GLUmANX7oD70Ht1jBBuhPtpyCaWQ+J0+m5eWQOUwmD4WXRhjRaqTPtUh7Ay9eJM+QQ/+lsaCkD4dxrbFZYKMPrmSR+dZSIo+3LCso6/2iD4+Va7Bn6CFPnYjAJpRz4A+OIs57501fj6zBa3485uDPgeYrQuYxIc+gEEvSun2iz785+stNhuRPpww0LAqnpA+JtMnRF+xiD5GTG/SkVx7Ppx+SZrgCGg+PYOREOMQXT5Mzmq/XXNkPnwaQdHbOW4+LFH0TdQxcD7ui9MFcA9oPjXUhWb2rVg+SmSJmJ14QT6+gzD2ShIhPg=="
+          "data": "PtV+X3//+D7DkGo+8gT5PtRSNs+JBfk+vU2mO8YI+T7fHFb3pwn5Pr6xlewQDPk+iyohxrUM+T4yuX/vEg/5PkLtxgYqEPk+6Nbu548R+T7p4/aufhT5PgACM4T3F/k+C8p+i40Y+T6NS+53TBz5PqBhCYlBHvk+otYxxH0i+T54jx7j5SL5PrwgTZi0J/k+r/hl9O0n+T4LbGsILi35PoIMQPp9Lvk+t4zvTrAy+T4SaRO+hzX5Puzpf6CHOPk+RqKS5I05+T72HrJkKT/5PgDn0U6yP/k+HeIi/5ZD+T5xGak5xkb5PqCLlI9TR/k+KSJ1r2tR+T4Lmp0LM1L5PiguKIqDWfk+fo9C159b+T6bb785CGf5PhrBEbpPbfk+1xxe8apy+T4PtCSVDHv5PkKCZ14LhPk+TFDFSvOF+T4tJhTGVZL5PnvFTDe/k/k+zh4354+k+T6wgYq1Pqn5Phm9Gji8svk+pcNqK2y5+T4q6f2rMb/5Pqkvw/boy/k+zUK3ZgzQ+T7NQrdmDND5PvVV8vlL1Pk+ewsHLK7W+T5WCe1n79j5Pn1SAgjY2Pk+fVICCNjY+T6FpvjlqtT5PsAhxx0H0Pk+d8Jt9a24+T5x+GUKnbf5PpqYzfMQnvk+RjecEExz+T6NgSI0VWT5PoBxTwvVNfk+D7D8aBYf+T4XFieJ2r34PkhHotrfr/g+xlJzapOk+D6jiUUMevP3PvH9l0ozq/c+Fi3ArS1P9z5YQ0sZkUH2Pj/od9NgEfY+WYw84a1+9D47+rPdnFP0Pl09oHmY+fI+gD/TpaB18j7Knvfu2znyPixGG/09+fE+yDKMQE328D7P/GZvyE3wPiDCrjNaHO0+YtJD5K/66j6Q7uMxYn7nPox+vUbwe+Y+UCCG5MxQ5j78HcoS90vkPi445oZYEuI+SC96APUf4D6/xzatCN/cPkCDNkpPmds+zbUMavaH2D62UjqLbenTPkz4NL3LtdE+N+fnhBE1zD5TdubQZXvFPrycy3I38sI+Zm02JPuiwj4b1p8/nma+Pg85TLIWOL4+ux/wkhkevD5OyRZZVnu7Puak00rFQ7o+VG6UXKCkuT4HCakcZ/u4Pr8vWNefFrY+1TIwH28Ltj5rnOY6Aly0PhIM3myzk7E+HbdkJpJoqj6K5i9l3MakPqk58v5LYqM+cd8HoO2Moj7YrJrkUPWhPgRyI7Iho6A+PYQWAiMpoD72s/rXGH+fPuA1g9QMP50+RwUX6mN/nD5cRfjADKGaPqqsniy8Kpo+ZRI7lNybmj6BZCA4lRKePouRBRRC1J8+G7UmANX7oD71Ht1jBBuhPtZyCaWQ+J0+m5eWQOUwmD4SXRhjRaqTPtEh7Ay9eJM+QA/+lsaCkD4bxrbFZYKMPruSR+dZSIo+3bCso6/2iD5GVa7Bn6CFPngjAJpRz4A+O4s57501fj61Ba3485uDPgiYrQuYxIc+gUEvSun2iz795+stNhuRPp0w0LAqnpA+J9MnRF+xiD5ITG/SkVx7Pn1+SZrgCGg+P4OREOMQXT5Nzmq/XXNkPn4aQdHbOW4+KlH0TdQxcD7wi9MFcA9oPjbUhWb2rVg+KGSJmJ14QT6/gzD2ShIhPg=="
         },
         {
           "encoding": "base64",
@@ -13260,13 +13401,13 @@ Computing Check:
         }
       ]
     },
-    "e136e06ea85e4556bdc53eb503c82972": {
+    "f2acd288fbb94881a62d6deb0c98cd12": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "7b650f754c87454daf5a17d5f3f547bf": {
+    "b8f12ac56b2f4ac9b1ac184b050db83d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -13276,7 +13417,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "eb4f8686081b4532bb12ef0b01875bda"}
+{"version_major": 2, "version_minor": 0, "model_id": "d6fecfcd3c14450e9f9e2e5166276ba5"}
 </script>
 
 </body>
@@ -13289,7 +13430,7 @@ Computing Check:
 addition to the label count per class, the label drift check for object detection
 tasks include drift calculation on certain measurements, like the bounding box
 area and the number of bboxes per image.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.227 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.480 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-vision-train-test-validation-plot-train-test-label-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/0e3a2bb432659183ec68095e13347d96/plot_train_test_label_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_train_test_label_drift.py</span></code></a></p>
@@ -13344,7 +13485,7 @@ area and the number of bboxes per image.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/e87b2cd.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/40df64d.<br>
 </p>
     </div>
     

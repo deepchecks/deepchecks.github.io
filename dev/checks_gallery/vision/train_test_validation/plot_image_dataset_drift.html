@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Image Dataset Drift &#8212; Deepchecks e87b2cd documentation</title>
+    <title>Image Dataset Drift &#8212; Deepchecks 40df64d documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -354,64 +354,52 @@ Page: checks_gallery/vision/train_test_validation/plot_image_dataset_drift&label
 
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Image Dataset Drift
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-dataset-drift">
+   What Is Dataset Drift?
   </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-image-dataset-drift">
-   What Is Image Dataset Drift?
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-deepchecks-detects-dataset-drift">
-     How Deepchecks Detects Dataset Drift
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-does-the-imagedatasetdrift-check-work">
+     How Does the ImageDatasetDrift Check Work?
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#using-properties-to-detect-image-drift">
-     Using Properties to Detect Image Drift
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#which-image-properties-are-used">
+     Which Image Properties Are Used?
     </a>
    </li>
   </ul>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#which-image-properties-are-used">
-   Which Image Properties Are Used?
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   Imports
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#imports">
-     Imports
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-the-data">
+   Loading the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#without-drift">
+     without drift
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#loading-the-data">
-     Loading the data
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#insert-drift">
+     Insert drift
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#run-the-check">
-     Run the check
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-the-check-again">
+     Run the check again
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#without-drift">
-       without drift
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#insert-drift">
-       Insert drift
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#run-the-check-again">
-       Run the check again
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -445,36 +433,52 @@ drift check, used to detect drift in simple image properties between train and
 test datasets.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#what-is-image-dataset-drift">What Is Image Dataset Drift?</a></p></li>
+<li><p><a class="reference external" href="#what-is-dataset-drift">What Is Dataset Drift?</a></p></li>
+<li><p><a class="reference external" href="#how-does-the-imagedatasetdrift-check-work">How Does the ImageDatasetDrift Check Work?</a></p></li>
 <li><p><a class="reference external" href="#which-image-properties-are-used">Which Image Properties Are Used?</a></p></li>
 <li><p><a class="reference external" href="#loading-the-data">Loading The Data</a></p></li>
 <li><p><a class="reference external" href="#run-the-check">Run The Check</a></p></li>
 </ul>
-</section>
-<section id="what-is-image-dataset-drift">
-<h1>What Is Image Dataset Drift?<a class="headerlink" href="#what-is-image-dataset-drift" title="Permalink to this headline">#</a></h1>
-<p>Drift is simply a change in the distribution of data over time, and it is
-also one of the top reasons why machine learning model’s performance degrades
-over time.</p>
-<p>Image dataset drift is a drift that occurs in more than one image property at a time,
-and may even affect the relationships between those properties, which are undetectable by
-univariate drift methods.</p>
-<p>For more information on drift, please visit our <a class="reference internal" href="../../../user-guide/general/drift_guide.html"><span class="doc">drift guide</span></a>.</p>
-<section id="how-deepchecks-detects-dataset-drift">
-<h2>How Deepchecks Detects Dataset Drift<a class="headerlink" href="#how-deepchecks-detects-dataset-drift" title="Permalink to this headline">#</a></h2>
-<p>This check detects multivariate drift by using <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-domain-classifier"><span class="std std-ref">a domain classifier</span></a>.
-Other methods to detect drift include <a class="reference internal" href="../../../user-guide/general/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
-which is used in other checks, such as <a class="reference internal" href="plot_image_property_drift.html"><span class="doc">Image Property Drift check</span></a>.</p>
-</section>
-<section id="using-properties-to-detect-image-drift">
-<h2>Using Properties to Detect Image Drift<a class="headerlink" href="#using-properties-to-detect-image-drift" title="Permalink to this headline">#</a></h2>
-<p>In computer vision specifically, we can’t measure drift on the images directly, as the individual pixel has little
-value when estimating drift. Therefore, we calculate drift on different <a class="reference internal" href="../../../user-guide/vision/vision_properties.html"><span class="doc">properties of the image</span></a>,
-on which we can directly measure drift.</p>
-</section>
+<section id="what-is-dataset-drift">
+<h2>What Is Dataset Drift?<a class="headerlink" href="#what-is-dataset-drift" title="Permalink to this headline">#</a></h2>
+<p>Data drift is simply a change in the distribution of data over time. It is also
+one of the top reasons that a machine learning model performance degrades over time.</p>
+<p>Specifically, a whole dataset drift, or a multivariate dataset drift, occurs when
+there is a change in the relation between input features.</p>
+<p>Causes of data drift include:</p>
+<ul class="simple">
+<li><p>Natural drift in the data, such as lighting (brightness) changes between summer
+and winter.</p></li>
+<li><p>Upstream process changes, such as a camera being replaced that has a different
+lens, which makes images sharper.</p></li>
+<li><p>Data quality issues, such as a malfunctioning camera that always returns a black image.</p></li>
+<li><p>Data pipeline errors, such as a change in image augmentations done in preprocessing.</p></li>
+</ul>
+<p>In the context of machine learning, drift between the training set and the test set
+(which is not due to augmentation) will likely make the model prone to errors. In
+other words, if the model was trained on data that is different from the current test
+data, it will probably make more mistakes predicting the target variable.</p>
+<section id="how-does-the-imagedatasetdrift-check-work">
+<h3>How Does the ImageDatasetDrift Check Work?<a class="headerlink" href="#how-does-the-imagedatasetdrift-check-work" title="Permalink to this headline">#</a></h3>
+<p>There are many methods to detect feature drift. Some of them are statistical methods
+that aim to measure difference between distribution of 2 given sets. This methods
+are more suited to univariate distributions and are primarily used to detect drift
+between 2 subsets of a single feature.</p>
+<p>Measuring a multivariate data drift is a bit more challenging. In the image dataset
+drift check, the multivariate drift is measured by training a classifier that detects
+which samples come from a known distribution and defines the drift by the accuracy
+of this classifier.</p>
+<p>Practically, the check concatenates the train and the test sets, and assigns label 0
+to samples that come from the training set, and 1 to those from the test set.
+Then, we train a binary classifer of type <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingClassifier.html">Histogram-based Gradient Boosting
+Classification Tree</a>,
+and measure the drift score from the AUC score of this classifier.</p>
+<p>As the classifier is a tree model, that cannot run on the images themselves, the
+check calculates properties for each image (such as brightness, aspect ratio etc.)
+and uses them as input features to the classifier.</p>
 </section>
 <section id="which-image-properties-are-used">
-<h1>Which Image Properties Are Used?<a class="headerlink" href="#which-image-properties-are-used" title="Permalink to this headline">#</a></h1>
+<h3>Which Image Properties Are Used?<a class="headerlink" href="#which-image-properties-are-used" title="Permalink to this headline">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 26%" />
@@ -513,6 +517,8 @@ comparison to the other channels [b / (r + g + b)].</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+</section>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -541,19 +547,19 @@ comparison to the other channels [b / (r + g + b)].</p></td>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2178.86 /s]
+|#####| 1/1 [00:00&lt;00:00, 2009.73 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.72s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.66s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.65s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.62s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.65s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.62s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
@@ -561,15 +567,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.51s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.48s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.68s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.63s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.68s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.63s/ Batch]
 
 
 
@@ -580,12 +586,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:02&lt;00:00,  2.34s/ Check]
+|#####| 1/1 [00:02&lt;00:00,  2.38s/ Check]
 
 
 
 Computing Check:
-|#####| 1/1 [00:02&lt;00:00,  2.34s/ Check]
+|#####| 1/1 [00:02&lt;00:00,  2.38s/ Check]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -872,7 +878,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "1e1b359689094557aa0875b77a05b35b": {
+    "33cbf6bc25784c408324dee50a18d53c": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -884,148 +890,148 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_306e5d57f181479abe0240a7425c7e1c",
-          "IPY_MODEL_f5059ad2bd5e4de9b5d29f5cfd3b532a",
-          "IPY_MODEL_17c066ce78544b22a29862758a5fe107",
-          "IPY_MODEL_59655419ad5d4227880f5d6551fd457e"
+          "IPY_MODEL_1988fcdd11404934962c1222d5551d5a",
+          "IPY_MODEL_a865f4ae4d2a4b6a9139466f800aea0e",
+          "IPY_MODEL_d92dc8e5bb384bd09ddb4e7111b46698",
+          "IPY_MODEL_b2e615f8b801441889bb1afc8ba3672f"
         ],
-        "layout": "IPY_MODEL_9d7b3447a3c24ff8a12f0007cb10ac38"
+        "layout": "IPY_MODEL_ce8e7ead70a14a8c9f1bcc30075433b4"
       }
     },
-    "306e5d57f181479abe0240a7425c7e1c": {
+    "1988fcdd11404934962c1222d5551d5a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_26530f125f664e12b594eeed68181d30",
-        "style": "IPY_MODEL_19e439b496114639914ed98f05dfa84a",
+        "layout": "IPY_MODEL_ea1bf2493cc3471a993978600fe8b5e5",
+        "style": "IPY_MODEL_194886557b70476dac07dfc9aef0acc7",
         "value": "<h4><b>Image Dataset Drift</b></h4>"
       }
     },
-    "26530f125f664e12b594eeed68181d30": {
+    "ea1bf2493cc3471a993978600fe8b5e5": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "19e439b496114639914ed98f05dfa84a": {
+    "194886557b70476dac07dfc9aef0acc7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "f5059ad2bd5e4de9b5d29f5cfd3b532a": {
+    "a865f4ae4d2a4b6a9139466f800aea0e": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_458c10bb4bd5437f8cf1c3989405d9f9",
-        "style": "IPY_MODEL_3130c2d70f4444559be9b1289c4477c4",
+        "layout": "IPY_MODEL_8fc60fc948d84c49935d94a5e7925905",
+        "style": "IPY_MODEL_05b8f99de16e4e6dbae287a7a6327e3f",
         "value": "<p>Calculate drift between the entire train and test datasets (based on image properties) using a trained model.</p>"
       }
     },
-    "458c10bb4bd5437f8cf1c3989405d9f9": {
+    "8fc60fc948d84c49935d94a5e7925905": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "3130c2d70f4444559be9b1289c4477c4": {
+    "05b8f99de16e4e6dbae287a7a6327e3f": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "17c066ce78544b22a29862758a5fe107": {
+    "d92dc8e5bb384bd09ddb4e7111b46698": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_267196292f63431f8f56a19a21b45cab",
-        "style": "IPY_MODEL_96848d3188c1433fab19e23fd0c18c16"
+        "layout": "IPY_MODEL_5516ff0dd51a46aa85c04e9e48d6870f",
+        "style": "IPY_MODEL_776efe5675d3404c9acee78efaf9cfb1"
       }
     },
-    "267196292f63431f8f56a19a21b45cab": {
+    "5516ff0dd51a46aa85c04e9e48d6870f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "96848d3188c1433fab19e23fd0c18c16": {
+    "776efe5675d3404c9acee78efaf9cfb1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "59655419ad5d4227880f5d6551fd457e": {
+    "b2e615f8b801441889bb1afc8ba3672f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_c38330848e8b4d2bba490c33ed751546",
-          "IPY_MODEL_4401e1b33daf4765bb7f6ec99b9a10bc"
+          "IPY_MODEL_22a2a5ee3b10446aabaf5de9f73859d1",
+          "IPY_MODEL_cdef801ed857403f8cdea2ea026b3bd0"
         ],
-        "layout": "IPY_MODEL_231fec10ea044dffb9d26ede3ffd6cac"
+        "layout": "IPY_MODEL_12428a2f53884bccb4d119a6f93e91c4"
       }
     },
-    "c38330848e8b4d2bba490c33ed751546": {
+    "22a2a5ee3b10446aabaf5de9f73859d1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c4d7624567d54abd916d7321934c28a7",
-        "style": "IPY_MODEL_66d9bb25fb2141aa8464606d55803bcc",
+        "layout": "IPY_MODEL_2cb12bb80102426787264d89f7ee145b",
+        "style": "IPY_MODEL_d44d20beaa4b4b919424e53573e1456a",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "c4d7624567d54abd916d7321934c28a7": {
+    "2cb12bb80102426787264d89f7ee145b": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "66d9bb25fb2141aa8464606d55803bcc": {
+    "d44d20beaa4b4b919424e53573e1456a": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4401e1b33daf4765bb7f6ec99b9a10bc": {
+    "cdef801ed857403f8cdea2ea026b3bd0": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2e99a0b5ea094d3aa04940ff831b8401",
-        "style": "IPY_MODEL_b8911333ea1a4c22a04f5e1ed0876ec9",
+        "layout": "IPY_MODEL_d10417c444ac44f6b7c0482fa6608797",
+        "style": "IPY_MODEL_ce01f54b3f5a4ba794c17ad52feab46b",
         "value": "<p><b>&#x2713;</b>Nothing to display</p>"
       }
     },
-    "2e99a0b5ea094d3aa04940ff831b8401": {
+    "d10417c444ac44f6b7c0482fa6608797": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "b8911333ea1a4c22a04f5e1ed0876ec9": {
+    "ce01f54b3f5a4ba794c17ad52feab46b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "231fec10ea044dffb9d26ede3ffd6cac": {
+    "12428a2f53884bccb4d119a6f93e91c4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "9d7b3447a3c24ff8a12f0007cb10ac38": {
+    "ce8e7ead70a14a8c9f1bcc30075433b4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -1035,7 +1041,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "1e1b359689094557aa0875b77a05b35b"}
+{"version_major": 2, "version_minor": 0, "model_id": "33cbf6bc25784c408324dee50a18d53c"}
 </script>
 
 </body>
@@ -1079,19 +1085,19 @@ Computing Check:
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2307.10 /s]
+|#####| 1/1 [00:00&lt;00:00, 2340.57 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.91s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.84s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.85s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.75s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:03&lt;00:00,  1.85s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.75s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
@@ -1099,15 +1105,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:01&lt;00:01,  1.30s/ Batch]
+|##5  | 1/2 [00:01&lt;00:01,  1.48s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.39s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.62s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:02&lt;00:00,  1.39s/ Batch]
+|#####| 2/2 [00:03&lt;00:00,  1.62s/ Batch]
 
 
 
@@ -1118,12 +1124,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  6.54 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  4.64 Check/s]
 
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00,  6.54 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  4.64 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1410,7 +1416,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "a2769d4b26e0450991aaaf9aea559ee6": {
+    "b4513929d3294750b82dfb5cc8b19f34": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1422,171 +1428,171 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_bbf7f86893e346f8a8289a69065f3553",
-          "IPY_MODEL_6a4f253fcc7f4fb691000570933facb1",
-          "IPY_MODEL_7671de7a81bb4b34ab482ddd9c8702b0",
-          "IPY_MODEL_ba0f86eb57b64e22ae198e2cb38f9e0e"
+          "IPY_MODEL_67ea354c63454b40a394855bd9ab390c",
+          "IPY_MODEL_c32e4fe9a25c4ef9abcb5a73f41cd719",
+          "IPY_MODEL_baf334303de64a9f8cb41a588c181ec3",
+          "IPY_MODEL_eeb13484b1a844af93f5b9edce0fe2ec"
         ],
-        "layout": "IPY_MODEL_c4fba41776ec4407b6afdd9ca255de0b"
+        "layout": "IPY_MODEL_8cda86594e1e474f94a836376f7a576d"
       }
     },
-    "bbf7f86893e346f8a8289a69065f3553": {
+    "67ea354c63454b40a394855bd9ab390c": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_482bc0721272436f9aff218004848337",
-        "style": "IPY_MODEL_96ce08ac65f34ba3994e3af4aff7f61e",
+        "layout": "IPY_MODEL_6a67b2a18bfd4545badbb18d86695be6",
+        "style": "IPY_MODEL_0327c30e74e84654a5239fd5cb658e91",
         "value": "<h4><b>Image Dataset Drift</b></h4>"
       }
     },
-    "482bc0721272436f9aff218004848337": {
+    "6a67b2a18bfd4545badbb18d86695be6": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "96ce08ac65f34ba3994e3af4aff7f61e": {
+    "0327c30e74e84654a5239fd5cb658e91": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6a4f253fcc7f4fb691000570933facb1": {
+    "c32e4fe9a25c4ef9abcb5a73f41cd719": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_01e371449a8843478a814fc7e59329ed",
-        "style": "IPY_MODEL_1de8ff36cdcb456eb11696fb54df2e93",
+        "layout": "IPY_MODEL_eb22a3000dba4f59bdddad3e581e5a24",
+        "style": "IPY_MODEL_497205bea53d436f94014157bca9477c",
         "value": "<p>Calculate drift between the entire train and test datasets (based on image properties) using a trained model.</p>"
       }
     },
-    "01e371449a8843478a814fc7e59329ed": {
+    "eb22a3000dba4f59bdddad3e581e5a24": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1de8ff36cdcb456eb11696fb54df2e93": {
+    "497205bea53d436f94014157bca9477c": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "7671de7a81bb4b34ab482ddd9c8702b0": {
+    "baf334303de64a9f8cb41a588c181ec3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_5295fd721c5c4f1ebb01674e2ddfdf4e",
-        "style": "IPY_MODEL_60750343a9c04c568182862573ce88a4"
+        "layout": "IPY_MODEL_615da18d971e4b67be31d1d669a43eb3",
+        "style": "IPY_MODEL_5652f0831bfe44a5a849909acef167ef"
       }
     },
-    "5295fd721c5c4f1ebb01674e2ddfdf4e": {
+    "615da18d971e4b67be31d1d669a43eb3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "60750343a9c04c568182862573ce88a4": {
+    "5652f0831bfe44a5a849909acef167ef": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ba0f86eb57b64e22ae198e2cb38f9e0e": {
+    "eeb13484b1a844af93f5b9edce0fe2ec": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_8f082530920545ea8fb7246356a7a378",
-          "IPY_MODEL_1e8f88d4c4c04f5398cba06f858cac0e",
-          "IPY_MODEL_ac5fb42fa9cf40668df86c4b799f45d1",
-          "IPY_MODEL_dd298204b55d4987a3d694f81466457d",
-          "IPY_MODEL_5fa5d32326064960a6bce4958b79c1ca",
-          "IPY_MODEL_b288246547a442a5aded6eb99d2fc7c7",
-          "IPY_MODEL_9dfea444e6404e74b10a457c99572e77",
-          "IPY_MODEL_f25b0732f512471c9b7c05ce3b4e2476"
+          "IPY_MODEL_c500b62549c64ea288998b89c52d114a",
+          "IPY_MODEL_4f12d058b081403286ab059c5d982474",
+          "IPY_MODEL_64208c8ff48348e79bd3898141d96cf9",
+          "IPY_MODEL_604c3cfa2b58444c80dc21df6e9b2b85",
+          "IPY_MODEL_8200f638313546998a7b570be16dca18",
+          "IPY_MODEL_85f4e95ab7fe4f8e9d9e624f7c590cd3",
+          "IPY_MODEL_a1c4468353344c0b88772bba412c4cae",
+          "IPY_MODEL_4b185dc7419d408c9454f974d6dfa2e5"
         ],
-        "layout": "IPY_MODEL_b7061446065742088d7b24b6cbd3bdad"
+        "layout": "IPY_MODEL_2c3e3d0bf6d6470cb4625c1b0fc57701"
       }
     },
-    "8f082530920545ea8fb7246356a7a378": {
+    "c500b62549c64ea288998b89c52d114a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_35b9c2e10b844dd8adaf7dedad99c7f6",
-        "style": "IPY_MODEL_e357d6d9071e43118e8b5bd73443a6e9",
+        "layout": "IPY_MODEL_4af857b46a2a4574b8acd66e26e66db7",
+        "style": "IPY_MODEL_bac47c87a60341ba9538d2c6416e58a1",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "35b9c2e10b844dd8adaf7dedad99c7f6": {
+    "4af857b46a2a4574b8acd66e26e66db7": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e357d6d9071e43118e8b5bd73443a6e9": {
+    "bac47c87a60341ba9538d2c6416e58a1": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1e8f88d4c4c04f5398cba06f858cac0e": {
+    "4f12d058b081403286ab059c5d982474": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ec70df12697e4cc99c55a106ab03b337",
-        "style": "IPY_MODEL_4e6c3fe0cf954acc9f534774bbb55c8f",
+        "layout": "IPY_MODEL_0709baa5beee47e189d29e101922107d",
+        "style": "IPY_MODEL_74748b09c27d42dc90330b3c3d7add0e",
         "value": "<div>\n        <span>\n        The shown features are the image properties (brightness, aspect ratio, etc.) that are most important for the\n        domain classifier - the domain_classifier trained to distinguish between the train and test datasets.<br>\n        </span>\n        </div>"
       }
     },
-    "ec70df12697e4cc99c55a106ab03b337": {
+    "0709baa5beee47e189d29e101922107d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "4e6c3fe0cf954acc9f534774bbb55c8f": {
+    "74748b09c27d42dc90330b3c3d7add0e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "ac5fb42fa9cf40668df86c4b799f45d1": {
+    "64208c8ff48348e79bd3898141d96cf9": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_cc253398aba3445b8e21eef3650de7a4",
-        "style": "IPY_MODEL_06e660306e84470fa9f8d44abf996495",
+        "layout": "IPY_MODEL_dedf01804bd646d8b832e0c657df1975",
+        "style": "IPY_MODEL_eec05967ac1642f59a8f0fe6e8802e12",
         "value": "<div>\n    <span>\n    The percents of explained dataset difference are the importance values for the feature calculated\n    using `permutation_importance`.\n    </span><br><br>\n    </div>"
       }
     },
-    "cc253398aba3445b8e21eef3650de7a4": {
+    "dedf01804bd646d8b832e0c657df1975": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "06e660306e84470fa9f8d44abf996495": {
+    "eec05967ac1642f59a8f0fe6e8802e12": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "dd298204b55d4987a3d694f81466457d": {
+    "604c3cfa2b58444c80dc21df6e9b2b85": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1610,7 +1616,7 @@ Computing Check:
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "53b807fc-9fe2-41a1-9a79-dade5c8e93c7"
+            "uid": "53bfeeed-2d2d-46e3-a3ac-7df22fa93892"
           },
           {
             "base": 0.1,
@@ -1627,7 +1633,7 @@ Computing Check:
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "8b86d979-3b5b-478e-aa81-8c16fe515fb7"
+            "uid": "c4725b08-03e8-4559-857f-2e8c71ed556d"
           },
           {
             "base": 0.2,
@@ -1644,7 +1650,7 @@ Computing Check:
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "c67ed283-4c5d-44de-9cc9-0c8286394473"
+            "uid": "a4f4b328-b41a-44fd-952d-8f9ea7a5a4b2"
           },
           {
             "base": 0.3,
@@ -1661,7 +1667,7 @@ Computing Check:
               "Drift Score"
             ],
             "type": "bar",
-            "uid": "e84a2e9d-732a-4468-b670-4b58bebed49f"
+            "uid": "99f2bb57-c45c-4f0a-8eeb-a6e465af99a4"
           }
         ],
         "_dom_classes": [],
@@ -2530,53 +2536,53 @@ Computing Check:
         "_view_count": 0
       }
     },
-    "5fa5d32326064960a6bce4958b79c1ca": {
+    "8200f638313546998a7b570be16dca18": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8b6b2e20e6b441c6a8c59f1ec40eb0d2",
-        "style": "IPY_MODEL_39e13a29bfc84178a5dae9d27736a7e4",
+        "layout": "IPY_MODEL_a267e54f53fe40e7963decd7c6df4a7d",
+        "style": "IPY_MODEL_54ffafd3563d473ba02ae70dbd941cec",
         "value": "<div><h3>Main features contributing to drift</h3></div>"
       }
     },
-    "8b6b2e20e6b441c6a8c59f1ec40eb0d2": {
+    "a267e54f53fe40e7963decd7c6df4a7d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "39e13a29bfc84178a5dae9d27736a7e4": {
+    "54ffafd3563d473ba02ae70dbd941cec": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b288246547a442a5aded6eb99d2fc7c7": {
+    "85f4e95ab7fe4f8e9d9e624f7c590cd3": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_44f8c929c843487bbbe91c7a1b3452f5",
-        "style": "IPY_MODEL_8b90d90827184e199a3ef639fb2f5988",
+        "layout": "IPY_MODEL_79e6961a6f4442b9a4a737260c12c5f1",
+        "style": "IPY_MODEL_2f81fb1e8fda47d7be203fb2ba06a64e",
         "value": "<div>* showing only the top 3 columns, you can change it using n_top_columns param</div>"
       }
     },
-    "44f8c929c843487bbbe91c7a1b3452f5": {
+    "79e6961a6f4442b9a4a737260c12c5f1": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8b90d90827184e199a3ef639fb2f5988": {
+    "2f81fb1e8fda47d7be203fb2ba06a64e": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "9dfea444e6404e74b10a457c99572e77": {
+    "a1c4468353344c0b88772bba412c4cae": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2753,7 +2759,7 @@ Computing Check:
               ]
             },
             "type": "scatter",
-            "uid": "12d4c12d-49e6-49d6-92df-40d3f2d3c243"
+            "uid": "5b1c2bdf-d8f8-4366-8112-79b1a3d75a0c"
           },
           {
             "line": {
@@ -2771,7 +2777,7 @@ Computing Check:
               4.811529499989834
             ],
             "type": "scatter",
-            "uid": "0415d136-0561-4ecd-9e11-48a1ac7ed14b"
+            "uid": "b1be1f11-0cde-4b11-bfd1-4d6732d87745"
           },
           {
             "line": {
@@ -2788,7 +2794,7 @@ Computing Check:
               4.823614303357316
             ],
             "type": "scatter",
-            "uid": "bd751227-ea7c-497f-98cb-0eda90f2ad79"
+            "uid": "cbbbfb57-f287-4e74-8de6-075f5e1dc3df"
           },
           {
             "fill": "tozeroy",
@@ -2958,7 +2964,7 @@ Computing Check:
               ]
             },
             "type": "scatter",
-            "uid": "b06a14e9-677b-4eea-90dc-13832d4aa771"
+            "uid": "5275d803-28f6-4ee4-b1ee-bc92272ae508"
           },
           {
             "line": {
@@ -2976,7 +2982,7 @@ Computing Check:
               3.098183772576263
             ],
             "type": "scatter",
-            "uid": "4f2bdf26-1464-4552-a68b-3946fe723f4b"
+            "uid": "86357858-d508-4399-89d3-2d4cb118410a"
           },
           {
             "line": {
@@ -2993,7 +2999,7 @@ Computing Check:
               3.4655982737561977
             ],
             "type": "scatter",
-            "uid": "95a87353-7426-4abb-8fdb-e2b79477f4af"
+            "uid": "61e3c3ac-70a0-41d1-8a15-2cf9e7292c92"
           }
         ],
         "_dom_classes": [],
@@ -3884,7 +3890,7 @@ Computing Check:
         }
       ]
     },
-    "f25b0732f512471c9b7c05ce3b4e2476": {
+    "4b185dc7419d408c9454f974d6dfa2e5": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -4061,7 +4067,7 @@ Computing Check:
               ]
             },
             "type": "scatter",
-            "uid": "7181a27b-93e1-4875-af28-f54983a43544"
+            "uid": "429e1960-ec72-4240-ad18-af9e2883ac19"
           },
           {
             "line": {
@@ -4079,7 +4085,7 @@ Computing Check:
               8.326198129001538
             ],
             "type": "scatter",
-            "uid": "ada536fc-1068-446f-9d1b-9d0c0c930456"
+            "uid": "c5cb9769-2268-4299-be52-e10161f488cb"
           },
           {
             "line": {
@@ -4096,7 +4102,7 @@ Computing Check:
               8.378573196119657
             ],
             "type": "scatter",
-            "uid": "3fa09989-cb8f-450c-8924-b462109bebc5"
+            "uid": "119345c7-52b0-4df7-aec7-e7633395a2bc"
           },
           {
             "fill": "tozeroy",
@@ -4266,7 +4272,7 @@ Computing Check:
               ]
             },
             "type": "scatter",
-            "uid": "06e1f091-3d58-4a9a-9cd0-bdfb38f1f502"
+            "uid": "20416114-b4fc-48ac-93d1-87a281f7b6e5"
           },
           {
             "line": {
@@ -4284,7 +4290,7 @@ Computing Check:
               6.095831604172491
             ],
             "type": "scatter",
-            "uid": "d7d13ce0-1eaf-4241-8d6c-14b86fed59ab"
+            "uid": "8ceead06-3062-4a8f-997a-22d42493144d"
           },
           {
             "line": {
@@ -4301,7 +4307,7 @@ Computing Check:
               6.603282455803313
             ],
             "type": "scatter",
-            "uid": "59b0a540-c2bf-4227-84dc-3ce3a74e0575"
+            "uid": "8178c61e-edfe-47ab-adac-7a32907adaeb"
           }
         ],
         "_dom_classes": [],
@@ -5192,13 +5198,13 @@ Computing Check:
         }
       ]
     },
-    "b7061446065742088d7b24b6cbd3bdad": {
+    "2c3e3d0bf6d6470cb4625c1b0fc57701": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "c4fba41776ec4407b6afdd9ca255de0b": {
+    "8cda86594e1e474f94a836376f7a576d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -5208,14 +5214,14 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "a2769d4b26e0450991aaaf9aea559ee6"}
+{"version_major": 2, "version_minor": 0, "model_id": "b4513929d3294750b82dfb5cc8b19f34"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  16.923 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  17.103 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-vision-train-test-validation-plot-image-dataset-drift-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/d41c38694eac6653e3e864dc037ee26c/plot_image_dataset_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_image_dataset_drift.py</span></code></a></p>
@@ -5270,7 +5276,7 @@ Computing Check:
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/e87b2cd.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/40df64d.<br>
 </p>
     </div>
     
