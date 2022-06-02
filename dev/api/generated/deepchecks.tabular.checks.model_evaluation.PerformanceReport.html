@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>PerformanceReport &#8212; Deepchecks 0617ca3 documentation</title>
+    <title>PerformanceReport &#8212; Deepchecks 659b6d1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -6424,44 +6424,45 @@ Page: api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceReport
 <dt class="sig sig-object py" id="deepchecks.tabular.checks.model_evaluation.PerformanceReport">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PerformanceReport</span></span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/performance_report.py#L31"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.PerformanceReport" title="Permalink to this definition">#</a></dt>
 <dd><p>Summarize given scores on a dataset and model.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
+<dd class="field-odd"><dl>
 <dt><strong>alternative_scorers</strong><span class="classifier">Dict[str, Callable], default: None</span></dt><dd><p>An optional dictionary of scorer name to scorer functions.
 If none given, using default scorers</p>
 </dd>
+<dt><strong>reduce: Union[Callable, str], default: ‘mean’</strong></dt><dd><p>An optional argument only used for the reduce_output function when using
+non-average scorers.</p>
+</dd>
+<dt><strong>Notes</strong></dt><dd></dd>
+<dt><strong>—–</strong></dt><dd></dd>
+<dt><strong>Scorers are a convention of sklearn to evaluate a model.</strong></dt><dd></dd>
+<dt><strong>`See scorers documentation &lt;https://scikit-learn.org/stable/modules/model_evaluation.html#scoring&gt;`_</strong></dt><dd></dd>
+<dt><strong>A scorer is a function which accepts (model, X, y_true) and returns a float result which is the score.</strong></dt><dd></dd>
+<dt><strong>For every scorer higher scores are better than lower scores.</strong></dt><dd></dd>
+<dt><strong>You can create a scorer out of existing sklearn metrics:</strong></dt><dd></dd>
+<dt><strong>.. code-block:: python</strong></dt><dd><p>from sklearn.metrics import roc_auc_score, make_scorer</p>
+<p>training_labels = [1, 2, 3]
+auc_scorer = make_scorer(roc_auc_score, labels=training_labels, multi_class=’ovr’)
+# Note that the labels parameter is required for multi-class classification in metrics like roc_auc_score or
+# log_loss that use the predict_proba function of the model, in case that not all labels are present in the test
+# set.</p>
+</dd>
+<dt><strong>Or you can implement your own:</strong></dt><dd></dd>
+<dt><strong>.. code-block:: python</strong></dt><dd><p>from sklearn.metrics import make_scorer</p>
+<dl class="simple">
+<dt>def my_mse(y_true, y_pred):</dt><dd><p>return (y_true - y_pred) ** 2</p>
+</dd>
+</dl>
+<p># Mark greater_is_better=False, since scorers always suppose to return
+# value to maximize.
+my_mse_scorer = make_scorer(my_mse, greater_is_better=False)</p>
+</dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Scorers are a convention of sklearn to evaluate a model.
-<a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#scoring">See scorers documentation</a>
-A scorer is a function which accepts (model, X, y_true) and returns a float result which is the score.
-For every scorer higher scores are better than lower scores.</p>
-<p>You can create a scorer out of existing sklearn metrics:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">make_scorer</span>
-
-<span class="n">training_labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="n">auc_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">training_labels</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
-<span class="c1"># Note that the labels parameter is required for multi-class classification in metrics like roc_auc_score or</span>
-<span class="c1"># log_loss that use the predict_proba function of the model, in case that not all labels are present in the test</span>
-<span class="c1"># set.</span>
-</pre></div>
-</div>
-<p>Or you can implement your own:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
-
-<span class="k">def</span> <span class="nf">my_mse</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">y_true</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-
-<span class="c1"># Mark greater_is_better=False, since scorers always suppose to return</span>
-<span class="c1"># value to maximize.</span>
-<span class="n">my_mse_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">my_mse</span><span class="p">,</span> <span class="n">greater_is_better</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepchecks.tabular.checks.model_evaluation.PerformanceReport.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alternative_scorers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/performance_report.py#L75"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.PerformanceReport.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alternative_scorers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/performance_report.py#L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.PerformanceReport.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
