@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Custom Task Tutorial &#8212; Deepchecks 918cc5e documentation</title>
+    <title>Custom Task Tutorial &#8212; Deepchecks 9dbb763 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -760,7 +760,9 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
             <span class="n">masks</span> <span class="o">=</span> <span class="n">transformed</span><span class="p">[</span><span class="s1">&#39;masks&#39;</span><span class="p">]</span>
             <span class="c1"># Transform masks to tensor of (num_masks, H, W)</span>
             <span class="k">if</span> <span class="n">masks</span><span class="p">:</span>
-                <span class="n">masks</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">masks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                    <span class="n">masks</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">]</span>
+                <span class="n">masks</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">masks</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">masks</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
@@ -824,8 +826,7 @@ of COCO-128 segmentation task. This part represents your own code, and is not ye
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/7115649 [00:00&lt;?, ?it/s]
- 85%|########5 | 6083584/7115649 [00:00&lt;00:00, 60834737.69it/s]
-7115776it [00:00, 67418110.26it/s]
+7115776it [00:00, 142252572.54it/s]
 </pre></div>
 </div>
 <p>Visualizing that we loaded our datasets correctly:</p>
@@ -939,19 +940,19 @@ Let’s run FeatureLabelCorrelationChange check with our task</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2394.01 /s]
+|#####| 1/1 [00:00&lt;00:00, 1985.94 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:10&lt;00:10, 10.76s/ Batch]
+|##5  | 1/2 [00:11&lt;00:11, 11.66s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:20&lt;00:00,  9.90s/ Batch]
+|#####| 2/2 [00:21&lt;00:00, 10.76s/ Batch]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:20&lt;00:00,  9.90s/ Batch]
+|#####| 2/2 [00:21&lt;00:00, 10.76s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
@@ -959,15 +960,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:07&lt;00:07,  7.18s/ Batch]
+|##5  | 1/2 [00:07&lt;00:07,  7.91s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:14&lt;00:00,  7.13s/ Batch]
+|#####| 2/2 [00:15&lt;00:00,  7.94s/ Batch]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:14&lt;00:00,  7.13s/ Batch]
+|#####| 2/2 [00:15&lt;00:00,  7.94s/ Batch]
 
 
 
@@ -977,12 +978,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:06&lt;00:00,  6.95s/ Check]
+|#####| 1/1 [00:08&lt;00:00,  8.43s/ Check]
 
 
 
 Computing Check:
-|#####| 1/1 [00:06&lt;00:00,  6.95s/ Check]
+|#####| 1/1 [00:08&lt;00:00,  8.43s/ Check]
 
 
 
@@ -998,19 +999,19 @@ Computing Check:
 Validating Input:
 |     | 0/1 [00:00&lt;?, ? /s]
 Validating Input:
-|#####| 1/1 [00:00&lt;00:00, 2592.28 /s]
+|#####| 1/1 [00:00&lt;00:00, 2149.82 /s]
 
 Ingesting Batches - Train Dataset:
 |     | 0/2 [00:00&lt;?, ? Batch/s]
 
 Ingesting Batches - Train Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  6.90 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  5.77 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  7.06 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  5.86 Batch/s]
 
 Ingesting Batches - Train Dataset:
-|#####| 2/2 [00:00&lt;00:00,  7.06 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  5.86 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
@@ -1018,15 +1019,15 @@ Ingesting Batches - Test Dataset:
 
 
 Ingesting Batches - Test Dataset:
-|##5  | 1/2 [00:00&lt;00:00,  8.21 Batch/s]
+|##5  | 1/2 [00:00&lt;00:00,  6.78 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  8.59 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  7.13 Batch/s]
 
 
 Ingesting Batches - Test Dataset:
-|#####| 2/2 [00:00&lt;00:00,  8.59 Batch/s]
+|#####| 2/2 [00:00&lt;00:00,  7.13 Batch/s]
 
 
 
@@ -1036,7 +1037,12 @@ Computing Check:
 
 
 Computing Check:
-|#####| 1/1 [00:00&lt;00:00, 11.29 Check/s]
+|#####| 1/1 [00:00&lt;00:00,  9.55 Check/s]
+
+
+
+Computing Check:
+|#####| 1/1 [00:00&lt;00:00,  9.55 Check/s]
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1323,7 +1329,7 @@ Computing Check:
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "c4868c1edfa943fda513af953fca7969": {
+    "2165e1c6eb5b4a2e92173c19b33082b7": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -1335,144 +1341,144 @@ Computing Check:
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_3a018110938b46d3adeefc40e935394b",
-          "IPY_MODEL_e90495703f7c46b5a58c3a9ba9d377d3",
-          "IPY_MODEL_a452660fa86842819e02f4601e83e73a",
-          "IPY_MODEL_8af6e3494ce1431a9c528422fd7bbd6a"
+          "IPY_MODEL_0fb5bdc20aec44bca906d3662f9a93f8",
+          "IPY_MODEL_750bc44dcad54c2b934759014f31fae7",
+          "IPY_MODEL_13d28587e556462ab74d71c838690772",
+          "IPY_MODEL_c092db3a407f4c65b6b1b92fd04c1d83"
         ],
-        "layout": "IPY_MODEL_dff08166add94bf0954d98cc8ef1297a"
+        "layout": "IPY_MODEL_8422438259734ed99687cf04d87f9751"
       }
     },
-    "3a018110938b46d3adeefc40e935394b": {
+    "0fb5bdc20aec44bca906d3662f9a93f8": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2a361b758848479380f4050edb572096",
-        "style": "IPY_MODEL_09bc526b817346e68c725a4873297613",
+        "layout": "IPY_MODEL_6ca150e90c8943de83bee600005f48ac",
+        "style": "IPY_MODEL_13ba2bf28fbc424b956315e15556f9e9",
         "value": "<h4><b>Train Test Label Drift</b></h4>"
       }
     },
-    "2a361b758848479380f4050edb572096": {
+    "6ca150e90c8943de83bee600005f48ac": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "09bc526b817346e68c725a4873297613": {
+    "13ba2bf28fbc424b956315e15556f9e9": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "e90495703f7c46b5a58c3a9ba9d377d3": {
+    "750bc44dcad54c2b934759014f31fae7": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_8a251795c4974577b2d4505fbf0747f0",
-        "style": "IPY_MODEL_328d612207954457b637507c2c91cee6",
+        "layout": "IPY_MODEL_402fc96a8b7344c28a12797ab0b7d4e9",
+        "style": "IPY_MODEL_8e153526cec64038ab1ed1e661f23a97",
         "value": "<p>    Calculate label drift between train dataset and test dataset, using statistical measures.</p>"
       }
     },
-    "8a251795c4974577b2d4505fbf0747f0": {
+    "402fc96a8b7344c28a12797ab0b7d4e9": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "328d612207954457b637507c2c91cee6": {
+    "8e153526cec64038ab1ed1e661f23a97": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "a452660fa86842819e02f4601e83e73a": {
+    "13d28587e556462ab74d71c838690772": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_869c591ce3224ca6a1709429c27a549c",
-        "style": "IPY_MODEL_35914191c3c1451f80a25f557eb78ada"
+        "layout": "IPY_MODEL_448c59e18210438985b1cfcf835c6f1f",
+        "style": "IPY_MODEL_71e1bc01eed6433cab5089ea922c75ab"
       }
     },
-    "869c591ce3224ca6a1709429c27a549c": {
+    "448c59e18210438985b1cfcf835c6f1f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "35914191c3c1451f80a25f557eb78ada": {
+    "71e1bc01eed6433cab5089ea922c75ab": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "8af6e3494ce1431a9c528422fd7bbd6a": {
+    "c092db3a407f4c65b6b1b92fd04c1d83": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_f275031e4d1449d8983ca1c100a47b62",
-          "IPY_MODEL_95dceefdc3164eb5946aaa40e71ffcfc",
-          "IPY_MODEL_6fec913a2776439cbafce711f1767046",
-          "IPY_MODEL_3964160df783442da85bc51456d45a32"
+          "IPY_MODEL_f193b71cb5e44c5681cd31af20d23f96",
+          "IPY_MODEL_a1c6264fd4a84d62acac44450427223a",
+          "IPY_MODEL_ce801458db14434088c4cab231088771",
+          "IPY_MODEL_cd5ebec69ea5491b86fb3d282228a73e"
         ],
-        "layout": "IPY_MODEL_82c9e987417b497bb33531fcef9eca9c"
+        "layout": "IPY_MODEL_020a133a472c49a89e46fc8dbf6afd31"
       }
     },
-    "f275031e4d1449d8983ca1c100a47b62": {
+    "f193b71cb5e44c5681cd31af20d23f96": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_e291e44f5769447d9215a8d940ba1686",
-        "style": "IPY_MODEL_84b908124fa94f59ab7076c7b50e5f8a",
+        "layout": "IPY_MODEL_987582fb7463413cbc9fdeb9c2d2b29c",
+        "style": "IPY_MODEL_6c7864327d68457ba2f1b5689364c969",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "e291e44f5769447d9215a8d940ba1686": {
+    "987582fb7463413cbc9fdeb9c2d2b29c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "84b908124fa94f59ab7076c7b50e5f8a": {
+    "6c7864327d68457ba2f1b5689364c969": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "95dceefdc3164eb5946aaa40e71ffcfc": {
+    "a1c6264fd4a84d62acac44450427223a": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_09d2126b37d44f7ca323642fcb03b2e9",
-        "style": "IPY_MODEL_5b822046b73c4786be7141c258f1a2e4",
+        "layout": "IPY_MODEL_af9f7882d5d441c5a8f2baa28ffcd387",
+        "style": "IPY_MODEL_225a71ebad7e420db11aedc1b8c8cc2b",
         "value": "<div><span>The Drift score is a measure for the difference between two distributions. In this check, drift is measured for the distribution of the following label properties: ['# Detections per Label', 'Classes in Labels'].</span></div>"
       }
     },
-    "09d2126b37d44f7ca323642fcb03b2e9": {
+    "af9f7882d5d441c5a8f2baa28ffcd387": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5b822046b73c4786be7141c258f1a2e4": {
+    "225a71ebad7e420db11aedc1b8c8cc2b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "6fec913a2776439cbafce711f1767046": {
+    "ce801458db14434088c4cab231088771": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1498,7 +1504,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "c6cb3a0b-23ad-46c0-9b66-c8651a141a0a"
+            "uid": "5965c736-623a-46c3-b805-7f5c7fe9cd7f"
           },
           {
             "base": 0.1,
@@ -1517,7 +1523,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "a93002a1-ea68-4d32-8529-65675266edc5"
+            "uid": "009ec98c-df0d-4b6b-b8b6-4afadd2e9fbf"
           },
           {
             "base": 0.2,
@@ -1536,7 +1542,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "99b56cb1-fbef-4618-98d9-4e96ed2353c2"
+            "uid": "8301f664-3cf2-401b-813f-42b57b6101eb"
           },
           {
             "base": 0.3,
@@ -1555,7 +1561,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "14588f34-121f-459b-a723-c74a5b17922c"
+            "uid": "4e640403-4580-460a-905c-e3f301b78646"
           },
           {
             "marker": {
@@ -1583,7 +1589,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "0b271ab0-0292-4db4-96dd-b2035706df7e"
+            "uid": "c92fd4ad-8310-4c6f-8eaa-cfb93d4d79cd"
           },
           {
             "marker": {
@@ -1611,7 +1617,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "6ffab418-4eae-4ac6-abd4-7441d53c9fcc"
+            "uid": "1eaa61fe-ba5b-4560-9bc5-cb8c13bd893d"
           }
         ],
         "_dom_classes": [],
@@ -2595,7 +2601,7 @@ Computing Check:
         }
       ]
     },
-    "3964160df783442da85bc51456d45a32": {
+    "cd5ebec69ea5491b86fb3d282228a73e": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2621,7 +2627,7 @@ Computing Check:
             ],
             "yaxis": "y",
             "type": "bar",
-            "uid": "97c1fb47-cd2f-4312-ab11-a8f43444034e"
+            "uid": "0b4c2812-dc62-4ccf-9562-1a891511e802"
           },
           {
             "marker": {
@@ -2649,7 +2655,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "5c825249-95e4-4193-bf9e-b674bf750e1b"
+            "uid": "f9fd7aea-663e-4a5e-867d-0bfbec2d7850"
           },
           {
             "marker": {
@@ -2677,7 +2683,7 @@ Computing Check:
             },
             "yaxis": "y2",
             "type": "bar",
-            "uid": "65bd91b3-a6e8-41b0-9177-e004759e1315"
+            "uid": "f0725f7c-033e-487c-825f-8997af128e5e"
           }
         ],
         "_dom_classes": [],
@@ -3661,13 +3667,13 @@ Computing Check:
         }
       ]
     },
-    "82c9e987417b497bb33531fcef9eca9c": {
+    "020a133a472c49a89e46fc8dbf6afd31": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "dff08166add94bf0954d98cc8ef1297a": {
+    "8422438259734ed99687cf04d87f9751": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -3677,7 +3683,7 @@ Computing Check:
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "c4868c1edfa943fda513af953fca7969"}
+{"version_major": 2, "version_minor": 0, "model_id": "2165e1c6eb5b4a2e92173c19b33082b7"}
 </script>
 
 </body>
@@ -3691,7 +3697,7 @@ Computing Check:
 have to create a custom metric in order for those checks to work, since the built-in metrics don’t know to handle
 your data structure. The metrics need to conform to the API of
 <a class="reference external" href="https://pytorch.org/ignite/metrics.html">pytorch-ignite</a>.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  43.729 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  48.909 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-vision-auto-tutorials-plot-custom-task-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/5f1ad3be72d1b0194ecbf6a816ffa79b/plot_custom_task_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_custom_task_tutorial.py</span></code></a></p>
