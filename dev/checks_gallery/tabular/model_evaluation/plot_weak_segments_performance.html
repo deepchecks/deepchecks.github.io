@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Weak Segments Performance &#8212; Deepchecks 6a33c73 documentation</title>
+    <title>Weak Segments Performance &#8212; Deepchecks eef382e documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -358,13 +358,11 @@ Page: checks_gallery/tabular/model_evaluation/plot_weak_segments_performance&lab
   <a class="reference internal nav-link" href="#what-is-the-purpose-of-the-check">
    What is the purpose of the check?
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#how-deepchecks-automatically-detects-weak-segments">
-     How Deepchecks automatically detects weak segments
-    </a>
-   </li>
-  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#automatically-detecting-weak-segments">
+   Automatically detecting weak segments
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#generate-data-model">
@@ -417,6 +415,7 @@ to download the full example code</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
 <li><p><a class="reference external" href="#what-is-the-purpose-of-the-check">What is the purpose of the check?</a></p></li>
+<li><p><a class="reference external" href="#automatically-detecting-weak-segments">Automatically detecting weak segments</a></p></li>
 <li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
 <li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
 <li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
@@ -426,17 +425,20 @@ to download the full example code</p>
 <p>The check is designed to help you easily identify the model’s weakest segments in the data provided. In addition,
 it enables to provide a sublist of the Dataset’s features, thus limiting the check to search in
 interesting subspaces.</p>
-<section id="how-deepchecks-automatically-detects-weak-segments">
-<h3>How Deepchecks automatically detects weak segments<a class="headerlink" href="#how-deepchecks-automatically-detects-weak-segments" title="Permalink to this headline">#</a></h3>
+</section>
+<section id="automatically-detecting-weak-segments">
+<h2>Automatically detecting weak segments<a class="headerlink" href="#automatically-detecting-weak-segments" title="Permalink to this headline">#</a></h2>
 <p>The check contains several steps:</p>
 <ol class="arabic simple">
-<li><p>We calculate loss for each sample in the dataset using the provided model via either log-loss or MSE.</p></li>
-<li><p>Select a subset of features for the the weak segment search. This is done by selecting the features with the highest feature importance to the model provided (within the features selected for check, if limited).</p></li>
-<li><p>We train multiple simple tree based models, each one is trained using exactly two features (out of the ones selected above) to predict the per sample error calculated before.</p></li>
-<li><p>We convert each of the leafs in each of the trees into a segment and calculate the segment’s performance.</p></li>
-<li><p>For the model’s weakest segments detected we calculate bins for the remaining of the data and calculate the model’s</p></li>
+<li><p>We calculate loss for each sample in the dataset using the provided model via either log-loss or MSE according
+to the task type.</p></li>
+<li><p>Select a subset of features for the weak segment search. This is done by selecting the features with the
+highest feature importance to the model provided (within the features selected for check, if limited).</p></li>
+<li><p>We train multiple simple tree based models, each one is trained using exactly two
+features (out of the ones selected above) to predict the per sample error calculated before.</p></li>
+<li><p>We convert each of the leafs in each of the trees into a segment and calculate the segment’s performance. For the
+weakest segments detected we also calculate the model’s performance on data segments surrounding them.</p></li>
 </ol>
-</section>
 </section>
 <section id="generate-data-model">
 <h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
@@ -462,8 +464,7 @@ to find the weakest segment regardless of the segment size and so it is recommen
 of this parameter as larger segments can be of interest even the model performance on them is superior.</p>
 <p><code class="docutils literal notranslate"><span class="pre">categorical_aggregation_threshold</span></code>: By default the check will combine rare categories into a single category called
 “Other”. This parameter determines the frequency threshold for categories to be mapped into to the “other” category.</p>
-<p>for additional information on the check’s parameters, please refer to the API reference of the check
-<a class="reference internal" href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance.html#deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance" title="deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance</span></code></a>.</p>
+<p>see <a class="reference internal" href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance.html#deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance" title="deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepchecks.tabular.checks.model_evaluation.WeakSegmentsPerformance</span></code></a> for more details.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">phishing</span>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">WeakSegmentsPerformance</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">f1_score</span>
@@ -471,7 +472,7 @@ of this parameter as larger segments can be of interest even the model performan
 <span class="n">scorer</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;micro&#39;</span><span class="p">)}</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">test_ds</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_data.html#deepchecks.tabular.datasets.classification.phishing.load_data" title="deepchecks.tabular.datasets.classification.phishing.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">phishing</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
 <span class="n">model</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.phishing.load_fitted_model.html#deepchecks.tabular.datasets.classification.phishing.load_fitted_model" title="deepchecks.tabular.datasets.classification.phishing.load_fitted_model" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-phishing sphx-glr-backref-type-py-function"><span class="n">phishing</span><span class="o">.</span><span class="n">load_fitted_model</span></a><span class="p">()</span>
-<span class="n">check</span> <span class="o">=</span> <span class="n">WeakSegmentsPerformance</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;urlLength&#39;</span><span class="p">,</span> <span class="s1">&#39;numTitles&#39;</span><span class="p">,</span> <span class="s1">&#39;ext&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy&#39;</span><span class="p">],</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">WeakSegmentsPerformance</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;urlLength&#39;</span><span class="p">,</span> <span class="s1">&#39;numTitles&#39;</span><span class="p">,</span> <span class="s1">&#39;ext&#39;</span><span class="p">,</span> <span class="s1">&#39;entropy&#39;</span><span class="p">],</span>
                                 <span class="n">alternative_scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">,</span>
                                 <span class="n">segment_minimum_size_ratio</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
                                 <span class="n">categorical_aggregation_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
@@ -773,7 +774,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "e547f2c26faa4ec5b1c2a3ef3366ff54": {
+    "c17f216c32fd459aa1ff634cf6b36e7f": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -785,179 +786,179 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_2a02315b75f7419ca540387dacc63982",
-          "IPY_MODEL_b789ca8317164db2a63ffac6980e7acc",
-          "IPY_MODEL_5b85c8eedbd84c49a5b53777b8f4d018",
-          "IPY_MODEL_c8656880308c48559fcfb56404a65232"
+          "IPY_MODEL_56764b44b00545b2b7e529ca003d1d7b",
+          "IPY_MODEL_1ff67c1efb364ea9b3b7f09eb606e0f1",
+          "IPY_MODEL_1323693cfb0e4738a44fd6a0da352298",
+          "IPY_MODEL_d50a1005aa164488b9ede1edc058233e"
         ],
-        "layout": "IPY_MODEL_88c7a287ff5f4553a8479fa66cb59661"
+        "layout": "IPY_MODEL_dc581498fe56477094eff96260d9d025"
       }
     },
-    "2a02315b75f7419ca540387dacc63982": {
+    "56764b44b00545b2b7e529ca003d1d7b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_0512b83881cb4be1a075a64936782c31",
-        "style": "IPY_MODEL_f843036150664677ba47602161ee0ece",
+        "layout": "IPY_MODEL_18d838e531b64c5ea6fe953933180fa3",
+        "style": "IPY_MODEL_ca578412f2cb4e7eace592c004768890",
         "value": "<h4><b>Weak Segments Performance</b></h4>"
       }
     },
-    "0512b83881cb4be1a075a64936782c31": {
+    "18d838e531b64c5ea6fe953933180fa3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f843036150664677ba47602161ee0ece": {
+    "ca578412f2cb4e7eace592c004768890": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "b789ca8317164db2a63ffac6980e7acc": {
+    "1ff67c1efb364ea9b3b7f09eb606e0f1": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_ddd1775f2cae4321bd2bc1de4239a930",
-        "style": "IPY_MODEL_2a3ff52ced5d4cd78abed36d13b6b361",
+        "layout": "IPY_MODEL_0591eca0a5fb4ce896fa1544150297c3",
+        "style": "IPY_MODEL_dd53db799aba4d4cb413b2740be30a60",
         "value": "<p>Search for segments with low performance scores.</p>"
       }
     },
-    "ddd1775f2cae4321bd2bc1de4239a930": {
+    "0591eca0a5fb4ce896fa1544150297c3": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2a3ff52ced5d4cd78abed36d13b6b361": {
+    "dd53db799aba4d4cb413b2740be30a60": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5b85c8eedbd84c49a5b53777b8f4d018": {
+    "1323693cfb0e4738a44fd6a0da352298": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d8562b5b8b5848ac832d7dafde642e86",
-        "style": "IPY_MODEL_1ad7468fe26c492f8d078c66d35b4eb4"
+        "layout": "IPY_MODEL_9b84fb84fe104db19856605bf4061a08",
+        "style": "IPY_MODEL_6383193f3fb44056b12b48a6b31f6015"
       }
     },
-    "d8562b5b8b5848ac832d7dafde642e86": {
+    "9b84fb84fe104db19856605bf4061a08": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "1ad7468fe26c492f8d078c66d35b4eb4": {
+    "6383193f3fb44056b12b48a6b31f6015": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c8656880308c48559fcfb56404a65232": {
+    "d50a1005aa164488b9ede1edc058233e": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_2ef2f43834564444b2158bf508d35021",
-          "IPY_MODEL_5f6da87ad3d14f269a46f1fbc2c4e383",
-          "IPY_MODEL_d0875e34f4c14ab197dffd83b20ca0e9"
+          "IPY_MODEL_e37d16a9f4d24061907ecabf56727525",
+          "IPY_MODEL_332ae11b5018438a97fe5c0ed1db19ff",
+          "IPY_MODEL_820238a457b3458b891e9dfa559c0a13"
         ],
-        "layout": "IPY_MODEL_915d247d34a8444c92db84bd964804ad"
+        "layout": "IPY_MODEL_605cb32a924e41b3a6ae1c07d9e773ea"
       }
     },
-    "2ef2f43834564444b2158bf508d35021": {
+    "e37d16a9f4d24061907ecabf56727525": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b66695501bb14418bbefecd3ca5fc171",
-        "style": "IPY_MODEL_353c00484afd466581d6c18b4f7f37d5",
+        "layout": "IPY_MODEL_28dc61a070b348df83492264cad21bb0",
+        "style": "IPY_MODEL_bc9519acc131463490403c665102d2d7",
         "value": "<h5><b>Additional Outputs</b></h5>"
       }
     },
-    "b66695501bb14418bbefecd3ca5fc171": {
+    "28dc61a070b348df83492264cad21bb0": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "353c00484afd466581d6c18b4f7f37d5": {
+    "bc9519acc131463490403c665102d2d7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "5f6da87ad3d14f269a46f1fbc2c4e383": {
+    "332ae11b5018438a97fe5c0ed1db19ff": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_1089f19705d9445089ca4226b762f855",
-        "style": "IPY_MODEL_5e697bf2f2b244fe97ac60b3b4f4f2e1",
+        "layout": "IPY_MODEL_92a15cc026704033973628d9557c9a4c",
+        "style": "IPY_MODEL_87c8677216324cb5ac3552e5b818e2ef",
         "value": "<div>Showcasing intersections of features with weakest detected segments.<br> The full list of weak segments can be observed in the check result value. </div>"
       }
     },
-    "1089f19705d9445089ca4226b762f855": {
+    "92a15cc026704033973628d9557c9a4c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "5e697bf2f2b244fe97ac60b3b4f4f2e1": {
+    "87c8677216324cb5ac3552e5b818e2ef": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d0875e34f4c14ab197dffd83b20ca0e9": {
+    "820238a457b3458b891e9dfa559c0a13": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_2153a976f3a644a796a9131cf825d4a4",
-          "IPY_MODEL_4d5b214be0694a87a741a60c05705107"
+          "IPY_MODEL_8aa0424c098442b3a91405388eb4b85b",
+          "IPY_MODEL_868ad27cba9149e2b045ec5d82ca46cb"
         ],
-        "layout": "IPY_MODEL_f00e1650573a4abfa0f64099aec6a667"
+        "layout": "IPY_MODEL_05aaa1d71e7e4f379f3fce6417187861"
       }
     },
-    "2153a976f3a644a796a9131cf825d4a4": {
+    "8aa0424c098442b3a91405388eb4b85b": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_c836ac635330414aa9b7dec64f99811e",
-        "style": "IPY_MODEL_0963dae5be99409689c66411283d3b86",
+        "layout": "IPY_MODEL_9b551fa523344477983b90aed17f0e16",
+        "style": "IPY_MODEL_022a6f7f6864428b9f34682e628c2275",
         "value": "<style>.jupyter-widgets.widget-tab > .p-TabBar .p-TabBar-tab {min-width: fit-content;}</style>"
       }
     },
-    "c836ac635330414aa9b7dec64f99811e": {
+    "9b551fa523344477983b90aed17f0e16": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0963dae5be99409689c66411283d3b86": {
+    "022a6f7f6864428b9f34682e628c2275": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "4d5b214be0694a87a741a60c05705107": {
+    "868ad27cba9149e2b045ec5d82ca46cb": {
       "model_name": "TabModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -969,27 +970,27 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
           "2": "ext vs entropy"
         },
         "children": [
-          "IPY_MODEL_c1e1579dd8a94543b498e416ada682c7",
-          "IPY_MODEL_fd9779252a024e3dbf36f34ef75421b4",
-          "IPY_MODEL_072a3353b4324eb6a1394c85bf4447e7"
+          "IPY_MODEL_9ba34738559a4faba00d476d86ada9b9",
+          "IPY_MODEL_e1b23df76ede424e892930c23009037a",
+          "IPY_MODEL_fabc9876f1344b4d97593ff4380bbe2c"
         ],
-        "layout": "IPY_MODEL_e6ef20934f9742048fe76d550f71203b"
+        "layout": "IPY_MODEL_51f16eac18334203a0d479212f90599e"
       }
     },
-    "c1e1579dd8a94543b498e416ada682c7": {
+    "9ba34738559a4faba00d476d86ada9b9": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_fc743f291f054198a05e1f9646b81990",
-          "IPY_MODEL_285b531ed5374424bd22f53c5b293241"
+          "IPY_MODEL_5cb8cc236a0c48e58ef87479e9f3ee6d",
+          "IPY_MODEL_b14fcf889a9c4023940983de321c7699"
         ],
-        "layout": "IPY_MODEL_d33aff4a089548479af031ffc9f35f19"
+        "layout": "IPY_MODEL_d1aff5d9bdc044679dd87b0db40c84c8"
       }
     },
-    "fc743f291f054198a05e1f9646b81990": {
+    "5cb8cc236a0c48e58ef87479e9f3ee6d": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -1079,7 +1080,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
               ]
             ],
             "type": "heatmap",
-            "uid": "6fd02572-e6cb-44cb-9909-5469c8aaaf66"
+            "uid": "9b0e186c-8371-42cd-bb19-d7e584478f9b"
           }
         ],
         "_dom_classes": [],
@@ -2004,49 +2005,49 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
         "_view_count": 0
       }
     },
-    "285b531ed5374424bd22f53c5b293241": {
+    "b14fcf889a9c4023940983de321c7699": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_81602c7c016f4f1c98c11049e471c3ea",
-        "style": "IPY_MODEL_d6bfcf5bfae74abfb81bef2969e3091c",
+        "layout": "IPY_MODEL_7bee3e720ade41a491fdabca2a492566",
+        "style": "IPY_MODEL_347a793387b848d5ba2abf690d71a575",
         "value": "<div>Check ran on 3178 data samples. Average f1 score is 0.99.</div>"
       }
     },
-    "81602c7c016f4f1c98c11049e471c3ea": {
+    "7bee3e720ade41a491fdabca2a492566": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "d6bfcf5bfae74abfb81bef2969e3091c": {
+    "347a793387b848d5ba2abf690d71a575": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "d33aff4a089548479af031ffc9f35f19": {
+    "d1aff5d9bdc044679dd87b0db40c84c8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "fd9779252a024e3dbf36f34ef75421b4": {
+    "e1b23df76ede424e892930c23009037a": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_1f66afa0e15b40bb824360eaeadcf983",
-          "IPY_MODEL_e75915ccaa184ee99417fe885447a675"
+          "IPY_MODEL_c0c75e64a26d46d2b475c00612ceb9ff",
+          "IPY_MODEL_e3a0f1b95f6b48488d05323d50f30aeb"
         ],
-        "layout": "IPY_MODEL_1a0cee629fd4440596b3a617aceab275"
+        "layout": "IPY_MODEL_0be50ceb9d564340b4ec0639bfdd9d8e"
       }
     },
-    "1f66afa0e15b40bb824360eaeadcf983": {
+    "c0c75e64a26d46d2b475c00612ceb9ff": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -2136,7 +2137,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
               ]
             ],
             "type": "heatmap",
-            "uid": "1a3d0a01-37e4-4798-b4a6-54b5f3408a2e"
+            "uid": "c9c9bc95-10f3-4f75-b5de-20df838f1d84"
           }
         ],
         "_dom_classes": [],
@@ -3061,49 +3062,49 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
         "_view_count": 0
       }
     },
-    "e75915ccaa184ee99417fe885447a675": {
+    "e3a0f1b95f6b48488d05323d50f30aeb": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_2de45aa92950445ebd9218344e2fd1ba",
-        "style": "IPY_MODEL_743963c1b2f64494a016f921cbd95e7f",
+        "layout": "IPY_MODEL_88e81f6cf37e4d52a2e390dd0821bd4f",
+        "style": "IPY_MODEL_eb82e2305c614526babe091bd80f7a85",
         "value": "<div>Check ran on 3178 data samples. Average f1 score is 0.99.</div>"
       }
     },
-    "2de45aa92950445ebd9218344e2fd1ba": {
+    "88e81f6cf37e4d52a2e390dd0821bd4f": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "743963c1b2f64494a016f921cbd95e7f": {
+    "eb82e2305c614526babe091bd80f7a85": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "1a0cee629fd4440596b3a617aceab275": {
+    "0be50ceb9d564340b4ec0639bfdd9d8e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "072a3353b4324eb6a1394c85bf4447e7": {
+    "fabc9876f1344b4d97593ff4380bbe2c": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
         "children": [
-          "IPY_MODEL_9470b01d84f143b98666b3d57d082ca0",
-          "IPY_MODEL_b7e99abfed644ae9b5301642ee0903c5"
+          "IPY_MODEL_f1f69cf17d5646429e71e933e700d33b",
+          "IPY_MODEL_6d19177c76df429bb241475ebf05d3f4"
         ],
-        "layout": "IPY_MODEL_0fbe033e986b4ce3a1e639373c351e9a"
+        "layout": "IPY_MODEL_ab265c93067f44a88336487ab6288aa4"
       }
     },
-    "9470b01d84f143b98666b3d57d082ca0": {
+    "f1f69cf17d5646429e71e933e700d33b": {
       "model_name": "FigureModel",
       "model_module": "jupyterlab-plotly",
       "model_module_version": "^5.5.0",
@@ -3186,7 +3187,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
               ]
             ],
             "type": "heatmap",
-            "uid": "29fe2011-e805-41ab-a986-b317fba3acd7"
+            "uid": "cce38bd8-8e18-4642-896b-283122244fe9"
           }
         ],
         "_dom_classes": [],
@@ -4111,54 +4112,54 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
         "_view_count": 0
       }
     },
-    "b7e99abfed644ae9b5301642ee0903c5": {
+    "6d19177c76df429bb241475ebf05d3f4": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d17a941734e84e5882bb0d9f19ebe063",
-        "style": "IPY_MODEL_8514dd19f26d4805a684cde0d5e641cd",
+        "layout": "IPY_MODEL_9cf95c34dcc841fb9c17432cf9da5052",
+        "style": "IPY_MODEL_a2b78772b9f94cb7887bf27e160ccc90",
         "value": "<div>Check ran on 3178 data samples. Average f1 score is 0.99.</div>"
       }
     },
-    "d17a941734e84e5882bb0d9f19ebe063": {
+    "9cf95c34dcc841fb9c17432cf9da5052": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "8514dd19f26d4805a684cde0d5e641cd": {
+    "a2b78772b9f94cb7887bf27e160ccc90": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "0fbe033e986b4ce3a1e639373c351e9a": {
+    "ab265c93067f44a88336487ab6288aa4": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e6ef20934f9742048fe76d550f71203b": {
+    "51f16eac18334203a0d479212f90599e": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "f00e1650573a4abfa0f64099aec6a667": {
+    "05aaa1d71e7e4f379f3fce6417187861": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "915d247d34a8444c92db84bd964804ad": {
+    "605cb32a924e41b3a6ae1c07d9e773ea": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "88c7a287ff5f4553a8479fa66cb59661": {
+    "dc581498fe56477094eff96260d9d025": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -4168,7 +4169,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "e547f2c26faa4ec5b1c2a3ef3366ff54"}
+{"version_major": 2, "version_minor": 0, "model_id": "c17f216c32fd459aa1ff634cf6b36e7f"}
 </script>
 
 </body>
@@ -4579,7 +4580,7 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
   "version_major": 2,
   "version_minor": 0,
   "state": {
-    "717d4328800044d6aa844e315408fd63": {
+    "5c4899efa0c94b18aff6706225722959": {
       "model_name": "VBoxModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
@@ -4591,83 +4592,83 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
           "jp-OutputArea-output"
         ],
         "children": [
-          "IPY_MODEL_8fc6af91b91d434abd7d4de6676c385f",
-          "IPY_MODEL_c5e63f46a7684f508e29a10b79d3dca3",
-          "IPY_MODEL_53b787d7778149beb8804ea3a0d8df32"
+          "IPY_MODEL_af495c30b8eb43708fa0252fdd4c1d89",
+          "IPY_MODEL_8d7d018f1db04b2da9963e8794c1d8c5",
+          "IPY_MODEL_7b92fb6b0dfb43e7b644990a86a886de"
         ],
-        "layout": "IPY_MODEL_81c0ef7dc5644f7c8bcb5921d0fe3779"
+        "layout": "IPY_MODEL_ef1ebfa766a44ae5913e355447273c2c"
       }
     },
-    "8fc6af91b91d434abd7d4de6676c385f": {
+    "af495c30b8eb43708fa0252fdd4c1d89": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_7da607e460a546fc8c4b1acfb7229455",
-        "style": "IPY_MODEL_e01c1c74b6634fb88253c8a562cf8f93",
+        "layout": "IPY_MODEL_978671de69194909bef160c93712dde8",
+        "style": "IPY_MODEL_08ad7c70926a4549a3425c20c1ad28dd",
         "value": "<h4><b>Weak Segments Performance</b></h4>"
       }
     },
-    "7da607e460a546fc8c4b1acfb7229455": {
+    "978671de69194909bef160c93712dde8": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "e01c1c74b6634fb88253c8a562cf8f93": {
+    "08ad7c70926a4549a3425c20c1ad28dd": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "c5e63f46a7684f508e29a10b79d3dca3": {
+    "8d7d018f1db04b2da9963e8794c1d8c5": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_d6a3547b640d491fbb53198a6887f7c3",
-        "style": "IPY_MODEL_2ebf388e88a8432aa57677efa840800e",
+        "layout": "IPY_MODEL_9c8d2adc40d64e29aa07cac59efe0a26",
+        "style": "IPY_MODEL_ea673bb2a24046e6a88e6372e751987b",
         "value": "<p>Search for segments with low performance scores.</p>"
       }
     },
-    "d6a3547b640d491fbb53198a6887f7c3": {
+    "9c8d2adc40d64e29aa07cac59efe0a26": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "2ebf388e88a8432aa57677efa840800e": {
+    "ea673bb2a24046e6a88e6372e751987b": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "53b787d7778149beb8804ea3a0d8df32": {
+    "7b92fb6b0dfb43e7b644990a86a886de": {
       "model_name": "HTMLModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {
         "_dom_classes": [],
-        "layout": "IPY_MODEL_b85be97eb5c944f28dd4a4df12537c91",
-        "style": "IPY_MODEL_0b65f5b5cb9a41fcab625ac008951ead",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_9d03a_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9d03a_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9d03a_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9d03a_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9d03a_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_9d03a_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_9d03a_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_9d03a_row0_col1\" class=\"data row0 col1\" >The relative performance of weakest segment is greater than 90% of average model performance.</td>\n      <td id=\"T_9d03a_row0_col2\" class=\"data row0 col2\" >Found a segment with f1 score of 0.959 in comparison to an average score of 0.993 in sampled data.</td>\n    </tr>\n  </tbody>\n</table>\n"
+        "layout": "IPY_MODEL_860622d9b0af4f57a1dcfbdc1923a38d",
+        "style": "IPY_MODEL_ff4964214cec45bb9536da55a099d5e7",
+        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_f300b_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f300b_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f300b_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f300b_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f300b_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f300b_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_f300b_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_f300b_row0_col1\" class=\"data row0 col1\" >The relative performance of weakest segment is greater than 90% of average model performance.</td>\n      <td id=\"T_f300b_row0_col2\" class=\"data row0 col2\" >Found a segment with f1 score of 0.959 in comparison to an average score of 0.993 in sampled data.</td>\n    </tr>\n  </tbody>\n</table>\n"
       }
     },
-    "b85be97eb5c944f28dd4a4df12537c91": {
+    "860622d9b0af4f57a1dcfbdc1923a38d": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
       "state": {}
     },
-    "0b65f5b5cb9a41fcab625ac008951ead": {
+    "ff4964214cec45bb9536da55a099d5e7": {
       "model_name": "DescriptionStyleModel",
       "model_module": "@jupyter-widgets/controls",
       "model_module_version": "1.5.0",
       "state": {}
     },
-    "81c0ef7dc5644f7c8bcb5921d0fe3779": {
+    "ef1ebfa766a44ae5913e355447273c2c": {
       "model_name": "LayoutModel",
       "model_module": "@jupyter-widgets/base",
       "model_module_version": "1.2.0",
@@ -4677,14 +4678,14 @@ Default parameter smoothing will change in version 2.6.See https://github.com/sc
 }
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "717d4328800044d6aa844e315408fd63"}
+{"version_major": 2, "version_minor": 0, "model_id": "5c4899efa0c94b18aff6706225722959"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  33.109 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  40.232 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-weak-segments-performance-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/e66060e1709237dc771f204c920ec0b2/plot_weak_segments_performance.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_weak_segments_performance.py</span></code></a></p>
