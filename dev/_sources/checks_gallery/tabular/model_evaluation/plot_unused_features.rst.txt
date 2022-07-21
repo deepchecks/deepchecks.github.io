@@ -47,13 +47,25 @@ reason the Unused Features check selects out of these features those that have h
 information that was ignored during model construction. We may wish to manually inspect those features to make sure
 our model is not missing on important information.
 
+.. GENERATED FROM PYTHON SOURCE LINES 34-49
+
 Run the check
 =============
+The check has two key parameters (that are optional) that affect the behavior of the
+check and especially its output.
+
+``feature_variance_threshold``: Controls the threshold over which features are considered "high variance".
+A higher threshold means that fewer features will be considered "high variance".
+
+``feature_importance_threshold``: Controls the threshold over which features are considered important.
+For additional information on how feature importance is being calculated, see
+:doc:`Feature Importance </user-guide/tabular/feature_importance>`.
+
 We will run the check on the adult dataset which can be downloaded from the
 `UCI machine learning repository <http://archive.ics.uci.edu/ml>`_ and is also available in
 `deepchecks.tabular.datasets`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-49
+.. GENERATED FROM PYTHON SOURCE LINES 49-59
 
 .. code-block:: default
 
@@ -64,322 +76,8 @@ We will run the check on the adult dataset which can be downloaded from the
     train_ds, test_ds = adult.load_data()
     model = adult.load_fitted_model()
 
-    UnusedFeatures().add_condition_number_of_high_variance_unused_features_less_or_equal()
-    result = UnusedFeatures().run(train_ds, test_ds, model)
-    result
-
-
-
-
-
-
-.. raw:: html
-
-    <div class="output_subarea output_html rendered_html output_result">
-    <!--
-        ~ ----------------------------------------------------------------------------
-        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
-        ~
-        ~ This file is part of Deepchecks.
-        ~ Deepchecks is distributed under the terms of the GNU Affero General
-        ~ Public License (version 3 or later).
-        ~ You should have received a copy of the GNU Affero General Public License
-        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
-        ~ ----------------------------------------------------------------------------
-        ~
-    -->
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Unused Features</title>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-                font-size: 1rem;
-                line-height: 1.5;
-                color: #212529;
-                text-align: left;
-                max-width: 1200px;
-                margin: auto;
-                background-color: white;
-            }
-
-            div.nbinput.container div.prompt *,
-            div.nboutput.container div.prompt *,
-            div.nbinput.container div.input_area pre,
-            div.nboutput.container div.output_area pre,
-            div.nbinput.container div.input_area .highlight,
-            div.nboutput.container div.output_area .highlight {
-                border: none;
-                padding: 0;
-                margin: 0;
-                box-shadow: none;
-            }
-
-            div.nbinput.container > div[class*=highlight],
-            div.nboutput.container > div[class*=highlight] {
-                margin: 0;
-            }
-
-            div.nbinput.container div.prompt *,
-            div.nboutput.container div.prompt * {
-                background: none;
-            }
-
-            div.nboutput.container div.output_area .highlight,
-            div.nboutput.container div.output_area pre {
-                background: unset;
-            }
-
-            div.nboutput.container div.output_area div.highlight {
-                color: unset;  /* override Pygments text color */
-            }
-
-            /* avoid gaps between output lines */
-            div.nboutput.container div[class*=highlight] pre {
-                line-height: normal;
-            }
-
-            /* input/output containers */
-            div.nbinput.container,
-            div.nboutput.container {
-                display: -webkit-flex;
-                display: flex;
-                align-items: flex-start;
-                margin: 0;
-                width: 100%;
-            }
-            @media (max-width: 540px) {
-                div.nbinput.container,
-                div.nboutput.container {
-                    flex-direction: column;
-                }
-            }
-
-            /* input container */
-            div.nbinput.container {
-                padding-top: 5px;
-            }
-
-            /* last container */
-            div.nblast.container {
-                padding-bottom: 5px;
-            }
-
-            /* input prompt */
-            div.nbinput.container div.prompt pre {
-                color: #307FC1;
-            }
-
-            /* output prompt */
-            div.nboutput.container div.prompt pre {
-                color: #BF5B3D;
-            }
-
-            /* all prompts */
-            div.nbinput.container div.prompt,
-            div.nboutput.container div.prompt {
-                width: 4.5ex;
-                padding-top: 5px;
-                position: relative;
-                user-select: none;
-            }
-
-            div.nbinput.container div.prompt > div,
-            div.nboutput.container div.prompt > div {
-                position: absolute;
-                right: 0;
-                margin-right: 0.3ex;
-            }
-
-            @media (max-width: 540px) {
-                div.nbinput.container div.prompt,
-                div.nboutput.container div.prompt {
-                    width: unset;
-                    text-align: left;
-                    padding: 0.4em;
-                }
-                div.nboutput.container div.prompt.empty {
-                    padding: 0;
-                }
-
-                div.nbinput.container div.prompt > div,
-                div.nboutput.container div.prompt > div {
-                    position: unset;
-                }
-            }
-
-            /* disable scrollbars on prompts */
-            div.nbinput.container div.prompt pre,
-            div.nboutput.container div.prompt pre {
-                overflow: hidden;
-            }
-
-            /* input/output area */
-            div.nbinput.container div.input_area,
-            div.nboutput.container div.output_area {
-                -webkit-flex: 1;
-                flex: 1;
-                overflow: auto;
-            }
-            @media (max-width: 540px) {
-                div.nbinput.container div.input_area,
-                div.nboutput.container div.output_area {
-                    width: 100%;
-                }
-            }
-
-            /* input area */
-            div.nbinput.container div.input_area {
-                border: 1px solid #e0e0e0;
-                border-radius: 2px;
-                /*background: #f5f5f5;*/
-            }
-
-            /* override MathJax center alignment in output cells */
-            div.nboutput.container div[class*=MathJax] {
-                text-align: left !important;
-            }
-
-            /* override sphinx.ext.imgmath center alignment in output cells */
-            div.nboutput.container div.math p {
-                text-align: left;
-            }
-
-            /* standard error */
-            div.nboutput.container div.output_area.stderr {
-                background: #fdd;
-            }
-
-            /* ANSI colors */
-            .ansi-black-fg { color: #3E424D; }
-            .ansi-black-bg { background-color: #3E424D; }
-            .ansi-black-intense-fg { color: #282C36; }
-            .ansi-black-intense-bg { background-color: #282C36; }
-            .ansi-red-fg { color: #E75C58; }
-            .ansi-red-bg { background-color: #E75C58; }
-            .ansi-red-intense-fg { color: #B22B31; }
-            .ansi-red-intense-bg { background-color: #B22B31; }
-            .ansi-green-fg { color: #00A250; }
-            .ansi-green-bg { background-color: #00A250; }
-            .ansi-green-intense-fg { color: #007427; }
-            .ansi-green-intense-bg { background-color: #007427; }
-            .ansi-yellow-fg { color: #DDB62B; }
-            .ansi-yellow-bg { background-color: #DDB62B; }
-            .ansi-yellow-intense-fg { color: #B27D12; }
-            .ansi-yellow-intense-bg { background-color: #B27D12; }
-            .ansi-blue-fg { color: #208FFB; }
-            .ansi-blue-bg { background-color: #208FFB; }
-            .ansi-blue-intense-fg { color: #0065CA; }
-            .ansi-blue-intense-bg { background-color: #0065CA; }
-            .ansi-magenta-fg { color: #D160C4; }
-            .ansi-magenta-bg { background-color: #D160C4; }
-            .ansi-magenta-intense-fg { color: #A03196; }
-            .ansi-magenta-intense-bg { background-color: #A03196; }
-            .ansi-cyan-fg { color: #60C6C8; }
-            .ansi-cyan-bg { background-color: #60C6C8; }
-            .ansi-cyan-intense-fg { color: #258F8F; }
-            .ansi-cyan-intense-bg { background-color: #258F8F; }
-            .ansi-white-fg { color: #C5C1B4; }
-            .ansi-white-bg { background-color: #C5C1B4; }
-            .ansi-white-intense-fg { color: #A1A6B2; }
-            .ansi-white-intense-bg { background-color: #A1A6B2; }
-
-            .ansi-default-inverse-fg { color: #FFFFFF; }
-            .ansi-default-inverse-bg { background-color: #000000; }
-
-            .ansi-bold { font-weight: bold; }
-            .ansi-underline { text-decoration: underline; }
-
-
-            div.nbinput.container div.input_area div[class*=highlight] > pre,
-            div.nboutput.container div.output_area div[class*=highlight] > pre,
-            div.nboutput.container div.output_area div[class*=highlight].math,
-            div.nboutput.container div.output_area.rendered_html,
-            div.nboutput.container div.output_area > div.output_javascript,
-            div.nboutput.container div.output_area:not(.rendered_html) > img{
-                padding: 5px;
-                margin: 0;
-            }
-
-            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-            div.nbinput.container div.input_area > div[class^='highlight'],
-            div.nboutput.container div.output_area > div[class^='highlight']{
-                overflow-y: hidden;
-            }
-
-            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-            .prompt .copybtn {
-                display: none;
-            }
-
-            /* Some additional styling taken form the Jupyter notebook CSS */
-            div.rendered_html table {
-            border: none;
-            border-collapse: collapse;
-            border-spacing: 0;
-            color: black;
-            font-size: 12px;
-            table-layout: fixed;
-            }
-            div.rendered_html thead {
-            border-bottom: 1px solid black;
-            vertical-align: bottom;
-            }
-            div.rendered_html tr,
-            div.rendered_html th,
-            div.rendered_html td {
-            text-align: right;
-            vertical-align: middle;
-            padding: 0.5em 0.5em;
-            line-height: normal;
-            white-space: normal;
-            max-width: none;
-            border: none;
-            }
-            div.rendered_html th {
-            font-weight: bold;
-            }
-            div.rendered_html tbody tr:nth-child(odd) {
-            background: #f5f5f5;
-            }
-            div.rendered_html tbody tr:hover {
-            background: rgba(66, 165, 245, 0.2);
-            }
-        </style>
-    </head>
-    <body>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
-    
-
-    <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"d6d69ee5bc65458cb76d1248ce10e493": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_5c44e8af04274e25a5739604c325452d", "IPY_MODEL_5bfe55686645459aa2af1dd51a3a01cb", "IPY_MODEL_eb7d4294988c4afd8ff2d60679d162e0", "IPY_MODEL_c8ac160b36ac4b93b7f0269c645e03f3"], "layout": "IPY_MODEL_5f36a37c8d2c4529860733950fda12da"}}, "5c44e8af04274e25a5739604c325452d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d3a3e5dba1cf48c3b339be6638b3a8d5", "style": "IPY_MODEL_28756581cfc04b2db4360fd397643727", "value": "<h4><b>Unused Features</b></h4>"}}, "d3a3e5dba1cf48c3b339be6638b3a8d5": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "28756581cfc04b2db4360fd397643727": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5bfe55686645459aa2af1dd51a3a01cb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_41e3ca432489486a9dccb92879804d06", "style": "IPY_MODEL_8e2fd87eb5ff4cbdb9ba667072305c4b", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "41e3ca432489486a9dccb92879804d06": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8e2fd87eb5ff4cbdb9ba667072305c4b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "eb7d4294988c4afd8ff2d60679d162e0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9a1e272035c2453b9b35fcefaab1ea75", "style": "IPY_MODEL_1a91dae5169244b39ff20dd1f1d00b8e"}}, "9a1e272035c2453b9b35fcefaab1ea75": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1a91dae5169244b39ff20dd1f1d00b8e": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "c8ac160b36ac4b93b7f0269c645e03f3": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_66e6ed19259a4b1eb51aceaa9cd832ea", "IPY_MODEL_91a45186df6c4f82b68bd25e4502faaf", "IPY_MODEL_5507fbec3e8e4d3584af8f84bf3e171b"], "layout": "IPY_MODEL_858ca0ff5d1545d3a64e90517993f478"}}, "66e6ed19259a4b1eb51aceaa9cd832ea": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_18e33b018f2441739fca1e96df06678a", "style": "IPY_MODEL_308d755e48704b329c1cbc584432f2d0", "value": "<h5><b>Additional Outputs</b></h5>"}}, "18e33b018f2441739fca1e96df06678a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "308d755e48704b329c1cbc584432f2d0": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "91a45186df6c4f82b68bd25e4502faaf": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_31e7ed73161a4daa8d0c64a67ec657c7", "style": "IPY_MODEL_9a3123f0012542fcbe8fb3bbf423d7df", "value": "<div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"}}, "31e7ed73161a4daa8d0c64a67ec657c7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9a3123f0012542fcbe8fb3bbf423d7df": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5507fbec3e8e4d3584af8f84bf3e171b": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"marker": {"color": "indianred"}, "name": "Feature Importance %", "orientation": "h", "x": {"dtype": "float64", "shape": [10]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country", "fnlwgt", "race"], "type": "bar", "uid": "87713eb0-83fc-4898-850d-eeb15fdd84c4"}, {"marker": {"color": "lightsalmon"}, "name": "Feature Variance %", "orientation": "h", "x": {"dtype": "float64", "shape": [10]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country", "fnlwgt", "race"], "type": "bar", "uid": "15ba1aae-dd51-4c49-bc46-9f966ec84bfa"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"showarrow": false, "text": "Last shown significant feature", "x": 1, "xanchor": "right", "xref": "x domain", "y": 4.5, "yanchor": "bottom", "yref": "y"}], "height": 500, "shapes": [{"line": {"color": "green", "dash": "dash", "width": 2}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 4.5, "y1": 4.5, "yref": "y"}], "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Unused features compared to top important features"}, "yaxis": {"autorange": "reversed"}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "7NjoZbeHQkAohL+Z4yo7QAg+JyV+KCxA94Q4YmcmJUAbBS0cNVoQQGHQB+CftMY/AAAAAAAAAICDscpOZsSQPwAAAAAAAACAruy4EzNblj8="}, {"encoding": "base64", "path": ["_data", 1, "x", "buffer"], "data": "UeUNih/8JEC0AJifEg8UQLKO0ukrCRJAo7ihiZPZAEANQ3TtzwUNQL2MG7zhFilAG3LTQiSpJkA1WqBss3MlQNrb9/hI5yFAweCA9whzEUA="}]}, "858ca0ff5d1545d3a64e90517993f478": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5f36a37c8d2c4529860733950fda12da": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
-    </script>
-    <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "d6d69ee5bc65458cb76d1248ce10e493"}
-    </script>
-
-    </body>
-    </html>
-    </div>
-    <br />
-    <br />
-
-.. GENERATED FROM PYTHON SOURCE LINES 50-55
-
-Controlling the variance threshold
-----------------------------------
-The check can be configured to use a different threshold which controls which features are considered "high variance".
-The default value is `0.4`. We will use a more strict value and see that fewer features are considered "high
-variance".
-
-.. GENERATED FROM PYTHON SOURCE LINES 55-58
-
-.. code-block:: default
-
     result = UnusedFeatures(feature_variance_threshold=1.5).run(train_ds, test_ds, model)
-    result
+    result.show()
 
 
 
@@ -667,10 +365,10 @@ variance".
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"18361e08e649403d9f35531b395da23d": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_0cce555f7a90442cbfbaefba3b75b45d", "IPY_MODEL_0237ed5e2e9f47cd96ad16bcc543d135", "IPY_MODEL_114de28825704707b2df00d66d8b97d3", "IPY_MODEL_c71358c74b1841dcb2f4793cd622b94a"], "layout": "IPY_MODEL_a6852474ff924381a361df8bda453835"}}, "0cce555f7a90442cbfbaefba3b75b45d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_17408aa8b08c44c08223f4911cd7ec3f", "style": "IPY_MODEL_df9016163f6a48f497f4c47ef89a597d", "value": "<h4><b>Unused Features</b></h4>"}}, "17408aa8b08c44c08223f4911cd7ec3f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "df9016163f6a48f497f4c47ef89a597d": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0237ed5e2e9f47cd96ad16bcc543d135": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_acdc02b1c852465299f8b81946528ae3", "style": "IPY_MODEL_e65d8c938508439a8c6b331e17e3317a", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "acdc02b1c852465299f8b81946528ae3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e65d8c938508439a8c6b331e17e3317a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "114de28825704707b2df00d66d8b97d3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9da9b13f723d4b8b91ac97900a161251", "style": "IPY_MODEL_8f11c7fce8f44e7285f5857144c9b44f"}}, "9da9b13f723d4b8b91ac97900a161251": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8f11c7fce8f44e7285f5857144c9b44f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "c71358c74b1841dcb2f4793cd622b94a": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_d90cec76f20d4b52a1cf750db2566ffd", "IPY_MODEL_6fcd2a6fc8d549cd90b22fe4898e97bd", "IPY_MODEL_5df06b955ab445b1aa59784ae8655c7a"], "layout": "IPY_MODEL_108b15d89d314b189d15a3e717cc41fd"}}, "d90cec76f20d4b52a1cf750db2566ffd": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_28b7411a712a408485bce6fd7418d396", "style": "IPY_MODEL_5375e8cf18794fb28243c314bafcd98b", "value": "<h5><b>Additional Outputs</b></h5>"}}, "28b7411a712a408485bce6fd7418d396": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5375e8cf18794fb28243c314bafcd98b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6fcd2a6fc8d549cd90b22fe4898e97bd": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_abc0c30272a843478f3ad416e004f5bd", "style": "IPY_MODEL_fab0ec8714624bcfad4b12022b89f612", "value": "<div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"}}, "abc0c30272a843478f3ad416e004f5bd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "fab0ec8714624bcfad4b12022b89f612": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5df06b955ab445b1aa59784ae8655c7a": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"marker": {"color": "indianred"}, "name": "Feature Importance %", "orientation": "h", "x": {"dtype": "float64", "shape": [8]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country"], "type": "bar", "uid": "66f2337f-d2b7-4395-9af5-b02893464775"}, {"marker": {"color": "lightsalmon"}, "name": "Feature Variance %", "orientation": "h", "x": {"dtype": "float64", "shape": [8]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country"], "type": "bar", "uid": "02d48a32-ab2e-41ae-bb33-399883069d2d"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"showarrow": false, "text": "Last shown significant feature", "x": 1, "xanchor": "right", "xref": "x domain", "y": 4.5, "yanchor": "bottom", "yref": "y"}], "height": 500, "shapes": [{"line": {"color": "green", "dash": "dash", "width": 2}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 4.5, "y1": 4.5, "yref": "y"}], "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Unused features compared to top important features"}, "yaxis": {"autorange": "reversed"}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "7NjoZbeHQkAohL+Z4yo7QAg+JyV+KCxA94Q4YmcmJUAbBS0cNVoQQGHQB+CftMY/AAAAAAAAAICDscpOZsSQPw=="}, {"encoding": "base64", "path": ["_data", 1, "x", "buffer"], "data": "UeUNih/8JEC0AJifEg8UQLKO0ukrCRJAo7ihiZPZAEANQ3TtzwUNQL2MG7zhFilAG3LTQiSpJkA1WqBss3MlQA=="}]}, "108b15d89d314b189d15a3e717cc41fd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a6852474ff924381a361df8bda453835": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"0766ab09b1514987a6c050ebaccb5892": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_3d45caa7ac2047bb9344291ea29b0a16", "IPY_MODEL_72f7f27860f348f192a93e4f6f926c7b", "IPY_MODEL_2d050377dcef4ff9aed5825bf5e02279", "IPY_MODEL_4357b5663c0c47ea83c3cce0d3737bf4"], "layout": "IPY_MODEL_a404e2c25040472880adaf337bb9d7f0"}}, "3d45caa7ac2047bb9344291ea29b0a16": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_3b10ef7c79a443c4a47fd50b4150d495", "style": "IPY_MODEL_7a664fafb7284036a87bec1314bf5b75", "value": "<h4><b>Unused Features</b></h4>"}}, "3b10ef7c79a443c4a47fd50b4150d495": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7a664fafb7284036a87bec1314bf5b75": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "72f7f27860f348f192a93e4f6f926c7b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e3136bc7792d4e3881711b1993c5416a", "style": "IPY_MODEL_d92ab100f802415ca47b0dcd788753a1", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "e3136bc7792d4e3881711b1993c5416a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "d92ab100f802415ca47b0dcd788753a1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "2d050377dcef4ff9aed5825bf5e02279": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2b72f1f700374cd9a05f93b517bf363a", "style": "IPY_MODEL_c2bfc527e913471fabd84a09c6a71375"}}, "2b72f1f700374cd9a05f93b517bf363a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c2bfc527e913471fabd84a09c6a71375": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "4357b5663c0c47ea83c3cce0d3737bf4": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_4f7d11f418014166b140c901b0144bbc", "IPY_MODEL_9f8a1442cee84df789a9e5d43a4c32bb", "IPY_MODEL_93affa27344b49f5901b40dc7628086b"], "layout": "IPY_MODEL_939a7e0089ca46faa915f2301a9a58fd"}}, "4f7d11f418014166b140c901b0144bbc": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5599e16ad86840c58a2b089fe0788c34", "style": "IPY_MODEL_ee9fdcc710604bd4ada271f8010288d0", "value": "<h5><b>Additional Outputs</b></h5>"}}, "5599e16ad86840c58a2b089fe0788c34": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ee9fdcc710604bd4ada271f8010288d0": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9f8a1442cee84df789a9e5d43a4c32bb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_06234e12d7224526832269d44135c3ec", "style": "IPY_MODEL_eaed345b0c7946d7aef87c0efcc47421", "value": "<div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"}}, "06234e12d7224526832269d44135c3ec": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "eaed345b0c7946d7aef87c0efcc47421": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "93affa27344b49f5901b40dc7628086b": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"marker": {"color": "indianred"}, "name": "Feature Importance %", "orientation": "h", "x": {"dtype": "float64", "shape": [8]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country"], "type": "bar", "uid": "57904030-214d-427f-9f68-7b6931196c2e"}, {"marker": {"color": "lightsalmon"}, "name": "Feature Variance %", "orientation": "h", "x": {"dtype": "float64", "shape": [8]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "workclass", "education", "native-country"], "type": "bar", "uid": "77a79ea6-6efc-4d8f-a7fb-7c842e8ff5fe"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"showarrow": false, "text": "Last shown significant feature", "x": 1, "xanchor": "right", "xref": "x domain", "y": 4.5, "yanchor": "bottom", "yref": "y"}], "height": 500, "shapes": [{"line": {"color": "green", "dash": "dash", "width": 2}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 4.5, "y1": 4.5, "yref": "y"}], "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Unused features compared to top important features"}, "yaxis": {"autorange": "reversed"}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "7NjoZbeHQkAohL+Z4yo7QAg+JyV+KCxA94Q4YmcmJUAbBS0cNVoQQGHQB+CftMY/AAAAAAAAAICDscpOZsSQPw=="}, {"encoding": "base64", "path": ["_data", 1, "x", "buffer"], "data": "zuUNih/8JEBVDpifEg8UQLuO0ukrCRJAU7mhiZPZAEDDOHTtzwUNQP6NG7zhFilAGXXTQiSpJkB/WqBss3MlQA=="}]}, "939a7e0089ca46faa915f2301a9a58fd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a404e2c25040472880adaf337bb9d7f0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "18361e08e649403d9f35531b395da23d"}
+    {"version_major": 2, "version_minor": 0, "model_id": "0766ab09b1514987a6c050ebaccb5892"}
     </script>
 
     </body>
@@ -679,326 +377,14 @@ variance".
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-63
-
-Controlling the importance threshold
-------------------------------------
-We can also define the importance threshold which controls features are considered important. If we define it as 0
-then all features are considered important.
-
-.. GENERATED FROM PYTHON SOURCE LINES 63-66
-
-.. code-block:: default
-
-    result = UnusedFeatures(feature_importance_threshold=0).run(train_ds, test_ds, model)
-    result
-
-
-
-
-
-
-.. raw:: html
-
-    <div class="output_subarea output_html rendered_html output_result">
-    <!--
-        ~ ----------------------------------------------------------------------------
-        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
-        ~
-        ~ This file is part of Deepchecks.
-        ~ Deepchecks is distributed under the terms of the GNU Affero General
-        ~ Public License (version 3 or later).
-        ~ You should have received a copy of the GNU Affero General Public License
-        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
-        ~ ----------------------------------------------------------------------------
-        ~
-    -->
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Unused Features</title>
-        <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-                font-size: 1rem;
-                line-height: 1.5;
-                color: #212529;
-                text-align: left;
-                max-width: 1200px;
-                margin: auto;
-                background-color: white;
-            }
-
-            div.nbinput.container div.prompt *,
-            div.nboutput.container div.prompt *,
-            div.nbinput.container div.input_area pre,
-            div.nboutput.container div.output_area pre,
-            div.nbinput.container div.input_area .highlight,
-            div.nboutput.container div.output_area .highlight {
-                border: none;
-                padding: 0;
-                margin: 0;
-                box-shadow: none;
-            }
-
-            div.nbinput.container > div[class*=highlight],
-            div.nboutput.container > div[class*=highlight] {
-                margin: 0;
-            }
-
-            div.nbinput.container div.prompt *,
-            div.nboutput.container div.prompt * {
-                background: none;
-            }
-
-            div.nboutput.container div.output_area .highlight,
-            div.nboutput.container div.output_area pre {
-                background: unset;
-            }
-
-            div.nboutput.container div.output_area div.highlight {
-                color: unset;  /* override Pygments text color */
-            }
-
-            /* avoid gaps between output lines */
-            div.nboutput.container div[class*=highlight] pre {
-                line-height: normal;
-            }
-
-            /* input/output containers */
-            div.nbinput.container,
-            div.nboutput.container {
-                display: -webkit-flex;
-                display: flex;
-                align-items: flex-start;
-                margin: 0;
-                width: 100%;
-            }
-            @media (max-width: 540px) {
-                div.nbinput.container,
-                div.nboutput.container {
-                    flex-direction: column;
-                }
-            }
-
-            /* input container */
-            div.nbinput.container {
-                padding-top: 5px;
-            }
-
-            /* last container */
-            div.nblast.container {
-                padding-bottom: 5px;
-            }
-
-            /* input prompt */
-            div.nbinput.container div.prompt pre {
-                color: #307FC1;
-            }
-
-            /* output prompt */
-            div.nboutput.container div.prompt pre {
-                color: #BF5B3D;
-            }
-
-            /* all prompts */
-            div.nbinput.container div.prompt,
-            div.nboutput.container div.prompt {
-                width: 4.5ex;
-                padding-top: 5px;
-                position: relative;
-                user-select: none;
-            }
-
-            div.nbinput.container div.prompt > div,
-            div.nboutput.container div.prompt > div {
-                position: absolute;
-                right: 0;
-                margin-right: 0.3ex;
-            }
-
-            @media (max-width: 540px) {
-                div.nbinput.container div.prompt,
-                div.nboutput.container div.prompt {
-                    width: unset;
-                    text-align: left;
-                    padding: 0.4em;
-                }
-                div.nboutput.container div.prompt.empty {
-                    padding: 0;
-                }
-
-                div.nbinput.container div.prompt > div,
-                div.nboutput.container div.prompt > div {
-                    position: unset;
-                }
-            }
-
-            /* disable scrollbars on prompts */
-            div.nbinput.container div.prompt pre,
-            div.nboutput.container div.prompt pre {
-                overflow: hidden;
-            }
-
-            /* input/output area */
-            div.nbinput.container div.input_area,
-            div.nboutput.container div.output_area {
-                -webkit-flex: 1;
-                flex: 1;
-                overflow: auto;
-            }
-            @media (max-width: 540px) {
-                div.nbinput.container div.input_area,
-                div.nboutput.container div.output_area {
-                    width: 100%;
-                }
-            }
-
-            /* input area */
-            div.nbinput.container div.input_area {
-                border: 1px solid #e0e0e0;
-                border-radius: 2px;
-                /*background: #f5f5f5;*/
-            }
-
-            /* override MathJax center alignment in output cells */
-            div.nboutput.container div[class*=MathJax] {
-                text-align: left !important;
-            }
-
-            /* override sphinx.ext.imgmath center alignment in output cells */
-            div.nboutput.container div.math p {
-                text-align: left;
-            }
-
-            /* standard error */
-            div.nboutput.container div.output_area.stderr {
-                background: #fdd;
-            }
-
-            /* ANSI colors */
-            .ansi-black-fg { color: #3E424D; }
-            .ansi-black-bg { background-color: #3E424D; }
-            .ansi-black-intense-fg { color: #282C36; }
-            .ansi-black-intense-bg { background-color: #282C36; }
-            .ansi-red-fg { color: #E75C58; }
-            .ansi-red-bg { background-color: #E75C58; }
-            .ansi-red-intense-fg { color: #B22B31; }
-            .ansi-red-intense-bg { background-color: #B22B31; }
-            .ansi-green-fg { color: #00A250; }
-            .ansi-green-bg { background-color: #00A250; }
-            .ansi-green-intense-fg { color: #007427; }
-            .ansi-green-intense-bg { background-color: #007427; }
-            .ansi-yellow-fg { color: #DDB62B; }
-            .ansi-yellow-bg { background-color: #DDB62B; }
-            .ansi-yellow-intense-fg { color: #B27D12; }
-            .ansi-yellow-intense-bg { background-color: #B27D12; }
-            .ansi-blue-fg { color: #208FFB; }
-            .ansi-blue-bg { background-color: #208FFB; }
-            .ansi-blue-intense-fg { color: #0065CA; }
-            .ansi-blue-intense-bg { background-color: #0065CA; }
-            .ansi-magenta-fg { color: #D160C4; }
-            .ansi-magenta-bg { background-color: #D160C4; }
-            .ansi-magenta-intense-fg { color: #A03196; }
-            .ansi-magenta-intense-bg { background-color: #A03196; }
-            .ansi-cyan-fg { color: #60C6C8; }
-            .ansi-cyan-bg { background-color: #60C6C8; }
-            .ansi-cyan-intense-fg { color: #258F8F; }
-            .ansi-cyan-intense-bg { background-color: #258F8F; }
-            .ansi-white-fg { color: #C5C1B4; }
-            .ansi-white-bg { background-color: #C5C1B4; }
-            .ansi-white-intense-fg { color: #A1A6B2; }
-            .ansi-white-intense-bg { background-color: #A1A6B2; }
-
-            .ansi-default-inverse-fg { color: #FFFFFF; }
-            .ansi-default-inverse-bg { background-color: #000000; }
-
-            .ansi-bold { font-weight: bold; }
-            .ansi-underline { text-decoration: underline; }
-
-
-            div.nbinput.container div.input_area div[class*=highlight] > pre,
-            div.nboutput.container div.output_area div[class*=highlight] > pre,
-            div.nboutput.container div.output_area div[class*=highlight].math,
-            div.nboutput.container div.output_area.rendered_html,
-            div.nboutput.container div.output_area > div.output_javascript,
-            div.nboutput.container div.output_area:not(.rendered_html) > img{
-                padding: 5px;
-                margin: 0;
-            }
-
-            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-            div.nbinput.container div.input_area > div[class^='highlight'],
-            div.nboutput.container div.output_area > div[class^='highlight']{
-                overflow-y: hidden;
-            }
-
-            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-            .prompt .copybtn {
-                display: none;
-            }
-
-            /* Some additional styling taken form the Jupyter notebook CSS */
-            div.rendered_html table {
-            border: none;
-            border-collapse: collapse;
-            border-spacing: 0;
-            color: black;
-            font-size: 12px;
-            table-layout: fixed;
-            }
-            div.rendered_html thead {
-            border-bottom: 1px solid black;
-            vertical-align: bottom;
-            }
-            div.rendered_html tr,
-            div.rendered_html th,
-            div.rendered_html td {
-            text-align: right;
-            vertical-align: middle;
-            padding: 0.5em 0.5em;
-            line-height: normal;
-            white-space: normal;
-            max-width: none;
-            border: none;
-            }
-            div.rendered_html th {
-            font-weight: bold;
-            }
-            div.rendered_html tbody tr:nth-child(odd) {
-            background: #f5f5f5;
-            }
-            div.rendered_html tbody tr:hover {
-            background: rgba(66, 165, 245, 0.2);
-            }
-        </style>
-    </head>
-    <body>
-        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
-    
-
-    <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"b06da9731a2d41b99fa54dab1bfa2aee": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_0ff50df986cc4ddf90e3a233fff17981", "IPY_MODEL_2024af01f9d24037ac7060ca00737ad2", "IPY_MODEL_6ee362956852460899924160506225cf", "IPY_MODEL_5f2bd870ba8e4ed1baa84bd6500249f5"], "layout": "IPY_MODEL_8a57291c24354fb79a9f3872f58f661e"}}, "0ff50df986cc4ddf90e3a233fff17981": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_84392666f6504c3e9832951fdcc2bfa9", "style": "IPY_MODEL_68ae8b6f85e94c788e0c9fe6fe7861a2", "value": "<h4><b>Unused Features</b></h4>"}}, "84392666f6504c3e9832951fdcc2bfa9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "68ae8b6f85e94c788e0c9fe6fe7861a2": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "2024af01f9d24037ac7060ca00737ad2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_29592aa0152f4ed394e5cd54dd3dc4d6", "style": "IPY_MODEL_3367acef9a7a4527894eef1b7648a6d9", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "29592aa0152f4ed394e5cd54dd3dc4d6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "3367acef9a7a4527894eef1b7648a6d9": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6ee362956852460899924160506225cf": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2c275dcea2f44feaab9cf34020d613e5", "style": "IPY_MODEL_a41195fd938843479bcca2631f33a668"}}, "2c275dcea2f44feaab9cf34020d613e5": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a41195fd938843479bcca2631f33a668": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5f2bd870ba8e4ed1baa84bd6500249f5": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_7516fd50bd8a4f5ca0c7c95dc916a644", "IPY_MODEL_bf391823baec40789189396b0e76ad18", "IPY_MODEL_370b02b6e7a64c1399221f173db7cb2a"], "layout": "IPY_MODEL_0bac27128e7d4e9da84605a0c09bb17c"}}, "7516fd50bd8a4f5ca0c7c95dc916a644": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_afbeee1a312e48fc9555ad2ff8463fa7", "style": "IPY_MODEL_e9c3e3d108544d19a12d114bb6ac20e0", "value": "<h5><b>Additional Outputs</b></h5>"}}, "afbeee1a312e48fc9555ad2ff8463fa7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e9c3e3d108544d19a12d114bb6ac20e0": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "bf391823baec40789189396b0e76ad18": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_29ac64ef8f5f45f599b892e21986814e", "style": "IPY_MODEL_df6496b8bf7a491b837d8e9b906defee", "value": "<div>Features above the line are a sample of the most important features, while the features below the line are the unused features with highest variance, as defined by check parameters</div>"}}, "29ac64ef8f5f45f599b892e21986814e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "df6496b8bf7a491b837d8e9b906defee": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "370b02b6e7a64c1399221f173db7cb2a": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"marker": {"color": "indianred"}, "name": "Feature Importance %", "orientation": "h", "x": {"dtype": "float64", "shape": [7]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "education", "fnlwgt"], "type": "bar", "uid": "548849e9-2a59-4fa2-8dd6-979a64e57ea5"}, {"marker": {"color": "lightsalmon"}, "name": "Feature Variance %", "orientation": "h", "x": {"dtype": "float64", "shape": [7]}, "y": ["capital-gain", "education-num", "marital-status", "relationship", "age", "education", "fnlwgt"], "type": "bar", "uid": "bb2e474c-c897-4b72-bd66-d12255021b81"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"showarrow": false, "text": "Last shown significant feature", "x": 1, "xanchor": "right", "xref": "x domain", "y": 4.5, "yanchor": "bottom", "yref": "y"}], "height": 500, "shapes": [{"line": {"color": "green", "dash": "dash", "width": 2}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 4.5, "y1": 4.5, "yref": "y"}], "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Unused features compared to top important features"}, "yaxis": {"autorange": "reversed"}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "7NjoZbeHQkAohL+Z4yo7QAg+JyV+KCxA94Q4YmcmJUAbBS0cNVoQQAAAAAAAAACAAAAAAAAAAIA="}, {"encoding": "base64", "path": ["_data", 1, "x", "buffer"], "data": "UeUNih/8JEC0AJifEg8UQLKO0ukrCRJAo7ihiZPZAEANQ3TtzwUNQBty00IkqSZA2tv3+EjnIUA="}]}, "0bac27128e7d4e9da84605a0c09bb17c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8a57291c24354fb79a9f3872f58f661e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
-    </script>
-    <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "b06da9731a2d41b99fa54dab1bfa2aee"}
-    </script>
-
-    </body>
-    </html>
-    </div>
-    <br />
-    <br />
-
-.. GENERATED FROM PYTHON SOURCE LINES 67-71
+.. GENERATED FROM PYTHON SOURCE LINES 60-64
 
 Define a condition
 ==================
 We can define a condition that enforces that number of unused features with high variance is not greater than a given
 amount, the default is 5.
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-74
+.. GENERATED FROM PYTHON SOURCE LINES 64-67
 
 .. code-block:: default
 
@@ -1291,10 +677,10 @@ amount, the default is 5.
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"814af0a9cd1940e5ab9c45a643f9e205": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_f041731303e44008890de3031217d867", "IPY_MODEL_e9bc7f30be9e4167bab7596b35e5bf22", "IPY_MODEL_018f669864c44070b9bb9f3b132562a8"], "layout": "IPY_MODEL_83bc8b96ef12413e91535b4531d80c1d"}}, "f041731303e44008890de3031217d867": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_171805908848474bb26166c1298b9a14", "style": "IPY_MODEL_681edad95702428d8ed6cfa7dfa45b73", "value": "<h4><b>Unused Features</b></h4>"}}, "171805908848474bb26166c1298b9a14": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "681edad95702428d8ed6cfa7dfa45b73": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e9bc7f30be9e4167bab7596b35e5bf22": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_31a7366ddbd64d22ac01d302bf9ffc50", "style": "IPY_MODEL_e6f1ba18322a404ebd975dd261e6039d", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "31a7366ddbd64d22ac01d302bf9ffc50": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e6f1ba18322a404ebd975dd261e6039d": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "018f669864c44070b9bb9f3b132562a8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d170b4316d4946bd9731e28466e9ceec", "style": "IPY_MODEL_704d082f94a14278b2943aa6f599c0bb", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_768b5_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_768b5_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_768b5_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_768b5_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_768b5_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_768b5_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_768b5_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_768b5_row0_col1\" class=\"data row0 col1\" >Number of high variance unused features is less or equal to 5</td>\n      <td id=\"T_768b5_row0_col2\" class=\"data row0 col2\" >Found 5 high variance unused features</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "d170b4316d4946bd9731e28466e9ceec": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "704d082f94a14278b2943aa6f599c0bb": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "83bc8b96ef12413e91535b4531d80c1d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"f0d3fed67cc440f2b0ea8283e0c1fe20": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_772e989038104d67a77079d2815ef0f8", "IPY_MODEL_732542e25e2f4ee8a3b869edf0c0191c", "IPY_MODEL_58c4c38713fa48048f9931bbb1a169ef"], "layout": "IPY_MODEL_83ee0325b6a34c12af043cac45750b06"}}, "772e989038104d67a77079d2815ef0f8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_8327b6c11fb44ae7bc2999090e5f502d", "style": "IPY_MODEL_ac5f850e292048bda0e9a3d46d8e9c39", "value": "<h4><b>Unused Features</b></h4>"}}, "8327b6c11fb44ae7bc2999090e5f502d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ac5f850e292048bda0e9a3d46d8e9c39": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "732542e25e2f4ee8a3b869edf0c0191c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f017b786b3644152bc41f3a0a09e86f2", "style": "IPY_MODEL_852355cedd4f4e428cc88920ab373b54", "value": "<p>Detect features that are nearly unused by the model. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/model_evaluation/plot_unused_features.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "f017b786b3644152bc41f3a0a09e86f2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "852355cedd4f4e428cc88920ab373b54": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "58c4c38713fa48048f9931bbb1a169ef": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6f4b7cf82f93439db9d44c420f1c4760", "style": "IPY_MODEL_149aa02b728445ad9541a617d7fa546b", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_4dbb3_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4dbb3_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4dbb3_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4dbb3_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_4dbb3_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_4dbb3_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_4dbb3_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_4dbb3_row0_col1\" class=\"data row0 col1\" >Number of high variance unused features is less or equal to 5</td>\n      <td id=\"T_4dbb3_row0_col2\" class=\"data row0 col2\" >Found 5 high variance unused features</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "6f4b7cf82f93439db9d44c420f1c4760": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "149aa02b728445ad9541a617d7fa546b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "83ee0325b6a34c12af043cac45750b06": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "814af0a9cd1940e5ab9c45a643f9e205"}
+    {"version_major": 2, "version_minor": 0, "model_id": "f0d3fed67cc440f2b0ea8283e0c1fe20"}
     </script>
 
     </body>
@@ -1306,7 +692,7 @@ amount, the default is 5.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  16.539 seconds)
+   **Total running time of the script:** ( 1 minutes  0.217 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_tabular_model_evaluation_plot_unused_features.py:
