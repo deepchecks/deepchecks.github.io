@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Drift User Guide &#8212; Deepchecks b866659 documentation</title>
+    <title>Drift User Guide &#8212; Deepchecks fbadc29 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -80,7 +80,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Tabular Tutorials" href="../tabular/auto_tutorials/index.html" />
-    <link rel="prev" title="Export Outputs to JSON" href="exporting_results/examples/plot_export_outputs_to_json.html" />
+    <link rel="prev" title="Configure Check Conditions" href="customizations/examples/plot_configure_check_conditions.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -343,6 +343,16 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
    Deepchecks Hierarchy
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="showing_results.html">
+   Viewing Deepchecks Results
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="export_save_results.html">
+   Exporting Deepchecks’ Results
+  </a>
+ </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="customizations/examples/index.html">
    Customizations
@@ -370,33 +380,6 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="exporting_results/examples/index.html">
-   Exporting Results
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="exporting_results/examples/plot_export_suite_results_as_html.html">
-     Export Suite Output to a HTML Report
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="exporting_results/examples/plot_exports_output_to_wandb.html">
-     Weights &amp; Biases (wandb)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="exporting_results/examples/plot_export_outputs_to_json.html">
-     Export Outputs to JSON
-    </a>
-   </li>
-  </ul>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Drift User Guide
@@ -413,8 +396,8 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
   <a class="reference internal" href="../tabular/auto_tutorials/index.html">
    Tabular Tutorials
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -487,8 +470,8 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
   <a class="reference internal" href="../vision/auto_tutorials/index.html">
    Computer Vision Tutorials
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -529,8 +512,8 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
   <a class="reference internal" href="../vision/data-classes/index.html">
    Data Classes
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -689,6 +672,23 @@ Page: user-guide/general/drift_guide&labels=labels=chore/documentation" target="
   <a class="reference internal nav-link" href="#what-can-you-do-in-case-of-drift">
    What Can You Do in Case of Drift?
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#retrain-your-model">
+     Retrain Your Model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adjust-your-prediction">
+     Adjust Your Prediction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#do-nothing">
+     Do Nothing
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#code-examples">
@@ -864,6 +864,8 @@ giving you an idea of the severity of your drift, even if you’re not still sur
 <p>It is recommended to manually explore your data and try to understand the root cause of your changes, in order to
 estimate the effect of the change on your model’s performance.
 After you have deeper insights on your data, you can choose to act in one of the following ways:</p>
+<section id="retrain-your-model">
+<h3>Retrain Your Model<a class="headerlink" href="#retrain-your-model" title="Permalink to this headline">#</a></h3>
 <p>If you have either kind of drift, retraining your model on new data that better represents the current distribution,
 is the most straight-forward solution.
 However, this solution may require additional resources such as manual labeling of new data, or might not be possible
@@ -877,14 +879,21 @@ training dataset is sampled so labels are evenly distributed).</p>
 <p>If you’re retraining to compensate for drift, you can also over-sample or give higher weights to newer or more
 out-of-distribution data, in order for you model to adjust to the new data distribution.</p>
 </div>
+</section>
+<section id="adjust-your-prediction">
+<h3>Adjust Your Prediction<a class="headerlink" href="#adjust-your-prediction" title="Permalink to this headline">#</a></h3>
 <p>When retraining is not an option, or if a quick action needs to be taken, adjustments to the output of the models may
 still help in cases of concept drift. This can be done by either recalibrating your model’s output, or by changing your
 decision thresholds on the model’s scores.</p>
 <p>However, these methods assume that there’s still enough similarity between your training data and your current data,
 which may not always be the case.</p>
+</section>
+<section id="do-nothing">
+<h3>Do Nothing<a class="headerlink" href="#do-nothing" title="Permalink to this headline">#</a></h3>
 <p>Not all drift is necessarily bad, and each case should be examined separately. Sometimes, data drift may be simply
 explained by changes in your label distribution (for example, in a dataset of food images, a drift in brightness of images can simply mean
 that people are eating more eggs, which are whiter than other foods).</p>
+</section>
 </section>
 <section id="code-examples">
 <h2>Code Examples<a class="headerlink" href="#code-examples" title="Permalink to this headline">#</a></h2>
@@ -951,11 +960,11 @@ that people are eating more eggs, which are whiter than other foods).</p>
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="exporting_results/examples/plot_export_outputs_to_json.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="customizations/examples/plot_configure_check_conditions.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Export Outputs to JSON</p>
+            <p class="prev-next-title">Configure Check Conditions</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../tabular/auto_tutorials/index.html" title="next page">
