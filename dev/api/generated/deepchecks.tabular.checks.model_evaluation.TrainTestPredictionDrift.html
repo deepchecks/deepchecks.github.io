@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>TrainTestPredictionDrift &#8212; Deepchecks dba2f81 documentation</title>
+    <title>TrainTestPredictionDrift &#8212; Deepchecks f16d859 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -7770,10 +7770,13 @@ Page: api/generated/deepchecks.tabular.checks.model_evaluation.TrainTestPredicti
 <h1>TrainTestPredictionDrift<a class="headerlink" href="#traintestpredictiondrift" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TrainTestPredictionDrift</span></span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/train_test_prediction_drift.py#L31"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TrainTestPredictionDrift</span></span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/train_test_prediction_drift.py#L32"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift" title="Permalink to this definition">#</a></dt>
 <dd><p>Calculate prediction drift between train dataset and test dataset, using statistical measures.</p>
 <p>Check calculates a drift score for the prediction in the test dataset, by comparing its distribution to the train
-dataset.</p>
+dataset.
+For classification tasks, by default the drift score will be computed on the predicted probability of the positive
+(1) class for binary classification tasks, and on the predicted class itself for multiclass tasks. This behavior can
+be controlled using the <cite>drift_mode</cite> parameter.</p>
 <p>For numerical columns, we use the Earth Movers Distance.
 See <a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">https://en.wikipedia.org/wiki/Wasserstein_metric</a></p>
 <p>For categorical distributions, we use the Cramer’s V.
@@ -7786,6 +7789,13 @@ However, in cases of a variable with many categories with few samples, it is sti
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
+<dt><strong>drift_mode: str, default: ‘auto’</strong></dt><dd><p>For classification task, controls whether to compute drift on the predicted probabilities or the predicted
+classes. For regression task this parameter may be ignored.
+If  set to ‘auto’, compute drift on the predicted class if the task is multiclass, and on
+the predicted probability of the positive class if binary. Set to ‘proba’ to force drift on the predicted
+probabilities, and ‘prediction’ to force drift on the predicted classes. If set to ‘proba’, on a multiclass
+task, drift would be calculated on each class independently.</p>
+</dd>
 <dt><strong>margin_quantile_filter: float, default: 0.025</strong></dt><dd><p>float in range [0,0.5), representing which margins (high and low quantiles) of the distribution will be filtered
 out of the EMD calculation. This is done in order for extreme values not to affect the calculation
 disproportionally. This filter is applied to both distributions, in both margins.</p>
@@ -7804,6 +7814,17 @@ by max_num_categories_for_display. Possible values:
 <dt><strong>categorical_drift_method: str, default: “cramer_v”</strong></dt><dd><p>decides which method to use on categorical variables. Possible values are:
 “cramers_v” for Cramer’s V, “PSI” for Population Stability Index (PSI).</p>
 </dd>
+<dt><strong>aggregation_method: str, default: “max”</strong></dt><dd><p>Argument for the reduce_output functionality, decides how to aggregate the drift scores of different classes
+(for classification tasks) into a single score, when drift is computed on the class probabilities. Possible
+values are:
+‘max’: Maximum of all the class drift scores.
+‘weighted’: Weighted mean based on the class sizes in the train data set.
+‘mean’: Mean of all drift scores.
+‘none’: No averaging. Return a dict with a drift score for each class.</p>
+</dd>
+<dt><strong>max_classes_to_display: int, default: 3</strong></dt><dd><p>Max number of classes to show in the display when drift is computed on the class probabilities for
+classification tasks.</p>
+</dd>
 <dt><strong>max_num_categories: int, default: None</strong></dt><dd><p>Deprecated. Please use max_num_categories_for_drift and max_num_categories_for_display instead</p>
 </dd>
 </dl>
@@ -7811,7 +7832,7 @@ by max_num_categories_for_display. Possible values:
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">margin_quantile_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories_for_drift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories_for_display</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_categories_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'largest_difference'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_drift_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cramer_v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/train_test_prediction_drift.py#L75"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drift_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin_quantile_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories_for_drift</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories_for_display</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_categories_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'largest_difference'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_drift_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cramer_v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_classes_to_display</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/deepchecks/deepchecks/blob/main/deepchecks/tabular/checks/model_evaluation/train_test_prediction_drift.py#L97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepchecks.tabular.checks.model_evaluation.TrainTestPredictionDrift.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
