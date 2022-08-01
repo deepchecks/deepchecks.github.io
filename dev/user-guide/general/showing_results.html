@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Viewing Deepchecks Results &#8212; Deepchecks e54ade5 documentation</title>
+    <title>Viewing Deepchecks Results &#8212; Deepchecks 0b122bd documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -695,30 +695,37 @@ refer to the <a class="reference internal" href="export_save_results.html"><span
 <p>Deepchecks Check and Suite results can be viewed in a separate window or inline if working within a notebook.</p>
 <section id="show-method">
 <span id="id1"></span><h3><code class="docutils literal notranslate"><span class="pre">show()</span></code> method<a class="headerlink" href="#show-method" title="Permalink to this headline">#</a></h3>
-<p>This is the main show method. It will show the block inline if possible,
-and in a window (using the <code class="docutils literal notranslate"><span class="pre">show_in_window()</span></code> functionality) if running from an IDE.</p>
+<p>This is the main show method. It will show the check/suite result’s HTML output inline, in a notebook cell.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 <section id="show-in-window-method">
 <span id="id2"></span><h3><code class="docutils literal notranslate"><span class="pre">show_in_window()</span></code> method<a class="headerlink" href="#show-in-window-method" title="Permalink to this headline">#</a></h3>
-<p>This will show the results in a separate window.</p>
-<p>It requires installation of the following python libraries: <code class="docutils literal notranslate"><span class="pre">pyQt5</span></code>, <code class="docutils literal notranslate"><span class="pre">pygtwebengine</span></code>,
-and it may not work on cloud environments such as kaggle and colab.</p>
+<p>This method shows the result in a separate window (using the PyQt5 library).
+It starts a PyQt5 application in a separate process therefore this display
+method does not work on cloud platforms like Kaggle or Google Colab.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">show_in_window</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note, PyQt5 library is an optional dependency and it is not installed
+along with Deepchecks automatically, therefore to use <code class="docutils literal notranslate"><span class="pre">show_in_window()</span></code> you need
+to install it manually by running the next command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pip install PyQt5 pygtwebengine
 </pre></div>
 </div>
 </section>
 </section>
 <section id="alternative-methods-for-showing-results-troubleshooting">
 <span id="alternative-show-options-for-troubleshooting"></span><h2>Alternative Methods for Showing Results (Troubleshooting)<a class="headerlink" href="#alternative-methods-for-showing-results-troubleshooting" title="Permalink to this headline">#</a></h2>
-<p>Some environments may have certain limitations with the display,
-that may result with partial output (e.g. without plots) of the main
-<code class="docutils literal notranslate"><span class="pre">show()</span></code> or <code class="docutils literal notranslate"><span class="pre">show_in_window()</span></code> methods.</p>
-<p>If you experience result display problems, you can consider any of the following options:</p>
+<p>The result’s HTML output produced by the <code class="docutils literal notranslate"><span class="pre">show()</span></code> method
+requires specific jupyter extensions to display properly.
+These extensions may not be installed/enabled by default,
+or may have compatibility issues with different environments (e.g. some cloud platforms).</p>
+<p>Therefore, if you experience any result display problems, you can consider any of the following
+options to resolve them:</p>
 <ul>
-<li><p>Using one of the alternatives: <a class="reference internal" href="#show-in-iframe"><span class="std std-ref">show_in_iframe() method</span></a> or <a class="reference internal" href="#show-not-interactive"><span class="std std-ref">show_not_interactive() method</span></a>
+<li><p>Using one of the alternatives: <a class="reference internal" href="#show-in-iframe"><span class="std std-ref">show_in_iframe() method</span></a> or <a class="reference internal" href="#show-not-interactive"><span class="std std-ref">show_not_interactive() method</span></a>,
 elaborated below.</p></li>
 <li><div class="line-block">
 <div class="line">Verifying that the <code class="docutils literal notranslate"><span class="pre">jupyter-widgets</span></code> extension is installed and enabled.</div>
@@ -731,22 +738,24 @@ and viewing the output file.</p></li>
 </ul>
 <section id="show-in-iframe-method">
 <span id="show-in-iframe"></span><h3><code class="docutils literal notranslate"><span class="pre">show_in_iframe()</span></code> method<a class="headerlink" href="#show-in-iframe-method" title="Permalink to this headline">#</a></h3>
-<p>This is the main alternative in case plots aren’t displayed properly.
-It embeds the output into an iframe with the html content,
-thus does not require any jupyter extensions installed on the environment,
-and uses the needed javascript libraries inline.</p>
+<p>This is the main alternative in case you experience any result display problems.
+It uses a different output technique (embedding the result’s HTML output into an iframe) and thus doesn’t require any jupyter extensions installed.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">show_in_iframe</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 <section id="show-not-interactive-method">
 <span id="show-not-interactive"></span><h3><code class="docutils literal notranslate"><span class="pre">show_not_interactive()</span></code> method<a class="headerlink" href="#show-not-interactive-method" title="Permalink to this headline">#</a></h3>
-<p>This displays a static version of the suite/check result:
-all figures and charts are converted into non-interactive
-(no zoom, no dynamic legend) images.
-The result is a less detailed output, that doesnt require any javascript
+<p>This method displays a static version of the suite/check result.
+It converts all figures and charts into images (no zoom, no dynamic legend).
+The result is a less detailed output, that doesn’t require any javascript
 libraries or jupyter extensions in order to work.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">show_not_interactive</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To be able to use this method you need to install an optional dependency package called ‘kaleido’
+that is used to transform figures and charts into images. In order to install it run the command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ pip install kaleido
 </pre></div>
 </div>
 </section>
