@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
 
 
-    <title>Simple Model Comparison &#8212; Deepchecks 951ad43 documentation</title>
+    <title>Simple Model Comparison &#8212; Deepchecks Documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -79,7 +79,7 @@
     <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Train Test Prediction Drift" href="plot_train_test_prediction_drift.html" />
+    <link rel="next" title="Single Dataset Performance" href="plot_single_dataset_performance.html" />
     <link rel="prev" title="Segment Performance" href="plot_segment_performance.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -332,7 +332,89 @@ Page: checks_gallery/tabular/model_evaluation/plot_simple_model_comparison&label
 </form> -->
 </div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_model_info.html">
+   Model Info
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_segment_performance.html">
+   Segment Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_unused_features.html">
+   Unused Features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_confusion_matrix_report.html">
+   Confusion Matrix Report
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Simple Model Comparison
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_model_inference_time.html">
+   Model Inference Time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_regression_systematic_error.html">
+   Regression Systematic Error
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_roc_report.html">
+   ROC Report
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_regression_error_distribution.html">
+   Regression Error Distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_single_dataset_performance.html">
+   Single Dataset Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_train_test_performance.html">
+   Train Test Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_weak_segments_performance.html">
+   Weak Segments Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_calibration_score.html">
+   Calibration Score
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_boosting_overfit.html">
+   Boosting Overfit
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_train_test_prediction_drift.html">
+   Train Test Prediction Drift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_multi_model_performance_report.html">
+   Multi Model Performance Report
+  </a>
+ </li>
+</ul>
+
   </div>
 </nav>
               </div>
@@ -396,6 +478,8 @@ Page: checks_gallery/tabular/model_evaluation/plot_simple_model_comparison&label
     
     <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
         
+            <ul><li><a href='../../../../../api/generated/deepchecks.tabular.checks.model_evaluation.SimpleModelComparison.html'>API Reference - SimpleModelComparison</a></li></ul>
+        
         
             <div>
                 
@@ -422,15 +506,17 @@ performance for the given task, to which the user model may be compared. If the 
 model achieves less or a similar score to the simple model, this is an indicator
 for a possible problem with the model (e.g. it wasn’t trained properly).</p>
 <p>The check has three possible “simple model” heuristics, from which one is chosen and
-compared to. By default the check uses the <strong>constant</strong> heuristic, which can be
-overridden in the checks’ parameters using simple_model_type. There is no simple
+compared to. By default the check uses the <strong>most_frequent</strong> heuristic, which can be
+overridden in the checks’ parameters using strategy. There is no simple
 model which is more “correct” to use, each gives a different baseline to compare to,
 and you may experiment with the different types and see how it performs on your data.</p>
 <p>The simple models are:</p>
 <ul class="simple">
-<li><p>A <strong>constant</strong> model - The default. In regression the prediction is equal to the
+<li><p>A <strong>most_frequent</strong> model - The default. In regression the prediction is equal to the
 mean value, in classification the prediction is equal to the most common value.</p></li>
-<li><p>A <strong>random</strong> model - Draws the prediction from the distribution of the labels in the train.</p></li>
+<li><p>A <strong>uniform</strong> model - In regression, selects a random value from the y range.
+In classification, selects one of the labels by random.</p></li>
+<li><p>A <strong>stratified</strong> model - Draws the prediction from the distribution of the labels in the train.</p></li>
 <li><p>A <strong>tree</strong> model - Trains a simple decision tree with a given depth. The depth
 can be customized using the <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> parameter.</p></li>
 </ul>
@@ -456,7 +542,7 @@ regression we’ll have a single result per metric.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">SimpleModelComparison</span>
 
 <span class="c1"># Using tree model as a simple model, and changing the tree depth from the default 3 to 5</span>
-<span class="n">check</span> <span class="o">=</span> <span class="n">SimpleModelComparison</span><span class="p">(</span><span class="n">simple_model_type</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">SimpleModelComparison</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -733,1131 +819,16 @@ regression we’ll have a single result per metric.</p>
         background: rgba(66, 165, 245, 0.2);
         }
     </style>
-    <script>
-        (!window.navigator.onLine ? alert('needs internet connection') : '');
-    </script>
 </head>
 <body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
 
-<script src="" crossorigin="anonymous"></script>
+
 <script type="application/vnd.jupyter.widget-state+json">
-{
-  "version_major": 2,
-  "version_minor": 0,
-  "state": {
-    "dfbd1358661e43788485609aed1e837d": {
-      "model_name": "VBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [
-          "rendered_html",
-          "jp-RenderedHTMLCommon",
-          "jp-RenderedHTML",
-          "jp-OutputArea-output"
-        ],
-        "children": [
-          "IPY_MODEL_4735aed4e38f4a8296c580af79a25070",
-          "IPY_MODEL_4c0fc4b7130744eeb7b6334327901115",
-          "IPY_MODEL_54a278f828d54e53b9d653c5a930c212",
-          "IPY_MODEL_f92a8ca4eb4d417582f1d15ec90a4627"
-        ],
-        "layout": "IPY_MODEL_9e0e432f32414390b78fa4126159343e"
-      }
-    },
-    "4735aed4e38f4a8296c580af79a25070": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_c4319a3c65594a7892bb717aafa5f42a",
-        "style": "IPY_MODEL_71673001f82b40d2af65409841a6520d",
-        "value": "<h4><b>Simple Model Comparison</b></h4>"
-      }
-    },
-    "c4319a3c65594a7892bb717aafa5f42a": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "71673001f82b40d2af65409841a6520d": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "4c0fc4b7130744eeb7b6334327901115": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_4a4222c2648c41a6acb6bf8739869adf",
-        "style": "IPY_MODEL_385bb4cae5954ba0963304e905f7e695",
-        "value": "<p>Compare given model score to simple model score (according to given model type).</p>"
-      }
-    },
-    "4a4222c2648c41a6acb6bf8739869adf": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "385bb4cae5954ba0963304e905f7e695": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "54a278f828d54e53b9d653c5a930c212": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_2833c050e47e4de6b51a5b8ae6d9d6a2",
-        "style": "IPY_MODEL_21beca28a12044ff914425ae44d39904"
-      }
-    },
-    "2833c050e47e4de6b51a5b8ae6d9d6a2": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "21beca28a12044ff914425ae44d39904": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "f92a8ca4eb4d417582f1d15ec90a4627": {
-      "model_name": "VBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "children": [
-          "IPY_MODEL_993666022fe64af6a5feaf3df520b0df",
-          "IPY_MODEL_620945465d684e5d86de4e010da100a5"
-        ],
-        "layout": "IPY_MODEL_91c8e560720c4fb3b931e49b1cf4452a"
-      }
-    },
-    "993666022fe64af6a5feaf3df520b0df": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_02e0155faafd4142a73ec1a42e0696f2",
-        "style": "IPY_MODEL_4a2fb0b4d9d64aef98e99f0750470b39",
-        "value": "<h5><b>Additional Outputs</b></h5>"
-      }
-    },
-    "02e0155faafd4142a73ec1a42e0696f2": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "4a2fb0b4d9d64aef98e99f0750470b39": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "620945465d684e5d86de4e010da100a5": {
-      "model_name": "FigureModel",
-      "model_module": "jupyterlab-plotly",
-      "model_module_version": "^5.5.0",
-      "state": {
-        "_config": {
-          "plotlyServerURL": "https://plot.ly"
-        },
-        "_data": [
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Model=Pipeline model<br>Metric=F1<br>value=%{x}<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Pipeline model",
-            "marker": {
-              "color": "#636efa",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Pipeline model",
-            "offsetgroup": "Pipeline model",
-            "orientation": "v",
-            "showlegend": true,
-            "x": [
-              0,
-              1
-            ],
-            "xaxis": "x",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                2
-              ]
-            },
-            "yaxis": "y",
-            "type": "histogram",
-            "uid": "46d628f0-3d48-4f23-9b51-2a235718bd0d"
-          },
-          {
-            "alignmentgroup": "True",
-            "bingroup": "x",
-            "histfunc": "sum",
-            "hovertemplate": "Model=Simple model - tree<br>Metric=F1<br>value=%{x}<br>sum of Value=%{y}<extra></extra>",
-            "legendgroup": "Simple model - tree",
-            "marker": {
-              "color": "#EF553B",
-              "pattern": {
-                "shape": ""
-              }
-            },
-            "name": "Simple model - tree",
-            "offsetgroup": "Simple model - tree",
-            "orientation": "v",
-            "showlegend": true,
-            "x": [
-              0,
-              1
-            ],
-            "xaxis": "x",
-            "y": {
-              "dtype": "float64",
-              "shape": [
-                2
-              ]
-            },
-            "yaxis": "y",
-            "type": "histogram",
-            "uid": "045c52d4-3790-4280-8e32-dcc41f114cbd"
-          }
-        ],
-        "_dom_classes": [],
-        "_js2py_layoutDelta": {},
-        "_js2py_pointsCallback": {},
-        "_js2py_relayout": {},
-        "_js2py_restyle": {},
-        "_js2py_traceDeltas": {},
-        "_js2py_update": {},
-        "_layout": {
-          "annotations": [
-            {
-              "showarrow": false,
-              "text": "F1",
-              "x": 0.5,
-              "xanchor": "center",
-              "xref": "paper",
-              "y": 1.0,
-              "yanchor": "bottom",
-              "yref": "paper"
-            }
-          ],
-          "barmode": "group",
-          "legend": {
-            "title": {
-              "text": "Model"
-            },
-            "tracegroupgap": 0
-          },
-          "margin": {
-            "t": 60
-          },
-          "template": {
-            "data": {
-              "barpolar": [
-                {
-                  "marker": {
-                    "line": {
-                      "color": "#E5ECF6",
-                      "width": 0.5
-                    },
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "barpolar"
-                }
-              ],
-              "bar": [
-                {
-                  "error_x": {
-                    "color": "#2a3f5f"
-                  },
-                  "error_y": {
-                    "color": "#2a3f5f"
-                  },
-                  "marker": {
-                    "line": {
-                      "color": "#E5ECF6",
-                      "width": 0.5
-                    },
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "bar"
-                }
-              ],
-              "carpet": [
-                {
-                  "aaxis": {
-                    "endlinecolor": "#2a3f5f",
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "minorgridcolor": "white",
-                    "startlinecolor": "#2a3f5f"
-                  },
-                  "baxis": {
-                    "endlinecolor": "#2a3f5f",
-                    "gridcolor": "white",
-                    "linecolor": "white",
-                    "minorgridcolor": "white",
-                    "startlinecolor": "#2a3f5f"
-                  },
-                  "type": "carpet"
-                }
-              ],
-              "choropleth": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "choropleth"
-                }
-              ],
-              "contourcarpet": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "contourcarpet"
-                }
-              ],
-              "contour": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "contour"
-                }
-              ],
-              "heatmapgl": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "heatmapgl"
-                }
-              ],
-              "heatmap": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "heatmap"
-                }
-              ],
-              "histogram2dcontour": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "histogram2dcontour"
-                }
-              ],
-              "histogram2d": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "histogram2d"
-                }
-              ],
-              "histogram": [
-                {
-                  "marker": {
-                    "pattern": {
-                      "fillmode": "overlay",
-                      "size": 10,
-                      "solidity": 0.2
-                    }
-                  },
-                  "type": "histogram"
-                }
-              ],
-              "mesh3d": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "type": "mesh3d"
-                }
-              ],
-              "parcoords": [
-                {
-                  "line": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "parcoords"
-                }
-              ],
-              "pie": [
-                {
-                  "automargin": true,
-                  "type": "pie"
-                }
-              ],
-              "scatter3d": [
-                {
-                  "line": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatter3d"
-                }
-              ],
-              "scattercarpet": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattercarpet"
-                }
-              ],
-              "scattergeo": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattergeo"
-                }
-              ],
-              "scattergl": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattergl"
-                }
-              ],
-              "scattermapbox": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scattermapbox"
-                }
-              ],
-              "scatterpolargl": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterpolargl"
-                }
-              ],
-              "scatterpolar": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterpolar"
-                }
-              ],
-              "scatter": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatter"
-                }
-              ],
-              "scatterternary": [
-                {
-                  "marker": {
-                    "colorbar": {
-                      "outlinewidth": 0,
-                      "ticks": ""
-                    }
-                  },
-                  "type": "scatterternary"
-                }
-              ],
-              "surface": [
-                {
-                  "colorbar": {
-                    "outlinewidth": 0,
-                    "ticks": ""
-                  },
-                  "colorscale": [
-                    [
-                      0.0,
-                      "#0d0887"
-                    ],
-                    [
-                      0.1111111111111111,
-                      "#46039f"
-                    ],
-                    [
-                      0.2222222222222222,
-                      "#7201a8"
-                    ],
-                    [
-                      0.3333333333333333,
-                      "#9c179e"
-                    ],
-                    [
-                      0.4444444444444444,
-                      "#bd3786"
-                    ],
-                    [
-                      0.5555555555555556,
-                      "#d8576b"
-                    ],
-                    [
-                      0.6666666666666666,
-                      "#ed7953"
-                    ],
-                    [
-                      0.7777777777777778,
-                      "#fb9f3a"
-                    ],
-                    [
-                      0.8888888888888888,
-                      "#fdca26"
-                    ],
-                    [
-                      1.0,
-                      "#f0f921"
-                    ]
-                  ],
-                  "type": "surface"
-                }
-              ],
-              "table": [
-                {
-                  "cells": {
-                    "fill": {
-                      "color": "#EBF0F8"
-                    },
-                    "line": {
-                      "color": "white"
-                    }
-                  },
-                  "header": {
-                    "fill": {
-                      "color": "#C8D4E3"
-                    },
-                    "line": {
-                      "color": "white"
-                    }
-                  },
-                  "type": "table"
-                }
-              ]
-            },
-            "layout": {
-              "annotationdefaults": {
-                "arrowcolor": "#2a3f5f",
-                "arrowhead": 0,
-                "arrowwidth": 1
-              },
-              "autotypenumbers": "strict",
-              "coloraxis": {
-                "colorbar": {
-                  "outlinewidth": 0,
-                  "ticks": ""
-                }
-              },
-              "colorscale": {
-                "diverging": [
-                  [
-                    0,
-                    "#8e0152"
-                  ],
-                  [
-                    0.1,
-                    "#c51b7d"
-                  ],
-                  [
-                    0.2,
-                    "#de77ae"
-                  ],
-                  [
-                    0.3,
-                    "#f1b6da"
-                  ],
-                  [
-                    0.4,
-                    "#fde0ef"
-                  ],
-                  [
-                    0.5,
-                    "#f7f7f7"
-                  ],
-                  [
-                    0.6,
-                    "#e6f5d0"
-                  ],
-                  [
-                    0.7,
-                    "#b8e186"
-                  ],
-                  [
-                    0.8,
-                    "#7fbc41"
-                  ],
-                  [
-                    0.9,
-                    "#4d9221"
-                  ],
-                  [
-                    1,
-                    "#276419"
-                  ]
-                ],
-                "sequential": [
-                  [
-                    0.0,
-                    "#0d0887"
-                  ],
-                  [
-                    0.1111111111111111,
-                    "#46039f"
-                  ],
-                  [
-                    0.2222222222222222,
-                    "#7201a8"
-                  ],
-                  [
-                    0.3333333333333333,
-                    "#9c179e"
-                  ],
-                  [
-                    0.4444444444444444,
-                    "#bd3786"
-                  ],
-                  [
-                    0.5555555555555556,
-                    "#d8576b"
-                  ],
-                  [
-                    0.6666666666666666,
-                    "#ed7953"
-                  ],
-                  [
-                    0.7777777777777778,
-                    "#fb9f3a"
-                  ],
-                  [
-                    0.8888888888888888,
-                    "#fdca26"
-                  ],
-                  [
-                    1.0,
-                    "#f0f921"
-                  ]
-                ],
-                "sequentialminus": [
-                  [
-                    0.0,
-                    "#0d0887"
-                  ],
-                  [
-                    0.1111111111111111,
-                    "#46039f"
-                  ],
-                  [
-                    0.2222222222222222,
-                    "#7201a8"
-                  ],
-                  [
-                    0.3333333333333333,
-                    "#9c179e"
-                  ],
-                  [
-                    0.4444444444444444,
-                    "#bd3786"
-                  ],
-                  [
-                    0.5555555555555556,
-                    "#d8576b"
-                  ],
-                  [
-                    0.6666666666666666,
-                    "#ed7953"
-                  ],
-                  [
-                    0.7777777777777778,
-                    "#fb9f3a"
-                  ],
-                  [
-                    0.8888888888888888,
-                    "#fdca26"
-                  ],
-                  [
-                    1.0,
-                    "#f0f921"
-                  ]
-                ]
-              },
-              "colorway": [
-                "#636efa",
-                "#EF553B",
-                "#00cc96",
-                "#ab63fa",
-                "#FFA15A",
-                "#19d3f3",
-                "#FF6692",
-                "#B6E880",
-                "#FF97FF",
-                "#FECB52"
-              ],
-              "font": {
-                "color": "#2a3f5f"
-              },
-              "geo": {
-                "bgcolor": "white",
-                "lakecolor": "white",
-                "landcolor": "#E5ECF6",
-                "showlakes": true,
-                "showland": true,
-                "subunitcolor": "white"
-              },
-              "hoverlabel": {
-                "align": "left"
-              },
-              "hovermode": "closest",
-              "mapbox": {
-                "style": "light"
-              },
-              "paper_bgcolor": "white",
-              "plot_bgcolor": "#E5ECF6",
-              "polar": {
-                "angularaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "bgcolor": "#E5ECF6",
-                "radialaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                }
-              },
-              "scene": {
-                "xaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                },
-                "yaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                },
-                "zaxis": {
-                  "backgroundcolor": "#E5ECF6",
-                  "gridcolor": "white",
-                  "gridwidth": 2,
-                  "linecolor": "white",
-                  "showbackground": true,
-                  "ticks": "",
-                  "zerolinecolor": "white"
-                }
-              },
-              "shapedefaults": {
-                "line": {
-                  "color": "#2a3f5f"
-                }
-              },
-              "ternary": {
-                "aaxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "baxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                },
-                "bgcolor": "#E5ECF6",
-                "caxis": {
-                  "gridcolor": "white",
-                  "linecolor": "white",
-                  "ticks": ""
-                }
-              },
-              "title": {
-                "x": 0.05
-              },
-              "xaxis": {
-                "automargin": true,
-                "gridcolor": "white",
-                "linecolor": "white",
-                "ticks": "",
-                "title": {
-                  "standoff": 15
-                },
-                "zerolinecolor": "white",
-                "zerolinewidth": 2
-              },
-              "yaxis": {
-                "automargin": true,
-                "gridcolor": "white",
-                "linecolor": "white",
-                "ticks": "",
-                "title": {
-                  "standoff": 15
-                },
-                "zerolinecolor": "white",
-                "zerolinewidth": 2
-              }
-            }
-          },
-          "xaxis": {
-            "anchor": "y",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "tickangle": 60,
-            "tickprefix": "Class ",
-            "type": "category"
-          },
-          "yaxis": {
-            "anchor": "x",
-            "domain": [
-              0.0,
-              1.0
-            ],
-            "showticklabels": true
-          }
-        },
-        "_py2js_addTraces": {},
-        "_py2js_animate": {},
-        "_py2js_deleteTraces": {},
-        "_py2js_moveTraces": {},
-        "_py2js_relayout": {},
-        "_py2js_removeLayoutProps": {},
-        "_py2js_removeTraceProps": {},
-        "_py2js_restyle": {},
-        "_py2js_update": {},
-        "_view_count": 0
-      },
-      "buffers": [
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            0,
-            "y",
-            "buffer"
-          ],
-          "data": "3Jcv/CPk7z81T6gFjEnsPw=="
-        },
-        {
-          "encoding": "base64",
-          "path": [
-            "_data",
-            1,
-            "y",
-            "buffer"
-          ],
-          "data": "+JcdHXZ27j8NmcqQqQzZPw=="
-        }
-      ]
-    },
-    "91c8e560720c4fb3b931e49b1cf4452a": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "9e0e432f32414390b78fa4126159343e": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    }
-  }
-}
+{"version_major": 2, "version_minor": 0, "state": {"72731092b1dc48879705b9213d25b3aa": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_afdd43cfacfe4c389f89a509d50061da", "IPY_MODEL_731067ec3e244ddaabdd6d76d9f2f7d4", "IPY_MODEL_3d8fd028fb4647649f99f9507d3566d5", "IPY_MODEL_9269860130c64170a3aec95cceff9265"], "layout": "IPY_MODEL_4b2faef31f4f449b8f4569ea8d07be03"}}, "afdd43cfacfe4c389f89a509d50061da": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_096b7ae48c68484e8693cbc997f7987f", "style": "IPY_MODEL_4550591e4ae84e91a1b9ff5d1a04bb87", "value": "<h4><b>Simple Model Comparison</b></h4>"}}, "096b7ae48c68484e8693cbc997f7987f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4550591e4ae84e91a1b9ff5d1a04bb87": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "731067ec3e244ddaabdd6d76d9f2f7d4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_00aca6ceff2c45aba17a11591d3d4e47", "style": "IPY_MODEL_294dccea542f40e19460ac4771eac8d9", "value": "<p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/0.8/checks_gallery/tabular/model_evaluation/plot_simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "00aca6ceff2c45aba17a11591d3d4e47": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "294dccea542f40e19460ac4771eac8d9": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "3d8fd028fb4647649f99f9507d3566d5": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2329cd224b9746d0944f96920d27b1af", "style": "IPY_MODEL_222a8e675bcb477db9751e41cab582b1"}}, "2329cd224b9746d0944f96920d27b1af": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "222a8e675bcb477db9751e41cab582b1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9269860130c64170a3aec95cceff9265": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_f3c9c5bb9d174d4782912da00406b389", "IPY_MODEL_73ecd55264ce4280a5972a662a021023"], "layout": "IPY_MODEL_f55d0969cb3a4eddbfc3be68f5443fc2"}}, "f3c9c5bb9d174d4782912da00406b389": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_171f7db11c5e4ecf9c77b008f9839152", "style": "IPY_MODEL_f5ad8417a1db40fab18066b4e466fa20", "value": "<h5><b>Additional Outputs</b></h5>"}}, "171f7db11c5e4ecf9c77b008f9839152": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f5ad8417a1db40fab18066b4e466fa20": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "73ecd55264ce4280a5972a662a021023": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"alignmentgroup": "True", "bingroup": "x", "histfunc": "sum", "hovertemplate": "Model=Pipeline model<br>Metric=F1<br>value=%{x}<br>sum of Value=%{y}<extra></extra>", "legendgroup": "Pipeline model", "marker": {"color": "#636efa", "pattern": {"shape": ""}}, "name": "Pipeline model", "offsetgroup": "Pipeline model", "orientation": "v", "showlegend": true, "x": [0, 1], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "ed9f562b-75a9-4a1d-ae16-64f52ac80823"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "sum", "hovertemplate": "Model=Simple model - tree<br>Metric=F1<br>value=%{x}<br>sum of Value=%{y}<extra></extra>", "legendgroup": "Simple model - tree", "marker": {"color": "#EF553B", "pattern": {"shape": ""}}, "name": "Simple model - tree", "offsetgroup": "Simple model - tree", "orientation": "v", "showlegend": true, "x": [0, 1], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "b73db869-75d7-4908-8c46-5a570719eb14"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"showarrow": false, "text": "F1", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}], "barmode": "group", "legend": {"title": {"text": "Model"}, "tracegroupgap": 0}, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "tickangle": 60, "tickprefix": "Class ", "type": "category"}, "yaxis": {"anchor": "x", "domain": [0.0, 1.0], "showticklabels": true}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "3Jcv/CPk7z81T6gFjEnsPw=="}, {"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "+JcdHXZ27j8NmcqQqQzZPw=="}]}, "f55d0969cb3a4eddbfc3be68f5443fc2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4b2faef31f4f449b8f4569ea8d07be03": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "dfbd1358661e43788485609aed1e837d"}
+{"version_major": 2, "version_minor": 0, "model_id": "72731092b1dc48879705b9213d25b3aa"}
 </script>
 
 </body>
@@ -1884,7 +855,6 @@ and <code class="docutils literal notranslate"><span class="pre">classes</span><
 <span class="n">result</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;scores&#39;: {&#39;F1&#39;: defaultdict(&lt;class &#39;dict&#39;&gt;, {0: {&#39;Origin&#39;: 0.9965991902834008, &#39;Simple&#39;: 0.9843400447427293}, 1: {&#39;Origin&#39;: 0.8839779005524863, &#39;Simple&#39;: 0.0}})}, &#39;type&#39;: &lt;TaskType.BINARY: &#39;binary&#39;&gt;, &#39;scorers_perfect&#39;: {&#39;F1&#39;: 1.0}, &#39;classes&#39;: [0, 1]}
 </pre></div>
 </div>
@@ -1904,7 +874,7 @@ imbalance scenario), but improving from 0.1 to 0.13 is not a great achievement.<
 <p>The gain is calculated as: <img class="math" src="../../../_images/math/1f2f30a44a7c5048a2e68211c7e0764341466784.svg" alt="gain = \frac{\text{model score} - \text{simple score}}
 {\text{perfect score} - \text{simple score}}"/></p>
 <p>Let’s add a condition to the check and see what happens when it fails:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">SimpleModelComparison</span><span class="p">(</span><span class="n">simple_model_type</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <span class="n">SimpleModelComparison</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">)</span>
 <span class="n">check</span><span class="o">.</span><span class="n">add_condition_gain_greater_than</span><span class="p">(</span><span class="mf">0.9</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 <span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -2183,117 +1153,16 @@ imbalance scenario), but improving from 0.1 to 0.13 is not a great achievement.<
         background: rgba(66, 165, 245, 0.2);
         }
     </style>
-    <script>
-        (!window.navigator.onLine ? alert('needs internet connection') : '');
-    </script>
 </head>
 <body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
 
-<script src="" crossorigin="anonymous"></script>
+
 <script type="application/vnd.jupyter.widget-state+json">
-{
-  "version_major": 2,
-  "version_minor": 0,
-  "state": {
-    "f3c04aecb7434427a9101cdc3bc51e2b": {
-      "model_name": "VBoxModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [
-          "rendered_html",
-          "jp-RenderedHTMLCommon",
-          "jp-RenderedHTML",
-          "jp-OutputArea-output"
-        ],
-        "children": [
-          "IPY_MODEL_253e386d25df41aea6cd83d2daf4d619",
-          "IPY_MODEL_621daad4e9974dc8b79b0ed0f7b87db5",
-          "IPY_MODEL_318565c38cf74c538477f71ffe417045"
-        ],
-        "layout": "IPY_MODEL_9f1a804b98ca4af4b8ecd1a53bafce1d"
-      }
-    },
-    "253e386d25df41aea6cd83d2daf4d619": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_7f666a80e2c94facb19d6f1d5602cc36",
-        "style": "IPY_MODEL_cf72e07db0c94daaba86eac46e29aa77",
-        "value": "<h4><b>Simple Model Comparison</b></h4>"
-      }
-    },
-    "7f666a80e2c94facb19d6f1d5602cc36": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "cf72e07db0c94daaba86eac46e29aa77": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "621daad4e9974dc8b79b0ed0f7b87db5": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_faad4c261b7249ffb729d10198777e0f",
-        "style": "IPY_MODEL_4b1471e471a94ffe9882434c8f620275",
-        "value": "<p>Compare given model score to simple model score (according to given model type).</p>"
-      }
-    },
-    "faad4c261b7249ffb729d10198777e0f": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "4b1471e471a94ffe9882434c8f620275": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "318565c38cf74c538477f71ffe417045": {
-      "model_name": "HTMLModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {
-        "_dom_classes": [],
-        "layout": "IPY_MODEL_41063571488a44f1806ef9ff6e45a68c",
-        "style": "IPY_MODEL_9a91496329e743f9a9881b34c22148e4",
-        "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_f4cca_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f4cca_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f4cca_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f4cca_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f4cca_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f4cca_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_f4cca_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_f4cca_row0_col1\" class=\"data row0 col1\" >Model performance gain over simple model is greater than 90%</td>\n      <td id=\"T_f4cca_row0_col2\" class=\"data row0 col2\" >Found classes with failed metric's gain: {1: {'F1': '82.79%'}}</td>\n    </tr>\n  </tbody>\n</table>\n"
-      }
-    },
-    "41063571488a44f1806ef9ff6e45a68c": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    },
-    "9a91496329e743f9a9881b34c22148e4": {
-      "model_name": "DescriptionStyleModel",
-      "model_module": "@jupyter-widgets/controls",
-      "model_module_version": "1.5.0",
-      "state": {}
-    },
-    "9f1a804b98ca4af4b8ecd1a53bafce1d": {
-      "model_name": "LayoutModel",
-      "model_module": "@jupyter-widgets/base",
-      "model_module_version": "1.2.0",
-      "state": {}
-    }
-  }
-}
+{"version_major": 2, "version_minor": 0, "state": {"755ab0c3c29b42c1a8200f009ba8d61a": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_b8f243497c60435f810e16d23a0d6f53", "IPY_MODEL_e9392d9032954021a98696fadf248dde", "IPY_MODEL_d4df822b9aaf439ba75ebdca93bcbbb9"], "layout": "IPY_MODEL_d56495a516a74d83a13e3f0711d17221"}}, "b8f243497c60435f810e16d23a0d6f53": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_df7b4d675baf4cfaa3efc25b56d18af4", "style": "IPY_MODEL_7beacd1e9ca545ba81ae538bd7008424", "value": "<h4><b>Simple Model Comparison</b></h4>"}}, "df7b4d675baf4cfaa3efc25b56d18af4": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7beacd1e9ca545ba81ae538bd7008424": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e9392d9032954021a98696fadf248dde": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a235d878d4594478a8cf57bb67478199", "style": "IPY_MODEL_2f5cbe55950248f4af1cc2d1cc7feef0", "value": "<p>Compare given model score to simple model score (according to given model type). <a href=\"https://docs.deepchecks.com/0.8/checks_gallery/tabular/model_evaluation/plot_simple_model_comparison.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "a235d878d4594478a8cf57bb67478199": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "2f5cbe55950248f4af1cc2d1cc7feef0": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d4df822b9aaf439ba75ebdca93bcbbb9": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_fdc3526614e749d19eb897eb541cc396", "style": "IPY_MODEL_00b03a6d405046c4aaab36d73b9885df", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_61abb_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_61abb_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_61abb_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_61abb_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_61abb_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_61abb_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_61abb_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_61abb_row0_col1\" class=\"data row0 col1\" >Model performance gain over simple model is greater than 90%</td>\n      <td id=\"T_61abb_row0_col2\" class=\"data row0 col2\" >Found classes with failed metric's gain: {1: {'F1': '82.79%'}}</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "fdc3526614e749d19eb897eb541cc396": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "00b03a6d405046c4aaab36d73b9885df": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d56495a516a74d83a13e3f0711d17221": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "f3c04aecb7434427a9101cdc3bc51e2b"}
+{"version_major": 2, "version_minor": 0, "model_id": "755ab0c3c29b42c1a8200f009ba8d61a"}
 </script>
 
 </body>
@@ -2302,8 +1171,8 @@ imbalance scenario), but improving from 0.1 to 0.13 is not a great achievement.<
 <br />
 <br /><p>We detected that for class “1” our gain did not passed the target gain we
 defined, therefore it failed.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.126 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-simple-model-comparison-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.301 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-simple-model-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/2f045f8ed22cddec09373d8a13a79f43/plot_simple_model_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_simple_model_comparison.py</span></code></a></p>
 </div>
@@ -2328,10 +1197,10 @@ defined, therefore it failed.</p>
             <p class="prev-next-title">Segment Performance</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_train_test_prediction_drift.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_single_dataset_performance.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Train Test Prediction Drift</p>
+        <p class="prev-next-title">Single Dataset Performance</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
