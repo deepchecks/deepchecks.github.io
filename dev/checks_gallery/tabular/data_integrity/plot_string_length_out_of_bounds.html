@@ -348,9 +348,19 @@ Page: checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds&lab
    String Mismatch
   </a>
  </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   String Length Out Of Bounds
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="plot_feature_label_correlation.html">
    Feature Label Correlation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_is_single_value.html">
+   Is Single Value
   </a>
  </li>
  <li class="toctree-l1">
@@ -366,16 +376,6 @@ Page: checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds&lab
  <li class="toctree-l1">
   <a class="reference internal" href="plot_outlier_sample_detection.html">
    Outlier Sample Detection
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="plot_is_single_value.html">
-   Is Single Value
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   String Length Out Of Bounds
   </a>
  </li>
  <li class="toctree-l1">
@@ -420,9 +420,29 @@ Page: checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds&lab
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-string-length-out-of-bounds">
+   What is String Length Out Of Bounds
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-data">
+   Generate Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -448,321 +468,45 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="string-length-out-of-bounds">
 <span id="plot-tabular-string-length-out-of-bounds"></span><span id="sphx-glr-checks-gallery-tabular-data-integrity-plot-string-length-out-of-bounds-py"></span><h1>String Length Out Of Bounds<a class="headerlink" href="#string-length-out-of-bounds" title="Permalink to this headline">#</a></h1>
+<p>This notebook provides an overview for using and understanding the String Length Out Of Bounds check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-string-length-out-of-bounds">What is String Length Out Of Bounds</a></p></li>
+<li><p><a class="reference external" href="#generate-data">Generate data</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+</ul>
+<section id="what-is-string-length-out-of-bounds">
+<h2>What is String Length Out Of Bounds<a class="headerlink" href="#what-is-string-length-out-of-bounds" title="Permalink to this headline">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">StringLengthOutOfBounds</span></code> check detects strings with length that is much longer/shorter
+than the identified “normal” string lengths.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">StringLengthOutOfBounds</span>
+<span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">col1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;aaaaa33&quot;</span><span class="p">,</span> <span class="s2">&quot;aaaaaaa33&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">40</span>
-<span class="n">col1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
-<span class="n">col1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;aaaaaadsfasdfasdf&quot;</span><span class="p">)</span>
+</section>
+<section id="generate-data">
+<h2>Generate Data<a class="headerlink" href="#generate-data" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">col1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deepchecks123&quot;</span><span class="p">,</span> <span class="s2">&quot;deepchecks456&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">40</span>
+<span class="n">col1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ab&quot;</span><span class="p">)</span>
+<span class="n">col1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">)</span>
 
 <span class="n">col2</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;abc&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">41</span>
 
-<span class="n">col3</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">80</span>
-<span class="n">col3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">col3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="o">*</span><span class="mi">200</span><span class="p">)</span>
-<span class="c1"># col1 and col3 contrains outliers, col2 does not</span>
+<span class="n">col3</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deepchecks&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">80</span>
+<span class="n">col3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;an_outlier&quot;</span><span class="p">)</span>
+<span class="n">col3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;im_an_outlier_too&quot;</span><span class="p">)</span>
+
+<span class="c1">## col1 and col3 contain outliers, col2 does not</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;col1&quot;</span><span class="p">:</span><span class="n">col1</span><span class="p">,</span> <span class="s2">&quot;col2&quot;</span><span class="p">:</span> <span class="n">col2</span><span class="p">,</span> <span class="s2">&quot;col3&quot;</span><span class="p">:</span> <span class="n">col3</span> <span class="p">})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[])</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">StringLengthOutOfBounds</span><span class="p">(</span><span class="n">min_unique_value_ratio</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="output_subarea output_html rendered_html output_result">
-<!--
-    ~ ----------------------------------------------------------------------------
-    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
-    ~
-    ~ This file is part of Deepchecks.
-    ~ Deepchecks is distributed under the terms of the GNU Affero General
-    ~ Public License (version 3 or later).
-    ~ You should have received a copy of the GNU Affero General Public License
-    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
-    ~ ----------------------------------------------------------------------------
-    ~
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>String Length Out Of Bounds</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #212529;
-            text-align: left;
-            max-width: 1200px;
-            margin: auto;
-            background-color: white;
-        }
-
-        div.nbinput.container div.prompt *,
-        div.nboutput.container div.prompt *,
-        div.nbinput.container div.input_area pre,
-        div.nboutput.container div.output_area pre,
-        div.nbinput.container div.input_area .highlight,
-        div.nboutput.container div.output_area .highlight {
-            border: none;
-            padding: 0;
-            margin: 0;
-            box-shadow: none;
-        }
-
-        div.nbinput.container > div[class*=highlight],
-        div.nboutput.container > div[class*=highlight] {
-            margin: 0;
-        }
-
-        div.nbinput.container div.prompt *,
-        div.nboutput.container div.prompt * {
-            background: none;
-        }
-
-        div.nboutput.container div.output_area .highlight,
-        div.nboutput.container div.output_area pre {
-            background: unset;
-        }
-
-        div.nboutput.container div.output_area div.highlight {
-            color: unset;  /* override Pygments text color */
-        }
-
-        /* avoid gaps between output lines */
-        div.nboutput.container div[class*=highlight] pre {
-            line-height: normal;
-        }
-
-        /* input/output containers */
-        div.nbinput.container,
-        div.nboutput.container {
-            display: -webkit-flex;
-            display: flex;
-            align-items: flex-start;
-            margin: 0;
-            width: 100%;
-        }
-        @media (max-width: 540px) {
-            div.nbinput.container,
-            div.nboutput.container {
-                flex-direction: column;
-            }
-        }
-
-        /* input container */
-        div.nbinput.container {
-            padding-top: 5px;
-        }
-
-        /* last container */
-        div.nblast.container {
-            padding-bottom: 5px;
-        }
-
-        /* input prompt */
-        div.nbinput.container div.prompt pre {
-            color: #307FC1;
-        }
-
-        /* output prompt */
-        div.nboutput.container div.prompt pre {
-            color: #BF5B3D;
-        }
-
-        /* all prompts */
-        div.nbinput.container div.prompt,
-        div.nboutput.container div.prompt {
-            width: 4.5ex;
-            padding-top: 5px;
-            position: relative;
-            user-select: none;
-        }
-
-        div.nbinput.container div.prompt > div,
-        div.nboutput.container div.prompt > div {
-            position: absolute;
-            right: 0;
-            margin-right: 0.3ex;
-        }
-
-        @media (max-width: 540px) {
-            div.nbinput.container div.prompt,
-            div.nboutput.container div.prompt {
-                width: unset;
-                text-align: left;
-                padding: 0.4em;
-            }
-            div.nboutput.container div.prompt.empty {
-                padding: 0;
-            }
-
-            div.nbinput.container div.prompt > div,
-            div.nboutput.container div.prompt > div {
-                position: unset;
-            }
-        }
-
-        /* disable scrollbars on prompts */
-        div.nbinput.container div.prompt pre,
-        div.nboutput.container div.prompt pre {
-            overflow: hidden;
-        }
-
-        /* input/output area */
-        div.nbinput.container div.input_area,
-        div.nboutput.container div.output_area {
-            -webkit-flex: 1;
-            flex: 1;
-            overflow: auto;
-        }
-        @media (max-width: 540px) {
-            div.nbinput.container div.input_area,
-            div.nboutput.container div.output_area {
-                width: 100%;
-            }
-        }
-
-        /* input area */
-        div.nbinput.container div.input_area {
-            border: 1px solid #e0e0e0;
-            border-radius: 2px;
-            /*background: #f5f5f5;*/
-        }
-
-        /* override MathJax center alignment in output cells */
-        div.nboutput.container div[class*=MathJax] {
-            text-align: left !important;
-        }
-
-        /* override sphinx.ext.imgmath center alignment in output cells */
-        div.nboutput.container div.math p {
-            text-align: left;
-        }
-
-        /* standard error */
-        div.nboutput.container div.output_area.stderr {
-            background: #fdd;
-        }
-
-        /* ANSI colors */
-        .ansi-black-fg { color: #3E424D; }
-        .ansi-black-bg { background-color: #3E424D; }
-        .ansi-black-intense-fg { color: #282C36; }
-        .ansi-black-intense-bg { background-color: #282C36; }
-        .ansi-red-fg { color: #E75C58; }
-        .ansi-red-bg { background-color: #E75C58; }
-        .ansi-red-intense-fg { color: #B22B31; }
-        .ansi-red-intense-bg { background-color: #B22B31; }
-        .ansi-green-fg { color: #00A250; }
-        .ansi-green-bg { background-color: #00A250; }
-        .ansi-green-intense-fg { color: #007427; }
-        .ansi-green-intense-bg { background-color: #007427; }
-        .ansi-yellow-fg { color: #DDB62B; }
-        .ansi-yellow-bg { background-color: #DDB62B; }
-        .ansi-yellow-intense-fg { color: #B27D12; }
-        .ansi-yellow-intense-bg { background-color: #B27D12; }
-        .ansi-blue-fg { color: #208FFB; }
-        .ansi-blue-bg { background-color: #208FFB; }
-        .ansi-blue-intense-fg { color: #0065CA; }
-        .ansi-blue-intense-bg { background-color: #0065CA; }
-        .ansi-magenta-fg { color: #D160C4; }
-        .ansi-magenta-bg { background-color: #D160C4; }
-        .ansi-magenta-intense-fg { color: #A03196; }
-        .ansi-magenta-intense-bg { background-color: #A03196; }
-        .ansi-cyan-fg { color: #60C6C8; }
-        .ansi-cyan-bg { background-color: #60C6C8; }
-        .ansi-cyan-intense-fg { color: #258F8F; }
-        .ansi-cyan-intense-bg { background-color: #258F8F; }
-        .ansi-white-fg { color: #C5C1B4; }
-        .ansi-white-bg { background-color: #C5C1B4; }
-        .ansi-white-intense-fg { color: #A1A6B2; }
-        .ansi-white-intense-bg { background-color: #A1A6B2; }
-
-        .ansi-default-inverse-fg { color: #FFFFFF; }
-        .ansi-default-inverse-bg { background-color: #000000; }
-
-        .ansi-bold { font-weight: bold; }
-        .ansi-underline { text-decoration: underline; }
-
-
-        div.nbinput.container div.input_area div[class*=highlight] > pre,
-        div.nboutput.container div.output_area div[class*=highlight] > pre,
-        div.nboutput.container div.output_area div[class*=highlight].math,
-        div.nboutput.container div.output_area.rendered_html,
-        div.nboutput.container div.output_area > div.output_javascript,
-        div.nboutput.container div.output_area:not(.rendered_html) > img{
-            padding: 5px;
-            margin: 0;
-        }
-
-        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-        div.nbinput.container div.input_area > div[class^='highlight'],
-        div.nboutput.container div.output_area > div[class^='highlight']{
-            overflow-y: hidden;
-        }
-
-        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-        .prompt .copybtn {
-            display: none;
-        }
-
-        /* Some additional styling taken form the Jupyter notebook CSS */
-        div.rendered_html table {
-        border: none;
-        border-collapse: collapse;
-        border-spacing: 0;
-        color: black;
-        font-size: 12px;
-        table-layout: fixed;
-        }
-        div.rendered_html thead {
-        border-bottom: 1px solid black;
-        vertical-align: bottom;
-        }
-        div.rendered_html tr,
-        div.rendered_html th,
-        div.rendered_html td {
-        text-align: right;
-        vertical-align: middle;
-        padding: 0.5em 0.5em;
-        line-height: normal;
-        white-space: normal;
-        max-width: none;
-        border: none;
-        }
-        div.rendered_html th {
-        font-weight: bold;
-        }
-        div.rendered_html tbody tr:nth-child(odd) {
-        background: #f5f5f5;
-        }
-        div.rendered_html tbody tr:hover {
-        background: rgba(66, 165, 245, 0.2);
-        }
-    </style>
-</head>
-<body>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
-
-
-<script type="application/vnd.jupyter.widget-state+json">
-{"version_major": 2, "version_minor": 0, "state": {"09f1f72c28b849a591190ea0f1de5411": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_76655bc9ff2b44ec8a6c78b335bffd6d", "IPY_MODEL_568e566f33ee49f196be8d4c87a2679a", "IPY_MODEL_d216d3fe8eab44e6b6039337096a3060", "IPY_MODEL_e12f8ecb13124b6cb0401886bc8119b8"], "layout": "IPY_MODEL_58af13e7b9794a599b6615f6027debcf"}}, "76655bc9ff2b44ec8a6c78b335bffd6d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_af24b27175c74679b9d9461d8cd0a734", "style": "IPY_MODEL_278f20353de94c97943b8361595027c9", "value": "<h4><b>String Length Out Of Bounds</b></h4>"}}, "af24b27175c74679b9d9461d8cd0a734": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "278f20353de94c97943b8361595027c9": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "568e566f33ee49f196be8d4c87a2679a": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_fe31967c330c49589f5a4dfa1d486181", "style": "IPY_MODEL_f46c5e62bc4a4025952c4d4b1cfa1fb4", "value": "<p>Detect strings with length that is much longer/shorter than the identified \"normal\" string lengths. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "fe31967c330c49589f5a4dfa1d486181": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f46c5e62bc4a4025952c4d4b1cfa1fb4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d216d3fe8eab44e6b6039337096a3060": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_85c5b0c63aca42ccb3557f777788d3fc", "style": "IPY_MODEL_8f83eae8092640059451c014fbe0caab"}}, "85c5b0c63aca42ccb3557f777788d3fc": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8f83eae8092640059451c014fbe0caab": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e12f8ecb13124b6cb0401886bc8119b8": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_cc4ddb97c81147f3a855869613ed5175", "IPY_MODEL_a134bfe2a43b4ea2baa78b2f0d17eef0"], "layout": "IPY_MODEL_1dc1e3e1a2534b629ad94bed6ada75ab"}}, "cc4ddb97c81147f3a855869613ed5175": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_7fe4adc718c3443295452f8afb9b813e", "style": "IPY_MODEL_a481ce0a25f642b391d2ba4f2226e4c8", "value": "<h5><b>Additional Outputs</b></h5>"}}, "7fe4adc718c3443295452f8afb9b813e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a481ce0a25f642b391d2ba4f2226e4c8": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a134bfe2a43b4ea2baa78b2f0d17eef0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_183ea458f07b472c89020faf3f191221", "style": "IPY_MODEL_a9d1c85029214da1a5e2d8d1e02293f3", "value": "<p><b>&#x2713;</b>Nothing to display</p>"}}, "183ea458f07b472c89020faf3f191221": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a9d1c85029214da1a5e2d8d1e02293f3": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "1dc1e3e1a2534b629ad94bed6ada75ab": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "58af13e7b9794a599b6615f6027debcf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
-</script>
-<script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "09f1f72c28b849a591190ea0f1de5411"}
-</script>
-
-</body>
-</html>
-</div>
-<br />
-<br /><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span><span class="s2">&quot;ab&quot;</span><span class="p">,</span> <span class="s2">&quot;ab&quot;</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span>
-<span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;basdbadsbaaaaaaaaaa&quot;</span><span class="p">)</span>
-<span class="n">col</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;basdbadsbaaaaaaaaaaa&quot;</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;col1&quot;</span><span class="p">:</span><span class="n">col</span><span class="p">})</span>
-<span class="n">StringLengthOutOfBounds</span><span class="p">(</span><span class="n">num_percentiles</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_unique_values</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</section>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">StringLengthOutOfBounds</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1044,17 +788,17 @@ to download the full example code</p>
 
 
 <script type="application/vnd.jupyter.widget-state+json">
-{"version_major": 2, "version_minor": 0, "state": {"08b0dddd0fa54ee5abf609eea99599c2": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_ffc46a7cf40f4ad59d0d7731bb4492da", "IPY_MODEL_a5b8e09ffadc4cb5b996809eaa2225db", "IPY_MODEL_8d1befb437204d3693e226f4e1a4da40", "IPY_MODEL_fe471e0403d24364be466b48fe2cb176"], "layout": "IPY_MODEL_6f88252700504e8680b40087317c5f7a"}}, "ffc46a7cf40f4ad59d0d7731bb4492da": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f38c20f832c441cc84ddc5fdae7f6e49", "style": "IPY_MODEL_43435c5e882942a7894e13bbe07d498d", "value": "<h4><b>String Length Out Of Bounds</b></h4>"}}, "f38c20f832c441cc84ddc5fdae7f6e49": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "43435c5e882942a7894e13bbe07d498d": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a5b8e09ffadc4cb5b996809eaa2225db": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_50b1126ab0f34a81b2c8bc363e212cc9", "style": "IPY_MODEL_376e4d7fd5a04d3c8e9ab94569f2cdeb", "value": "<p>Detect strings with length that is much longer/shorter than the identified \"normal\" string lengths. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "50b1126ab0f34a81b2c8bc363e212cc9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "376e4d7fd5a04d3c8e9ab94569f2cdeb": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "8d1befb437204d3693e226f4e1a4da40": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b361a83209a84935a04ee9e8632a14e0", "style": "IPY_MODEL_1349007dd57c43a6afdf6517464f14f8"}}, "b361a83209a84935a04ee9e8632a14e0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1349007dd57c43a6afdf6517464f14f8": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "fe471e0403d24364be466b48fe2cb176": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_13b0f65b7d2c4012bde9c5ec84b40652", "IPY_MODEL_cd07f4599e264d58a6f80f25c01fbecd"], "layout": "IPY_MODEL_17c2e9b44a174a57b23b960e6c4e4645"}}, "13b0f65b7d2c4012bde9c5ec84b40652": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_8e2441720684404d98b76d85cbf26b0b", "style": "IPY_MODEL_5aec737384d64d62b6f23ca6051efcfd", "value": "<h5><b>Additional Outputs</b></h5>"}}, "8e2441720684404d98b76d85cbf26b0b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5aec737384d64d62b6f23ca6051efcfd": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "cd07f4599e264d58a6f80f25c01fbecd": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f11dbefee1fa4f1dbcbbfff28393dbc8", "style": "IPY_MODEL_d83b627681f74fda9b0454aa3891669b", "value": "<p><b>&#x2713;</b>Nothing to display</p>"}}, "f11dbefee1fa4f1dbcbbfff28393dbc8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "d83b627681f74fda9b0454aa3891669b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "17c2e9b44a174a57b23b960e6c4e4645": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6f88252700504e8680b40087317c5f7a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+{"version_major": 2, "version_minor": 0, "state": {"d7f1aea7dd49467d9ba478e69fc059a1": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_e1690d0b625949ce9e5178302205eac2", "IPY_MODEL_3a14f87952144999973a8068fde709e3", "IPY_MODEL_6f674a77630e46bb9e0bde567eb85e7a", "IPY_MODEL_27197125619f45929fbdc986bfc20174"], "layout": "IPY_MODEL_e00fa2cf0cfb466392cc14ef8ee46990"}}, "e1690d0b625949ce9e5178302205eac2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_957933a5e3d54f2fa34d786d81fe4f50", "style": "IPY_MODEL_86cde0ea787243258c2d770da7a9293a", "value": "<h4><b>String Length Out Of Bounds</b></h4>"}}, "957933a5e3d54f2fa34d786d81fe4f50": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "86cde0ea787243258c2d770da7a9293a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "3a14f87952144999973a8068fde709e3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_1f604546280a47098fe58c3f2e023fff", "style": "IPY_MODEL_cbbc2243792a4bafa1755c4b4295fe3f", "value": "<p>Detect strings with length that is much longer/shorter than the identified \"normal\" string lengths. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/tabular/data_integrity/plot_string_length_out_of_bounds.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "1f604546280a47098fe58c3f2e023fff": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "cbbc2243792a4bafa1755c4b4295fe3f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6f674a77630e46bb9e0bde567eb85e7a": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_81edbd7f0cb8401381761bed179f4f79", "style": "IPY_MODEL_e8496a1163674b3b9038f6da9c6456d6"}}, "81edbd7f0cb8401381761bed179f4f79": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e8496a1163674b3b9038f6da9c6456d6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "27197125619f45929fbdc986bfc20174": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_1c1bd327b1c741c38645afda7a8d0b6a", "IPY_MODEL_a6753b9bbddd44968435eb76f90b8404", "IPY_MODEL_0bc9a8260b7a478bb2484505efa540f5"], "layout": "IPY_MODEL_5371ee8b10f34049afd61bfba32b3f06"}}, "1c1bd327b1c741c38645afda7a8d0b6a": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b9ce4750d6d94c2da813dfb87e7250f5", "style": "IPY_MODEL_e8f4a72995e74d8fb7a032bd50f7d5d6", "value": "<h5><b>Additional Outputs</b></h5>"}}, "b9ce4750d6d94c2da813dfb87e7250f5": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e8f4a72995e74d8fb7a032bd50f7d5d6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a6753b9bbddd44968435eb76f90b8404": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_4ade403586f7481f95f50361f937611b", "style": "IPY_MODEL_67ff18a62c06450081ac115af718ae01", "value": "<div>Showing only the top 10 columns, you can change it using n_top_columns param</div>"}}, "4ade403586f7481f95f50361f937611b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "67ff18a62c06450081ac115af718ae01": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0bc9a8260b7a478bb2484505efa540f5": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_901bf18588e94884952efe621bb8f580", "style": "IPY_MODEL_788f9c2f73cb4980a69763f66048dc1a", "value": "<style type=\"text/css\">\n#T_747f9_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_747f9_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_747f9_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_747f9_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_747f9_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_747f9_\">\n  <thead>\n    <tr>\n      <th class=\"blank\" >&nbsp;</th>\n      <th class=\"blank\" >&nbsp;</th>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th class=\"col_heading level0 col0\" >Number of Outlier Samples</th>\n      <th class=\"col_heading level0 col1\" >Example Samples</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Column Name</th>\n      <th class=\"index_name level1\" >Range of Detected Normal String Lengths</th>\n      <th class=\"index_name level2\" >Range of Detected Outlier String Lengths</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_747f9_level0_row0\" class=\"row_heading level0 row0\" >col1</th>\n      <th id=\"T_747f9_level1_row0\" class=\"row_heading level1 row0\" >13 - 13</th>\n      <th id=\"T_747f9_level2_row0\" class=\"row_heading level2 row0\" >2 - 2</th>\n      <td id=\"T_747f9_row0_col0\" class=\"data row0 col0\" >2</td>\n      <td id=\"T_747f9_row0_col1\" class=\"data row0 col1\" >['cd', 'ab']</td>\n    </tr>\n    <tr>\n      <th id=\"T_747f9_level0_row1\" class=\"row_heading level0 row1\" >col3</th>\n      <th id=\"T_747f9_level1_row1\" class=\"row_heading level1 row1\" >10 - 10</th>\n      <th id=\"T_747f9_level2_row1\" class=\"row_heading level2 row1\" >17 - 17</th>\n      <td id=\"T_747f9_row1_col0\" class=\"data row1 col0\" >1</td>\n      <td id=\"T_747f9_row1_col1\" class=\"data row1 col1\" >['im_an_outlier_too']</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "901bf18588e94884952efe621bb8f580": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "788f9c2f73cb4980a69763f66048dc1a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5371ee8b10f34049afd61bfba32b3f06": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e00fa2cf0cfb466392cc14ef8ee46990": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "08b0dddd0fa54ee5abf609eea99599c2"}
+{"version_major": 2, "version_minor": 0, "model_id": "d7f1aea7dd49467d9ba478e69fc059a1"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.072 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.051 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-data-integrity-plot-string-length-out-of-bounds-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/a1ca9c3a200edb97f778d1e00ced423d/plot_string_length_out_of_bounds.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_string_length_out_of_bounds.py</span></code></a></p>
@@ -1064,6 +808,7 @@ to download the full example code</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
 </section>
 
 
