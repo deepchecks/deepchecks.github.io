@@ -643,6 +643,18 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
   <a class="reference internal nav-link" href="#deepchecks-built-in-properties">
    Deepchecks’ Built-in Properties
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#image-properties">
+     Image Properties
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#label-prediction-properties">
+     Label &amp; Prediction Properties
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#property-structure">
@@ -702,7 +714,7 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
             <div>
                 
   <section id="data-properties">
-<h1>Data Properties<a class="headerlink" href="#data-properties" title="Permalink to this headline">#</a></h1>
+<span id="vision-properties-guide"></span><h1>Data Properties<a class="headerlink" href="#data-properties" title="Permalink to this headline">#</a></h1>
 <p>Properties are one-dimension values that are extracted from either the images, labels or predictions. For example, an
 image property is <strong>brightness</strong>, and a label property is <strong>bounding box area</strong> (for detection tasks).
 Deepchecks includes <a class="reference internal" href="#deepchecks-built-in-properties"><span class="std std-ref">built-in properties</span></a> and supports implementing your own
@@ -733,6 +745,8 @@ might not learn to discern wolf from dog by the animal’s characteristics, but 
 <h2>Deepchecks’ Built-in Properties<a class="headerlink" href="#deepchecks-built-in-properties" title="Permalink to this headline">#</a></h2>
 <p>We divide the properties by the data that they are based on: images, labels or predictions.
 You can either use the built-in properties or implement your own ones and pass them to the relevant checks.</p>
+<section id="image-properties">
+<h3>Image Properties<a class="headerlink" href="#image-properties" title="Permalink to this headline">#</a></h3>
 <p>The built-in image properties are:</p>
 <table class="table">
 <colgroup>
@@ -772,6 +786,9 @@ comparison to the other channels [b / (r + g + b)].</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="label-prediction-properties">
+<h3>Label &amp; Prediction Properties<a class="headerlink" href="#label-prediction-properties" title="Permalink to this headline">#</a></h3>
 <p>The built-in label &amp; predictions properties are:</p>
 <table class="table">
 <colgroup>
@@ -796,23 +813,23 @@ comparison to the other channels [b / (r + g + b)].</p></td>
 </tbody>
 </table>
 </section>
+</section>
 <section id="property-structure">
 <h2>Property Structure<a class="headerlink" href="#property-structure" title="Permalink to this headline">#</a></h2>
 <p>All property types have a similar structure, which is a dictionary with 3 keys:</p>
 <ul class="simple">
-<li><p><cite>name</cite> - The name of the property</p></li>
-<li><p><cite>method</cite> - The callable function that calculates the property’s value. It accepts the relevant data and returns</p></li>
-</ul>
-<p>the values list.
-- <cite>output_type</cite> - Relates to the method’s return values list, and is one of the following:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><cite>continuous</cite> - For numeric values with continuous nature</p></li>
-<li><p><cite>discrete</cite> - For numeric values with discrete nature or non-numeric values</p></li>
-<li><p><cite>class_id</cite> - Means the output is of class ids. In this case we will try to translate the ids into their
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the property</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code> - The callable function that calculates the property’s value. It accepts the relevant data and returns
+the values list.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_type</span></code> - Relates to the method’s return values list, and is one of the following:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">continuous</span></code> - For numeric values with continuous nature</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">discrete</span></code> - For numeric values with discrete nature or non-numeric values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">class_id</span></code> - Means the output is of class ids. In this case we will try to translate the ids into their
 corresponding class labels.</p></li>
 </ul>
-</div></blockquote>
+</li>
+</ul>
 <p>Each dictionary is a single property, and the checks accepts a list of those dictionaries. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mean_image</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
   <span class="k">return</span> <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
