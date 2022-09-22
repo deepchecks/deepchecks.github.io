@@ -730,7 +730,8 @@ Probabilities per class are only required for classification tasks.</p></li>
 <p class="admonition-title">Note</p>
 <p>For classification tasks, Deepchecks require the list of all possible classes in the order they appear at the
 <code class="docutils literal notranslate"><span class="pre">probabilities</span> <span class="pre">per</span> <span class="pre">class</span></code> vector (alphanumeric order). It can either be inferred based on provided data and model
-or supplied via the Dataset’s <code class="docutils literal notranslate"><span class="pre">label_class</span></code> argument.</p>
+or supplied via the Dataset’s <code class="docutils literal notranslate"><span class="pre">label_class</span></code> argument. For binary classification, the class with the greater
+alphanumeric value is considered the positive class.</p>
 </div>
 </section>
 <section id="passing-a-model">
@@ -763,10 +764,10 @@ This method is required only for classification tasks.</p></li>
 model’s class or create a wrapper class that implements the required interfaces by calling the relevant APIs of your
 model. Below is a general structure of such wrapper class.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyModelWrapper</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="c1"># Implement based on base model&#39;s API.</span>
 <span class="gp">... </span>        <span class="o">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="c1"># Implement based on base model&#39;s API, only required for classification tasks.</span>
 <span class="gp">... </span>        <span class="o">...</span>
 <span class="gp">... </span>    <span class="nd">@property</span>
