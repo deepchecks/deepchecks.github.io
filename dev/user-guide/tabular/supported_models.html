@@ -724,7 +724,8 @@ for each sample in the dataset. Predicted values are required for all task types
 <li><p><strong>Probabilities per class</strong>: should be provided as an <a href="https://scikit-learn.org/stable/glossary.html#term-array-like" target="_blank">array-like</a> of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_classes)</span></code>
 containing the predicted probability of each possible class for each sample in the dataset. The probabilities
 per class should be provided in a <strong>alphanumeric order</strong> based on the classes names.
-Probabilities per class are only required for classification tasks.</p></li>
+Probabilities per class are only relevant for classification tasks. If predicted probabilities are not supplied,
+checks and metrics that rely on the predicted probabilities (such as ROC Curve and the AUC metric) will not run.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -745,7 +746,7 @@ along with many additional popular models types (e.g. XGBoost, LightGBM, CatBoos
 input features and returns <a class="reference internal" href="#supported-models-predictions-format"><span class="std std-ref">predicted values</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> method which receives an <a href="https://scikit-learn.org/stable/glossary.html#term-array-like" target="_blank">array-like</a>  of shape <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_features)</span></code> containing the
 input features and returns <a class="reference internal" href="#supported-models-predictions-format"><span class="std std-ref">probabilities per class</span></a>.
-This method is required only for classification tasks.</p></li>
+This method is optional and relevant only for classification tasks.</p></li>
 </ul>
 <section id="running-deepchecks-with-a-supported-model">
 <h3>Running Deepchecks With a Supported Model<a class="headerlink" href="#running-deepchecks-with-a-supported-model" title="Permalink to this headline">#</a></h3>
@@ -791,14 +792,15 @@ as index and their corresponding importance as values.</p>
 <span id="supported-models-using-pre-computed-predictions"></span><h2>Using Pre-computed Predictions<a class="headerlink" href="#using-pre-computed-predictions" title="Permalink to this headline">#</a></h2>
 <p>The predictions should be passed via the <code class="docutils literal notranslate"><span class="pre">y_proba</span></code> and <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> arguments of the suite / check’s <code class="docutils literal notranslate"><span class="pre">run</span></code> method in
 the <a class="reference internal" href="#supported-models-predictions-format"><span class="std std-ref">appropriate format</span></a>. <code class="docutils literal notranslate"><span class="pre">y_pred</span></code> receives the predicted values of
-the model and <code class="docutils literal notranslate"><span class="pre">y_proba</span></code> receives the probabilities per class, which is only required for classification tasks.</p>
+the model and <code class="docutils literal notranslate"><span class="pre">y_proba</span></code> receives the probabilities per class, which is only relevant for classification tasks.</p>
 <p>The predictions should be provided for each dataset supplied to the suite / check. For example the
 <a class="reference internal" href="../../api/generated/deepchecks.tabular.checks.model_evaluation.SimpleModelComparison.html"><span class="doc">Simple Model Comparison</span></a>
 check for a regression model
 requires both train and test <a class="reference internal" href="#supported-models-predictions-format"><span class="std std-ref">predicted values</span></a>
 to be provided via the <code class="docutils literal notranslate"><span class="pre">y_pred_train</span></code>, <code class="docutils literal notranslate"><span class="pre">y_pred_test</span></code> arguments.</p>
-<p>For classification tasks, predicted values are not mandatory. If not supplied,
-deepchecks will assume the predicted class is the class with the highest predicted probability.</p>
+<p>For classification it’s recommended but not mandatory to also pass the predicted probabilities (<code class="docutils literal notranslate"><span class="pre">y_proba</span></code>). If
+predicted probabilities are not supplied, checks and metrics that rely on the predicted probabilities (such as
+ROC Curve and the AUC metric) will not run.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When using pre-computed predictions, if the train dataset shares indices with the test dataset we
