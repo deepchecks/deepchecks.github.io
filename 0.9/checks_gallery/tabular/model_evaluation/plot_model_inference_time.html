@@ -369,16 +369,6 @@ Page: checks_gallery/tabular/model_evaluation/plot_model_inference_time&labels=l
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_roc_report.html">
-   ROC Report
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="plot_regression_error_distribution.html">
-   Regression Error Distribution
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="plot_single_dataset_performance.html">
    Single Dataset Performance
   </a>
@@ -389,13 +379,18 @@ Page: checks_gallery/tabular/model_evaluation/plot_model_inference_time&labels=l
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_weak_segments_performance.html">
-   Weak Segments Performance
+  <a class="reference internal" href="plot_roc_report.html">
+   ROC Report
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_calibration_score.html">
-   Calibration Score
+  <a class="reference internal" href="plot_regression_error_distribution.html">
+   Regression Error Distribution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_weak_segments_performance.html">
+   Weak Segments Performance
   </a>
  </li>
  <li class="toctree-l1">
@@ -406,6 +401,11 @@ Page: checks_gallery/tabular/model_evaluation/plot_model_inference_time&labels=l
  <li class="toctree-l1">
   <a class="reference internal" href="plot_train_test_prediction_drift.html">
    Train Test Prediction Drift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_calibration_score.html">
+   Calibration Score
   </a>
  </li>
  <li class="toctree-l1">
@@ -437,8 +437,28 @@ Page: checks_gallery/tabular/model_evaluation/plot_model_inference_time&labels=l
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#instantiating-check-instance-with-condition">
-   Instantiating check instance with condition
+  <a class="reference internal nav-link" href="#what-is-the-model-inference-time-check">
+   What is the Model Inference Time check?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   Imports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
   </a>
  </li>
 </ul>
@@ -468,6 +488,23 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="model-inference-time">
 <span id="plot-tabular-model-inference-time"></span><span id="sphx-glr-checks-gallery-tabular-model-evaluation-plot-model-inference-time-py"></span><h1>Model Inference Time<a class="headerlink" href="#model-inference-time" title="Permalink to this headline">#</a></h1>
+<p>This notebook provides an overview for using and understanding the Model Inference Time check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-the-model-inference-time-check">What is the Model Inference Time check?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+</ul>
+<section id="what-is-the-model-inference-time-check">
+<h2>What is the Model Inference Time check?<a class="headerlink" href="#what-is-the-model-inference-time-check" title="Permalink to this headline">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ModelInferenceTime</span></code> check measures the model’s average inference time (in seconds) per sample.
+Inference time is an important metric for prediction models, especially in real-time applications and
+data streaming processes, where a fast runtime can affect the user’s experience or the overall system
+load.</p>
+</section>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">AdaBoostClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
@@ -476,6 +513,9 @@ to download the full example code</p>
 <span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">ModelInferenceTime</span></a>
 </pre></div>
 </div>
+</section>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
@@ -485,6 +525,9 @@ to download the full example code</p>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.data" title="deepchecks.tabular.Dataset.data" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_ds</span><span class="o">.</span><span class="n">data</span></a><span class="p">[</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.features" title="deepchecks.tabular.Dataset.features" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_ds</span><span class="o">.</span><span class="n">features</span></a><span class="p">],</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.data" title="deepchecks.tabular.Dataset.data" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_ds</span><span class="o">.</span><span class="n">data</span></a><span class="p">[</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.label_name" title="deepchecks.tabular.Dataset.label_name" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_ds</span><span class="o">.</span><span class="n">label_name</span></a><span class="p">])</span>
 </pre></div>
 </div>
+</section>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">ModelInferenceTime</span></a><span class="p">()</span>
 <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck.run" title="deepchecks.tabular.SingleDatasetCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_ds</span></a><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
@@ -507,6 +550,7 @@ to download the full example code</p>
 <head>
     <meta charset="UTF-8">
     <title>Model Inference Time</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -768,19 +812,22 @@ to download the full example code</p>
 
 
 <script type="application/vnd.jupyter.widget-state+json">
-{"version_major": 2, "version_minor": 0, "state": {"273a4fa18c8048529cbaadb8811f8360": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_1a7bd7be872b44068e27548698f402b9", "IPY_MODEL_da1803deb0614309ad70b10a79d6b487", "IPY_MODEL_bc4185302c1e4450b650466c3da676c6", "IPY_MODEL_59c04cc8a0de4667848d2b15776557bb"], "layout": "IPY_MODEL_46bce8276b4d46ae82ef752ea97182cf"}}, "1a7bd7be872b44068e27548698f402b9": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_743a6c60dba143e7b08db8bc59cda37c", "style": "IPY_MODEL_2b7c36feebd44fdfa798229efe346d84", "value": "<h4><b>Model Inference Time</b></h4>"}}, "743a6c60dba143e7b08db8bc59cda37c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "2b7c36feebd44fdfa798229efe346d84": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "da1803deb0614309ad70b10a79d6b487": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d19f137b6d8b4ba1a405d5497e568fe3", "style": "IPY_MODEL_df624cfbbe3e43aeac063c1d2d3df43c", "value": "<p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "d19f137b6d8b4ba1a405d5497e568fe3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "df624cfbbe3e43aeac063c1d2d3df43c": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "bc4185302c1e4450b650466c3da676c6": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a56c05a3ea7a4a68826aed7225664d97", "style": "IPY_MODEL_9358dd8fae54446fb0b2861773aab3bc"}}, "a56c05a3ea7a4a68826aed7225664d97": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9358dd8fae54446fb0b2861773aab3bc": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "59c04cc8a0de4667848d2b15776557bb": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_03235053be3641f197f3d14c4ed44d48", "IPY_MODEL_28af291ad1d243b5ade6d388ac39fbfb"], "layout": "IPY_MODEL_a0b95d8ada6d4ee69160321f94a90e27"}}, "03235053be3641f197f3d14c4ed44d48": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_690b0d2ba31e4c76a62b24a41dfb2b67", "style": "IPY_MODEL_0444660a98b6479f8b87a2a0042275b1", "value": "<h5><b>Additional Outputs</b></h5>"}}, "690b0d2ba31e4c76a62b24a41dfb2b67": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "0444660a98b6479f8b87a2a0042275b1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "28af291ad1d243b5ade6d388ac39fbfb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_52b80303030d457dbccc0c5d48922300", "style": "IPY_MODEL_004dcb311b674f6d9d1d910974084b01", "value": "<div>Average model inference time for one sample (in seconds): 0.00012799</div>"}}, "52b80303030d457dbccc0c5d48922300": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "004dcb311b674f6d9d1d910974084b01": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a0b95d8ada6d4ee69160321f94a90e27": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "46bce8276b4d46ae82ef752ea97182cf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+{"version_major": 2, "version_minor": 0, "state": {"8152c57542bf47adae27c3eacef193f1": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_9b726586dfee4b1ab0b9ac19d9cc3269", "IPY_MODEL_e28b3cb34b734382801c39d83a32d523", "IPY_MODEL_dc8c735f4c4545a7a76ea4f8bc8aa5ad", "IPY_MODEL_9e2a2102331747c68c3ca3e0ad66fdc6"], "layout": "IPY_MODEL_54fd950a89ac444e801a3f959154eb83"}}, "9b726586dfee4b1ab0b9ac19d9cc3269": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ac5533cc4e4d4d3999c7a4e272eca2cc", "style": "IPY_MODEL_b51573727915482dbc618a6ac1bb6fdb", "value": "<h4><b>Model Inference Time</b></h4>"}}, "ac5533cc4e4d4d3999c7a4e272eca2cc": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b51573727915482dbc618a6ac1bb6fdb": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e28b3cb34b734382801c39d83a32d523": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_98714b1d37ae4e1e860da04253c497cf", "style": "IPY_MODEL_cb6659985389499487a20e905cf4ebee", "value": "<p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "98714b1d37ae4e1e860da04253c497cf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "cb6659985389499487a20e905cf4ebee": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "dc8c735f4c4545a7a76ea4f8bc8aa5ad": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_52f2f723852143e2b60b0d6190b4a7fa", "style": "IPY_MODEL_ed98753f290e49c39eda5f0f4743ab50"}}, "52f2f723852143e2b60b0d6190b4a7fa": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ed98753f290e49c39eda5f0f4743ab50": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9e2a2102331747c68c3ca3e0ad66fdc6": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_b88d33dd10244ccc990322a4bec1f020", "IPY_MODEL_0c23ca87e2014c98b782f5094ff83906"], "layout": "IPY_MODEL_50624da614ea435cab7db1824be02f0b"}}, "b88d33dd10244ccc990322a4bec1f020": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_fa975cbd393b45b28a35bb100b742dbe", "style": "IPY_MODEL_0d181ff1061647f9a98e0d5bebbec1e9", "value": "<h5><b>Additional Outputs</b></h5>"}}, "fa975cbd393b45b28a35bb100b742dbe": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "0d181ff1061647f9a98e0d5bebbec1e9": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0c23ca87e2014c98b782f5094ff83906": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b01481d1a88e40f2b16490aca2c04f1d", "style": "IPY_MODEL_09e209e850e84753b8c2294d758cac21", "value": "<div>Average model inference time for one sample (in seconds): 0.00012602</div>"}}, "b01481d1a88e40f2b16490aca2c04f1d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "09e209e850e84753b8c2294d758cac21": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "50624da614ea435cab7db1824be02f0b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "54fd950a89ac444e801a3f959154eb83": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "273a4fa18c8048529cbaadb8811f8360"}
+{"version_major": 2, "version_minor": 0, "model_id": "8152c57542bf47adae27c3eacef193f1"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><section id="instantiating-check-instance-with-condition">
-<h2>Instantiating check instance with condition<a class="headerlink" href="#instantiating-check-instance-with-condition" title="Permalink to this headline">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">ModelInferenceTime</span></a><span class="p">()</span><span class="o">.</span><span class="n">add_condition_inference_time_less_than</span><span class="p">(</span><span class="mf">0.00001</span><span class="p">)</span>
+<br /></section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>A condition for the average inference time per sample can be defined.
+Here, we define the threshold to be 0.00001 seconds.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">ModelInferenceTime</span></a><span class="p">()</span><span class="o">.</span><span class="n">add_condition_inference_time_less_than</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">)</span>
 <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck.run" title="deepchecks.tabular.SingleDatasetCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_ds</span></a><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -802,6 +849,7 @@ to download the full example code</p>
 <head>
     <meta charset="UTF-8">
     <title>Model Inference Time</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -1063,17 +1111,17 @@ to download the full example code</p>
 
 
 <script type="application/vnd.jupyter.widget-state+json">
-{"version_major": 2, "version_minor": 0, "state": {"254762dbc33946909b26272b353d32bb": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_c28e073d8c184a93bc9eef541f0ab589", "IPY_MODEL_682f787449ad4a36b76a0830c3181a99", "IPY_MODEL_1dbc08768e16498d84ca0644add2ea48", "IPY_MODEL_7b3b4389af8f4f88baae7ed4bb606337"], "layout": "IPY_MODEL_846f8908a1cd4f708510b32818dce0e1"}}, "c28e073d8c184a93bc9eef541f0ab589": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0e4c38e96b21424c818dde8451607c12", "style": "IPY_MODEL_f18f2d8bd25f429a8c71ef9125a8cb5e", "value": "<h4><b>Model Inference Time</b></h4>"}}, "0e4c38e96b21424c818dde8451607c12": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f18f2d8bd25f429a8c71ef9125a8cb5e": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "682f787449ad4a36b76a0830c3181a99": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_4cb1efc523d0426197e27fc62a68b335", "style": "IPY_MODEL_6658623c4335456e88c6f2b069e72f76", "value": "<p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "4cb1efc523d0426197e27fc62a68b335": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6658623c4335456e88c6f2b069e72f76": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "1dbc08768e16498d84ca0644add2ea48": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_56a5f7d4fbb94b1a904ec8bb92314bb0", "style": "IPY_MODEL_17ab08b3372846c88d49ffc243b3680c", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_268d5_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_268d5_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_268d5_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_268d5_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_268d5_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_268d5_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_268d5_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_268d5_row0_col1\" class=\"data row0 col1\" >Average model inference time for one sample is less than 1e-05</td>\n      <td id=\"T_268d5_row0_col2\" class=\"data row0 col2\" >Found average inference time (seconds): 0.000126</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "56a5f7d4fbb94b1a904ec8bb92314bb0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "17ab08b3372846c88d49ffc243b3680c": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "7b3b4389af8f4f88baae7ed4bb606337": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_d19dadfdd0864008a021786253a50df7", "IPY_MODEL_6df9bf93d456442fb35ce03b4dfc80b4"], "layout": "IPY_MODEL_7ad2dd8c0eba45ecb3bca77ef3ee5321"}}, "d19dadfdd0864008a021786253a50df7": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d6d6fc4e0a294adbbc1e53fc701ff8d6", "style": "IPY_MODEL_7abc109d7e7c483884180a4d2327c773", "value": "<h5><b>Additional Outputs</b></h5>"}}, "d6d6fc4e0a294adbbc1e53fc701ff8d6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7abc109d7e7c483884180a4d2327c773": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6df9bf93d456442fb35ce03b4dfc80b4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_7d7f21345cb94c91930e060839d82dc7", "style": "IPY_MODEL_fa3d2b9b15ee4ac1adddb21d7b797d33", "value": "<div>Average model inference time for one sample (in seconds): 0.000126</div>"}}, "7d7f21345cb94c91930e060839d82dc7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "fa3d2b9b15ee4ac1adddb21d7b797d33": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "7ad2dd8c0eba45ecb3bca77ef3ee5321": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "846f8908a1cd4f708510b32818dce0e1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+{"version_major": 2, "version_minor": 0, "state": {"6f05b1060f734e72878ab5e2c45bd854": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_a2437753ce0d4e72a9ffa25672f7d2c7", "IPY_MODEL_55c46cc93a8e4c189dbfc3161a48ed7b", "IPY_MODEL_db19084d7cb74c09a6642b54ad553d53", "IPY_MODEL_8daa161cdfaf4a26a3893ede4803fb47"], "layout": "IPY_MODEL_addd6b9abdef4abd9c072409d81b624a"}}, "a2437753ce0d4e72a9ffa25672f7d2c7": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2adcc87fd62b4a7799613b98f540246a", "style": "IPY_MODEL_ddf649b053b247fba373a90d386ebac6", "value": "<h4><b>Model Inference Time</b></h4>"}}, "2adcc87fd62b4a7799613b98f540246a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ddf649b053b247fba373a90d386ebac6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "55c46cc93a8e4c189dbfc3161a48ed7b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5b68b227054143dfa5a84362a42ced67", "style": "IPY_MODEL_df2b409a8408433e9620f271c8ba3bd0", "value": "<p>Measure model average inference time (in seconds) per sample. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_model_inference_time.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "5b68b227054143dfa5a84362a42ced67": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "df2b409a8408433e9620f271c8ba3bd0": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "db19084d7cb74c09a6642b54ad553d53": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_bbb4fe5788dc42538e38cfb119ad6c34", "style": "IPY_MODEL_a3e103123e7041c78f69c62a5499c3d1", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_f654b_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f654b_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f654b_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f654b_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_f654b_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_f654b_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_f654b_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_f654b_row0_col1\" class=\"data row0 col1\" >Average model inference time for one sample is less than 1e-05</td>\n      <td id=\"T_f654b_row0_col2\" class=\"data row0 col2\" >Found average inference time (seconds): 0.00012526</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "bbb4fe5788dc42538e38cfb119ad6c34": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a3e103123e7041c78f69c62a5499c3d1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "8daa161cdfaf4a26a3893ede4803fb47": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_ca2bacf255954bef977940605d16a38c", "IPY_MODEL_09fcfe87939f4e69b4b9d09282a1e6ab"], "layout": "IPY_MODEL_3a8387debe9c471b8a50302f49e52f64"}}, "ca2bacf255954bef977940605d16a38c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_51a7adb9690a4b1d832fb8b69f16d88a", "style": "IPY_MODEL_c4e17e77b9df48b2b148f2fd0a8dfe37", "value": "<h5><b>Additional Outputs</b></h5>"}}, "51a7adb9690a4b1d832fb8b69f16d88a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c4e17e77b9df48b2b148f2fd0a8dfe37": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "09fcfe87939f4e69b4b9d09282a1e6ab": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e50c7374e4ee4de9bf4f71a9fa84d63a", "style": "IPY_MODEL_233f931d46eb458987cf0bf1c2342306", "value": "<div>Average model inference time for one sample (in seconds): 0.00012526</div>"}}, "e50c7374e4ee4de9bf4f71a9fa84d63a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "233f931d46eb458987cf0bf1c2342306": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "3a8387debe9c471b8a50302f49e52f64": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "addd6b9abdef4abd9c072409d81b624a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "254762dbc33946909b26272b353d32bb"}
+{"version_major": 2, "version_minor": 0, "model_id": "6f05b1060f734e72878ab5e2c45bd854"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.155 seconds)</p>
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.151 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-model-inference-time-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/f6de5d0c887ed4e427687c7cb496c10a/plot_model_inference_time.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_model_inference_time.py</span></code></a></p>

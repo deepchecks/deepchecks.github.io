@@ -368,6 +368,16 @@ Page: checks_gallery/tabular/model_evaluation/plot_roc_report&labels=labels=chor
    Regression Systematic Error
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_single_dataset_performance.html">
+   Single Dataset Performance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_train_test_performance.html">
+   Train Test Performance
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    ROC Report
@@ -379,23 +389,8 @@ Page: checks_gallery/tabular/model_evaluation/plot_roc_report&labels=labels=chor
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_single_dataset_performance.html">
-   Single Dataset Performance
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="plot_train_test_performance.html">
-   Train Test Performance
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="plot_weak_segments_performance.html">
    Weak Segments Performance
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="plot_calibration_score.html">
-   Calibration Score
   </a>
  </li>
  <li class="toctree-l1">
@@ -406,6 +401,11 @@ Page: checks_gallery/tabular/model_evaluation/plot_roc_report&labels=labels=chor
  <li class="toctree-l1">
   <a class="reference internal" href="plot_train_test_prediction_drift.html">
    Train Test Prediction Drift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_calibration_score.html">
+   Calibration Score
   </a>
  </li>
  <li class="toctree-l1">
@@ -437,24 +437,28 @@ Page: checks_gallery/tabular/model_evaluation/plot_roc_report&labels=labels=chor
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-the-roc-report-check">
+   What is the ROC Report check?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#imports">
    Imports
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#generating-data">
-   Generating data
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#running-roc-report-check">
-   Running
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     roc_report
-    </span>
-   </code>
-   Check
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the Check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
   </a>
  </li>
 </ul>
@@ -484,6 +488,20 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="roc-report">
 <span id="plot-tabular-roc-report"></span><span id="sphx-glr-checks-gallery-tabular-model-evaluation-plot-roc-report-py"></span><h1>ROC Report<a class="headerlink" href="#roc-report" title="Permalink to this headline">#</a></h1>
+<p>This notebook provides an overview for using and understanding the ROC Report check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-the-roc-report-check">What is the ROC Report check?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+</ul>
+<section id="what-is-the-roc-report-check">
+<h2>What is the ROC Report check?<a class="headerlink" href="#what-is-the-roc-report-check" title="Permalink to this headline">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ROCReport</span></code> check calculates the ROC curve for each class.
+The ROC curve is a plot of TPR (true positive rate) with respect to FPR (false positive rate)
+at various thresholds (<a class="reference external" href="https://deepchecks.com/glossary/roc-receiver-operating-characteristic-curve">ROC curve</a>).</p>
+</section>
 <section id="imports">
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
@@ -504,8 +522,8 @@ to download the full example code</p>
 </pre></div>
 </div>
 </section>
-<section id="generating-data">
-<h2>Generating data<a class="headerlink" href="#generating-data" title="Permalink to this headline">#</a></h2>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">(</span><span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
 <span class="n">frame</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">frame</span>
@@ -519,12 +537,10 @@ to download the full example code</p>
 </pre></div>
 </div>
 </section>
-<section id="running-roc-report-check">
-<h2>Running <code class="docutils literal notranslate"><span class="pre">roc_report</span></code> Check<a class="headerlink" href="#running-roc-report-check" title="Permalink to this headline">#</a></h2>
+<section id="run-the-check">
+<h2>Run the Check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">RocReport</span></a><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck.run" title="deepchecks.tabular.SingleDatasetCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ds</span></a><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+<a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck.run" title="deepchecks.tabular.SingleDatasetCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ds</span></a><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -545,6 +561,7 @@ to download the full example code</p>
 <head>
     <meta charset="UTF-8">
     <title>ROC Report</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -806,17 +823,316 @@ to download the full example code</p>
 
 
 <script type="application/vnd.jupyter.widget-state+json">
-{"version_major": 2, "version_minor": 0, "state": {"539099871a7e4ca5a9697784f2e86701": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_8b2aaac3aec447a2abf1b9643b8b88fc", "IPY_MODEL_ed7da5a3344142f48249930d4aae848f", "IPY_MODEL_f73fbf1caac0463e9cc32c22b6bef70e", "IPY_MODEL_9df0cfb0fcdc42b9930f247ad17581ac"], "layout": "IPY_MODEL_71274ebe2b2d4bd990a7752d34dc2245"}}, "8b2aaac3aec447a2abf1b9643b8b88fc": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6e0cca03815a4114b97bbf383bcef834", "style": "IPY_MODEL_53e66f24ae664541addfbed4d99c4244", "value": "<h4><b>ROC Report</b></h4>"}}, "6e0cca03815a4114b97bbf383bcef834": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "53e66f24ae664541addfbed4d99c4244": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "ed7da5a3344142f48249930d4aae848f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e4b4deb5a2ec49b695ff22b2fbc63a18", "style": "IPY_MODEL_ac25294cdfb04c329c72cd19d69be374", "value": "<p>Calculate the ROC curve for each class. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_roc_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "e4b4deb5a2ec49b695ff22b2fbc63a18": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ac25294cdfb04c329c72cd19d69be374": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f73fbf1caac0463e9cc32c22b6bef70e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d3d1425947204630bb88f726c791f496", "style": "IPY_MODEL_361c23de4bc14a3097971eeee349cf32"}}, "d3d1425947204630bb88f726c791f496": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "361c23de4bc14a3097971eeee349cf32": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9df0cfb0fcdc42b9930f247ad17581ac": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_2fed42182c1b41828849844f120d3b76", "IPY_MODEL_01a797815b464e3d98df56c438335a2b", "IPY_MODEL_2b8627d218384b3f8f7f694100ba74f2"], "layout": "IPY_MODEL_cb1635f7091c4310b859c2d1c96a635c"}}, "2fed42182c1b41828849844f120d3b76": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ea59564e15124bcb8c45a53055bc87e0", "style": "IPY_MODEL_913cf86faf434081b187e61f7fa50ee7", "value": "<h5><b>Additional Outputs</b></h5>"}}, "ea59564e15124bcb8c45a53055bc87e0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "913cf86faf434081b187e61f7fa50ee7": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "01a797815b464e3d98df56c438335a2b": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"line": {"width": 2}, "name": "Class 0 (auc = 1.00)", "x": {"dtype": "float64", "shape": [4]}, "y": {"dtype": "float64", "shape": [4]}, "type": "scatter", "uid": "b27a5c25-9a63-44e0-9b9f-7b11759618b6"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 1.0", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.0], "y": [1.0], "type": "scatter", "uid": "5a3f5731-ca23-4938-8c0c-1c5b2f9cd66d"}, {"line": {"width": 2}, "name": "Class 1 (auc = 0.98)", "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "f2230ce1-ba61-4438-8e9e-0d7048759080"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 3.38e-26<br>Class: 1", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.1320754716981132], "y": [1.0], "type": "scatter", "uid": "0f927d03-a8fd-46db-82be-4a68aefca114"}, {"line": {"width": 2}, "name": "Class 2 (auc = 0.97)", "x": {"dtype": "float64", "shape": [7]}, "y": {"dtype": "float64", "shape": [7]}, "type": "scatter", "uid": "536ffb41-0c85-4fdb-a423-82ae56d01689"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 0.585<br>Class: 2", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.08], "y": [1.0], "type": "scatter", "uid": "f615fd4f-b3e6-4f91-b8b9-fddc3811c176"}, {"line": {"color": "#444", "dash": "dash", "width": 2}, "showlegend": false, "x": [0, 1], "y": [0, 1], "type": "scatter", "uid": "16744f81-347a-4bee-bf8f-3b03434e4973"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"height": 500, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Receiver operating characteristic for multi-class data"}, "xaxis": {"title": {"text": "False Positive Rate"}}, "yaxis": {"title": {"text": "True Positive Rate"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAN/ZqO9s1Oc/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "AAAAAAAAAAAAAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwXgr+xxSkz/BeCv7HFKTP8F4K/scUrM/wXgr+xxSsz+pCcZb2efAP6kJxlvZ58A/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "AAAAAAAAAADRRRdddNHlPy+66KKLLuo/L7rooosu6j+jiy666KLrP6OLLrroous/F1100UUX7T8XXXTRRRftPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "x", "buffer"], "data": "AAAAAAAAAAC4HoXrUbiuP7gehetRuK4/exSuR+F6tD97FK5H4Xq0P1K4HoXrUeg/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "AAAAAAAAAAApXI/C9SjsP7gehetRuO4/uB6F61G47j8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}]}, "2b8627d218384b3f8f7f694100ba74f2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_7d574b38e70d4988afd672be177cd51a", "style": "IPY_MODEL_55d33fdecda742a8a2d208d52d6da74b", "value": "<div><span style=\"font-size:0.8em\"><i>\n            The marked points are the optimal threshold cut-off points. They are determined using Youden's index defined\n            as sensitivity + specificity - 1\n            </i></span></div>"}}, "7d574b38e70d4988afd672be177cd51a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "55d33fdecda742a8a2d208d52d6da74b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "cb1635f7091c4310b859c2d1c96a635c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "71274ebe2b2d4bd990a7752d34dc2245": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+{"version_major": 2, "version_minor": 0, "state": {"b204f9e7f2c2413bbd4b561987999a40": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_74306b57ac7844d999880f9edbb64e49", "IPY_MODEL_a1a5105b3c6e419ea0010ed7cedcd4c8", "IPY_MODEL_920dfa1ecf9b41c0b90d3e7bc522dc74", "IPY_MODEL_54a2f4de293a469caf8467e4e8f50ae8"], "layout": "IPY_MODEL_fd5c2b91c48741418d2836c774714512"}}, "74306b57ac7844d999880f9edbb64e49": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a53e220849504ea59af091a909b2bb93", "style": "IPY_MODEL_96a5529f57a84419bba5a00bd335e668", "value": "<h4><b>ROC Report</b></h4>"}}, "a53e220849504ea59af091a909b2bb93": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "96a5529f57a84419bba5a00bd335e668": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a1a5105b3c6e419ea0010ed7cedcd4c8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_1e9053adb83f4858a97aec8f0d5916fb", "style": "IPY_MODEL_cec6e74c2427411889d8dd6cbedbcae4", "value": "<p>Calculate the ROC curve for each class. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_roc_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "1e9053adb83f4858a97aec8f0d5916fb": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "cec6e74c2427411889d8dd6cbedbcae4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "920dfa1ecf9b41c0b90d3e7bc522dc74": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6864c053728848e3906a184353181536", "style": "IPY_MODEL_2518e6351a9c403c8495333895002b9b"}}, "6864c053728848e3906a184353181536": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "2518e6351a9c403c8495333895002b9b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "54a2f4de293a469caf8467e4e8f50ae8": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_0ba5834ddb164e768406155ce774dab8", "IPY_MODEL_eb26a4cb7ec6492ba200e8d8c7bddbc6", "IPY_MODEL_d0356c4679bb4dc3aa65e81b5fdeaa2f"], "layout": "IPY_MODEL_94b4f76f6c8949e6a51f754f0b5b7409"}}, "0ba5834ddb164e768406155ce774dab8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c2235faa341d46e1a91871750f11bd40", "style": "IPY_MODEL_b2206e8fd9614abab6ab8e418ee13411", "value": "<h5><b>Additional Outputs</b></h5>"}}, "c2235faa341d46e1a91871750f11bd40": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b2206e8fd9614abab6ab8e418ee13411": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "eb26a4cb7ec6492ba200e8d8c7bddbc6": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"line": {"width": 2}, "name": "Class 0 (auc = 1.00)", "x": {"dtype": "float64", "shape": [4]}, "y": {"dtype": "float64", "shape": [4]}, "type": "scatter", "uid": "243956b4-4d2a-47e1-a2c3-b7b30119be47"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 1.0", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.0], "y": [1.0], "type": "scatter", "uid": "76b33472-e5c7-492b-81a7-c00ce2ffa3a0"}, {"line": {"width": 2}, "name": "Class 1 (auc = 0.98)", "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "b2fcdef9-b70a-43dc-b961-1446a268f4a2"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 3.38e-26<br>Class: 1", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.1320754716981132], "y": [1.0], "type": "scatter", "uid": "5e9b7f06-5290-4c7e-b0f6-2fbbe0682a7c"}, {"line": {"width": 2}, "name": "Class 2 (auc = 0.97)", "x": {"dtype": "float64", "shape": [7]}, "y": {"dtype": "float64", "shape": [7]}, "type": "scatter", "uid": "649877ae-3b9f-4588-91b9-0ee958b99fa2"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 0.585<br>Class: 2", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.08], "y": [1.0], "type": "scatter", "uid": "bfeca2b0-4fe9-46a8-9e9d-8fd86ffc430c"}, {"line": {"color": "#444", "dash": "dash", "width": 2}, "showlegend": false, "x": [0, 1], "y": [0, 1], "type": "scatter", "uid": "218e7ffc-9a87-4276-beda-72f77b7f16cd"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"height": 500, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Receiver operating characteristic for multi-class data"}, "xaxis": {"title": {"text": "False Positive Rate"}}, "yaxis": {"title": {"text": "True Positive Rate"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAN/ZqO9s1Oc/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "AAAAAAAAAAAAAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwXgr+xxSkz/BeCv7HFKTP8F4K/scUrM/wXgr+xxSsz+pCcZb2efAP6kJxlvZ58A/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "AAAAAAAAAADRRRdddNHlPy+66KKLLuo/L7rooosu6j+jiy666KLrP6OLLrroous/F1100UUX7T8XXXTRRRftPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "x", "buffer"], "data": "AAAAAAAAAAC4HoXrUbiuP7gehetRuK4/exSuR+F6tD97FK5H4Xq0P1K4HoXrUeg/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "AAAAAAAAAAApXI/C9SjsP7gehetRuO4/uB6F61G47j8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}]}, "d0356c4679bb4dc3aa65e81b5fdeaa2f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_8f5b370eef5b464da07ffb15b66e3d17", "style": "IPY_MODEL_895dc4b54bfc4088bb78ad96a7bc95d5", "value": "<div><span style=\"font-size:0.8em\"><i>\n            The marked points are the optimal threshold cut-off points. They are determined using Youden's index defined\n            as sensitivity + specificity - 1\n            </i></span></div>"}}, "8f5b370eef5b464da07ffb15b66e3d17": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "895dc4b54bfc4088bb78ad96a7bc95d5": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "94b4f76f6c8949e6a51f754f0b5b7409": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "fd5c2b91c48741418d2836c774714512": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"version_major": 2, "version_minor": 0, "model_id": "539099871a7e4ca5a9697784f2e86701"}
+{"version_major": 2, "version_minor": 0, "model_id": "b204f9e7f2c2413bbd4b561987999a40"}
 </script>
 
 </body>
 </html>
 </div>
 <br />
-<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.084 seconds)</p>
+<br /></section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>A condition for minimum allowed AUC score per class can be defined.
+Here, we define minimum AUC score to be 0.7.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.SingleDatasetCheck" title="deepchecks.tabular.SingleDatasetCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">RocReport</span></a><span class="p">()</span>
+<span class="n">check</span><span class="o">.</span><span class="n">add_condition_auc_greater_than</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ds</span></a><span class="p">,</span> <span class="n">clf</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ROC Report</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"version_major": 2, "version_minor": 0, "state": {"f3a2f38ce21144fb81c86d1e19eff0ae": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_e39a80e6a1bd46c3b4a89a6485fd7ad0", "IPY_MODEL_827cb7eb161840c896cf910520e0973d", "IPY_MODEL_27e317f24e3644e79ffe163d21deeb04", "IPY_MODEL_d878b6be0a154da4a3356fb9cf6a7bb6"], "layout": "IPY_MODEL_a6e467e1a52d4ee7a48de4f8ee3d826a"}}, "e39a80e6a1bd46c3b4a89a6485fd7ad0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6e5948c72fea470ea755ac3d4779e4a3", "style": "IPY_MODEL_30d0e369ae814384a69a0e5496f29d1f", "value": "<h4><b>ROC Report</b></h4>"}}, "6e5948c72fea470ea755ac3d4779e4a3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "30d0e369ae814384a69a0e5496f29d1f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "827cb7eb161840c896cf910520e0973d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_cada52f8a8854b2e9d35a76e4e996d7f", "style": "IPY_MODEL_fc343f2c9f264ba5a7752cf616eb451d", "value": "<p>Calculate the ROC curve for each class. <a href=\"https://docs.deepchecks.com/0.9/checks_gallery/tabular/model_evaluation/plot_roc_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "cada52f8a8854b2e9d35a76e4e996d7f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "fc343f2c9f264ba5a7752cf616eb451d": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "27e317f24e3644e79ffe163d21deeb04": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_62d1662a35ce491fa7635cf56abb171e", "style": "IPY_MODEL_7b7f1dd000a74d6c8094dac8289fa07f", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_3b001_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3b001_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3b001_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3b001_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_3b001_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_3b001_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_3b001_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_3b001_row0_col1\" class=\"data row0 col1\" >AUC score for all the classes is greater than 0.7</td>\n      <td id=\"T_3b001_row0_col2\" class=\"data row0 col2\" >All classes passed, minimum AUC found is 0.97 for class 2</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "62d1662a35ce491fa7635cf56abb171e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7b7f1dd000a74d6c8094dac8289fa07f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d878b6be0a154da4a3356fb9cf6a7bb6": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_2b5e1e2bacb84a298fd26d5063cf4adb", "IPY_MODEL_a1e5ea7e37be446db8f70906e4dce71f", "IPY_MODEL_2d0a3f94850f4a3581cad379d6f85125"], "layout": "IPY_MODEL_86dcd2420dd94d8ea27ba940a4bf5a71"}}, "2b5e1e2bacb84a298fd26d5063cf4adb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9d8cd8148e8742de8330dce27506b04a", "style": "IPY_MODEL_143c9525dd994774b5c658c63da67b51", "value": "<h5><b>Additional Outputs</b></h5>"}}, "9d8cd8148e8742de8330dce27506b04a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "143c9525dd994774b5c658c63da67b51": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a1e5ea7e37be446db8f70906e4dce71f": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.5.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"line": {"width": 2}, "name": "Class 0 (auc = 1.00)", "x": {"dtype": "float64", "shape": [4]}, "y": {"dtype": "float64", "shape": [4]}, "type": "scatter", "uid": "d72e5a25-35af-4a01-bb4e-4554fadf9d6c"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 1.0", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.0], "y": [1.0], "type": "scatter", "uid": "7b420007-b0f8-4fb1-831f-f9a0554190be"}, {"line": {"width": 2}, "name": "Class 1 (auc = 0.98)", "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "624c90bb-9842-4192-b6b6-ed9cfd5cd913"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 3.38e-26<br>Class: 1", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.1320754716981132], "y": [1.0], "type": "scatter", "uid": "c9973ff6-642c-4b19-9bbe-4efc9cc271c6"}, {"line": {"width": 2}, "name": "Class 2 (auc = 0.97)", "x": {"dtype": "float64", "shape": [7]}, "y": {"dtype": "float64", "shape": [7]}, "type": "scatter", "uid": "bc89cba2-dd8a-4055-8858-2b1869f6eca3"}, {"hovertemplate": "TPR: %{y:.2%}<br>FPR: %{x:.2%}<br>Youden's Index: 0.585<br>Class: 2", "marker": {"size": 15}, "mode": "markers", "showlegend": false, "x": [0.08], "y": [1.0], "type": "scatter", "uid": "c1abc937-01c9-4670-b0a9-4df2d4cd8174"}, {"line": {"color": "#444", "dash": "dash", "width": 2}, "showlegend": false, "x": [0, 1], "y": [0, 1], "type": "scatter", "uid": "a50c3ecd-8fca-4ab8-baf1-633422a50691"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"height": 500, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Receiver operating characteristic for multi-class data"}, "xaxis": {"title": {"text": "False Positive Rate"}}, "yaxis": {"title": {"text": "True Positive Rate"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAN/ZqO9s1Oc/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "AAAAAAAAAAAAAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "x", "buffer"], "data": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwXgr+xxSkz/BeCv7HFKTP8F4K/scUrM/wXgr+xxSsz+pCcZb2efAP6kJxlvZ58A/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "AAAAAAAAAADRRRdddNHlPy+66KKLLuo/L7rooosu6j+jiy666KLrP6OLLrroous/F1100UUX7T8XXXTRRRftPwAAAAAAAPA/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "x", "buffer"], "data": "AAAAAAAAAAC4HoXrUbiuP7gehetRuK4/exSuR+F6tD97FK5H4Xq0P1K4HoXrUeg/AAAAAAAA8D8="}, {"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "AAAAAAAAAAApXI/C9SjsP7gehetRuO4/uB6F61G47j8AAAAAAADwPwAAAAAAAPA/AAAAAAAA8D8="}]}, "2d0a3f94850f4a3581cad379d6f85125": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_033e541f46ff4e9bb80e17e9d8efe3fe", "style": "IPY_MODEL_8e5815b7035649ccb6fc2b138e65e540", "value": "<div><span style=\"font-size:0.8em\"><i>\n            The marked points are the optimal threshold cut-off points. They are determined using Youden's index defined\n            as sensitivity + specificity - 1\n            </i></span></div>"}}, "033e541f46ff4e9bb80e17e9d8efe3fe": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8e5815b7035649ccb6fc2b138e65e540": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "86dcd2420dd94d8ea27ba940a4bf5a71": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a6e467e1a52d4ee7a48de4f8ee3d826a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "f3a2f38ce21144fb81c86d1e19eff0ae"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.147 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-checks-gallery-tabular-model-evaluation-plot-roc-report-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../../_downloads/302691f6669541a3b6001ad16675f67b/plot_roc_report.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_roc_report.py</span></code></a></p>

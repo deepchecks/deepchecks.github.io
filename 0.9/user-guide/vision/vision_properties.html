@@ -684,6 +684,11 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#customizing-the-checks-properties">
+   Customizing the Checks’ Properties
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#properties-demonstration">
    Properties Demonstration
   </a>
@@ -701,6 +706,18 @@ Page: user-guide/vision/vision_properties&labels=labels=chore/documentation" tar
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#prediction-property">
      Prediction Property
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-calculated-properties">
+   Pre-Calculated Properties
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#code-example">
+     Code Example
     </a>
    </li>
   </ul>
@@ -866,6 +883,17 @@ box), which means the returned list may contain either primitives values or a li
 label/prediction.</p>
 </section>
 </section>
+<section id="customizing-the-checks-properties">
+<h2>Customizing the Checks’ Properties<a class="headerlink" href="#customizing-the-checks-properties" title="Permalink to this headline">#</a></h2>
+<p>By default, checks using properties will use the <a class="reference internal" href="#deepchecks-built-in-properties"><span class="std std-ref">built-in properties</span></a>.
+Those default properties can be overridden in one of two ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Properties</strong> - a list of functions to be calculated on the data during the check (in the format specified above)
+passed to the check init. <a class="reference internal" href="#property-structure"><span class="std std-ref">Properties format</span></a>.</p></li>
+<li><p><strong>Pre-Calculated Properties</strong> - a dictionary with the result of pre calculated properties per sample passed to the
+check run. <a class="reference internal" href="#pre-calculated-properties"><span class="std std-ref">Pre-calculated properties format</span></a>.</p></li>
+</ol>
+</section>
 <section id="properties-demonstration">
 <h2>Properties Demonstration<a class="headerlink" href="#properties-demonstration" title="Permalink to this headline">#</a></h2>
 <p>We will demonstrate the 3 drift checks (for each property type) and implement the properties to pass to it.</p>
@@ -946,6 +974,62 @@ implement properties which apply to the Detection task type.</p>
 <span class="p">]</span>
 
 <span class="n">check</span> <span class="o">=</span> <span class="n">TrainTestPredictionDrift</span><span class="p">(</span><span class="n">prediction_properties</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pre-calculated-properties">
+<h2>Pre-Calculated Properties<a class="headerlink" href="#pre-calculated-properties" title="Permalink to this headline">#</a></h2>
+<p>Properties can be calculated and saved ahead of time and then passed to the check. This can be useful in cases where
+calculation on the fly is not practical, for example demands extra computing resources that are not always available,
+as well as for using meta-data as properties such as the camera type for images and annotator identity for labels.</p>
+<p>To use this option, pass the static properties to the <cite>check.run</cite> argument <cite>train_properties</cite> in the case of the train
+dataset or single dataset, and to the argument <cite>test_properties</cite> in the case tf the test set.</p>
+<dl class="simple">
+<dt>The expected format for the static properties is the following nested dictionary:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>sample index (int):</dt><dd><ul>
+<li><dl class="simple">
+<dt>properties input type (PropertiesInputType):</dt><dd><ul>
+<li><dl class="simple">
+<dt>property name (str):</dt><dd><ul>
+<li><p>property values per sample (list)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>The values per sample is a list to support the case of object detection where there might be multiple bounding boxes per
+image.</p>
+<section id="code-example">
+<h3>Code Example<a class="headerlink" href="#code-example" title="Permalink to this headline">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">deepchecks.vision.checks</span> <span class="kn">import</span> <span class="n">ImagePropertyOutliers</span>
+<span class="kn">from</span> <span class="nn">deepchecks.vision.datasets.detection.coco</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">deepchecks.vision.utils</span> <span class="kn">import</span> <span class="n">static_properties_from_df</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">object_type</span><span class="o">=</span><span class="s1">&#39;VisionData&#39;</span><span class="p">)</span>
+
+<span class="c1"># Say we have a dataframe with previously calculated properties</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;property1&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">num_samples</span><span class="p">),</span>
+                   <span class="s1">&#39;property2&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">num_samples</span><span class="p">)})</span>
+
+<span class="n">static_props</span> <span class="o">=</span> <span class="n">static_properties_from_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">image_cols</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;property1&#39;</span><span class="p">,</span> <span class="s1">&#39;property2&#39;</span><span class="p">))</span>
+
+
+<span class="n">check</span> <span class="o">=</span> <span class="n">ImagePropertyOutliers</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_properties</span><span class="o">=</span><span class="n">static_props</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
