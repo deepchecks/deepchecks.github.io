@@ -83,10 +83,12 @@ read_schema(schema_file_path)
 # based metrics such as AUC, log_loss, brier scorer and more.
 
 import os, random, string
-os.environ['DEEPCHECKS_API_HOST'] = 'https://app.deepchecks.com'
+
+# Point the host to deepchecks app
+host = os.environ['DEEPCHECKS_API_HOST'] or 'https://app.deepchecks.com'
 # note to put the API token in your environment variables. Or alternatively (less recommended):
 # os.environ['DEEPCHECKS_API_TOKEN'] = 'uncomment-this-line-and-insert-your-api-token-here'
-dc_client = DeepchecksClient(host=os.getenv('DEEPCHECKS_API_HOST'), token=os.getenv('DEEPCHECKS_API_TOKEN'))
+dc_client = DeepchecksClient(host=host, token=os.getenv('DEEPCHECKS_API_TOKEN'))
 model_name = 'Airbnb' + ''.join(random.choices(string.ascii_letters, k=8))
 
 model_version = dc_client.create_tabular_model_version(model_name=model_name, version_name='ver_1',
