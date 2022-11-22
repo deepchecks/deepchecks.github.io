@@ -1,0 +1,129 @@
+
+API
+===
+
+
+
+.. currentmodule:: deepchecks_client.core.api
+
+.. autoclass:: API
+   :special-members: __init__
+
+
+
+.. rubric:: Attributes
+
+.. autosummary::
+   :toctree:
+
+   
+   API.session
+   
+
+
+
+
+
+
+.. rubric:: Methods
+
+.. autosummary::
+   :toctree:
+
+   
+   
+   API.create_alert_rule
+   
+   
+   API.create_checks
+   
+   
+   API.create_model
+   
+   
+   API.create_model_version
+   
+   
+   API.create_monitor
+   
+   
+   API.delete_check_by_name
+   
+   
+   API.delete_model_by_id
+   
+   
+   API.delete_model_by_name
+   
+   
+   API.delete_model_checks_by_name
+   
+   
+   API.delete_model_version_by_id
+   
+   
+   API.delete_model_version_by_name
+   
+   
+   API.fetch_all_model_checks_by_id
+   
+   
+   API.fetch_all_model_checks_by_name
+   
+   
+   API.fetch_all_model_versions
+   
+   
+   API.fetch_dashboard
+   
+   
+   API.fetch_model_by_id
+   
+   
+   API.fetch_model_by_name
+   
+   
+   API.fetch_model_version
+   
+   
+   API.fetch_model_version_by_id
+   
+   
+   API.fetch_model_version_by_name
+   
+   
+   API.fetch_model_version_schema
+   
+   
+   API.fetch_model_version_time_window_statistics
+   
+   
+   API.fetch_models
+   
+   
+   API.get_samples_count
+   
+   
+   API.instantiate
+   
+   
+   API.say_hello
+   
+   
+   API.update_model_version
+   
+   
+   API.update_samples
+   
+   
+   API.upload_reference
+   
+   
+   API.upload_samples
+   
+
+
+
+
+
+

@@ -1,0 +1,71 @@
+
+DeepchecksModelVersionClient
+============================
+
+
+
+.. currentmodule:: deepchecks_client.tabular.client
+
+.. autoclass:: DeepchecksModelVersionClient
+   :special-members: __init__
+
+
+
+.. rubric:: Attributes
+
+.. autosummary::
+   :toctree:
+
+   
+   DeepchecksModelVersionClient.api
+   
+
+   
+   DeepchecksModelVersionClient.model
+   
+
+   
+   DeepchecksModelVersionClient.model_version_id
+   
+
+
+
+
+
+
+.. rubric:: Methods
+
+.. autosummary::
+   :toctree:
+
+   
+   
+   DeepchecksModelVersionClient.log_batch
+   
+   
+   DeepchecksModelVersionClient.log_sample
+   
+   
+   DeepchecksModelVersionClient.send
+   
+   
+   DeepchecksModelVersionClient.set_feature_importance
+   
+   
+   DeepchecksModelVersionClient.time_window_statistics
+   
+   
+   DeepchecksModelVersionClient.update_batch
+   
+   
+   DeepchecksModelVersionClient.update_sample
+   
+   
+   DeepchecksModelVersionClient.upload_reference
+   
+
+
+
+
+
+

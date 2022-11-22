@@ -1,0 +1,76 @@
+
+DeepchecksModelVersionClient
+============================
+
+
+
+.. currentmodule:: deepchecks_client.vision.client
+
+.. autoclass:: DeepchecksModelVersionClient
+   :special-members: __init__
+
+
+
+.. rubric:: Attributes
+
+.. autosummary::
+   :toctree:
+
+   
+   DeepchecksModelVersionClient.model_version_id
+   
+
+   
+   DeepchecksModelVersionClient.schema
+   
+
+   
+   DeepchecksModelVersionClient.ref_schema
+   
+
+   
+   DeepchecksModelVersionClient.api
+   
+
+   
+   DeepchecksModelVersionClient.model
+   
+
+
+
+
+
+
+.. rubric:: Methods
+
+.. autosummary::
+   :toctree:
+
+   
+   
+   DeepchecksModelVersionClient.log_batch
+   
+   
+   DeepchecksModelVersionClient.log_sample
+   
+   
+   DeepchecksModelVersionClient.send
+   
+   
+   DeepchecksModelVersionClient.time_window_statistics
+   
+   
+   DeepchecksModelVersionClient.update_sample
+   
+   
+   DeepchecksModelVersionClient.upload_reference
+   
+   
+   DeepchecksModelVersionClient.upload_reference_batch
+   
+
+
+
+
+
+
