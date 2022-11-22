@@ -82,14 +82,14 @@ read_schema(schema_file_path)
 # through the `reference_proba` argument, enabling computation of probability
 # based metrics such as AUC, log_loss, brier scorer and more.
 
-import os, random, string
+import os
 
 # Point the host to deepchecks app
-host = os.environ.get('DEEPCHECKS_API_HOST') or 'https://staging-v2.deepchecks.com'  # Replace this with https://app.deepchecks.com
+host = os.environ.get('DEEPCHECKS_API_HOST')  # Replace this with https://app.deepchecks.com
 # note to put the API token in your environment variables. Or alternatively (less recommended):
 # os.environ['DEEPCHECKS_API_TOKEN'] = 'uncomment-this-line-and-insert-your-api-token-here'
 dc_client = DeepchecksClient(host=host, token=os.getenv('DEEPCHECKS_API_TOKEN'))
-model_name = 'Airbnb' + ''.join(random.choices(string.ascii_letters, k=8))
+model_name = 'Airbnb'
 
 model_version = dc_client.create_tabular_model_version(model_name=model_name, version_name='ver_1',
                                                        schema=schema_file_path,
