@@ -717,7 +717,7 @@ on the format required by deepchecks can be found in the
 
 
 <span class="k">class</span> <span class="nc">COCODETRData</span><span class="p">(</span><span class="n">DetectionData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class for loading the COCO dataset meant for the DETR ResNet50 model, inherits from `deepchecks.vision.DetectionData`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for loading the COCO dataset meant for the DETR ResNet50 model, inherits from `deepchecks.vision.DetectionData`.</span>
 
 <span class="sd">    Implement the necessary methods to load the images, labels and generate model predictions in a format comprehensible</span>
 <span class="sd">     by deepchecks.</span>
@@ -763,7 +763,7 @@ on the format required by deepchecks can be found in the
             <span class="bp">self</span><span class="o">.</span><span class="n">label_translation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">detr_shift</span>
 
     <span class="k">def</span> <span class="nf">batch_to_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Convert the batch to a list of labels. Copied from deepchecks.vision.datasets.detection.coco&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the batch to a list of labels. Copied from deepchecks.vision.datasets.detection.coco&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">move_class</span><span class="p">(</span><span class="n">tensor</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">device</span><span class="p">))</span> \
@@ -772,21 +772,21 @@ on the format required by deepchecks can be found in the
         <span class="k">return</span> <span class="p">[</span><span class="n">move_class</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span> <span class="k">for</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">def</span> <span class="nf">batch_to_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Convert the batch to a list of images. Copied from deepchecks.vision.datasets.detection.coco&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the batch to a list of images. Copied from deepchecks.vision.datasets.detection.coco&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="k">def</span> <span class="nf">_detect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">im</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;A helper function. Applies DETR detection to a single PIL image.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A helper function. Applies DETR detection to a single PIL image.&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">box_cxcywh_to_xyxy</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Convert bounding box format from [cx, cy, w, h] to [xmin, ymin, xmax, ymax], when c is &quot;center&quot;.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Convert bounding box format from [cx, cy, w, h] to [xmin, ymin, xmax, ymax], when c is &quot;center&quot;.&quot;&quot;&quot;</span>
             <span class="n">x_c</span><span class="p">,</span> <span class="n">y_c</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x_c</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="n">y_c</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">h</span><span class="p">),</span>
                  <span class="p">(</span><span class="n">x_c</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="n">y_c</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">h</span><span class="p">)]</span>
             <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">rescale_bboxes</span><span class="p">(</span><span class="n">out_bbox</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Rescale bounding boxes from the DETR model&#39;s normalized output to the original image size.&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Rescale bounding boxes from the DETR model&#39;s normalized output to the original image size.&quot;&quot;&quot;</span>
             <span class="n">img_w</span><span class="p">,</span> <span class="n">img_h</span> <span class="o">=</span> <span class="n">size</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">box_cxcywh_to_xyxy</span><span class="p">(</span><span class="n">out_bbox</span><span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">img_w</span><span class="p">,</span> <span class="n">img_h</span><span class="p">,</span> <span class="n">img_w</span><span class="p">,</span> <span class="n">img_h</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
@@ -808,11 +808,11 @@ on the format required by deepchecks can be found in the
         <span class="k">return</span> <span class="n">probas</span><span class="p">[</span><span class="n">keep</span><span class="p">],</span> <span class="n">bboxes_scaled</span>
 
     <span class="k">def</span> <span class="nf">_convert_to_80_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Use the pre-built self.label_translation to translate the DETR predictions to YOLO COCO classes.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Use the pre-built self.label_translation to translate the DETR predictions to YOLO COCO classes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">label_translation</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">infer_on_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Infer on a batch of images and return it in deepchecks format.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Infer on a batch of images and return it in deepchecks format.</span>
 
 <span class="sd">        Return a list of prediction tensors (one for each image) containing in each row:</span>
 <span class="sd">        [x_min, y_min, width, height, confidence, class_id]</span>
