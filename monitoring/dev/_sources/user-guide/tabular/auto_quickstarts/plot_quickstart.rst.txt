@@ -58,12 +58,14 @@ Providing reference data is optional yet many important :doc:`checks <deepchecks
 such as :doc:`Train Test Feature Drift (Tabular Version) <deepchecks:checks_gallery/tabular/train_test_validation/plot_train_test_feature_drift>`
 cannot run without it.
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 46-50
 
 Preparing the Reference Data
 -------------------------------
+See :doc:`link <deepchecks:user-guide/tabular/dataset_object>` for more information on the Dataset object and how
+to create it from different data sources.
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-57
+.. GENERATED FROM PYTHON SOURCE LINES 50-59
 
 .. code-block:: default
 
@@ -73,7 +75,7 @@ Preparing the Reference Data
 
     ref_dataset, _ = load_data(data_format='Dataset')
     ref_predictions, _ = load_pre_calculated_prediction()
-    feature_importance = load_pre_calculated_feature_importance()
+    feature_importance = load_pre_calculated_feature_importance() # Optional
     feature_importance
 
 
@@ -98,14 +100,14 @@ Preparing the Reference Data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-62
+.. GENERATED FROM PYTHON SOURCE LINES 60-64
 
 Creating the Data Schema
 ----------------------------
 Schema file contains the description of the data (features and additional data) associated with a model version.
 **It is highly recommended to review the created schema file before moving forward to creating the model version.**
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-71
+.. GENERATED FROM PYTHON SOURCE LINES 64-73
 
 .. code-block:: default
 
@@ -132,7 +134,7 @@ Schema file contains the description of the data (features and additional data) 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-85
+.. GENERATED FROM PYTHON SOURCE LINES 74-87
 
 Creating a model version
 ------------------------
@@ -148,7 +150,7 @@ For classification tasks, also predicted probabilities can be sent
 through the `reference_proba` argument, enabling computation of probability
 based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-102
+.. GENERATED FROM PYTHON SOURCE LINES 87-104
 
 .. code-block:: default
 
@@ -164,7 +166,7 @@ based metrics such as AUC, log_loss, brier scorer and more.
 
     model_version = dc_client.create_tabular_model_version(model_name=model_name, version_name='ver_1',
                                                            schema=schema_file_path,
-                                                           feature_importance=feature_importance.to_dict(),
+                                                           feature_importance=feature_importance,
                                                            reference_dataset=ref_dataset,
                                                            reference_predictions=ref_predictions,
                                                            task_type='regression')
@@ -184,7 +186,7 @@ based metrics such as AUC, log_loss, brier scorer and more.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-114
+.. GENERATED FROM PYTHON SOURCE LINES 105-116
 
 Uploading Production Data
 =========================
@@ -198,7 +200,7 @@ Uploading Data and Predictions
 Same as with the reference data, for classification tasks also predicted probabilities can be sent
 enabling computation of probability based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-126
+.. GENERATED FROM PYTHON SOURCE LINES 116-127
 
 .. code-block:: default
 
@@ -208,7 +210,6 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
     timestamp, label_col = 'datestamp', 'price'
     _, prod_data = load_data(data_format='DataFrame')
     _, prod_predictions = load_pre_calculated_prediction()
-    prod_predictions = pd.Series(prod_predictions, index=prod_data.index)
     # If labels arrive along with the data it is possible to upload them directly via the labels param.
     model_version.log_batch(sample_ids=prod_data.index,
                             data=prod_data.drop([timestamp, label_col], axis=1),
@@ -235,24 +236,20 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-131
+.. GENERATED FROM PYTHON SOURCE LINES 128-132
 
 Updating the Labels
 -------------------
 In many real world scenarios, the labels of the data are only available at a later time. We can update them
 in hindsight using the global sample ids.
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-139
+.. GENERATED FROM PYTHON SOURCE LINES 132-136
 
 .. code-block:: default
 
 
     model_version.update_batch(sample_ids=prod_data.index, labels=prod_data[label_col])
 
-    # We can verify that status of the process that is running in the background by checking
-    # the amount of samples that have been processed and uploaded by the system, using:
-    # model_version.time_window_statistics(min(prod_data[timestamp]), max(prod_data[timestamp]))
-    # upon completion, the statistics should equal the total number of samples sent
 
 
 
@@ -267,10 +264,12 @@ in hindsight using the global sample ids.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-151
+.. GENERATED FROM PYTHON SOURCE LINES 137-160
 
-The Dashboard Screen
-====================
+The Application
+================
+Dashboard Screen
+----------------
 After creating the model version and uploading the data, we can now see the monitors within the
 `application dashboard <https://app.deepchecks.com/>`_.
 The monitors below are generated by default when a new model is created, all versions of the same model are tracked
@@ -279,9 +278,19 @@ within the same monitor.
 .. image:: /_static/images/quickstart/dashboard_w_defaults.png
    :width: 600
 
+Models Screen
+-------------
+The data uploaded is processed in the background before being visible in the dashboard.
+In order to verify that the data was properly uploaded to the queue and see the progress of the processing
+we can go to the `models screen <https://app.deepchecks.com/configuration/models/>`_.
+
+.. image:: /_static/images/quickstart/models_screen.png
+   :width: 600
+
+
 If we wish to remove the model do free up space for new models we can do it in the following way:
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-154
+.. GENERATED FROM PYTHON SOURCE LINES 160-163
 
 .. code-block:: default
 
@@ -304,7 +313,7 @@ If we wish to remove the model do free up space for new models we can do it in t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  1.229 seconds)
+   **Total running time of the script:** ( 1 minutes  4.162 seconds)
 
 
 .. _sphx_glr_download_user-guide_tabular_auto_quickstarts_plot_quickstart.py:
