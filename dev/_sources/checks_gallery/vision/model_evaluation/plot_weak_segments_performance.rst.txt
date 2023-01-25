@@ -27,7 +27,7 @@ This notebook provides an overview for using and understanding the weak segment 
 
 * `What is the purpose of the check? <#what-is-the-purpose-of-the-check>`__
 * `Automatically detecting weak segments <#automatically-detecting-weak-segments>`__
-* `Generate data & model <#generate-data-model>`__
+* `Generate Dataset <#generate-dataset>`__
 * `Run the check <#run-the-check>`__
 * `Define a condition <#define-a-condition>`__
 
@@ -55,23 +55,45 @@ The check performs several steps:
 #. We convert each of the leafs in each of the trees into a segment and calculate the segment's performance. For the
    weakest segments detected we also calculate the model's performance on the data segments surrounding them.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-44
+.. GENERATED FROM PYTHON SOURCE LINES 42-50
 
-Run the check
-=============
+Generate Dataset
+=================
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-54
+.. note::
+  In this example, we use the pytorch version of the coco dataset and model. In order to run this example using
+  tensorflow, please change the import statements to::
+
+      from deepchecks.vision.datasets.detection import coco_tensorflow as coco
+
+.. GENERATED FROM PYTHON SOURCE LINES 50-56
 
 .. code-block:: default
 
 
     from deepchecks.vision.checks import WeakSegmentsPerformance
-    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.datasets.detection import coco_torch as coco
 
     coco_data = coco.load_dataset(train=False, object_type='VisionData')
-    model = coco.load_model()
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
+
+Run the check
+=============
+
+.. GENERATED FROM PYTHON SOURCE LINES 59-63
+
+.. code-block:: default
+
     check = WeakSegmentsPerformance()
-    result = check.run(coco_data, model)
+    result = check.run(coco_data)
     result
 
 
@@ -82,33 +104,16 @@ Run the check
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
-    |#####| 1/1 [Time: 00:04]    Validating Input:
+    Processing Batches:
+    |     | 0/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]
+    Computing Check:
+    |     | 0/1 [Time: 00:00]
+    Computing Check:
     |#####| 1/1 [Time: 00:04]
-    Ingesting Batches:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches:
-    |##5  | 1/2 [Time: 00:05]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:12]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:12]
-
     Computing Check:
-    |     | 0/1 [Time: 00:00]/home/runner/work/deepchecks/deepchecks/venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:700: UserWarning:
-
-    A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
-
-
-
-    Computing Check:
-    |#####| 1/1 [Time: 00:07]
-
-    Computing Check:
-    |#####| 1/1 [Time: 00:07]                                           
-                                                
-
+    |#####| 1/1 [Time: 00:04]                                             
                                               
 
 .. raw:: html
@@ -393,10 +398,10 @@ Run the check
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"49461738665647d5b2cd15af5ad87cf3": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_9caff9b9c95a42a5b234c083f896cdf4", "IPY_MODEL_db8e694c79c04cce97df0063c428cc97", "IPY_MODEL_1d3a3cc3071b4971bc4eac6fd1eca66c", "IPY_MODEL_f5224c134cdf4199a7cfc35d2796ec2f"], "layout": "IPY_MODEL_74ea5b5eb1fc40cc9b6421f8ec8ff53f"}}, "9caff9b9c95a42a5b234c083f896cdf4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_63b7e4c7ef5045ec9c8a23c4113b86db", "style": "IPY_MODEL_7122a93304e3427ba75e46c393592856", "value": "<h4><b>Weak Segments Performance</b></h4>"}}, "63b7e4c7ef5045ec9c8a23c4113b86db": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7122a93304e3427ba75e46c393592856": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "db8e694c79c04cce97df0063c428cc97": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_90bd1d9075b54ce6a7c87e03211725d9", "style": "IPY_MODEL_5d8f30666ee647d793937ac72509b829", "value": "<p>Search for segments with low performance scores. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_weak_segments_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "90bd1d9075b54ce6a7c87e03211725d9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5d8f30666ee647d793937ac72509b829": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "1d3a3cc3071b4971bc4eac6fd1eca66c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c58fa9097e75426992969fa0a7b96e67", "style": "IPY_MODEL_d8c803a04f3d4aa48045e04620a561b2"}}, "c58fa9097e75426992969fa0a7b96e67": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "d8c803a04f3d4aa48045e04620a561b2": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f5224c134cdf4199a7cfc35d2796ec2f": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_cf2a4a36c84645e9aaf1729b5456b42d", "IPY_MODEL_0dd7765b75ae40959a54bcb898d2ccf6", "IPY_MODEL_6c56125afca44160b844aec7d4231fe3"], "layout": "IPY_MODEL_7074f9c7ae90448e917f2b3a011cb7b7"}}, "cf2a4a36c84645e9aaf1729b5456b42d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c5155524d50d42d7a92624ef0155f481", "style": "IPY_MODEL_bcbf7cef5b9644a283709c17254d6bd6", "value": "<h5><b>Additional Outputs</b></h5>"}}, "c5155524d50d42d7a92624ef0155f481": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "bcbf7cef5b9644a283709c17254d6bd6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0dd7765b75ae40959a54bcb898d2ccf6": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_129fa75c00324c0a878f63d1ef624945", "style": "IPY_MODEL_5cee147c20c940a8a57405ce58515468", "value": "<div>Showcasing intersections of features with weakest detected segments.<br> The full list of weak segments can be observed in the check result value. </div>"}}, "129fa75c00324c0a878f63d1ef624945": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5cee147c20c940a8a57405ce58515468": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6c56125afca44160b844aec7d4231fe3": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_4767e695ecb24022893b6e4fa6bb9bec", "IPY_MODEL_e580167f673849c893285c50bbd7ea56"], "layout": "IPY_MODEL_f76af7b9335048cca2832fdd30d12441"}}, "4767e695ecb24022893b6e4fa6bb9bec": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0acab471347141a0b733fea4b3d8702b", "style": "IPY_MODEL_332ec817d1d141f5b8197800e741852b", "value": "<style>.jupyter-widgets.widget-tab > .p-TabBar .p-TabBar-tab {min-width: fit-content;}</style>"}}, "0acab471347141a0b733fea4b3d8702b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "332ec817d1d141f5b8197800e741852b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e580167f673849c893285c50bbd7ea56": {"model_name": "TabModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_titles": {"0": "Aspect Ratio vs RMS Contrast", "1": "Aspect Ratio vs Brightness", "2": "Aspect Ratio vs Mean Red Relative Intensity"}, "children": ["IPY_MODEL_3e879db7db164a0f8c5f59a27a730bd8", "IPY_MODEL_bc6463368a914d33a34eac33855dddf0", "IPY_MODEL_47ba57af890d498cbdb182533aaffafd"], "layout": "IPY_MODEL_844bc92b2bcb428ebaa00a05798655ae"}}, "3e879db7db164a0f8c5f59a27a730bd8": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_907c4e1c88fa4e66b169a817c3c6febd", "IPY_MODEL_fcd7cbbd0cf04afc9995fefaef042692"], "layout": "IPY_MODEL_f96643b3f1a84d06af525087c152584d"}}, "907c4e1c88fa4e66b169a817c3c6febd": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "Aspect Ratio: %{x}<br>RMS Contrast: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.77\n(4.69%)", "", "0.74\n(4.69%)", "", "0.79\n(6.25%)"], ["", "0.8\n(1.56%)", "0.54\n(7.81%)", "0.82\n(3.12%)", "0.83\n(4.69%)"], ["0.69\n(4.69%)", "0.94\n(1.56%)", "0.72\n(4.69%)", "0.83\n(4.69%)", "0.92\n(1.56%)"], ["0.84\n(3.12%)", "0.87\n(9.38%)", "0.57\n(15.62%)", "0.76\n(7.81%)", "0.65\n(1.56%)"], ["0.63\n(1.56%)", "0.63\n(1.56%)", "0.77\n(15.62%)", "0.88\n(3.12%)", "0.88\n(3.12%)"]], "texttemplate": "%{text}", "x": ["[0.35, 0.67]", "(0.67, 0.69]", "(0.69, 1.24]", "(1.24, 1.5]", "(1.5, 1.78]"], "xaxis": "x", "y": ["[0.09, 0.18]", "(0.18, 0.2]", "(0.2, 0.22]", "(0.22, 0.28]", "(0.28, 0.32]"], "yaxis": "y", "z": [[0.7730807783229962, null, 0.7410680181316217, null, 0.7925051671468291], [null, 0.7975229361368006, 0.5444529827677098, 0.8154300686860662, 0.833548120439251], [0.6861732341289906, 0.9400327183543623, 0.7160822661727752, 0.8317933123991805, 0.9237770981474771], [0.841060869106964, 0.8689816231847591, 0.5671764156259776, 0.7572166663437988, 0.6481139387477247], [0.6303340450994597, 0.6303340450994597, 0.7693991498325075, 0.8750514624086164, 0.8750514624086164]], "type": "heatmap", "uid": "05a928b7-5a35-4df2-9afd-62036c06e22e"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) Aspect Ratio vs RMS Contrast"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "Aspect Ratio"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": "RMS Contrast"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "fcd7cbbd0cf04afc9995fefaef042692": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2fce77e7860d4cab87e82d73a42fed0c", "style": "IPY_MODEL_53bbd15d2a984ab4b8fc473c92a0b108", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "2fce77e7860d4cab87e82d73a42fed0c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "53bbd15d2a984ab4b8fc473c92a0b108": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f96643b3f1a84d06af525087c152584d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "bc6463368a914d33a34eac33855dddf0": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_2b8b7e27616548eda420bd9149f8fcc3", "IPY_MODEL_f8a0612abebe4ed6b8d5a015b1ce99c1"], "layout": "IPY_MODEL_c9895b242e1f4c2698fc596c4d41644e"}}, "2b8b7e27616548eda420bd9149f8fcc3": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "Aspect Ratio: %{x}<br>Brightness: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.93\n(1.56%)", "0.8\n(1.56%)", "0.77\n(6.25%)", "0.82\n(3.12%)", "0.87\n(3.12%)"], ["0.74\n(1.56%)", "", "0.75\n(6.25%)", "0.79\n(4.69%)", ""], ["", "", "0.6\n(6.25%)", "0.73\n(4.69%)", "0.65\n(3.12%)"], ["", "", "0.74\n(9.38%)", "0.79\n(1.56%)", "0.8\n(3.12%)"], ["0.72\n(10.94%)", "0.85\n(12.5%)", "0.58\n(20.31%)", "0.88\n(3.12%)", "0.89\n(4.69%)"]], "texttemplate": "%{text}", "x": ["[0.35, 0.67]", "(0.67, 0.69]", "(0.69, 1.24]", "(1.24, 1.5]", "(1.5, 1.78]"], "xaxis": "x", "y": ["[0.13, 0.32]", "(0.32, 0.35]", "(0.35, 0.4]", "(0.4, 0.45]", "(0.45, 0.73]"], "yaxis": "y", "z": [[0.9261749734398114, 0.7975229361368006, 0.7688817449876182, 0.8154300686860662, 0.8733121246057637], [0.7397391651567804, null, 0.7527040682172557, 0.791672808547256, null], [null, null, 0.6045778857398877, 0.7309187269628353, 0.6495843876221776], [null, null, 0.7362821196419674, 0.7899115642387843, 0.7967682532107914], [0.7177576688675364, 0.8480320628202971, 0.5797787621312106, 0.8750514624086164, 0.8918440834954452]], "type": "heatmap", "uid": "fd65877f-697e-4856-841a-3674f55ba135"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) Aspect Ratio vs Brightness"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "Aspect Ratio"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": "Brightness"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "f8a0612abebe4ed6b8d5a015b1ce99c1": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_3a00e5ec4f2b4c20b5f431b501f5d8fd", "style": "IPY_MODEL_4fb1adfe03cf48f7b9aa440a3494440a", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "3a00e5ec4f2b4c20b5f431b501f5d8fd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4fb1adfe03cf48f7b9aa440a3494440a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "c9895b242e1f4c2698fc596c4d41644e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "47ba57af890d498cbdb182533aaffafd": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_eb8298c6e6764a54b138a4a605449550", "IPY_MODEL_853e4148217a486d9947b97300d9a95e"], "layout": "IPY_MODEL_56bb5b0ea2df4deaabe42d125bb7b6b1"}}, "eb8298c6e6764a54b138a4a605449550": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "Aspect Ratio: %{x}<br>Mean Red Relative Intensity: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.94\n(1.56%)", "0.81\n(7.81%)", "0.89\n(6.25%)", "0.67\n(15.62%)", "0.58\n(15.62%)"], ["", "0.94\n(3.12%)", "0.95\n(1.56%)", "0.77\n(4.69%)", "0.83\n(7.81%)"], ["0.82\n(3.12%)", "0.64\n(1.56%)", "", "0.64\n(3.12%)", "0.81\n(6.25%)"], ["0.71\n(3.12%)", "0.79\n(1.56%)", "0.79\n(1.56%)", "0.77\n(6.25%)", "0.73\n(3.12%)"], ["", "0.63\n(1.56%)", "", "0.72\n(7.81%)", "0.81\n(6.25%)"]], "texttemplate": "%{text}", "x": ["[0.35, 0.63]", "(0.63, 0.67]", "(0.67, 0.67]", "(0.67, 0.75]", "(0.75, 1.78]"], "xaxis": "x", "y": ["[0.24, 0.34]", "(0.34, 0.37]", "(0.37, 0.39]", "(0.39, 0.45]", "(0.45, 0.55]"], "yaxis": "y", "z": [[0.938215552459234, 0.8137039146169839, 0.8931672182542134, 0.6677280496587517, 0.5820344237381379], [null, 0.9381521042790804, 0.9501292351183492, 0.7687876866836459, 0.8305372157151363], [0.8231090194959945, 0.6364940288790945, null, 0.6397099437295216, 0.8140590770364662], [0.7084652408658468, 0.7936926698867542, 0.7936926698867542, 0.7686351037847474, 0.7264870997952382], [null, 0.6303340450994597, null, 0.7161779565797608, 0.806302155923862]], "type": "heatmap", "uid": "f365cf04-6efe-4b36-aebf-a7d59e44c9b0"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) Aspect Ratio vs Mean Red Relative Intensity"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "Aspect Ratio"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": "Mean Red Relative Intensity"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "853e4148217a486d9947b97300d9a95e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ef57a83b7b694a4b9c5c2a60d38bc0cf", "style": "IPY_MODEL_f3021225ca23424db948959d864b9ccd", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "ef57a83b7b694a4b9c5c2a60d38bc0cf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f3021225ca23424db948959d864b9ccd": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "56bb5b0ea2df4deaabe42d125bb7b6b1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "844bc92b2bcb428ebaa00a05798655ae": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f76af7b9335048cca2832fdd30d12441": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7074f9c7ae90448e917f2b3a011cb7b7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "74ea5b5eb1fc40cc9b6421f8ec8ff53f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"232bf79335d84efcad6dd87e899ad062": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_60821d4704f3490da7524ed29638fc45", "IPY_MODEL_f726462feec94d6e9be600bf16adfc18", "IPY_MODEL_e2f1f0cad59c46d584419d471fefb262", "IPY_MODEL_8b7e751ccc00495298f7290f70be982a"], "layout": "IPY_MODEL_0dcbee00b897429c873449c81c578f0e"}}, "60821d4704f3490da7524ed29638fc45": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_70235cbd0f894d24ab1bf86e9e4b99e7", "style": "IPY_MODEL_7939a5f7c7d84ec2a065b71c22192120", "value": "<h4><b>Weak Segments Performance</b></h4>"}}, "70235cbd0f894d24ab1bf86e9e4b99e7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7939a5f7c7d84ec2a065b71c22192120": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f726462feec94d6e9be600bf16adfc18": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ffb04dc778c0494d8b255078b88c6bdf", "style": "IPY_MODEL_4fc5facb259444c78e199ca8e0b86b83", "value": "<p>Search for segments with low performance scores. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_weak_segments_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "ffb04dc778c0494d8b255078b88c6bdf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4fc5facb259444c78e199ca8e0b86b83": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e2f1f0cad59c46d584419d471fefb262": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c6ff0e4c08d84af3956f393e127958d8", "style": "IPY_MODEL_8370905c132f42c0992d8622faaf541f"}}, "c6ff0e4c08d84af3956f393e127958d8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8370905c132f42c0992d8622faaf541f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "8b7e751ccc00495298f7290f70be982a": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_efe42db0c1db4bb3a4fb96554ec6b376", "IPY_MODEL_00f78b516b4842e7903cf49e97d0f39a", "IPY_MODEL_805b39ab821a47e3a37db4409c70eeed"], "layout": "IPY_MODEL_6b91201447af4f028f5033021eae5c0f"}}, "efe42db0c1db4bb3a4fb96554ec6b376": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0076d1ba1563423c82b8c785e69e170a", "style": "IPY_MODEL_098ed6075fc54f1caf3c72718317c167", "value": "<h5><b>Additional Outputs</b></h5>"}}, "0076d1ba1563423c82b8c785e69e170a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "098ed6075fc54f1caf3c72718317c167": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "00f78b516b4842e7903cf49e97d0f39a": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f6313e0607bf4fb2ab09fb6c2daaa0d2", "style": "IPY_MODEL_f2ea608828364911adf48f355168ca28", "value": "<div>Showcasing intersections of features with weakest detected segments.<br> The full list of weak segments can be observed in the check result value. </div>"}}, "f6313e0607bf4fb2ab09fb6c2daaa0d2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f2ea608828364911adf48f355168ca28": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "805b39ab821a47e3a37db4409c70eeed": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_840da848326e4930b0b6b61d1a0652ae", "IPY_MODEL_8c76a85d96f14be2a756e1f1ad8ae29e"], "layout": "IPY_MODEL_3fbd666ebc494ed68a086df84c704069"}}, "840da848326e4930b0b6b61d1a0652ae": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_db80dd412cc5445d9c79be319e8964bf", "style": "IPY_MODEL_c7571f8875ee4a358027cd041afa6476", "value": "<style>.jupyter-widgets.widget-tab > .p-TabBar .p-TabBar-tab {min-width: fit-content;}</style>"}}, "db80dd412cc5445d9c79be319e8964bf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c7571f8875ee4a358027cd041afa6476": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "8c76a85d96f14be2a756e1f1ad8ae29e": {"model_name": "TabModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_titles": {"0": "Aspect Ratio vs RMS Contrast", "1": "Aspect Ratio vs Brightness", "2": "RMS Contrast"}, "children": ["IPY_MODEL_520d16655e984467992bfee86adb96c7", "IPY_MODEL_9328a405f83f4fdab0179db5d028f8ec", "IPY_MODEL_a3f859ddefa04ca58fe21c9e34db1320"], "layout": "IPY_MODEL_7ddce2d7e0934cf2af5398f70900e0fd"}}, "520d16655e984467992bfee86adb96c7": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_d5527cf081344288b975e9f30b28f200", "IPY_MODEL_0615a0fc28ed468098cd0e85888e0d4f"], "layout": "IPY_MODEL_e8962074f0a342e192d4ba39eaadde62"}}, "d5527cf081344288b975e9f30b28f200": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "Aspect Ratio: %{x}<br>RMS Contrast: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.77\n(4.69%)", "", "0.74\n(4.69%)", "", "0.81\n(4.69%)"], ["", "0.8\n(1.56%)", "0.54\n(7.81%)", "0.71\n(1.56%)", "0.79\n(3.12%)"], ["0.69\n(4.69%)", "0.94\n(1.56%)", "0.7\n(3.12%)", "0.83\n(4.69%)", "0.92\n(1.56%)"], ["0.84\n(3.12%)", "0.87\n(9.38%)", "0.55\n(15.62%)", "0.76\n(7.81%)", "0.65\n(1.56%)"], ["0.63\n(1.56%)", "0.63\n(1.56%)", "0.78\n(17.19%)", "0.88\n(3.12%)", "0.88\n(3.12%)"]], "texttemplate": "%{text}", "x": ["[0.35, 0.67]", "(0.67, 0.69]", "(0.69, 1.24]", "(1.24, 1.5]", "(1.5, 1.78]"], "xaxis": "x", "y": ["[23.53, 45.35]", "(45.35, 50.33]", "(50.33, 55.43]", "(55.43, 69.72]", "(69.72, 81.73]"], "yaxis": "y", "z": [[0.773080151287303, null, 0.7410681381311414, null, 0.8053315623074332], [null, 0.7975310151701297, 0.5444515624266597, 0.7070795569601535, 0.7884351416902733], [0.6861717069221728, 0.9400327183543623, 0.6982380423455866, 0.8317907888638588, 0.9237769222096427], [0.8410607343332479, 0.8689807684589561, 0.5510985874324499, 0.7572165511211504, 0.6481136697292352], [0.630334090728621, 0.630334090728621, 0.7824130767266094, 0.8750545256475784, 0.8750545256475784]], "type": "heatmap", "uid": "4571fcda-dd2f-44ce-af11-f97ea8a1f42f"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) Aspect Ratio vs RMS Contrast"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "Aspect Ratio"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": "RMS Contrast"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "0615a0fc28ed468098cd0e85888e0d4f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5791f943b5c842a6a33ce3e9d474d1b3", "style": "IPY_MODEL_0c75a706b26d445db1e2fea662192a5b", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "5791f943b5c842a6a33ce3e9d474d1b3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "0c75a706b26d445db1e2fea662192a5b": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e8962074f0a342e192d4ba39eaadde62": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9328a405f83f4fdab0179db5d028f8ec": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_9db815029c5448c18b4a5a62b62689e0", "IPY_MODEL_6030a767fc1f4ca584682e2952b57fa4"], "layout": "IPY_MODEL_6504a0d1360340dea9ae09dc3d1a7dfc"}}, "9db815029c5448c18b4a5a62b62689e0": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "Aspect Ratio: %{x}<br>Brightness: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.93\n(1.56%)", "0.8\n(1.56%)", "0.77\n(6.25%)", "0.82\n(3.12%)", "0.87\n(3.12%)"], ["0.74\n(1.56%)", "", "0.75\n(6.25%)", "0.79\n(4.69%)", ""], ["", "", "0.63\n(7.81%)", "0.64\n(3.12%)", "0.65\n(3.12%)"], ["", "", "0.74\n(7.81%)", "0.85\n(3.12%)", "0.8\n(3.12%)"], ["0.72\n(10.94%)", "0.85\n(12.5%)", "0.58\n(20.31%)", "0.88\n(3.12%)", "0.89\n(4.69%)"]], "texttemplate": "%{text}", "x": ["[0.35, 0.67]", "(0.67, 0.69]", "(0.69, 1.24]", "(1.24, 1.5]", "(1.5, 1.78]"], "xaxis": "x", "y": ["[33.29, 81.17]", "(81.17, 89.98]", "(89.98, 101.68]", "(101.68, 114.78]", "(114.78, 185.81]"], "yaxis": "y", "z": [[0.9261728094695393, 0.7975310151701297, 0.7688815043339281, 0.8154282395848981, 0.8733124438560457], [0.7397390559811668, null, 0.7527043010281484, 0.7916704678873794, null], [null, null, 0.6275593460068917, 0.6391201524927485, 0.649581341680944], [null, null, 0.739638742403409, 0.8522132456700251, 0.796769388039372], [0.7177570383675483, 0.84803142747959, 0.5797795666180992, 0.8750545256475784, 0.8918460887947192]], "type": "heatmap", "uid": "8b26988e-d287-4280-89fe-b5a9dbbafe1b"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) Aspect Ratio vs Brightness"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "Aspect Ratio"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": "Brightness"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "6030a767fc1f4ca584682e2952b57fa4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ba6340c5ce7247fbaa5486b64169aeba", "style": "IPY_MODEL_1b8263c384b449239bfb6f9b9a399347", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "ba6340c5ce7247fbaa5486b64169aeba": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1b8263c384b449239bfb6f9b9a399347": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6504a0d1360340dea9ae09dc3d1a7dfc": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a3f859ddefa04ca58fe21c9e34db1320": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_3a6f1d76df1348769e2e8de5b964391c", "IPY_MODEL_e08f46daaad04fb4be92236b762abae4"], "layout": "IPY_MODEL_6fe460d887504a488b26c1ac5cf2ce4b"}}, "3a6f1d76df1348769e2e8de5b964391c": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "RMS Contrast: %{x}<br>y: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.75\n(12.5%)", "0.63\n(10.94%)", "0.78\n(10.94%)", "0.78\n(10.94%)", "0.82\n(12.5%)", "0.6\n(18.75%)", "0.8\n(12.5%)", "0.75\n(12.5%)"]], "texttemplate": "%{text}", "x": ["[23.53, 42.93]", "(42.93, 48.36]", "(48.36, 52.91]", "(52.91, 57.54]", "(57.54, 62.37]", "(62.37, 69.64]", "(69.64, 73]", "(73, 81.73]"], "xaxis": "x", "y": [""], "yaxis": "y", "z": [[0.754126292511079, 0.6318275662467591, 0.7796917931508417, 0.7757735042367896, 0.8185625424310901, 0.5969314340075487, 0.7983463253346725, 0.7525577204468663]], "type": "heatmap", "uid": "b9306f43-e96c-44c0-9316-fbc77f52cba6"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) RMS Contrast"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "RMS Contrast"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "e08f46daaad04fb4be92236b762abae4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b6b2ae4067b0424590568ea722cd6e76", "style": "IPY_MODEL_3036e47850b544ddb96ab5c54877e8fe", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "b6b2ae4067b0424590568ea722cd6e76": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "3036e47850b544ddb96ab5c54877e8fe": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6fe460d887504a488b26c1ac5cf2ce4b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7ddce2d7e0934cf2af5398f70900e0fd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "3fbd666ebc494ed68a086df84c704069": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6b91201447af4f028f5033021eae5c0f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "0dcbee00b897429c873449c81c578f0e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "49461738665647d5b2cd15af5ad87cf3"}
+    {"version_major": 2, "version_minor": 0, "model_id": "232bf79335d84efcad6dd87e899ad062"}
     </script>
 
     </body>
@@ -405,13 +410,11 @@ Run the check
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-58
-
-If you have a GPU, you can speed up this check by passing it as an argument to .run() as device=<your GPU>
+.. GENERATED FROM PYTHON SOURCE LINES 64-65
 
 To display the results in an IDE like PyCharm, you can use the following code:
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-60
+.. GENERATED FROM PYTHON SOURCE LINES 65-67
 
 .. code-block:: default
 
@@ -424,7 +427,7 @@ To display the results in an IDE like PyCharm, you can use the following code:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-70
+.. GENERATED FROM PYTHON SOURCE LINES 68-77
 
 The result will be displayed in a new window.
 %%
@@ -436,7 +439,7 @@ The result will be displayed in a new window.
  to the two segmentation features. In order to get the full list of weak segments found we can look at
  the result.value attribute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-74
+.. GENERATED FROM PYTHON SOURCE LINES 77-81
 
 .. code-block:: default
 
@@ -481,48 +484,66 @@ The result will be displayed in a new window.
       <tbody>
         <tr>
           <th>2</th>
-          <td>0.567176</td>
+          <td>0.551099</td>
           <td>Aspect Ratio</td>
           <td>(0.6875679194927216, 1.2355396747589111)</td>
           <td>RMS Contrast</td>
-          <td>(0.2228790521621704, 0.2750105708837509)</td>
+          <td>(55.4311408996582, 69.72321319580078)</td>
           <td>15.6250</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0.579779</td>
+          <td>0.579780</td>
           <td>Aspect Ratio</td>
           <td>(0.6875679194927216, 1.2355396747589111)</td>
           <td>Brightness</td>
-          <td>(0.45119504630565643, inf)</td>
+          <td>(114.77898406982422, inf)</td>
           <td>20.3125</td>
         </tr>
         <tr>
-          <th>3</th>
-          <td>0.582034</td>
-          <td>Aspect Ratio</td>
-          <td>(0.753125011920929, inf)</td>
-          <td>Mean Red Relative Intensity</td>
-          <td>(-inf, 0.3401498943567276)</td>
+          <th>5</th>
+          <td>0.596931</td>
+          <td>RMS Contrast</td>
+          <td>(62.37001991271973, 69.63874816894531)</td>
+          <td></td>
+          <td>None</td>
+          <td>18.7500</td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td>0.603122</td>
+          <td>Brightness</td>
+          <td>(89.9817886352539, inf)</td>
+          <td>RMS Contrast</td>
+          <td>(62.00737762451172, 69.63874816894531)</td>
           <td>15.6250</td>
         </tr>
         <tr>
-          <th>5</th>
-          <td>0.588011</td>
-          <td>Area</td>
-          <td>(273600.0, inf)</td>
+          <th>9</th>
+          <td>0.608905</td>
           <td>RMS Contrast</td>
-          <td>(0.24485763162374496, 0.27773164212703705)</td>
-          <td>17.1875</td>
+          <td>(-inf, 69.78135681152344)</td>
+          <td>Mean Red Relative Intensity</td>
+          <td>(-inf, 0.3267597407102585)</td>
+          <td>15.6250</td>
         </tr>
         <tr>
-          <th>6</th>
-          <td>0.600899</td>
+          <th>8</th>
+          <td>0.632636</td>
           <td>Mean Red Relative Intensity</td>
-          <td>(0.3300568163394928, 0.3401498943567276)</td>
+          <td>(-inf, 0.31693054735660553)</td>
           <td></td>
           <td>None</td>
           <td>15.6250</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>0.642269</td>
+          <td>Mean Red Relative Intensity</td>
+          <td>(-inf, 0.31777942180633545)</td>
+          <td></td>
+          <td>None</td>
+          <td>17.1875</td>
         </tr>
         <tr>
           <th>0</th>
@@ -535,21 +556,12 @@ The result will be displayed in a new window.
         </tr>
         <tr>
           <th>4</th>
-          <td>0.672503</td>
-          <td>Area</td>
-          <td>(279360.0, inf)</td>
+          <td>0.670180</td>
           <td>Brightness</td>
-          <td>(0.36843201518058777, 0.49187861382961273)</td>
-          <td>21.8750</td>
-        </tr>
-        <tr>
-          <th>7</th>
-          <td>0.674128</td>
-          <td>Brightness</td>
-          <td>(0.49187861382961273, inf)</td>
+          <td>(89.9817886352539, 115.23897171020508)</td>
           <td></td>
           <td>None</td>
-          <td>26.5625</td>
+          <td>28.1250</td>
         </tr>
       </tbody>
     </table>
@@ -558,12 +570,12 @@ The result will be displayed in a new window.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-77
+.. GENERATED FROM PYTHON SOURCE LINES 82-84
 
 Now we will run a check with properties and minimum segment size ratio (the minimal fraction of the data to be
 considered as a segment) different from the defaults.
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-85
+.. GENERATED FROM PYTHON SOURCE LINES 84-92
 
 .. code-block:: default
 
@@ -571,8 +583,8 @@ considered as a segment) different from the defaults.
     properties = [{'name': 'brightness', 'method': brightness, 'output_type': 'numerical'},
                   {'name': ' texture', 'method': texture_level, 'output_type': 'numerical'}]
     check = WeakSegmentsPerformance(segment_minimum_size_ratio=0.03, image_properties=properties)
-    result = check.run(coco_data, model)
-    result.show_in_window()
+    result = check.run(coco_data)
+    result.show()
 
 
 
@@ -583,79 +595,16 @@ considered as a segment) different from the defaults.
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
-    |#####| 1/1 [Time: 00:05]    Validating Input:
-    |#####| 1/1 [Time: 00:05]
-    Ingesting Batches:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches:
-    |##5  | 1/2 [Time: 00:05]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:10]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:10]
-
+    Processing Batches:
+    |     | 0/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]
     Computing Check:
     |     | 0/1 [Time: 00:00]
-
     Computing Check:
     |#####| 1/1 [Time: 00:00]
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                
-
-                                              
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 86-91
-
-Define a condition
-==================
-
-We can define on our check a condition that will validate that the ratio of the model performance on the
-weakest segment to the average model performance is less than a specified ratio.
-
-.. GENERATED FROM PYTHON SOURCE LINES 91-97
-
-.. code-block:: default
-
-
-    # Let's add a condition and re-run the check:
-
-    check.add_condition_segments_relative_performance_greater_than(0.1)
-    result = check.run(coco_data, model)
-    result.show(show_additional_outputs=False)
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
-    |#####| 1/1 [Time: 00:04]    Validating Input:
-    |#####| 1/1 [Time: 00:04]
-    Ingesting Batches:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches:
-    |##5  | 1/2 [Time: 00:05]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:10]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:10]
-
-    Computing Check:
-    |     | 0/1 [Time: 00:00]
-
-    Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                
-
+    |#####| 1/1 [Time: 00:00]                                             
                                               
 
 .. raw:: html
@@ -940,10 +889,342 @@ weakest segment to the average model performance is less than a specified ratio.
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"03ddb96580af487d8195db6b7ce9b0fe": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_995ed1c032b745ba847f12842e146752", "IPY_MODEL_60501003acca49ef9a2e0bf826ca5b1c", "IPY_MODEL_8ab6fc0773644b77bc9bfbd06f0cc5ce"], "layout": "IPY_MODEL_3b64c14c74764df9a0840cf3c943adfb"}}, "995ed1c032b745ba847f12842e146752": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5494a71b090246ec85e8ecc95e29f498", "style": "IPY_MODEL_e0e7d298221b40d8a42b64b0868d70ef", "value": "<h4><b>Weak Segments Performance</b></h4>"}}, "5494a71b090246ec85e8ecc95e29f498": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e0e7d298221b40d8a42b64b0868d70ef": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "60501003acca49ef9a2e0bf826ca5b1c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_4c82736934d84f33867c09ece1a8a0f9", "style": "IPY_MODEL_2885b9721d984d4f8b3ff559a2b71b4c", "value": "<p>Search for segments with low performance scores. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_weak_segments_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "4c82736934d84f33867c09ece1a8a0f9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "2885b9721d984d4f8b3ff559a2b71b4c": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "8ab6fc0773644b77bc9bfbd06f0cc5ce": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_4fe120ca13da4c92bda8050e9ae82ea0", "style": "IPY_MODEL_41131ecc56de4c8d8c4e35d24431e453", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_5b329_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5b329_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5b329_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5b329_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_5b329_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_5b329_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_5b329_row0_col0\" class=\"data row0 col0\" ><div style=\"color: orange;text-align: center;font-weight:bold\">!</div></td>\n      <td id=\"T_5b329_row0_col1\" class=\"data row0 col1\" >The relative performance of weakest segment is greater than 90% of average model performance.</td>\n      <td id=\"T_5b329_row0_col2\" class=\"data row0 col2\" >Found a segment with mean IoU score of 0.623 in comparison to an average score of 0.732 in sampled data.</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "4fe120ca13da4c92bda8050e9ae82ea0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "41131ecc56de4c8d8c4e35d24431e453": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "3b64c14c74764df9a0840cf3c943adfb": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"78ea4341ec554f758a15ec26cfc28936": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_f19bbba0338c4de8b9ba795e9a266ca8", "IPY_MODEL_9bd6aeea57b34f63b94ede7e5602ce72", "IPY_MODEL_a5afde5e22f64750aef4679f1e7a6766", "IPY_MODEL_3a63dea9a366422f94903f60eeb25785"], "layout": "IPY_MODEL_6398dc684d7f409287134217211d5ca2"}}, "f19bbba0338c4de8b9ba795e9a266ca8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c5a188117fbb44788beb8f7ef7e55bc9", "style": "IPY_MODEL_002d8a9d3b344c4786c849e848373b84", "value": "<h4><b>Weak Segments Performance</b></h4>"}}, "c5a188117fbb44788beb8f7ef7e55bc9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "002d8a9d3b344c4786c849e848373b84": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9bd6aeea57b34f63b94ede7e5602ce72": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5934dfa2d9c1439dafc2b051449cbec3", "style": "IPY_MODEL_25c1481533614ff1b7649cf822605bef", "value": "<p>Search for segments with low performance scores. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_weak_segments_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "5934dfa2d9c1439dafc2b051449cbec3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "25c1481533614ff1b7649cf822605bef": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a5afde5e22f64750aef4679f1e7a6766": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_2536bd4b667e46c5bc90a443d903e749", "style": "IPY_MODEL_6becb385b2ff44249e3d853fdc973557"}}, "2536bd4b667e46c5bc90a443d903e749": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6becb385b2ff44249e3d853fdc973557": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "3a63dea9a366422f94903f60eeb25785": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_8484d23d79de4275b22f2dcc4644f260", "IPY_MODEL_4fd7e877023c478594a09ef2d1c831d7", "IPY_MODEL_7e86a38997f84fd69b7a44b95b1e4005"], "layout": "IPY_MODEL_4f23b60468604f4b8247170cc9aaa382"}}, "8484d23d79de4275b22f2dcc4644f260": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f67e43c976c448ff8ba697f1e24b7df2", "style": "IPY_MODEL_7b1b28c140774ee887b7fbbe97d22243", "value": "<h5><b>Additional Outputs</b></h5>"}}, "f67e43c976c448ff8ba697f1e24b7df2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7b1b28c140774ee887b7fbbe97d22243": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "4fd7e877023c478594a09ef2d1c831d7": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f8857232a11a446bb274f47a61042984", "style": "IPY_MODEL_38e6d6a4119a479dab365650fd584f17", "value": "<div>Showcasing intersections of features with weakest detected segments.<br> The full list of weak segments can be observed in the check result value. </div>"}}, "f8857232a11a446bb274f47a61042984": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "38e6d6a4119a479dab365650fd584f17": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "7e86a38997f84fd69b7a44b95b1e4005": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_fbe9fc3cc2614093b8128bbf9e7458ca", "IPY_MODEL_a757762244f34f249e50efcc6ef86d0a"], "layout": "IPY_MODEL_560906d11d084939a6fa1c7f2ed06499"}}, "fbe9fc3cc2614093b8128bbf9e7458ca": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b70a5b6196bc4949837f89d56f49d945", "style": "IPY_MODEL_7ceebf8513ba4e69930b7e550efbda19", "value": "<style>.jupyter-widgets.widget-tab > .p-TabBar .p-TabBar-tab {min-width: fit-content;}</style>"}}, "b70a5b6196bc4949837f89d56f49d945": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7ceebf8513ba4e69930b7e550efbda19": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a757762244f34f249e50efcc6ef86d0a": {"model_name": "TabModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "_titles": {"0": "brightness vs  texture"}, "children": ["IPY_MODEL_56d4c617b11c410288fdb60afe177ae7"], "layout": "IPY_MODEL_2e5433bc3df74351943d58a51d262a4c"}}, "56d4c617b11c410288fdb60afe177ae7": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_682ecb79420a46058b72f02ac1880dea", "IPY_MODEL_6b5e81298ebd47a898191bbf6e333f5b"], "layout": "IPY_MODEL_e78c4dca1dc641b3b1384e38abfb4c0a"}}, "682ecb79420a46058b72f02ac1880dea": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"coloraxis": "coloraxis", "hovertemplate": "brightness: %{x}<br> texture: %{y}<br>mean IoU score: %{z}<extra></extra>", "name": "0", "text": [["0.78\n(17.19%)", "0.69\n(17.19%)", "0.74\n(15.62%)", "0.76\n(15.62%)", "0.62\n(15.62%)"], ["", "", "0.91\n(1.56%)", "", "0.77\n(4.69%)"], ["", "0.69\n(1.56%)", "0.91\n(1.56%)", "0.72\n(1.56%)", "0.23\n(1.56%)"], ["", "", "", "0.86\n(1.56%)", "0.69\n(4.69%)"], ["0.8\n(1.56%)", "", "0.86\n(1.56%)", "", "0.9\n(3.12%)"]], "texttemplate": "%{text}", "x": ["[0.13, 0.33]", "(0.33, 0.39]", "(0.39, 0.45]", "(0.45, 0.49]", "(0.49, 0.73]"], "xaxis": "x", "y": ["[2.60E-4, 0.06]", "(0.06, 0.07]", "(0.07, 0.07]", "(0.07, 0.09]", "(0.09, 0.46]"], "yaxis": "y", "z": [[0.7818575234919901, 0.6939577958582339, 0.7383194972054941, 0.7559159307674832, 0.6231840971720761], [null, null, 0.9125449652555193, null, 0.7687757868060419], [null, 0.6945967632531148, 0.9125449652555193, 0.7164206797951214, 0.22560790532141795], [null, null, null, 0.8614458197696317, 0.6870112858501747], [0.7975310151701297, null, 0.8646524334252109, null, 0.9005006408194987]], "type": "heatmap", "uid": "de713e6a-13b8-4387-9fbd-f1a29eaab0f1"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"coloraxis": {"colorbar": {"title": {"text": "mean IoU score"}}, "colorscale": [[0.0, "rgb(165,0,38)"], [0.1, "rgb(215,48,39)"], [0.2, "rgb(244,109,67)"], [0.3, "rgb(253,174,97)"], [0.4, "rgb(254,224,139)"], [0.5, "rgb(255,255,191)"], [0.6, "rgb(217,239,139)"], [0.7, "rgb(166,217,106)"], [0.8, "rgb(102,189,99)"], [0.9, "rgb(26,152,80)"], [1.0, "rgb(0,104,55)"]]}, "height": 600, "margin": {"t": 60}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "mean IoU score (percent of data) brightness vs  texture"}, "xaxis": {"anchor": "y", "constrain": "domain", "domain": [0.0, 1.0], "scaleanchor": "y", "showgrid": false, "title": {"text": "brightness"}}, "yaxis": {"anchor": "x", "autorange": "reversed", "constrain": "domain", "domain": [0.0, 1.0], "showgrid": false, "title": {"text": " texture"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "6b5e81298ebd47a898191bbf6e333f5b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a1f8509bc0a343148ef582a99f9bcca8", "style": "IPY_MODEL_bc5c27fdd14f47dcb74c37c78a7061c7", "value": "<div>Check ran on 64 data samples. Average mean IoU score is 0.73.</div>"}}, "a1f8509bc0a343148ef582a99f9bcca8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "bc5c27fdd14f47dcb74c37c78a7061c7": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "e78c4dca1dc641b3b1384e38abfb4c0a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "2e5433bc3df74351943d58a51d262a4c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "560906d11d084939a6fa1c7f2ed06499": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4f23b60468604f4b8247170cc9aaa382": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6398dc684d7f409287134217211d5ca2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "03ddb96580af487d8195db6b7ce9b0fe"}
+    {"version_major": 2, "version_minor": 0, "model_id": "78ea4341ec554f758a15ec26cfc28936"}
+    </script>
+
+    </body>
+    </html>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 93-98
+
+Define a condition
+==================
+
+We can define on our check a condition that will validate that the ratio of the model performance on the
+weakest segment to the average model performance is less than a specified ratio.
+
+.. GENERATED FROM PYTHON SOURCE LINES 98-104
+
+.. code-block:: default
+
+
+    # Let's add a condition and re-run the check:
+
+    check.add_condition_segments_relative_performance_greater_than(0.1)
+    result = check.run(coco_data)
+    result.show(show_additional_outputs=False)
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    Processing Batches:
+    |     | 0/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]
+    Computing Check:
+    |     | 0/1 [Time: 00:00]
+    Computing Check:
+    |#####| 1/1 [Time: 00:00]
+    Computing Check:
+    |#####| 1/1 [Time: 00:00]                                             
+                                              
+
+.. raw:: html
+
+    <div class="output_subarea output_html rendered_html output_result">
+    <!--
+        ~ ----------------------------------------------------------------------------
+        ~ Copyright (C) 2021-2022 Deepchecks (https://www.deepchecks.com)
+        ~
+        ~ This file is part of Deepchecks.
+        ~ Deepchecks is distributed under the terms of the GNU Affero General
+        ~ Public License (version 3 or later).
+        ~ You should have received a copy of the GNU Affero General Public License
+        ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+        ~ ----------------------------------------------------------------------------
+        ~
+    -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Weak Segments Performance</title>
+        <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #212529;
+                text-align: left;
+                max-width: 1200px;
+                margin: auto;
+                background-color: white;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt *,
+            div.nbinput.container div.input_area pre,
+            div.nboutput.container div.output_area pre,
+            div.nbinput.container div.input_area .highlight,
+            div.nboutput.container div.output_area .highlight {
+                border: none;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            div.nbinput.container > div[class*=highlight],
+            div.nboutput.container > div[class*=highlight] {
+                margin: 0;
+            }
+
+            div.nbinput.container div.prompt *,
+            div.nboutput.container div.prompt * {
+                background: none;
+            }
+
+            div.nboutput.container div.output_area .highlight,
+            div.nboutput.container div.output_area pre {
+                background: unset;
+            }
+
+            div.nboutput.container div.output_area div.highlight {
+                color: unset;  /* override Pygments text color */
+            }
+
+            /* avoid gaps between output lines */
+            div.nboutput.container div[class*=highlight] pre {
+                line-height: normal;
+            }
+
+            /* input/output containers */
+            div.nbinput.container,
+            div.nboutput.container {
+                display: -webkit-flex;
+                display: flex;
+                align-items: flex-start;
+                margin: 0;
+                width: 100%;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container,
+                div.nboutput.container {
+                    flex-direction: column;
+                }
+            }
+
+            /* input container */
+            div.nbinput.container {
+                padding-top: 5px;
+            }
+
+            /* last container */
+            div.nblast.container {
+                padding-bottom: 5px;
+            }
+
+            /* input prompt */
+            div.nbinput.container div.prompt pre {
+                color: #307FC1;
+            }
+
+            /* output prompt */
+            div.nboutput.container div.prompt pre {
+                color: #BF5B3D;
+            }
+
+            /* all prompts */
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: 4.5ex;
+                padding-top: 5px;
+                position: relative;
+                user-select: none;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: absolute;
+                right: 0;
+                margin-right: 0.3ex;
+            }
+
+            @media (max-width: 540px) {
+                div.nbinput.container div.prompt,
+                div.nboutput.container div.prompt {
+                    width: unset;
+                    text-align: left;
+                    padding: 0.4em;
+                }
+                div.nboutput.container div.prompt.empty {
+                    padding: 0;
+                }
+
+                div.nbinput.container div.prompt > div,
+                div.nboutput.container div.prompt > div {
+                    position: unset;
+                }
+            }
+
+            /* disable scrollbars on prompts */
+            div.nbinput.container div.prompt pre,
+            div.nboutput.container div.prompt pre {
+                overflow: hidden;
+            }
+
+            /* input/output area */
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                -webkit-flex: 1;
+                flex: 1;
+                overflow: auto;
+            }
+            @media (max-width: 540px) {
+                div.nbinput.container div.input_area,
+                div.nboutput.container div.output_area {
+                    width: 100%;
+                }
+            }
+
+            /* input area */
+            div.nbinput.container div.input_area {
+                border: 1px solid #e0e0e0;
+                border-radius: 2px;
+                /*background: #f5f5f5;*/
+            }
+
+            /* override MathJax center alignment in output cells */
+            div.nboutput.container div[class*=MathJax] {
+                text-align: left !important;
+            }
+
+            /* override sphinx.ext.imgmath center alignment in output cells */
+            div.nboutput.container div.math p {
+                text-align: left;
+            }
+
+            /* standard error */
+            div.nboutput.container div.output_area.stderr {
+                background: #fdd;
+            }
+
+            /* ANSI colors */
+            .ansi-black-fg { color: #3E424D; }
+            .ansi-black-bg { background-color: #3E424D; }
+            .ansi-black-intense-fg { color: #282C36; }
+            .ansi-black-intense-bg { background-color: #282C36; }
+            .ansi-red-fg { color: #E75C58; }
+            .ansi-red-bg { background-color: #E75C58; }
+            .ansi-red-intense-fg { color: #B22B31; }
+            .ansi-red-intense-bg { background-color: #B22B31; }
+            .ansi-green-fg { color: #00A250; }
+            .ansi-green-bg { background-color: #00A250; }
+            .ansi-green-intense-fg { color: #007427; }
+            .ansi-green-intense-bg { background-color: #007427; }
+            .ansi-yellow-fg { color: #DDB62B; }
+            .ansi-yellow-bg { background-color: #DDB62B; }
+            .ansi-yellow-intense-fg { color: #B27D12; }
+            .ansi-yellow-intense-bg { background-color: #B27D12; }
+            .ansi-blue-fg { color: #208FFB; }
+            .ansi-blue-bg { background-color: #208FFB; }
+            .ansi-blue-intense-fg { color: #0065CA; }
+            .ansi-blue-intense-bg { background-color: #0065CA; }
+            .ansi-magenta-fg { color: #D160C4; }
+            .ansi-magenta-bg { background-color: #D160C4; }
+            .ansi-magenta-intense-fg { color: #A03196; }
+            .ansi-magenta-intense-bg { background-color: #A03196; }
+            .ansi-cyan-fg { color: #60C6C8; }
+            .ansi-cyan-bg { background-color: #60C6C8; }
+            .ansi-cyan-intense-fg { color: #258F8F; }
+            .ansi-cyan-intense-bg { background-color: #258F8F; }
+            .ansi-white-fg { color: #C5C1B4; }
+            .ansi-white-bg { background-color: #C5C1B4; }
+            .ansi-white-intense-fg { color: #A1A6B2; }
+            .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+            .ansi-default-inverse-fg { color: #FFFFFF; }
+            .ansi-default-inverse-bg { background-color: #000000; }
+
+            .ansi-bold { font-weight: bold; }
+            .ansi-underline { text-decoration: underline; }
+
+
+            div.nbinput.container div.input_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight] > pre,
+            div.nboutput.container div.output_area div[class*=highlight].math,
+            div.nboutput.container div.output_area.rendered_html,
+            div.nboutput.container div.output_area > div.output_javascript,
+            div.nboutput.container div.output_area:not(.rendered_html) > img{
+                padding: 5px;
+                margin: 0;
+            }
+
+            /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+            div.nbinput.container div.input_area > div[class^='highlight'],
+            div.nboutput.container div.output_area > div[class^='highlight']{
+                overflow-y: hidden;
+            }
+
+            /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+            .prompt .copybtn {
+                display: none;
+            }
+
+            /* Some additional styling taken form the Jupyter notebook CSS */
+            div.rendered_html table {
+            border: none;
+            border-collapse: collapse;
+            border-spacing: 0;
+            color: black;
+            font-size: 12px;
+            table-layout: fixed;
+            }
+            div.rendered_html thead {
+            border-bottom: 1px solid black;
+            vertical-align: bottom;
+            }
+            div.rendered_html tr,
+            div.rendered_html th,
+            div.rendered_html td {
+            text-align: right;
+            vertical-align: middle;
+            padding: 0.5em 0.5em;
+            line-height: normal;
+            white-space: normal;
+            max-width: none;
+            border: none;
+            }
+            div.rendered_html th {
+            font-weight: bold;
+            }
+            div.rendered_html tbody tr:nth-child(odd) {
+            background: #f5f5f5;
+            }
+            div.rendered_html tbody tr:hover {
+            background: rgba(66, 165, 245, 0.2);
+            }
+        </style>
+    </head>
+    <body>
+        <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
+    
+
+    <script type="application/vnd.jupyter.widget-state+json">
+    {"version_major": 2, "version_minor": 0, "state": {"f6de658c973f4eda97f4d419faff7b56": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_b34ecb0b620b4bafa7202f091ab32458", "IPY_MODEL_5cbe2142244b41c4883aa12d7bd39ebc", "IPY_MODEL_f729c349231e4db8964975baa1a42d0e"], "layout": "IPY_MODEL_36b7495cf7604109a3b39ea6939e1e6f"}}, "b34ecb0b620b4bafa7202f091ab32458": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c321fbb5466e4b5e907ee06a912fa9bc", "style": "IPY_MODEL_3813ac5ae70c41fca86e5b7d09d27e12", "value": "<h4><b>Weak Segments Performance</b></h4>"}}, "c321fbb5466e4b5e907ee06a912fa9bc": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "3813ac5ae70c41fca86e5b7d09d27e12": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5cbe2142244b41c4883aa12d7bd39ebc": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_99b9d3f319614424b0895ec7067c7056", "style": "IPY_MODEL_f454860dba8243208f9f430b5255dc49", "value": "<p>Search for segments with low performance scores. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_weak_segments_performance.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "99b9d3f319614424b0895ec7067c7056": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f454860dba8243208f9f430b5255dc49": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f729c349231e4db8964975baa1a42d0e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0cc09bf4728541dcb888a2c16b5eff6c", "style": "IPY_MODEL_dc2146336cb640ddb61e8ad4897b8cad", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_7675b_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7675b_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7675b_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7675b_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_7675b_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_7675b_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_7675b_row0_col0\" class=\"data row0 col0\" ><div style=\"color: orange;text-align: center;font-weight:bold\">!</div></td>\n      <td id=\"T_7675b_row0_col1\" class=\"data row0 col1\" >The relative performance of weakest segment is greater than 90% of average model performance.</td>\n      <td id=\"T_7675b_row0_col2\" class=\"data row0 col2\" >Found a segment with mean IoU score of 0.623 in comparison to an average score of 0.732 in sampled data.</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "0cc09bf4728541dcb888a2c16b5eff6c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "dc2146336cb640ddb61e8ad4897b8cad": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "36b7495cf7604109a3b39ea6939e1e6f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    </script>
+    <script type="application/vnd.jupyter.widget-view+json">
+    {"version_major": 2, "version_minor": 0, "model_id": "f6de658c973f4eda97f4d419faff7b56"}
     </script>
 
     </body>
@@ -955,7 +1236,7 @@ weakest segment to the average model performance is less than a specified ratio.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  55.914 seconds)
+   **Total running time of the script:** ( 0 minutes  7.496 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_vision_model_evaluation_plot_weak_segments_performance.py:

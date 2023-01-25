@@ -18,9 +18,9 @@
 .. _sphx_glr_user-guide_vision_auto_tutorials_plot_custom_checks.py:
 
 
-=============================================
-Writing Custom Computer Vision Checks
-=============================================
+=======================
+Creating a Custom Check
+=======================
 
 Deepchecks offers a wide range of checks for computer vision problems, addressing distribution issues, performance
 checks and more. Nevertheless, in order to fully validate your ML pipeline you often need to write your own checks.
@@ -42,7 +42,7 @@ Vision Checks Structure
 
 The first step when writing a vision check is to decide what check base class to use. You can read more in the
 `Base Checks Types <#base-checks-types>`__ section. In this case, we wish to compare train and test dataset, so we select the
-``TrainTestBaseCheck``. This type of check must implement the following three methods:
+:class:`deepchecks.core.checks.TrainTestBaseCheck`. This type of check must implement the following three methods:
 
 - initialize_run - Actions to be performed before starting to iterate over the dataloader batches.
 - update - Actions to be performed on each batch.
@@ -69,7 +69,7 @@ The three methods of the vision check - initialize_run, update and compute, make
 object.
 
 The context object contains the basic objects deepchecks uses - the train and test
-`VisionData </user-guide/vision/data_classes/VisionData>`__ objects, and the use model itself.
+`VisionData </user-guide/vision/VisionData>`__ objects, and the use model itself.
 The Batch objects contains processed data from the dataloader, such as the images, labels and model predictions.
 For some checks, such as the one shown in this example, the Context object is not needed.
 
@@ -91,8 +91,8 @@ Check Example
     from deepchecks.core.checks import DatasetKind
     from deepchecks.core.condition import ConditionCategory
     from deepchecks.vision.base_checks import TrainTestCheck
-    from deepchecks.vision.batch_wrapper import Batch
     from deepchecks.vision.context import Context
+    from deepchecks.vision.vision_data.batch_wrapper import BatchWrapper
 
 
     def init_color_averages_dict() -> t.Dict[str, np.array]:
@@ -111,23 +111,23 @@ Check Example
         }
 
 
-    def sum_pixel_values(batch: Batch) -> np.array:
+    def sum_pixel_values(batch: BatchWrapper) -> np.array:
         """Sum the values of all the pixels in the batch, returning a numpy array with an entry per channel."""
-        images = batch.images
+        images = batch.original_images
         return sum(image.sum(axis=(0, 1)) for image in images)  # sum over the batch and pixels
 
 
-    def count_pixels_in_batch(batch: Batch) -> int:
+    def count_pixels_in_batch(batch: BatchWrapper) -> int:
         """Count the pixels in the batch."""
-        return sum((image.shape[0] * image.shape[1] for image in batch.images))
+        return sum((image.shape[0] * image.shape[1] for image in batch.original_images))
 
 
     class ColorAveragesCheck(TrainTestCheck):
         """Check if the average of each color channel is the same between the train and test dataset."""
 
-        def __init__(self, channel_names: t.Tuple[str] = None):
+        def __init__(self, channel_names: t.Tuple[str] = None, **kwargs):
             """Init the check and enable customization of the channel_names."""
-            super().__init__()
+            super().__init__(**kwargs)
             if channel_names is None:
                 self.channel_names = ('R', 'G', 'B')
 
@@ -136,7 +136,7 @@ Check Example
             self._color_averages = init_color_averages_dict()
             self._pixel_count = init_pixel_counts_dict()
 
-        def update(self, context: Context, batch: Batch, dataset_kind: DatasetKind):
+        def update(self, context: Context, batch: BatchWrapper, dataset_kind: DatasetKind):
             """Add the batch color counts to the color_averages dict, and update counter."""
 
             self._color_averages[dataset_kind.value] += sum_pixel_values(batch)  # add to the color_averages dict
@@ -160,22 +160,27 @@ Check Example
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-135
+.. GENERATED FROM PYTHON SOURCE LINES 134-140
 
-Hooray! we just implemented a custom check. To read more about the internal objects  Let's run it and see what happens:
+Hooray! we just implemented a custom check. Next, we will run it on the COCO128 dataset:
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-144
+.. note::
+  In this tutorial, we use the pytorch to create the dataset and model. To see how this can be done using tensorflow
+  or other frameworks, please visit the :ref:`creating VisionData guide <vision_data__creating_vision_data>`.
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 140-149
 
 .. code-block:: default
 
 
-    from deepchecks.vision.datasets.detection.coco import load_dataset
+    from deepchecks.vision.datasets.detection.coco_torch import load_dataset
 
     train_ds = load_dataset(train=True, object_type='VisionData')
     test_ds = load_dataset(train=False, object_type='VisionData')
 
     result = ColorAveragesCheck().run(train_ds, test_ds)
-    result
+    result.show()
 
 
 
@@ -185,41 +190,26 @@ Hooray! we just implemented a custom check. To read more about the internal obje
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
+    Downloading https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5s.pt to yolov5s.pt...
+      0%|          | 0.00/14.1M [00:00<?, ?B/s]      1%|          | 96.0k/14.1M [00:00<00:16, 888kB/s]      3%|2         | 368k/14.1M [00:00<00:08, 1.69MB/s]      7%|6         | 0.98M/14.1M [00:00<00:03, 3.51MB/s]     18%|#7        | 2.50M/14.1M [00:00<00:01, 7.60MB/s]     38%|###7      | 5.35M/14.1M [00:00<00:00, 13.6MB/s]     75%|#######5  | 10.6M/14.1M [00:00<00:00, 24.4MB/s]    100%|##########| 14.1M/14.1M [00:00<00:00, 19.3MB/s]
+
+    Processing Train Batches:
+    |     | 0/1 [Time: 00:00]    Processing Train Batches:
+    |#####| 1/1 [Time: 00:01]    Processing Train Batches:
+    |#####| 1/1 [Time: 00:01]
+    Processing Test Batches:
+    |     | 0/1 [Time: 00:00]
+    Processing Test Batches:
     |#####| 1/1 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |##5  | 1/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |     | 0/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |##5  | 1/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
+    Processing Test Batches:
+    |#####| 1/1 [Time: 00:00]
 
     Computing Check:
     |     | 0/1 [Time: 00:00]
 
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                                
-
-                                                               
-
+    |#####| 1/1 [Time: 00:00]                                                   
+                                                      
 
                                               
 
@@ -505,10 +495,10 @@ Hooray! we just implemented a custom check. To read more about the internal obje
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"3d98aa9b785f420ca24466565f67dce2": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_9ede3c0a44834992bc944ad8a8149212", "IPY_MODEL_0c0ccc1cbcb7423284f1f111a6d4b4fd", "IPY_MODEL_9a95eacd5c0e48ae9e4e3f282cf8e0d2", "IPY_MODEL_31ddfb34a5ff4a60b9d8e6819410bc5f"], "layout": "IPY_MODEL_ded629d8452e43fc933cd5c7a3cb1950"}}, "9ede3c0a44834992bc944ad8a8149212": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6a05f4e92f964874a1d6df3228ac4ec3", "style": "IPY_MODEL_97b31a44c46a4b0c86572e33aa6b931a", "value": "<h4><b>Color Averages Check</b></h4>"}}, "6a05f4e92f964874a1d6df3228ac4ec3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "97b31a44c46a4b0c86572e33aa6b931a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0c0ccc1cbcb7423284f1f111a6d4b4fd": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_fecbc5a5b2f64350b6764e6e81bce02f", "style": "IPY_MODEL_3073a8b08a6c445d914b99dcf26913f4", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "fecbc5a5b2f64350b6764e6e81bce02f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "3073a8b08a6c445d914b99dcf26913f4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9a95eacd5c0e48ae9e4e3f282cf8e0d2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_88a75f527cb9458e861cd278b4844470", "style": "IPY_MODEL_dddb093b11eb470495952f0621425549"}}, "88a75f527cb9458e861cd278b4844470": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "dddb093b11eb470495952f0621425549": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "31ddfb34a5ff4a60b9d8e6819410bc5f": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_4c16fadbe13b469888c9815cd266ab07", "IPY_MODEL_724a08418be6410098a2d8ce66a43344"], "layout": "IPY_MODEL_75656b78500b47329384b19f79b87b9c"}}, "4c16fadbe13b469888c9815cd266ab07": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_06e1920b7b524060aab09f8d9fccb57b", "style": "IPY_MODEL_17f60f7779f04e78891d1e0f3a9d53bd", "value": "<h5><b>Additional Outputs</b></h5>"}}, "06e1920b7b524060aab09f8d9fccb57b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "17f60f7779f04e78891d1e0f3a9d53bd": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "724a08418be6410098a2d8ce66a43344": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9a9171f228504966a6ee23c07318a8cf", "style": "IPY_MODEL_0803ae0ae77941788c5ab83399dd1c94", "value": "<p><b>&#x2713;</b>Nothing to display</p>"}}, "9a9171f228504966a6ee23c07318a8cf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "0803ae0ae77941788c5ab83399dd1c94": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "75656b78500b47329384b19f79b87b9c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ded629d8452e43fc933cd5c7a3cb1950": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"5bdbdfde73e04d43956fd93f501a63aa": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_12e6cb3fe80a4168a0ce3e45f84aa2ac", "IPY_MODEL_08ff280bf4bb4e2ca9a11f7dcb854fdb", "IPY_MODEL_0cb29d273ea44eb180fb6ecfbe8a7743", "IPY_MODEL_5fd87a79071d42d780653be1f008683d"], "layout": "IPY_MODEL_934cc15498d445b8a2fb8dd240ba3e0e"}}, "12e6cb3fe80a4168a0ce3e45f84aa2ac": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9ae123d8fe494f6c923cebc5127f406b", "style": "IPY_MODEL_1df4092410e84aa7a9b72a351ab8e43c", "value": "<h4><b>Color Averages Check</b></h4>"}}, "9ae123d8fe494f6c923cebc5127f406b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1df4092410e84aa7a9b72a351ab8e43c": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "08ff280bf4bb4e2ca9a11f7dcb854fdb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9a226773793f49699be7d714d1cfbf6e", "style": "IPY_MODEL_a4518e636d2445709602275718596bf3", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "9a226773793f49699be7d714d1cfbf6e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a4518e636d2445709602275718596bf3": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0cb29d273ea44eb180fb6ecfbe8a7743": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_22f278c088b749bc94585a0ad1e09ba0", "style": "IPY_MODEL_e8e002728446437193a14cbd7785332f"}}, "22f278c088b749bc94585a0ad1e09ba0": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e8e002728446437193a14cbd7785332f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5fd87a79071d42d780653be1f008683d": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_435222e56feb41dfa02804daef13f90c", "IPY_MODEL_2fb4fa9a3fb643bd97cfff8bce3258ff"], "layout": "IPY_MODEL_a2117a317f274999a78bbaef2f663223"}}, "435222e56feb41dfa02804daef13f90c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_c55d3a1ba9cd44a5aab842e38920ae20", "style": "IPY_MODEL_37f4a71cc5a84fd49d0cf6b71bb8d11e", "value": "<h5><b>Additional Outputs</b></h5>"}}, "c55d3a1ba9cd44a5aab842e38920ae20": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "37f4a71cc5a84fd49d0cf6b71bb8d11e": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "2fb4fa9a3fb643bd97cfff8bce3258ff": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ae22dbbfdf354d1e858be01bb2c71145", "style": "IPY_MODEL_36246b3331474126908ccddae0c88a06", "value": "<p><b>&#x2713;</b>Nothing to display</p>"}}, "ae22dbbfdf354d1e858be01bb2c71145": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "36246b3331474126908ccddae0c88a06": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a2117a317f274999a78bbaef2f663223": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "934cc15498d445b8a2fb8dd240ba3e0e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "3d98aa9b785f420ca24466565f67dce2"}
+    {"version_major": 2, "version_minor": 0, "model_id": "5bdbdfde73e04d43956fd93f501a63aa"}
     </script>
 
     </body>
@@ -517,13 +507,13 @@ Hooray! we just implemented a custom check. To read more about the internal obje
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-148
+.. GENERATED FROM PYTHON SOURCE LINES 150-153
 
 Our check ran successfully, but we got the print “Nothing found”. This is because we haven’t defined to the check
 anything to display, so the default behavior is to print “Nothing found”. In order to access the value that we have
 defined earlier we can use the “value” property on the result.
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-152
+.. GENERATED FROM PYTHON SOURCE LINES 153-157
 
 .. code-block:: default
 
@@ -544,11 +534,11 @@ defined earlier we can use the “value” property on the result.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 153-154
+.. GENERATED FROM PYTHON SOURCE LINES 158-159
 
 favorite checks from our :doc:`API ref <../../../api/deepchecks.vision>`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-165
+.. GENERATED FROM PYTHON SOURCE LINES 161-170
 
 Check Display
 ========================
@@ -560,7 +550,7 @@ will inherit from the original check to shorten the code an update only the comp
 
 **Good to know: ``display`` can receive a single object to display or a list of objects**
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-210
+.. GENERATED FROM PYTHON SOURCE LINES 170-215
 
 .. code-block:: default
 
@@ -572,9 +562,9 @@ will inherit from the original check to shorten the code an update only the comp
     class ColorAveragesCheck(TrainTestCheck):
         """Check if the average of each color channel is the same between the train and test dataset."""
 
-        def __init__(self, channel_names: t.Tuple[str] = None):
+        def __init__(self, channel_names: t.Tuple[str] = None, **kwargs):
             """Init the check and enable customization of the channel_names."""
-            super().__init__()
+            super().__init__(**kwargs)
             if channel_names is None:
                 self.channel_names = ('R', 'G', 'B')
 
@@ -583,7 +573,7 @@ will inherit from the original check to shorten the code an update only the comp
             self._color_averages = init_color_averages_dict()
             self._pixel_count = init_pixel_counts_dict()
 
-        def update(self, context: Context, batch: Batch, dataset_kind: DatasetKind):
+        def update(self, context: Context, batch: BatchWrapper, dataset_kind: DatasetKind):
             """Add the batch color counts to the color_averages dict, and update counter."""
 
             self._color_averages[dataset_kind.value] += sum_pixel_values(batch)  # add to the color_averages dict
@@ -616,17 +606,17 @@ will inherit from the original check to shorten the code an update only the comp
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 211-212
+.. GENERATED FROM PYTHON SOURCE LINES 216-217
 
 Let check it out:
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-216
+.. GENERATED FROM PYTHON SOURCE LINES 217-221
 
 .. code-block:: default
 
 
     result = ColorAveragesCheck().run(train_ds, test_ds)
-    result
+    result.show()
 
 
 
@@ -636,41 +626,23 @@ Let check it out:
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
+    Processing Train Batches:
+    |     | 0/1 [Time: 00:00]    Processing Train Batches:
+    |#####| 1/1 [Time: 00:01]    Processing Train Batches:
+    |#####| 1/1 [Time: 00:01]
+    Processing Test Batches:
+    |     | 0/1 [Time: 00:00]
+    Processing Test Batches:
     |#####| 1/1 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |##5  | 1/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |     | 0/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |##5  | 1/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
+    Processing Test Batches:
+    |#####| 1/1 [Time: 00:00]
 
     Computing Check:
     |     | 0/1 [Time: 00:00]
 
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                                
-
-                                                               
-
+    |#####| 1/1 [Time: 00:00]                                                   
+                                                      
 
                                               
 
@@ -956,10 +928,10 @@ Let check it out:
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"27f86ebb9d684346839124f72976a2bf": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_8be88e6396734a7690e2a2ae70783ba0", "IPY_MODEL_928db5f4827c4bf2a28d214e6b1029c1", "IPY_MODEL_ca666126a8c44f44a41a6a5873b2eab0", "IPY_MODEL_6d1d1fe411eb4544b70f8ed27f59658f"], "layout": "IPY_MODEL_1a0404f784634e73aa4be4311accb864"}}, "8be88e6396734a7690e2a2ae70783ba0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_716e30ca28704db88485dc731df763a4", "style": "IPY_MODEL_f7fff88ded4743249f29b8849975ade6", "value": "<h4><b>Color Averages Check</b></h4>"}}, "716e30ca28704db88485dc731df763a4": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f7fff88ded4743249f29b8849975ade6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "928db5f4827c4bf2a28d214e6b1029c1": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e6a7dce463e74684b2d4ec9f02cbe042", "style": "IPY_MODEL_d86b36af03564ae1a58ef08dccdf19b1", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "e6a7dce463e74684b2d4ec9f02cbe042": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "d86b36af03564ae1a58ef08dccdf19b1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "ca666126a8c44f44a41a6a5873b2eab0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_bfbeee43a4de4d17831f6fded1c21f76", "style": "IPY_MODEL_634fd0291d134b9b821fcc7193a97f04"}}, "bfbeee43a4de4d17831f6fded1c21f76": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "634fd0291d134b9b821fcc7193a97f04": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6d1d1fe411eb4544b70f8ed27f59658f": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_858233acc7f343589908aec94b4b8da4", "IPY_MODEL_ce0fd9137caf48b482853b075ff80bac"], "layout": "IPY_MODEL_34bb06f4262d435abc477ce5c4b2cead"}}, "858233acc7f343589908aec94b4b8da4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e7096944c1674b8bb553439e8582d042", "style": "IPY_MODEL_912ef25f9eb443059e5e13e3a5f53200", "value": "<h5><b>Additional Outputs</b></h5>"}}, "e7096944c1674b8bb553439e8582d042": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "912ef25f9eb443059e5e13e3a5f53200": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "ce0fd9137caf48b482853b075ff80bac": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "R", "marker": {"color": "rgb(255,0,0)", "pattern": {"shape": ""}}, "name": "R", "offsetgroup": "R", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "fe060efe-f0ad-4336-8995-78d231b4bc0e"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "G", "marker": {"color": "rgb(0,255,0)", "pattern": {"shape": ""}}, "name": "G", "offsetgroup": "G", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "ebe94f3a-0b64-4a35-aa0d-7a2cb99e6353"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "B", "marker": {"color": "rgb(0,0,255)", "pattern": {"shape": ""}}, "name": "B", "offsetgroup": "B", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "d538d140-6b15-4fe0-91fa-9796ffaf18f3"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"barmode": "group", "legend": {"title": {"text": "Channel"}, "tracegroupgap": 0}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Color Averages Histogram"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "title": {"text": "Dataset"}}, "yaxis": {"anchor": "x", "domain": [0.0, 1.0], "title": {"text": "avg of Pixel Value"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "ncFx1/AlXkDFU2+mPqxcQA=="}, {"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "2uiSV3xqXUDblxUM1t1aQA=="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "2yvhtF6lWUCVoAfXcFlYQA=="}]}, "34bb06f4262d435abc477ce5c4b2cead": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1a0404f784634e73aa4be4311accb864": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"fa5472f44b64477db6476adc597eff64": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_3687907b944041239ad97f221d04970e", "IPY_MODEL_98ffe4e4140645f2bdc04f60a85c3799", "IPY_MODEL_d8b0c561ede647f49592b9553fb7d3a0", "IPY_MODEL_dd3aa6f5309d4a7b8643a9120f3611f9"], "layout": "IPY_MODEL_b105e59b8a30453aae7eff2c71776f2d"}}, "3687907b944041239ad97f221d04970e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_72530464ccc64778982be98562a3b752", "style": "IPY_MODEL_66b5a49741aa48b383c4a71f62e5b679", "value": "<h4><b>Color Averages Check</b></h4>"}}, "72530464ccc64778982be98562a3b752": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "66b5a49741aa48b383c4a71f62e5b679": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "98ffe4e4140645f2bdc04f60a85c3799": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_864991dc740a4f37a596ab18a8553348", "style": "IPY_MODEL_ca622ada8c604dcc9e5d207f15d02ef2", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "864991dc740a4f37a596ab18a8553348": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "ca622ada8c604dcc9e5d207f15d02ef2": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d8b0c561ede647f49592b9553fb7d3a0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_7d8a42d117d84d9b98845fd3b46071ae", "style": "IPY_MODEL_bb3b6c047d6c47a7ba580bc60fec9f89"}}, "7d8a42d117d84d9b98845fd3b46071ae": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "bb3b6c047d6c47a7ba580bc60fec9f89": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "dd3aa6f5309d4a7b8643a9120f3611f9": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_5d2a7eb580384e73a980dad3028becde", "IPY_MODEL_9325e77fc5d040f4870e81ac9f8e09e6"], "layout": "IPY_MODEL_b2acc0414e524fd3bb772320a579e286"}}, "5d2a7eb580384e73a980dad3028becde": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9ff9e8f112d347b9a9f0403c84a87f6e", "style": "IPY_MODEL_9576846971f04161bdd933437c4767c6", "value": "<h5><b>Additional Outputs</b></h5>"}}, "9ff9e8f112d347b9a9f0403c84a87f6e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9576846971f04161bdd933437c4767c6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9325e77fc5d040f4870e81ac9f8e09e6": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "R", "marker": {"color": "rgb(255,0,0)", "pattern": {"shape": ""}}, "name": "R", "offsetgroup": "R", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "eee2545d-6f4a-4ad8-a726-809e9b0c66b6"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "G", "marker": {"color": "rgb(0,255,0)", "pattern": {"shape": ""}}, "name": "G", "offsetgroup": "G", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "a82970e9-5209-4abc-89ed-48cc2e7d70ce"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "B", "marker": {"color": "rgb(0,0,255)", "pattern": {"shape": ""}}, "name": "B", "offsetgroup": "B", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "8a267ed2-022f-4c7b-9bd2-997edb92b171"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"barmode": "group", "legend": {"title": {"text": "Channel"}, "tracegroupgap": 0}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Color Averages Histogram"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "title": {"text": "Dataset"}}, "yaxis": {"anchor": "x", "domain": [0.0, 1.0], "title": {"text": "avg of Pixel Value"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "ncFx1/AlXkDFU2+mPqxcQA=="}, {"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "2uiSV3xqXUDblxUM1t1aQA=="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "2yvhtF6lWUCVoAfXcFlYQA=="}]}, "b2acc0414e524fd3bb772320a579e286": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b105e59b8a30453aae7eff2c71776f2d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "27f86ebb9d684346839124f72976a2bf"}
+    {"version_major": 2, "version_minor": 0, "model_id": "fa5472f44b64477db6476adc597eff64"}
     </script>
 
     </body>
@@ -968,12 +940,12 @@ Let check it out:
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-219
+.. GENERATED FROM PYTHON SOURCE LINES 222-224
 
 Voilà! Now we have a check that prints a graph and has a value. We can add this check
 to any Suite, and it will run within it.
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-228
+.. GENERATED FROM PYTHON SOURCE LINES 226-233
 
 Defining a Condition
 ========================
@@ -983,7 +955,7 @@ returns a condition result object. To read more on conditions, check out the con
 <../../user-guide/general/customizations/configure_check_conditions>`_. In this case, we'll define a condition
 verifying that the color averages haven't changed by more than 10%.
 
-.. GENERATED FROM PYTHON SOURCE LINES 228-292
+.. GENERATED FROM PYTHON SOURCE LINES 233-297
 
 .. code-block:: default
 
@@ -994,9 +966,9 @@ verifying that the color averages haven't changed by more than 10%.
     class ColorAveragesCheck(TrainTestCheck):
         """Check if the average of each color channel is the same between the train and test dataset."""
 
-        def __init__(self, channel_names: t.Tuple[str] = None):
+        def __init__(self, channel_names: t.Tuple[str] = None, **kwargs):
             """Init the check and enable customization of the channel_names."""
-            super().__init__()
+            super().__init__(**kwargs)
             if channel_names is None:
                 self.channel_names = ('R', 'G', 'B')
 
@@ -1005,7 +977,7 @@ verifying that the color averages haven't changed by more than 10%.
             self._color_averages = init_color_averages_dict()
             self._pixel_count = init_pixel_counts_dict()
 
-        def update(self, context: Context, batch: Batch, dataset_kind: DatasetKind):
+        def update(self, context: Context, batch: BatchWrapper, dataset_kind: DatasetKind):
             """Add the batch color counts to the color_averages dict, and update counter."""
 
             self._color_averages[dataset_kind.value] += sum_pixel_values(batch)  # add to the color_averages dict
@@ -1058,16 +1030,16 @@ verifying that the color averages haven't changed by more than 10%.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-294
+.. GENERATED FROM PYTHON SOURCE LINES 298-299
 
 Let check it out:
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-297
+.. GENERATED FROM PYTHON SOURCE LINES 299-302
 
 .. code-block:: default
 
     result = ColorAveragesCheck().run(train_ds, test_ds)
-    result
+    result.show()
 
 
 
@@ -1077,41 +1049,23 @@ Let check it out:
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
+    Processing Train Batches:
+    |     | 0/1 [Time: 00:00]    Processing Train Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Train Batches:
     |#####| 1/1 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |##5  | 1/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-    Ingesting Batches - Train Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |     | 0/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |##5  | 1/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
-    Ingesting Batches - Test Dataset:
-    |#####| 2/2 [Time: 00:00]
-
+    Processing Test Batches:
+    |     | 0/1 [Time: 00:00]
+    Processing Test Batches:
+    |#####| 1/1 [Time: 00:00]
+    Processing Test Batches:
+    |#####| 1/1 [Time: 00:00]
 
     Computing Check:
     |     | 0/1 [Time: 00:00]
 
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                                
-
-                                                               
-
+    |#####| 1/1 [Time: 00:00]                                                   
+                                                      
 
                                               
 
@@ -1397,10 +1351,10 @@ Let check it out:
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"a41f55e3a43b4bf0baf9c6f7c7481505": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_27b8a784299f4a259e3a5b6397d170c2", "IPY_MODEL_1c832f57c7a24c9d8d9f10197aa43961", "IPY_MODEL_9ff120bba9d742e3a5bce81f57f5598e", "IPY_MODEL_2403118f47e54dceae34f6ef1fd3d50d"], "layout": "IPY_MODEL_5e3eb0bb17a84a3a90dbcfe954fa094b"}}, "27b8a784299f4a259e3a5b6397d170c2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_057c35d6fd20429bb98e3dc22e920944", "style": "IPY_MODEL_98e87cc335994a13bcc4bf903c400747", "value": "<h4><b>Color Averages Check</b></h4>"}}, "057c35d6fd20429bb98e3dc22e920944": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "98e87cc335994a13bcc4bf903c400747": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "1c832f57c7a24c9d8d9f10197aa43961": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_82ef7d6f21584c53b31e161af07cee84", "style": "IPY_MODEL_87f18033995345b49dad7c6699d5e92f", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "82ef7d6f21584c53b31e161af07cee84": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "87f18033995345b49dad7c6699d5e92f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "9ff120bba9d742e3a5bce81f57f5598e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_35d858372da545fcabfcfa365002033f", "style": "IPY_MODEL_4265720e3cca466d89ba320c38caee43"}}, "35d858372da545fcabfcfa365002033f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4265720e3cca466d89ba320c38caee43": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "2403118f47e54dceae34f6ef1fd3d50d": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_015ac8aef288410aa66b8630a08f469f", "IPY_MODEL_95186a6f51cb44ac9fc75e1bac9895e6"], "layout": "IPY_MODEL_778d610f2cdb4ab3bc249c40845cc5c8"}}, "015ac8aef288410aa66b8630a08f469f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_24e45a99829341c08d3f298924d3b364", "style": "IPY_MODEL_6101fad435d1484fadfe923a02a1cbe6", "value": "<h5><b>Additional Outputs</b></h5>"}}, "24e45a99829341c08d3f298924d3b364": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "6101fad435d1484fadfe923a02a1cbe6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "95186a6f51cb44ac9fc75e1bac9895e6": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "R", "marker": {"color": "rgb(255,0,0)", "pattern": {"shape": ""}}, "name": "R", "offsetgroup": "R", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "e0f4dfc9-f96b-49ab-b5ce-5370e3deeca4"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "G", "marker": {"color": "rgb(0,255,0)", "pattern": {"shape": ""}}, "name": "G", "offsetgroup": "G", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "62d14bb2-1d90-4b55-aad0-564ba9b60543"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "B", "marker": {"color": "rgb(0,0,255)", "pattern": {"shape": ""}}, "name": "B", "offsetgroup": "B", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "a0556220-d482-4d11-b43d-ce9a890424f3"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"barmode": "group", "legend": {"title": {"text": "Channel"}, "tracegroupgap": 0}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Color Averages Histogram"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "title": {"text": "Dataset"}}, "yaxis": {"anchor": "x", "domain": [0.0, 1.0], "title": {"text": "avg of Pixel Value"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "ncFx1/AlXkDFU2+mPqxcQA=="}, {"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "2uiSV3xqXUDblxUM1t1aQA=="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "2yvhtF6lWUCVoAfXcFlYQA=="}]}, "778d610f2cdb4ab3bc249c40845cc5c8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5e3eb0bb17a84a3a90dbcfe954fa094b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"36b1c177653e43e896503e7bd9d08b91": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_fb365699330043f8b9cdb4d71368634c", "IPY_MODEL_5b95b476a1e6481ca88c2694698e396c", "IPY_MODEL_293946c1f45349189adb560a0d7de5cf", "IPY_MODEL_22c569369139434c91df66c15aedaf26"], "layout": "IPY_MODEL_c9a30a2a5a834e469f2c402da772576a"}}, "fb365699330043f8b9cdb4d71368634c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_04693c3b16924c7f9e24d1ffe402e4fd", "style": "IPY_MODEL_5bcdebe3cfbe4ed1a889228e1ad91bf1", "value": "<h4><b>Color Averages Check</b></h4>"}}, "04693c3b16924c7f9e24d1ffe402e4fd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "5bcdebe3cfbe4ed1a889228e1ad91bf1": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5b95b476a1e6481ca88c2694698e396c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_1010b31910c34204a4aae70ccc7bd3e7", "style": "IPY_MODEL_271016b8f0694f699f8724243bc236bc", "value": "<p>Check if the average of each color channel is the same between the train and test dataset. <a href=\"\" target=\"_blank\">Read More...</a></p>"}}, "1010b31910c34204a4aae70ccc7bd3e7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "271016b8f0694f699f8724243bc236bc": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "293946c1f45349189adb560a0d7de5cf": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_e7ca6c032bc242f08e8429760535aa04", "style": "IPY_MODEL_087b6b55ce2b4b909d86e5e58ccf8e9c"}}, "e7ca6c032bc242f08e8429760535aa04": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "087b6b55ce2b4b909d86e5e58ccf8e9c": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "22c569369139434c91df66c15aedaf26": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_1cf52ac933ac4bacb50956b332e6c3ab", "IPY_MODEL_74c2a10e5e144e77ba3b5e9d03e4651a"], "layout": "IPY_MODEL_851b89d96fe44601b817557822989e3c"}}, "1cf52ac933ac4bacb50956b332e6c3ab": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6f9bb474c56541f1ba2c665f15d2e9b3", "style": "IPY_MODEL_153878cbd2194eb796505fe0143bcfcf", "value": "<h5><b>Additional Outputs</b></h5>"}}, "6f9bb474c56541f1ba2c665f15d2e9b3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "153878cbd2194eb796505fe0143bcfcf": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "74c2a10e5e144e77ba3b5e9d03e4651a": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.13.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=R<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "R", "marker": {"color": "rgb(255,0,0)", "pattern": {"shape": ""}}, "name": "R", "offsetgroup": "R", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "1ba7bbc0-6fe4-4736-a472-34bc2f5778ba"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=G<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "G", "marker": {"color": "rgb(0,255,0)", "pattern": {"shape": ""}}, "name": "G", "offsetgroup": "G", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "7d2ebf91-6eb8-41bd-b2bf-1acc94faf059"}, {"alignmentgroup": "True", "bingroup": "x", "histfunc": "avg", "hovertemplate": "Channel=B<br>Dataset=%{x}<br>avg of Pixel Value=%{y}<extra></extra>", "legendgroup": "B", "marker": {"color": "rgb(0,0,255)", "pattern": {"shape": ""}}, "name": "B", "offsetgroup": "B", "orientation": "v", "showlegend": true, "x": ["Train", "Test"], "xaxis": "x", "y": {"dtype": "float64", "shape": [2]}, "yaxis": "y", "type": "histogram", "uid": "a27a0778-4c6e-4009-937d-18125be48dec"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"barmode": "group", "legend": {"title": {"text": "Channel"}, "tracegroupgap": 0}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Color Averages Histogram"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "title": {"text": "Dataset"}}, "yaxis": {"anchor": "x", "domain": [0.0, 1.0], "title": {"text": "avg of Pixel Value"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 0, "y", "buffer"], "data": "ncFx1/AlXkDFU2+mPqxcQA=="}, {"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "2uiSV3xqXUDblxUM1t1aQA=="}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "2yvhtF6lWUCVoAfXcFlYQA=="}]}, "851b89d96fe44601b817557822989e3c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c9a30a2a5a834e469f2c402da772576a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "a41f55e3a43b4bf0baf9c6f7c7481505"}
+    {"version_major": 2, "version_minor": 0, "model_id": "36b1c177653e43e896503e7bd9d08b91"}
     </script>
 
     </body>
@@ -1409,11 +1363,11 @@ Let check it out:
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-299
+.. GENERATED FROM PYTHON SOURCE LINES 303-304
 
 And now our check we will alert us automatically if the color averages have changed by more than 10%!
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-315
+.. GENERATED FROM PYTHON SOURCE LINES 307-320
 
 Base Checks Types
 ==================
@@ -1432,7 +1386,7 @@ accumulating and computation on batches outputted by the dataloader.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.443 seconds)
+   **Total running time of the script:** ( 0 minutes  8.579 seconds)
 
 
 .. _sphx_glr_download_user-guide_vision_auto_tutorials_plot_custom_checks.py:

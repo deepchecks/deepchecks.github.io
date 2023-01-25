@@ -28,7 +28,7 @@ This notebooks provides an overview for using and understanding the mean average
 **Structure:**
 
 * `What is the purpose of the check? <#what-is-the-purpose-of-the-check>`__
-* `Generate data & model <#generate-data-and-model>`__
+* `Generate Dataset <#generate-dataset>`__
 * `Run the check <#run-the-check>`__
 * `Define a condition <#define-a-condition>`__
 
@@ -39,20 +39,24 @@ The Mean Average Recall Report evaluates the
 on the given model and data, and returns the mAR values per bounding box size category (small, medium, large).
 This check only works on the Object Detection task.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-28
+.. GENERATED FROM PYTHON SOURCE LINES 26-34
 
 Imports
 -------
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-34
+.. note::
+  In this example, we use the pytorch version of the coco dataset and model. In order to run this example using
+  tensorflow, please change the import statements to::
+
+      from deepchecks.vision.datasets.detection import coco_tensorflow as coco
+
+.. GENERATED FROM PYTHON SOURCE LINES 34-38
 
 .. code-block:: default
 
 
-    import numpy as np
-
     from deepchecks.vision.checks import MeanAverageRecallReport
-    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.datasets.detection import coco_torch as coco
 
 
 
@@ -61,22 +65,20 @@ Imports
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-42
+.. GENERATED FROM PYTHON SOURCE LINES 39-46
 
-Generate Data and Model
------------------------
+Generate Dataset
+----------------
 We generate a sample dataset of 128 images from the `COCO dataset <https://cocodataset.org/#home>`__,
 and using the `YOLOv5 model <https://github.com/ultralytics/yolov5>`__.
 
 For the label formatter - our dataset returns exactly the accepted format, so our
 formatting function is the simple `lambda x: x` function.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-47
+.. GENERATED FROM PYTHON SOURCE LINES 46-49
 
 .. code-block:: default
 
-
-    yolo = coco.load_model(pretrained=True)
 
     test_ds = coco.load_dataset(train=False, object_type='VisionData')
 
@@ -87,18 +89,18 @@ formatting function is the simple `lambda x: x` function.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 50-52
 
 Run the check
 -------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-55
+.. GENERATED FROM PYTHON SOURCE LINES 52-57
 
 .. code-block:: default
 
 
     check = MeanAverageRecallReport()
-    result = check.run(test_ds, yolo)
+    result = check.run(test_ds)
     result
 
 
@@ -109,29 +111,16 @@ Run the check
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
-    |#####| 1/1 [Time: 00:05]    Validating Input:
-    |#####| 1/1 [Time: 00:05]
-    Ingesting Batches:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches:
-    |##5  | 1/2 [Time: 00:05]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:11]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:11]
-
+    Processing Batches:
+    |     | 0/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]
     Computing Check:
     |     | 0/1 [Time: 00:00]
-
     Computing Check:
     |#####| 1/1 [Time: 00:00]
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                
-
+    |#####| 1/1 [Time: 00:00]                                             
                                               
 
 .. raw:: html
@@ -416,10 +405,10 @@ Run the check
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"08362406e63c468c954950207da614e8": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_cc21765f368b47168f3fc6debebe5539", "IPY_MODEL_d1c8eb43361f44dfa82921984b0b2b0f", "IPY_MODEL_930509e2bf8d4f84a230ff0060bf7d0c", "IPY_MODEL_0501c8169e72437786237948eb33fc01"], "layout": "IPY_MODEL_f46294736d4b4c73b2f98e23115b783b"}}, "cc21765f368b47168f3fc6debebe5539": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_878e9fb5f4224b22bc0958cb436e9ea6", "style": "IPY_MODEL_1d84ff94544b459ba037e43edbe94175", "value": "<h4><b>Mean Average Recall Report</b></h4>"}}, "878e9fb5f4224b22bc0958cb436e9ea6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "1d84ff94544b459ba037e43edbe94175": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d1c8eb43361f44dfa82921984b0b2b0f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_691e92e1c7b94af5bb763d811e2c9121", "style": "IPY_MODEL_47d90ab4e9da4134b766f52436c66620", "value": "<p>Summarize mean average recall metrics on a dataset and model per detections and area range. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_mean_average_recall_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "691e92e1c7b94af5bb763d811e2c9121": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "47d90ab4e9da4134b766f52436c66620": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "930509e2bf8d4f84a230ff0060bf7d0c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_9f6fb008b90c4d27b4b5bfa2d0a665c3", "style": "IPY_MODEL_8cb70001ea2c422497a9b34425902524"}}, "9f6fb008b90c4d27b4b5bfa2d0a665c3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8cb70001ea2c422497a9b34425902524": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "0501c8169e72437786237948eb33fc01": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_3e0f5ea34c8c4d0b9681cf21db060ab2", "IPY_MODEL_2f25c4e0166f44ca937dc47cd5eaa5a3"], "layout": "IPY_MODEL_d120c1e7eb8c46cd9c2259a45145a570"}}, "3e0f5ea34c8c4d0b9681cf21db060ab2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a190712c511f4e628b4c90244ac003ca", "style": "IPY_MODEL_b7cdb7c336834b31b11cc5d01fc10465", "value": "<h5><b>Additional Outputs</b></h5>"}}, "a190712c511f4e628b4c90244ac003ca": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b7cdb7c336834b31b11cc5d01fc10465": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "2f25c4e0166f44ca937dc47cd5eaa5a3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_41dcad104fc8406c97c21fea800395be", "style": "IPY_MODEL_bb9eeba0c2144e0fa45f29e9ec92b128", "value": "<style type=\"text/css\">\n#T_9a2c8_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9a2c8_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9a2c8_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9a2c8_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_9a2c8_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_9a2c8_\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th class=\"col_heading level0 col0\" >AR@1 (%)</th>\n      <th class=\"col_heading level0 col1\" >AR@10 (%)</th>\n      <th class=\"col_heading level0 col2\" >AR@100 (%)</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Area size</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_9a2c8_level0_row0\" class=\"row_heading level0 row0\" >All</th>\n      <td id=\"T_9a2c8_row0_col0\" class=\"data row0 col0\" >0.33</td>\n      <td id=\"T_9a2c8_row0_col1\" class=\"data row0 col1\" >0.42</td>\n      <td id=\"T_9a2c8_row0_col2\" class=\"data row0 col2\" >0.43</td>\n    </tr>\n    <tr>\n      <th id=\"T_9a2c8_level0_row1\" class=\"row_heading level0 row1\" >Small (area < 32^2)</th>\n      <td id=\"T_9a2c8_row1_col0\" class=\"data row1 col0\" >0.10</td>\n      <td id=\"T_9a2c8_row1_col1\" class=\"data row1 col1\" >0.22</td>\n      <td id=\"T_9a2c8_row1_col2\" class=\"data row1 col2\" >0.22</td>\n    </tr>\n    <tr>\n      <th id=\"T_9a2c8_level0_row2\" class=\"row_heading level0 row2\" >Medium (32^2 < area < 96^2)</th>\n      <td id=\"T_9a2c8_row2_col0\" class=\"data row2 col0\" >0.33</td>\n      <td id=\"T_9a2c8_row2_col1\" class=\"data row2 col1\" >0.42</td>\n      <td id=\"T_9a2c8_row2_col2\" class=\"data row2 col2\" >0.42</td>\n    </tr>\n    <tr>\n      <th id=\"T_9a2c8_level0_row3\" class=\"row_heading level0 row3\" >Large (area < 96^2)</th>\n      <td id=\"T_9a2c8_row3_col0\" class=\"data row3 col0\" >0.48</td>\n      <td id=\"T_9a2c8_row3_col1\" class=\"data row3 col1\" >0.54</td>\n      <td id=\"T_9a2c8_row3_col2\" class=\"data row3 col2\" >0.55</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "41dcad104fc8406c97c21fea800395be": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "bb9eeba0c2144e0fa45f29e9ec92b128": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d120c1e7eb8c46cd9c2259a45145a570": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "f46294736d4b4c73b2f98e23115b783b": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"094d072938904d278774158c3fc111c6": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_ea45ae918f33479daced14a46730f5f3", "IPY_MODEL_d4fbb6f8f9c0486baadd4f6ec05d2a67", "IPY_MODEL_11c8a19476564099bb48e07fa7e60360", "IPY_MODEL_58d655108d2a49c4a4b97f5a9d6fecd8"], "layout": "IPY_MODEL_fee63cc24a1f4cc8a9eb7bf76beb370f"}}, "ea45ae918f33479daced14a46730f5f3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_94c2b2ce6ade47458cfa5cddfcfaba10", "style": "IPY_MODEL_e8f19880b22a4f839f292ca24b8b6c92", "value": "<h4><b>Mean Average Recall Report</b></h4>"}}, "94c2b2ce6ade47458cfa5cddfcfaba10": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e8f19880b22a4f839f292ca24b8b6c92": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "d4fbb6f8f9c0486baadd4f6ec05d2a67": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_bff87b6fdd6a4b758d88f6a68915dca8", "style": "IPY_MODEL_c3644db7ffdf4ebf9dd071f16aaafd21", "value": "<p>Summarize mean average recall metrics on a dataset and model per detections and area range. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_mean_average_recall_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "bff87b6fdd6a4b758d88f6a68915dca8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c3644db7ffdf4ebf9dd071f16aaafd21": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "11c8a19476564099bb48e07fa7e60360": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6b863f97907f4974a9509f4407348d09", "style": "IPY_MODEL_a358fc0d0a5949578a1fd6d24f2152ff"}}, "6b863f97907f4974a9509f4407348d09": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "a358fc0d0a5949578a1fd6d24f2152ff": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "58d655108d2a49c4a4b97f5a9d6fecd8": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_94b5ef27ae814aa6b29f3604af3cd1ea", "IPY_MODEL_55a87cca972a428faf70170ce1ab035f"], "layout": "IPY_MODEL_fef895f57151437ca1b129a68fcff7a6"}}, "94b5ef27ae814aa6b29f3604af3cd1ea": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ba9303ea894b40c1935c37f3897ca435", "style": "IPY_MODEL_70e8f8e8b03a4d2caa784cfe1935edf8", "value": "<h5><b>Additional Outputs</b></h5>"}}, "ba9303ea894b40c1935c37f3897ca435": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "70e8f8e8b03a4d2caa784cfe1935edf8": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "55a87cca972a428faf70170ce1ab035f": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f5b443de20f1431e80da1fb0b655d476", "style": "IPY_MODEL_800d81a52c2643c984b32e36e2ec9aa4", "value": "<style type=\"text/css\">\n#T_d8c42_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8c42_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8c42_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8c42_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8c42_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_d8c42_\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th class=\"col_heading level0 col0\" >AR@1 (%)</th>\n      <th class=\"col_heading level0 col1\" >AR@10 (%)</th>\n      <th class=\"col_heading level0 col2\" >AR@100 (%)</th>\n    </tr>\n    <tr>\n      <th class=\"index_name level0\" >Area size</th>\n      <th class=\"blank col0\" >&nbsp;</th>\n      <th class=\"blank col1\" >&nbsp;</th>\n      <th class=\"blank col2\" >&nbsp;</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_d8c42_level0_row0\" class=\"row_heading level0 row0\" >All</th>\n      <td id=\"T_d8c42_row0_col0\" class=\"data row0 col0\" >0.33</td>\n      <td id=\"T_d8c42_row0_col1\" class=\"data row0 col1\" >0.42</td>\n      <td id=\"T_d8c42_row0_col2\" class=\"data row0 col2\" >0.43</td>\n    </tr>\n    <tr>\n      <th id=\"T_d8c42_level0_row1\" class=\"row_heading level0 row1\" >Small (area < 32^2)</th>\n      <td id=\"T_d8c42_row1_col0\" class=\"data row1 col0\" >0.10</td>\n      <td id=\"T_d8c42_row1_col1\" class=\"data row1 col1\" >0.22</td>\n      <td id=\"T_d8c42_row1_col2\" class=\"data row1 col2\" >0.22</td>\n    </tr>\n    <tr>\n      <th id=\"T_d8c42_level0_row2\" class=\"row_heading level0 row2\" >Medium (32^2 < area < 96^2)</th>\n      <td id=\"T_d8c42_row2_col0\" class=\"data row2 col0\" >0.33</td>\n      <td id=\"T_d8c42_row2_col1\" class=\"data row2 col1\" >0.42</td>\n      <td id=\"T_d8c42_row2_col2\" class=\"data row2 col2\" >0.42</td>\n    </tr>\n    <tr>\n      <th id=\"T_d8c42_level0_row3\" class=\"row_heading level0 row3\" >Large (area < 96^2)</th>\n      <td id=\"T_d8c42_row3_col0\" class=\"data row3 col0\" >0.48</td>\n      <td id=\"T_d8c42_row3_col1\" class=\"data row3 col1\" >0.54</td>\n      <td id=\"T_d8c42_row3_col2\" class=\"data row3 col2\" >0.55</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "f5b443de20f1431e80da1fb0b655d476": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "800d81a52c2643c984b32e36e2ec9aa4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "fef895f57151437ca1b129a68fcff7a6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "fee63cc24a1f4cc8a9eb7bf76beb370f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "08362406e63c468c954950207da614e8"}
+    {"version_major": 2, "version_minor": 0, "model_id": "094d072938904d278774158c3fc111c6"}
     </script>
 
     </body>
@@ -428,9 +417,7 @@ Run the check
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-59
-
-If you have a GPU, you can speed up this check by passing it as an argument to .run() as device=<your GPU>
+.. GENERATED FROM PYTHON SOURCE LINES 58-59
 
 To display the results in an IDE like PyCharm, you can use the following code:
 
@@ -546,7 +533,7 @@ a given threshold
 
 
     check = MeanAverageRecallReport().add_condition_test_average_recall_greater_than(0.4)
-    result = check.run(test_ds, yolo)
+    result = check.run(test_ds)
     result.show(show_additional_outputs=False)
 
 
@@ -556,29 +543,16 @@ a given threshold
 
  .. code-block:: none
 
-    Validating Input:
-    |     | 0/1 [Time: 00:00]    Validating Input:
-    |#####| 1/1 [Time: 00:05]    Validating Input:
-    |#####| 1/1 [Time: 00:05]
-    Ingesting Batches:
-    |     | 0/2 [Time: 00:00]
-    Ingesting Batches:
-    |##5  | 1/2 [Time: 00:05]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:11]
-    Ingesting Batches:
-    |#####| 2/2 [Time: 00:11]
-
+    Processing Batches:
+    |     | 0/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]    Processing Batches:
+    |#####| 1/1 [Time: 00:00]
     Computing Check:
     |     | 0/1 [Time: 00:00]
-
     Computing Check:
     |#####| 1/1 [Time: 00:00]
-
     Computing Check:
-    |#####| 1/1 [Time: 00:00]                                           
-                                                
-
+    |#####| 1/1 [Time: 00:00]                                             
                                               
 
 .. raw:: html
@@ -863,10 +837,10 @@ a given threshold
     
 
     <script type="application/vnd.jupyter.widget-state+json">
-    {"version_major": 2, "version_minor": 0, "state": {"4ebbbe5f9b1b41ae868c08728325b2a7": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_40a822ddb7a5460abac5c939e01c2bc3", "IPY_MODEL_a57070e0b301498c9a3afa5990aacb1b", "IPY_MODEL_5ececc898cd44108b134a16999ef757e"], "layout": "IPY_MODEL_71e2354a465547bfa27531c80215f5c2"}}, "40a822ddb7a5460abac5c939e01c2bc3": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_943073511efd45be9099744c4809c334", "style": "IPY_MODEL_9efc57f4310e44ab92449f18cc740657", "value": "<h4><b>Mean Average Recall Report</b></h4>"}}, "943073511efd45be9099744c4809c334": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9efc57f4310e44ab92449f18cc740657": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a57070e0b301498c9a3afa5990aacb1b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_43fa924d5bce4ec6adfe82bfc3414be8", "style": "IPY_MODEL_9c3b2c62427446c2a575f2795a32306f", "value": "<p>Summarize mean average recall metrics on a dataset and model per detections and area range. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_mean_average_recall_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "43fa924d5bce4ec6adfe82bfc3414be8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9c3b2c62427446c2a575f2795a32306f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "5ececc898cd44108b134a16999ef757e": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_8cb0efa3a03048c7beced0f6a9e76c2a", "style": "IPY_MODEL_4ed79a31c01647da9771425f0700c1b5", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_d8675_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8675_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8675_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8675_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d8675_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_d8675_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_d8675_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_d8675_row0_col1\" class=\"data row0 col1\" >Scores are greater than 0.4</td>\n      <td id=\"T_d8675_row0_col2\" class=\"data row0 col2\" >Found lowest score of 0.1 for area Small (area < 32^2) and IoU AR@1 (%)</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "8cb0efa3a03048c7beced0f6a9e76c2a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "4ed79a31c01647da9771425f0700c1b5": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "71e2354a465547bfa27531c80215f5c2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+    {"version_major": 2, "version_minor": 0, "state": {"0cb47eb10edc4b50b27537a933721a3a": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_ffd0ca129c9741af9adc0b947fe53154", "IPY_MODEL_6ccc7ffda5b44ac5a47b013ee555df7d", "IPY_MODEL_16c6fe0b705d4975b3440d1698f5ba2c"], "layout": "IPY_MODEL_b79eaf14609f45b3984cc2eb5c1b6346"}}, "ffd0ca129c9741af9adc0b947fe53154": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_02ebe6b4498548fdb26d2b3c389a5818", "style": "IPY_MODEL_b19b06cb735e451ca983e62357e14274", "value": "<h4><b>Mean Average Recall Report</b></h4>"}}, "02ebe6b4498548fdb26d2b3c389a5818": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b19b06cb735e451ca983e62357e14274": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "6ccc7ffda5b44ac5a47b013ee555df7d": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0a848ee2e01b4eb8bacc26e2cb0b20bd", "style": "IPY_MODEL_b677638ac57c463ea6d59ff79fdabfe4", "value": "<p>Summarize mean average recall metrics on a dataset and model per detections and area range. <a href=\"https://docs.deepchecks.com/stable/checks_gallery/vision/model_evaluation/plot_mean_average_recall_report.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "0a848ee2e01b4eb8bacc26e2cb0b20bd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "b677638ac57c463ea6d59ff79fdabfe4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "16c6fe0b705d4975b3440d1698f5ba2c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5b3686c0ac1542efb6fb19f15be312d7", "style": "IPY_MODEL_af699807a4ac47a7af6da0900ecb18a6", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_ed313_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ed313_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ed313_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ed313_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_ed313_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_ed313_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_ed313_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_ed313_row0_col1\" class=\"data row0 col1\" >Scores are greater than 0.4</td>\n      <td id=\"T_ed313_row0_col2\" class=\"data row0 col2\" >Found lowest score of 0.1 for area Small (area < 32^2) and IoU AR@1 (%)</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "5b3686c0ac1542efb6fb19f15be312d7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "af699807a4ac47a7af6da0900ecb18a6": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "b79eaf14609f45b3984cc2eb5c1b6346": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
     </script>
     <script type="application/vnd.jupyter.widget-view+json">
-    {"version_major": 2, "version_minor": 0, "model_id": "4ebbbe5f9b1b41ae868c08728325b2a7"}
+    {"version_major": 2, "version_minor": 0, "model_id": "0cb47eb10edc4b50b27537a933721a3a"}
     </script>
 
     </body>
@@ -878,7 +852,7 @@ a given threshold
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  35.916 seconds)
+   **Total running time of the script:** ( 0 minutes  3.113 seconds)
 
 
 .. _sphx_glr_download_checks_gallery_vision_model_evaluation_plot_mean_average_recall_report.py:
