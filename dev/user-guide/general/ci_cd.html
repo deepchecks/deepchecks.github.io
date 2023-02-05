@@ -674,56 +674,65 @@ Page: user-guide/general/ci_cd&labels=labels=chore/documentation" target="_blank
                 
   <section id="using-deepchecks-in-ci-cd">
 <h1>Using Deepchecks In CI/CD<a class="headerlink" href="#using-deepchecks-in-ci-cd" title="Permalink to this headline">#</a></h1>
-<p>This guide will explain the basics of using CI/CD for machine learning, and how deepchecks can be incorporated into
-the process.</p>
+<p>This guide will explain the basics of using CI/CD for machine learning, and demonstrate how deepchecks
+can be incorporated into the process, including code snippets that can be used for running deepchecks
+with Airflow or Github Actions.</p>
 <p><strong>Structure:</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#ci/cd-in-machine-learning">CI/CD In Machine Learning</a></p></li>
+<li><p><a class="reference external" href="#ci/cd-in-machine-learning">Intro to CI/CD In Machine Learning</a></p></li>
 <li><p><a class="reference external" href="#airflow-integration">Airflow Integration</a></p></li>
 <li><p><a class="reference external" href="#github-actions-integration">GitHub Actions Integration</a></p></li>
 </ul>
 <section id="ci-cd-in-machine-learning">
 <h2>CI/CD In Machine Learning<a class="headerlink" href="#ci-cd-in-machine-learning" title="Permalink to this headline">#</a></h2>
 <p>CI/CD is a software engineering concept that is used to streamline the process of building, testing and deploying
-software products. CI/CD can also be utilized for the ML model lifecycle - to streamline the process of model training
-(and retraining), model validation and model deployment.</p>
-<p>For example, CI/CD in machine learning can be used in different steps such as:</p>
-<ul class="simple">
-<li><p>Data integrity validation: When the data used for training is collected via automatic processes and pipelines,
+software products. These can be made more trustworthy and efficient, and help improve the R&amp;D processes,
+by adding automated steps to the development and deployment lifecycle.
+For ML models, CI/CD concepts can be utilized to streamline the process of model training
+(and retraining), data and model validation and model deployment:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><strong>Data integrity validation</strong>: When the data used for training is collected via automatic processes and pipelines,
 the data may contain errors and problems we haven’t encountered before, either due to a bug in the
-data processing pipeline or due to a change in the data source.
-Examples of such problems include:
+data processing pipeline or due to a change in the data source.</div>
+<div class="line">Examples of such problems include:
 <a class="reference internal" href="../../checks_gallery/tabular/data_integrity/plot_conflicting_labels.html"><span class="doc">conflicting labels between similar samples</span></a>,
 <a class="reference internal" href="../../checks_gallery/tabular/data_integrity/plot_feature_feature_correlation.html"><span class="doc">high correlation between features</span></a>,
 <a class="reference internal" href="../../checks_gallery/tabular/data_integrity/plot_string_mismatch.html"><span class="doc">spelling errors in categorical features</span></a>,
-and more.</p></li>
-<li><p>Datasets comparison: In many cases it’s useful to make sure that there isn’t any leakage or drift between 2
+and more.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><strong>Datasets comparison</strong>: In many cases it’s useful to make sure that there isn’t any leakage or drift between two
 datasets. For example, when doing a time based split of the data there is a risk that the datasets will have
 significant differences, or when doing a periodic model retraining we might want to compare the new dataset
-to the previous one.
-Examples of checks that can be used are:
+to the previous one.</div>
+<div class="line">Examples of checks that can be used are:
 <a class="reference internal" href="../../checks_gallery/tabular/train_test_validation/plot_train_test_feature_drift.html"><span class="doc">drift between features</span></a>,
 <a class="reference internal" href="../../checks_gallery/tabular/train_test_validation/plot_feature_label_correlation_change.html"><span class="doc">change in correlation between features and label</span></a>,
 <a class="reference internal" href="../../checks_gallery/tabular/train_test_validation/plot_train_test_samples_mix.html"><span class="doc">duplicate samples between the datasets</span></a>,
-and more.</p></li>
-<li><p>Model training: The model is trained on the (previously validated) training set.</p></li>
-<li><p>Model validation: The trained model is evaluated on test data, testing for performance, weak segments and more:
+and more.</div>
+</div>
+</li>
+<li><p><strong>Model training</strong>: To automate the model’s training on a new (preferrably validated) training dataset.</p></li>
+<li><p><strong>Model validation</strong>: The trained model is evaluated on test data, testing for performance, weak segments and more
+sophisticated checks such as
 <a class="reference internal" href="../../checks_gallery/tabular/model_evaluation/plot_simple_model_comparison.html"><span class="doc">performance compared to naive model</span></a>,
 <a class="reference internal" href="../../checks_gallery/tabular/model_evaluation/plot_calibration_score.html"><span class="doc">calibration score for each class</span></a>,
 etc.</p></li>
-<li><p>Model deployment: The model is deployed to production if it meets the specified criteria.</p></li>
+<li><p><strong>Model deployment</strong>: The model is deployed to production if it meets the specified criteria.</p></li>
 </ul>
 <p>In most cases, the steps above are done manually today by running local tests, and inspecting graphs and reports.
 By using CI/CD these time consuming tasks can be automated, freeing up time for more meaningful work.</p>
 <p>Deepchecks can be used in the CI/CD process at 2 main steps of model development:</p>
 <ul class="simple">
-<li><p>Before model training, to validate the integrity of the data used for training, and check for any data
+<li><p><strong>Before model training</strong>, to validate the integrity of the data used for training, and check for any data
 drift or leakage between the train and test datasets.</p></li>
-<li><p>After model training, testing model performance across different metrics and data segments, and get
+<li><p><strong>After model training</strong>, testing model performance across different metrics and data segments, and to gain
 deeper insights on the model’s behavior, such as weak segments and performance bias.</p></li>
 </ul>
-<p>In this guide we will show end to end examples of validating both data and the trained model. In most use cases those
-processes will be separated into 2 separate pipelines, one for data validation and one for model validation.
+<p>In this guide we will show end to end examples of validating both the data and the trained model. In most use cases those
+processes will be separated into two separate pipelines, one for data validation and one for model validation.
 We will use the default suites provided by deepchecks, but it’s possible to create a
 <span class="xref std std-doc">custom suite</span>
 containing hand chosen checks and
@@ -737,17 +746,18 @@ in order to cater to the specific needs of the project.</p>
 <h3>Airflow Quickstart<a class="headerlink" href="#airflow-quickstart" title="Permalink to this headline">#</a></h3>
 <p>Apache Airflow is an open-source workflow management system which is commonly used to automate data processing
 pipelines.</p>
-<p>If you are new to Airflow, you can get it up and running quickly with those simplified steps:
-1. Run <cite>pip install apache-airflow</cite>
-2. Run <cite>airflow standalone</cite>. This will boostrap a local Airflow deployment which is good for testing, but not intended
-for production
-3. Under your home directory, insert your DAG (python file) inside the directory <cite>~/airflow/dags</cite></p>
-<p>For deeper explanations about installing and operating airflow see their
-<a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/start.html">docs</a></p>
+<p>If you are new to Airflow, you can get it up and running quickly with the following simplified steps:</p>
+<ol class="arabic simple">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">apache-airflow</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">airflow</span> <span class="pre">standalone</span></code>. This will bootstrap a local Airflow deployment which is good for testing, but not intended for production</p></li>
+<li><p>Under your home directory, insert your DAG (python file) inside the directory <code class="docutils literal notranslate"><span class="pre">~/airflow/dags</span></code></p></li>
+</ol>
+<p>For a more elaborate explanation about installing and operating airflow see their
+<a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/start.html">docs</a>.</p>
 </section>
 <section id="airflow-with-deepchecks">
 <h3>Airflow With Deepchecks<a class="headerlink" href="#airflow-with-deepchecks" title="Permalink to this headline">#</a></h3>
-<p>In the following example we will use S3 to load the training data and to store our suite results. We define the first
+<p>In the following example we will use S3 object storage to load the training data and to store our suite results. We define the first
 2 tasks as short circuit tasks, which means the rest of the downstream tasks will be skipped if the return value of
 them is false. This is useful in cases where we want to stop the pipeline if the data validation failed.
 We can also add an additional step of deploying the model after the last validation has passed.</p>
@@ -871,18 +881,20 @@ We can also add an additional step of deploying the model after the last validat
 <h3>GitHub Actions Quickstart<a class="headerlink" href="#github-actions-quickstart" title="Permalink to this headline">#</a></h3>
 <p>GitHub Actions is a service that allows you to run automated workflows, which can be triggered by events such as
 pushing to a repository or creating a pull request.</p>
-<p>If you are new to GitHub Actions, you can get it up and running quickly with those simplified steps:
-1. Have your project repository in <cite>github.com</cite>
-2. Add the python files with your ci/cd logic to the repository
-3. Add the yaml below in <cite>.github/workflows</cite> directory and push to github</p>
-<p>For deeper explanations about working with GitHub Actions see their
-<a class="reference external" href="https://docs.github.com/en/actions/quickstart">docs</a></p>
+<p>If you are new to GitHub Actions, you can get it up and running quickly with those simplified steps:</p>
+<ol class="arabic simple">
+<li><p>Have your project repository in <code class="docutils literal notranslate"><span class="pre">github.com</span></code></p></li>
+<li><p>Add the python files with your ci/cd logic to the repository</p></li>
+<li><p>Add the yaml below in <cite>.github/workflows</cite> directory and push to github</p></li>
+</ol>
+<p>For a more elaborate explanation about working with GitHub Actions see their
+<a class="reference external" href="https://docs.github.com/en/actions/quickstart">docs</a>.</p>
 </section>
 <section id="github-actions-with-deepchecks">
 <h3>GitHub Actions With Deepchecks<a class="headerlink" href="#github-actions-with-deepchecks" title="Permalink to this headline">#</a></h3>
 <p>We will use the same functions as defined in airflow above with slight changes, and run them in the GitHub Actions
 steps on every push to the <cite>main</cite> branch. Note that we might want to stop the pipeline when a suite fails.
-In this case we can change the methods return types from <cite>return suite_result.passed()</cite> to:</p>
+In this case we can change the methods return types from <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">suite_result.passed()</span></code> to:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">suite_result</span><span class="o">.</span><span class="n">passed</span><span class="p">():</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
