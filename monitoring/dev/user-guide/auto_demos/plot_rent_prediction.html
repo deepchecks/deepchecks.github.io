@@ -1,0 +1,932 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+<!-- Google Tag Manager -->
+<!--<script>(function (w, d, s, l, i) {-->
+<!--        w[l] = w[l] || []; w[l].push({-->
+<!--            'gtm.start':-->
+<!--                new Date().getTime(), event: 'gtm.js'-->
+<!--        }); var f = d.getElementsByTagName(s)[0],-->
+<!--            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =-->
+<!--                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);-->
+<!--    })(window, document, 'script', 'dataLayer', 'GTM-NNKXRJQ');</script>-->
+<!-- End Google Tag Manager -->
+<meta name="title" content="Predicting Rent Prices (Regression) | Deepchecks Documentation">
+<meta name="description" content="Do you need to know more about Predicting Rent Prices (Regression)? Read more at Deepchecks Online Documentation">
+<meta name="docsearch:version" content="">
+
+
+<!-- Warning: 
+        The 'shortcut link' type is often seen before icon, but this link type is non-conforming, 
+        ignored and web authors must not use it anymore. 
+        MDN docs https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
+    -->
+<link rel="shortcut icon" href="/_static/favicons/favicon.ico">
+<!--<link rel="canonical" href="https://docs.deepchecks.com/stable/user-guide/auto_demos/plot_rent_prediction.html" />-->
+
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="32x32">
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="192x192">
+
+<!-- Note: 
+        Apple's iOS does not use this 'link' type, nor the 'sizes' attribute, 
+        like others mobile browsers do, to select a webpage icon for Web Clip 
+        or a start-up placeholder. Instead it uses the non-standard 'apple-touch-icon'.
+        MDN docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types;
+        Safari Web Content Guide: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW4
+    -->
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+
+
+    <title>Predicting Rent Prices (Regression) &#8212; Deepchecks Monitoring  documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
+    crossorigin="anonymous"></script>
+
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Predicting Loan Defaults (Classification)" href="plot_lending_defauts.html" />
+    <link rel="prev" title="Demos" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+
+<body data-spy="scroll" data-target="#bd-toc-nav">
+    <!-- Google Tag Manager (noscript) -->
+<!--    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNKXRJQ" height="0" width="0"-->
+<!--            style="display:none;visibility:hidden"></iframe></noscript>-->
+    <!-- End Google Tag Manager (noscript) -->
+    <script>
+        require.config({
+            paths: {
+                "docsearchLib": "https://cdn.jsdelivr.net/npm/@docsearch/js@3?noext",
+                "clipboardjs": "//_static/clipboard.min"
+            }
+        }
+
+        );
+        // require(["docsearchLib"], function (docsearch) {
+        //     docsearch({
+        //         appId: "3UQ0BSGJ1N", apiKey: "83d250f88e29e9906a50ddf40a1871ce", indexName: "deepchecks", container: '#algolia-search', debug: false,
+        //         searchParameters: {
+        //             facetFilters: ["version:"]
+        //         }
+        //     });
+        // });
+        require(["clipboardjs"], function(clipboardJS) {
+            window.ClipboardJS=clipboardJS
+        });
+    </script>
+    <script data-url_root="/" id="documentation_options" src="//_static/documentation_options.js"></script>
+    <script src="//_static/copybutton.js"></script>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../index.html">
+  <img src="../../_static/deepchecks_logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../api/index.html">
+  API Reference
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://staging-v2.deepchecks.com/docs">API Docs<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/deepchecks/deepchecks" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://deepchecks.com/slack" rel="noopener" target="_blank" title="Slack"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://pypi.org/project/deepchecks/" rel="noopener" target="_blank" title="PyPI"><span><i class="fab fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  General
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../general/workspace_and_users.html">
+   Workspace &amp; Users
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../general/concepts.html">
+   Concepts
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../general/faq.html">
+   FAQ
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../general/aggregation_methods.html">
+   Aggregation Methods
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tabular
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../tabular/auto_quickstarts/index.html">
+   Tabular Quickstarts
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tabular/auto_quickstarts/plot_quickstart.html">
+     Quickstart - Get Deepchecks Monitoring Up and Running
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tabular/tabular_setup.html">
+   Setting Up a New Tabular Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tabular/tabular_production.html">
+   Sending Tabular Production Data
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  User Interface
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user_interface/dashboard.html">
+   Dashboard
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user_interface/alerts.html">
+   Alerts
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user_interface/analysis.html">
+   Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user_interface/configuration.html">
+   Configuration
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Demos
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Predicting Rent Prices (Regression)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_lending_defauts.html">
+     Predicting Loan Defaults (Classification)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-you-up-on-deepchecks">
+   Setting You Up on Deepchecks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#installation-api-key">
+     Installation &amp; API key
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#creating-a-client">
+     Creating a Client
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-model-model-version">
+   Creating a Model &amp; Model Version
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-the-data">
+     Getting the Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-schema">
+     Data Schema
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#feature-importance">
+     Feature Importance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#creating-a-model-version">
+     Creating a Model Version
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#uploading-production-data">
+   Uploading Production Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#uploading-a-batch-of-data">
+     Uploading a Batch of Data
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#introducing-some-issues">
+       Introducing Some Issues
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#uploading-the-first-batch">
+       Uploading the First Batch
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#uploading-the-second-batch">
+       Uploading the Second Batch
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#making-sure-your-data-has-arrived">
+     Making Sure Your Data Has Arrived
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analyzing-using-deepchecks">
+   Analyzing Using Deepchecks
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dashboard">
+     Dashboard
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis-finding-the-root-cause-for-the-drift">
+     Analysis - Finding the root cause for the drift
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis-performance-check">
+     Analysis - Performance Check
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#alerts-defining-a-new-alert">
+     Alerts - Defining a new alert
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cleaning-up">
+   Cleaning up
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+            
+          </div>
+          
+
+          
+    
+        
+    
+    <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+        
+            <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-user-guide-auto-demos-plot-rent-prediction-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="predicting-rent-prices-regression">
+<span id="lending-defaults"></span><span id="sphx-glr-user-guide-auto-demos-plot-rent-prediction-py"></span><h1>Predicting Rent Prices (Regression)<a class="headerlink" href="#predicting-rent-prices-regression" title="Permalink to this headline">#</a></h1>
+<p>In this Demo we are using an adaptation of the <a class="reference external" href="https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data">Airbnb rent regression dataset</a> to show how you can use Deepchecks to
+monitor and identify issues in a Rent Prediction task.</p>
+<p>You are a Data Scientist whose company has collected historical data on the apartments within New York
+city, and your goal is to accurately predict the actual rent for the property given its attributes and the community
+feedback. This estimation is then sold as an estimated price to the landlords, helping them correctly asses the value
+of their property.</p>
+<p>Recently, you have received word that some landlords in northern Manhattan are getting estimations from your platform
+that are way off the market price, and you are sent to investigate.</p>
+<p>In this notebook, we’ll show how you can use deepchecks to pinpoint where these problematic predictions are coming
+from, and what is their root cause. Before that, we’ll start by quickly setting up deepchecks monitoring for your
+data and model.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#setting-you-up-on-deepchecks">Setting You Up on Deepchecks</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-model-model-version">Creating a Model &amp; Model Version</a></p></li>
+<li><p><a class="reference internal" href="#uploading-production-data">Uploading Production Data</a></p></li>
+<li><p><a class="reference internal" href="#analyzing-using-deepchecks">Analyzing Using Deepchecks</a></p></li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To see how Deepchecks Monitoring is used, you can skip right to <a class="reference internal" href="#analyzing-using-deepchecks">Analyzing Using Deepchecks</a></p>
+</div>
+<section id="setting-you-up-on-deepchecks">
+<h2>Setting You Up on Deepchecks<a class="headerlink" href="#setting-you-up-on-deepchecks" title="Permalink to this headline">#</a></h2>
+<section id="installation-api-key">
+<h3>Installation &amp; API key<a class="headerlink" href="#installation-api-key" title="Permalink to this headline">#</a></h3>
+<p>In order to work with Deepchecks Monitoring, you need to:</p>
+<ol class="arabic simple">
+<li><p>Install with <code class="docutils literal notranslate"><span class="pre">pip</span></code> the deepchecks-client SDK</p></li>
+<li><p>Log in to the Deepchecks Monitoring app and create an organization</p></li>
+<li><p>Obtain an API key from the app</p></li>
+</ol>
+<p>For more details, please refer to the <a class="reference internal" href="../tabular/auto_quickstarts/plot_quickstart.html"><span class="doc">Quickstart</span></a>.</p>
+</section>
+<section id="creating-a-client">
+<h3>Creating a Client<a class="headerlink" href="#creating-a-client" title="Permalink to this headline">#</a></h3>
+<p>To work with Deepchecks Monitoring we first instantiate a client object.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">deepchecks_client</span> <span class="kn">import</span> <span class="n">DeepchecksClient</span>
+<span class="c1"># Note:  add an environment variable DEEPCHECKS_API_TOKEN and set it to your API token&#39;s value. Alternatively (not</span>
+<span class="c1"># recommended for security reasons) copy-paste your token string here, instead of retrieving it from the environment</span>
+<span class="c1"># variable.</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DEEPCHECKS_API_TOKEN&#39;</span><span class="p">)</span>
+<span class="c1"># Point the host to deepchecks host url (e.g. https://app.deepchecks.com. Save it to an environment variable,</span>
+<span class="c1"># or alternatively copy-paste it here directly)</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DEEPCHECKS_API_HOST&#39;</span><span class="p">)</span>
+<span class="c1"># Create a DeepchecksClient with relevant credentials</span>
+<span class="n">dc_client</span> <span class="o">=</span> <span class="n">DeepchecksClient</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We’ll use this object during the remainder of this example.</p>
+</section>
+</section>
+<section id="creating-a-model-model-version">
+<h2>Creating a Model &amp; Model Version<a class="headerlink" href="#creating-a-model-model-version" title="Permalink to this headline">#</a></h2>
+<p>In this section we’ll create a model and a model version, using the training data as the reference. Reference data is
+a dataset to which we wish to compare our production data stream. To learn more about models and model versions, and
+other important terms in Deepchecks please refer to the <a class="reference internal" href="../general/concepts.html"><span class="doc">Concepts guide</span></a>.</p>
+<section id="getting-the-data">
+<h3>Getting the Data<a class="headerlink" href="#getting-the-data" title="Permalink to this headline">#</a></h3>
+<p>We’ll start by downloading the training data from the deepchecks testing package. This training data will be used
+to set the reference for the model version.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.regression.airbnb</span> <span class="kn">import</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_data.html#deepchecks.tabular.datasets.regression.airbnb.load_data" title="deepchecks.tabular.datasets.regression.airbnb.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">,</span> \
+    <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_prediction</span></a><span class="p">,</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_feature_importance</span></a>
+
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_df</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_data.html#deepchecks.tabular.datasets.regression.airbnb.load_data" title="deepchecks.tabular.datasets.regression.airbnb.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">(</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;DataFrame&#39;</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">train_df</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>datestamp</th>
+      <th>neighbourhood_group</th>
+      <th>neighbourhood</th>
+      <th>room_type</th>
+      <th>price</th>
+      <th>minimum_nights</th>
+      <th>number_of_reviews</th>
+      <th>reviews_per_month</th>
+      <th>calculated_host_listings_count</th>
+      <th>availability_365</th>
+      <th>has_availability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1656750911</td>
+      <td>Brooklyn</td>
+      <td>Other</td>
+      <td>Entire home/apt</td>
+      <td>95</td>
+      <td>7</td>
+      <td>28</td>
+      <td>1.51</td>
+      <td>1</td>
+      <td>19</td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1656751617</td>
+      <td>Brooklyn</td>
+      <td>Bedford-Stuyvesant</td>
+      <td>Entire home/apt</td>
+      <td>135</td>
+      <td>2</td>
+      <td>174</td>
+      <td>3.58</td>
+      <td>1</td>
+      <td>5</td>
+      <td>yes</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>So what do we have? Let’s note the special columns in our data:</p>
+<ol class="arabic simple">
+<li><p>datestamp - The timestamp of the sample (seconds since epoch)</p></li>
+<li><p>price - Our label</p></li>
+</ol>
+<p>All the other columns are features that can be used by our model to predict the price. We note that there are some
+categorical features, and some numeric ones.</p>
+</section>
+<section id="data-schema">
+<h3>Data Schema<a class="headerlink" href="#data-schema" title="Permalink to this headline">#</a></h3>
+<p>A Schema file contains the description of the data (features and additional data) associated with a model version.
+To learn more about creating a schema, please refer to the
+<a class="reference internal" href="../tabular/tabular_setup.html"><span class="doc">Tabular Setup guide</span></a>.</p>
+<p><strong>It is highly recommended to review the created schema file before moving forward to creating the model version.</strong></p>
+<p>In order to create a schema file, the easiest way is to first define a deepchecks
+<a class="reference external" href="https://docs.deepchecks.com/stable/user-guide/tabular/dataset_object.html" title="(in Deepchecks v0.1)"><span class="xref std std-doc">Dataset</span></a> object, which contains the actual data (DataFrame)
+together with metadata about the role of each column.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <a href="https://docs.deepchecks.com/stable/api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.dataset.Dataset" class="sphx-glr-backref-module-deepchecks-tabular-dataset sphx-glr-backref-type-py-class"><span class="n">Dataset</span></a>
+<span class="n">timestamp</span><span class="p">,</span> <span class="n">label_col</span> <span class="o">=</span> <span class="s1">&#39;datestamp&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span>
+<a href="https://docs.deepchecks.com/stable/api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.dataset.Dataset" class="sphx-glr-backref-module-deepchecks-tabular-dataset sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.dataset.Dataset" class="sphx-glr-backref-module-deepchecks-tabular-dataset sphx-glr-backref-type-py-class"><span class="n">Dataset</span></a><span class="p">(</span>
+    <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_df</span></a><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label_col</span><span class="p">,</span>
+    <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;room_type&#39;</span><span class="p">,</span> <span class="s1">&#39;neighbourhood&#39;</span><span class="p">,</span> <span class="s1">&#39;neighbourhood_group&#39;</span><span class="p">,</span> <span class="s1">&#39;has_availability&#39;</span><span class="p">,</span> <span class="s1">&#39;minimum_nights&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;number_of_reviews&#39;</span><span class="p">,</span> <span class="s1">&#39;reviews_per_month&#39;</span><span class="p">,</span> <span class="s1">&#39;calculated_host_listings_count&#39;</span><span class="p">,</span> <span class="s1">&#39;availability_365&#39;</span><span class="p">],</span>
+    <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;neighbourhood_group&#39;</span><span class="p">,</span> <span class="s1">&#39;neighbourhood&#39;</span><span class="p">,</span> <span class="s1">&#39;room_type&#39;</span><span class="p">,</span> <span class="s1">&#39;has_availability&#39;</span><span class="p">],</span>
+    <span class="n">datetime_name</span><span class="o">=</span><span class="n">timestamp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We’ll create the schema file, and print it to show (and validate) the schema that was created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks_client</span> <span class="kn">import</span> <span class="n">create_schema</span><span class="p">,</span> <span class="n">read_schema</span>
+
+<span class="n">schema_file_path</span> <span class="o">=</span> <span class="s1">&#39;schema_file.yaml&#39;</span>
+<span class="n">create_schema</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><a href="https://docs.deepchecks.com/stable/api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.dataset.Dataset" class="sphx-glr-backref-module-deepchecks-tabular-dataset sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span> <span class="n">schema_output_file</span><span class="o">=</span><span class="n">schema_file_path</span><span class="p">)</span>
+<span class="n">read_schema</span><span class="p">(</span><span class="n">schema_file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Schema was successfully generated and saved to schema_file.yaml.
+
+{&#39;additional_data&#39;: {}, &#39;features&#39;: {&#39;availability_365&#39;: &#39;integer&#39;, &#39;calculated_host_listings_count&#39;: &#39;integer&#39;, &#39;has_availability&#39;: &#39;categorical&#39;, &#39;minimum_nights&#39;: &#39;integer&#39;, &#39;neighbourhood&#39;: &#39;categorical&#39;, &#39;neighbourhood_group&#39;: &#39;categorical&#39;, &#39;number_of_reviews&#39;: &#39;integer&#39;, &#39;reviews_per_month&#39;: &#39;numeric&#39;, &#39;room_type&#39;: &#39;categorical&#39;}}
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For conveniently changing the auto-inferred schema it’s recommended to edit the textual file with an app of your
+choice.</p>
+<p>After editing, you can use the <a class="reference internal" href="../../api/generated/deepchecks_client.tabular.utils.read_schema.html#deepchecks_client.tabular.utils.read_schema" title="deepchecks_client.tabular.utils.read_schema"><code class="xref py py-meth docutils literal notranslate"><span class="pre">read_schema</span></code></a>
+function to verify the validity of the syntax in your updated schema.</p>
+</div>
+</section>
+<section id="feature-importance">
+<h3>Feature Importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">#</a></h3>
+<p>In order to provide the best analysis and alerts, we should let Deepchecks know about the relative importance of
+the features to the model’s prediction. In this example we’ll load pre-calculated features importnaces,
+but these can be easily calculated using <a class="reference external" href="https://docs.deepchecks.com/stable/user-guide/tabular/feature_importance.html" title="(in Deepchecks v0.1)"><span class="xref std std-doc">deepchecks</span></a>,
+or other methods (such as SHAP).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.regression.airbnb</span> <span class="kn">import</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_feature_importance</span></a>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_importance</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_feature_importance" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_feature_importance</span></a><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-model-version">
+<h3>Creating a Model Version<a class="headerlink" href="#creating-a-model-version" title="Permalink to this headline">#</a></h3>
+<p>We’ll use the <a class="reference internal" href="../../api/generated/deepchecks_client.DeepchecksClient.create_tabular_model_version.html#deepchecks_client.DeepchecksClient.create_tabular_model_version" title="deepchecks_client.DeepchecksClient.create_tabular_model_version"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_tabular_model_version</span></code></a> method. Calling it, we can create both our
+model, our model version and define the reference data with one call. We’ll also let Deepchecks know this is a
+regression task, so we will set the <code class="docutils literal notranslate"><span class="pre">task_type</span></code> argument. Lastly, in order to fully define the reference,
+we must also pass model predictions for the reference data. For classification tasks, not that it’s highly recommended
+to also send the predicted probabilities.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.regression.airbnb</span> <span class="kn">import</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_prediction</span></a>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_predictions</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_prediction</span></a><span class="p">()</span>
+
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;Rent Prediction - Example-tmp&#39;</span>
+
+<span class="n">model_version</span> <span class="o">=</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">create_tabular_model_version</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">version_name</span><span class="o">=</span><span class="s1">&#39;ver_1&#39;</span><span class="p">,</span>
+                                                       <span class="n">schema</span><span class="o">=</span><span class="n">schema_file_path</span><span class="p">,</span>
+                                                       <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_importance</span></a><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_importance</span></a><span class="p">,</span>
+                                                       <span class="n">reference_dataset</span><span class="o">=</span><a href="https://docs.deepchecks.com/stable/api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.dataset.Dataset" class="sphx-glr-backref-module-deepchecks-tabular-dataset sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span>
+                                                       <span class="n">reference_predictions</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_predictions</span></a><span class="p">,</span>
+                                                       <span class="n">task_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Model Rent Prediction - Example-tmp was successfully created!. Default checks, monitors and alerts added.
+Model version ver_1 was successfully created.
+Reference data uploaded.
+</pre></div>
+</div>
+<p>Now we know our model, model version and reference data where set, and we’re ready to start uploading production data.</p>
+</section>
+</section>
+<section id="uploading-production-data">
+<h2>Uploading Production Data<a class="headerlink" href="#uploading-production-data" title="Permalink to this headline">#</a></h2>
+<p>Once in production, uploading data can be done either sample by sample, or by batch. To read more, please referTo
+read more, refer to the <span class="xref std std-doc">Production Data Guide</span>. Here we’ll
+show how to use the batch upload method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_data.html#deepchecks.tabular.datasets.regression.airbnb.load_data" title="deepchecks.tabular.datasets.regression.airbnb.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">(</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;DataFrame&#39;</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a> <span class="o">=</span> <a href="https://docs.deepchecks.com/stable/api/generated/deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction.html#deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" title="deepchecks.tabular.datasets.regression.airbnb.load_pre_calculated_prediction" class="sphx-glr-backref-module-deepchecks-tabular-datasets-regression-airbnb sphx-glr-backref-type-py-function"><span class="n">load_pre_calculated_prediction</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p>We’ll change the original timestamps so the samples are recent</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="n">yesterdays_timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a href="https://docs.python.org/3/library/datetime.html#datetime.datetime.now" title="datetime.datetime.now" class="sphx-glr-backref-module-datetime-datetime sphx-glr-backref-type-py-method"><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span></a><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">-</span> <span class="mi">3600</span><span class="o">*</span><span class="mi">24</span>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span> <span class="o">=</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">yesterdays_timestamp</span> <span class="o">-</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+<section id="uploading-a-batch-of-data">
+<h3>Uploading a Batch of Data<a class="headerlink" href="#uploading-a-batch-of-data" title="Permalink to this headline">#</a></h3>
+<section id="introducing-some-issues">
+<h4>Introducing Some Issues<a class="headerlink" href="#introducing-some-issues" title="Permalink to this headline">#</a></h4>
+<p>The data already has an issue we’ll detect in this example - at a certain point in time, the samples belonging to
+the “Harlem” neighborhood have been modified so that some values of room_types are now “None”. Let’s also
+corrupt these samples, to reflect problematic model performance on these samples by introducing systematic error.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[(</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="s1">&#39;neighbourhood&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Harlem&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="s1">&#39;room_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+</div>
+<p>RMSE before systematic error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">]</span> <span class="o">-</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.loc" title="pandas.DataFrame.loc" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-property"><span class="n">prod_data</span><span class="o">.</span><span class="n">loc</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">,</span> <span class="n">label_col</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>13.539969756639774
+</pre></div>
+</div>
+<p>Introduce error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.randn.html#numpy.random.randn" title="numpy.random.randn" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p>RMSE after systematic error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">]</span> <span class="o">-</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.loc" title="pandas.DataFrame.loc" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-property"><span class="n">prod_data</span><span class="o">.</span><span class="n">loc</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bad_segment_indices</span></a><span class="p">,</span> <span class="n">label_col</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>14.258282566487054
+</pre></div>
+</div>
+</section>
+<section id="uploading-the-first-batch">
+<h4>Uploading the First Batch<a class="headerlink" href="#uploading-the-first-batch" title="Permalink to this headline">#</a></h4>
+<p>Let’s start by uploading the first part of the dataset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timestamps</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">end_of_first_half</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timestamps</span></a><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timestamps</span></a><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)]</span>  <span class="c1"># This is the first 3 weeks of the production data</span>
+
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span><span class="o">.</span><span class="n">datestamp</span></a> <span class="o">&lt;</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">end_of_first_half</span></a><span class="p">]</span>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">second_half_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span></a><span class="p">[</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_data</span><span class="o">.</span><span class="n">datestamp</span></a> <span class="o">&gt;=</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">end_of_first_half</span></a><span class="p">]</span>
+
+<span class="c1"># If labels arrive along with the data it is possible to upload them directly via the labels param.</span>
+<span class="n">model_version</span><span class="o">.</span><span class="n">log_batch</span><span class="p">(</span><span class="n">sample_ids</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span><span class="o">.</span><span class="n">index</span></a><span class="p">,</span>
+                        <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html#pandas.DataFrame.drop" title="pandas.DataFrame.drop" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">first_half_df</span><span class="o">.</span><span class="n">drop</span></a><span class="p">([</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">label_col</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timestamps</span></a><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">],</span> <span class="n">predictions</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">)],</span>
+                        <span class="n">labels</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:650: UserWarning:
+
+Index of provided &quot;data&quot; dataframe completely matches &quot;sample_ids&quot; array, are you sure that &quot;samples_ids&quot; array is correct and contains unique sample identifiers?
+
+10000 new samples sent.
+10000 new samples sent.
+10000 new samples sent.
+1668 new samples sent.
+Upload finished successfully but might take time to ingest into the system, see http://127.0.0.1:8000/configuration/models for status.
+</pre></div>
+</div>
+</section>
+<section id="uploading-the-second-batch">
+<h4>Uploading the Second Batch<a class="headerlink" href="#uploading-the-second-batch" title="Permalink to this headline">#</a></h4>
+<p>Now let’s upload the second half of the dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># If labels arrive along with the data it is possible to upload them directly via the labels param.</span>
+<span class="n">model_version</span><span class="o">.</span><span class="n">log_batch</span><span class="p">(</span><span class="n">sample_ids</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.Int64Index.html#pandas.Int64Index" title="pandas.core.indexes.numeric.Int64Index" class="sphx-glr-backref-module-pandas-core-indexes-numeric sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span><span class="o">.</span><span class="n">index</span></a><span class="p">,</span>
+                        <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html#pandas.DataFrame.drop" title="pandas.DataFrame.drop" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">first_half_df</span><span class="o">.</span><span class="n">drop</span></a><span class="p">([</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">label_col</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                        <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">timestamps</span></a><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">[</span><span class="n">timestamp</span><span class="p">],</span> <span class="n">predictions</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prod_predictions</span></a><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">)],</span>
+                        <span class="n">labels</span><span class="o">=</span><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_half_df</span></a><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:650: UserWarning:
+
+Index of provided &quot;data&quot; dataframe completely matches &quot;sample_ids&quot; array, are you sure that &quot;samples_ids&quot; array is correct and contains unique sample identifiers?
+
+10000 new samples sent.
+10000 new samples sent.
+10000 new samples sent.
+1668 new samples sent.
+Upload finished successfully but might take time to ingest into the system, see http://127.0.0.1:8000/configuration/models for status.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="making-sure-your-data-has-arrived">
+<h3>Making Sure Your Data Has Arrived<a class="headerlink" href="#making-sure-your-data-has-arrived" title="Permalink to this headline">#</a></h3>
+<p>If you’re not sure if your data has arrived, please refer to the relevant section in the
+<a class="reference internal" href="../tabular/tabular_production.html#tabular-production-validating-your-data-has-arrived"><span class="std std-ref">Production Data guide</span></a>.</p>
+</section>
+</section>
+<section id="analyzing-using-deepchecks">
+<h2>Analyzing Using Deepchecks<a class="headerlink" href="#analyzing-using-deepchecks" title="Permalink to this headline">#</a></h2>
+<p>Now that you have our data in Deepchecks, you can start monitoring and analyzing it. Let’s remember that you’ve
+received some complaints about the model performance from some of your customers, can you find the source of the
+issue?</p>
+<section id="dashboard">
+<h3>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this headline">#</a></h3>
+<p>When you log in to Deepchecks, you’ll be greeted by the Dashboard, in which you can view all the monitors defined for
+your models. Selecting our <code class="docutils literal notranslate"><span class="pre">Loan</span> <span class="pre">Default</span> <span class="pre">-</span> <span class="pre">Example</span></code> model, we see the default monitors and their corresponding
+default alert rules.</p>
+<img alt="Dashboard" class="align-center" src="../../_images/dashboard.jpg" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>We see that no monitor has exceeded its threshold, but that is to be excepted - you know it was only a small subset
+of landlords that made the complaint so whatever is affecting them would probably not be a global phenomenon.
+Nevertheless, we can see that aggregate feature drift monitor did increase slightly in the past weeks. To explore
+further, let’s go to the Analysis screen.</p>
+</section>
+<section id="analysis-finding-the-root-cause-for-the-drift">
+<h3>Analysis - Finding the root cause for the drift<a class="headerlink" href="#analysis-finding-the-root-cause-for-the-drift" title="Permalink to this headline">#</a></h3>
+<p>The analysis screen is where you can freely explore your data. There, you can run any of the checks you defined for
+your model over different time periods and segments and easily change the parameters of the checks.</p>
+<p>To find what is causing the drift we first saw in the Dashboard, we’ll head over to the Feature Drift check. Here
+we indeed see that the <a class="reference internal" href="../general/aggregation_methods.html"><span class="doc">L2 Weighted</span></a> feature drift has increased in
+the past weeks. To easily understand what feature is driving this aggregate drift, we’ll click on the “Per feature”
+aggregation method.</p>
+<img alt="Analysis" class="align-center" src="../../_images/analysis1.gif" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>We see that the drift originates from the room_type feature. Clicking on the room_type graph will lead us to the
+drill-down side panel for this check (Feature Drift in the room_type feature). Using the “Check Per Segment” part
+of the screen we can see the value of the check when the data is segmented by various features.</p>
+<p>After exploring some segments, we see that when partitioning the data by neighborhood, we see that all the drift is
+concentrated in one segment: Harlem neighborhood. Clicking on the check’s value for “Harlem” in the graph will run
+the drift check for the data in that specific segment, in the time period we selected in the main screen,
+and show the display below. In that display, we can finally see the issue! A new room_type “None” has appeared in
+the Harlem neighborhood, and it is causing the drift.</p>
+<img alt="Analysis Drilldown" class="align-center" src="../../_images/analysis_drilldown.gif" />
+</section>
+<section id="analysis-performance-check">
+<h3>Analysis - Performance Check<a class="headerlink" href="#analysis-performance-check" title="Permalink to this headline">#</a></h3>
+<p>Now that we’ve found the source of the issue, we can go ahead and check the performance of the model on the
+problematic samples. To do so, we’ll head over to the Performance check. We’ll select one of the time windows in
+which we saw the drift and select room_type as the segmentation feature. Right away we see that the samples with
+“None” room type have a higher RMSE than the rest of the samples. This is indeed the source of our issue and the
+complaints we’ve received from our customers! We can now go fix this integrity issue that caused these “None”
+room types to appear in the data.</p>
+<img alt="Analysis RMSE" class="align-center" src="../../_images/analysis_rmse.gif" />
+</section>
+<section id="alerts-defining-a-new-alert">
+<h3>Alerts - Defining a new alert<a class="headerlink" href="#alerts-defining-a-new-alert" title="Permalink to this headline">#</a></h3>
+<p>Now that we know for sure that the complaints have been coming from landlords in the Harlem neighborhood, we can
+define an alert to notify us of any future occurrence of this problem. To do that we head to the Alert Rules screen,
+nested under the Configuration menu. Here we can define our alert, and make sure it runs only on data that comes from
+the Harlem neighborhood.</p>
+<img alt="Alert Rule" class="align-center" src="../../_images/alert_rule.gif" />
+</section>
+</section>
+<section id="cleaning-up">
+<h2>Cleaning up<a class="headerlink" href="#cleaning-up" title="Permalink to this headline">#</a></h2>
+<p>If you wish to delete this model from your environment, you can do that using the <code class="docutils literal notranslate"><span class="pre">delete_model</span></code> function.
+CAUTION: This will delete the model, all model versions, and all associated datasets.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dc_client</span><span class="o">.</span><span class="n">delete_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>The following model was successfully deleted: Rent Prediction - Example-tmp
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  5.301 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-auto-demos-plot-rent-prediction-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/3a5529c69df3c80b0f57dc7380044614/plot_rent_prediction.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_rent_prediction.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/d0c4f92ed987a1872f6a4590e3a529fd/plot_rent_prediction.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_rent_prediction.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </div>
+        
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Demos</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="plot_lending_defauts.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Predicting Loan Defaults (Classification)</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+    </main>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, Deepchecks.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
