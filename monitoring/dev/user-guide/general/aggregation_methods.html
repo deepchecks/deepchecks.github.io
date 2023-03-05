@@ -361,6 +361,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
    L2 Weighted
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#l3-weighted">
+   L3 Weighted
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -389,12 +394,12 @@ that returns a value for every feature, to aggregate them into a single value.</
 <li><p>Mean - The mean of the scores.</p></li>
 <li><p>Weighted - The weighted mean of the scores, where the weights are the feature importance values.</p></li>
 <li><p><a class="reference internal" href="#aggregation-methods-l2-weighted"><span class="std std-ref">L2 Weighted</span></a> (Default).</p></li>
+<li><p><a class="reference internal" href="#aggregation-methods-l3-weighted"><span class="std std-ref">L3 Weighted</span></a>.</p></li>
 </ul>
 <section id="l2-weighted">
 <h2>L2 Weighted<a class="headerlink" href="#l2-weighted" title="Permalink to this headline">#</a></h2>
-<p>L2 norm over the combination of per-feature values and feature importance, minus the
-L2 norm of feature importance alone, specifically:</p>
-<p><code class="docutils literal notranslate"><span class="pre">||FEATURE_IMPORTANCE</span> <span class="pre">+</span> <span class="pre">PER_FEATURE_VALUES||</span> <span class="pre">-</span> <span class="pre">||FEATURE_IMPORTANCE||</span></code></p>
+<p>L2 norm over the per-feature values weighted by the feature importance, specifically:</p>
+<p><code class="docutils literal notranslate"><span class="pre">|FEATURE_IMPORTANCE</span> <span class="pre">*</span> <span class="pre">PER_FEATURE_VALUES^2|^(1/2)</span></code></p>
 <p>Note that for this method, the feature importance values are normalized to sum to 1.</p>
 <p>The main benefits of this method are:</p>
 <ul class="simple">
@@ -403,6 +408,15 @@ effect of features with very low importance.</p></li>
 <li><p>This method showed the highest correlation with the actual performance degradation (the change that we’re
 ultimately trying to predict), when compared with other methods across various use cases.</p></li>
 </ul>
+</section>
+<section id="l3-weighted">
+<h2>L3 Weighted<a class="headerlink" href="#l3-weighted" title="Permalink to this headline">#</a></h2>
+<p>Similar to the <a class="reference internal" href="#aggregation-methods-l2-weighted"><span class="std std-ref">L2 Weighted</span></a> method, but using the L3 norm:</p>
+<p><code class="docutils literal notranslate"><span class="pre">|FEATURE_IMPORTANCE</span> <span class="pre">*</span> <span class="pre">PER_FEATURE_VALUES^3|^(1/3)</span></code></p>
+<p>In comparison to the L2 method, this method gives less weight to the feature importance thus it is recommended
+to use this method when your model is sensitive to drift in features with low importance. In addition, this method
+returns higher values the the <a class="reference internal" href="#aggregation-methods-l2-weighted"><span class="std std-ref">L2 Weighted</span></a> method, so if chosen it is
+recommended to update the default alert threshold accordingly.</p>
 </section>
 </section>
 

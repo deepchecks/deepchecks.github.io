@@ -105,17 +105,16 @@ Getting the Data
 ----------------
 
 We'll start by downloading the training data from the deepchecks testing package. This training data will be used
-to set the reference for the model version.
+to set the reference for the model version. We'll also download the pre-calculated predictions for this data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-86
+.. GENERATED FROM PYTHON SOURCE LINES 79-85
 
 .. code-block:: default
 
 
-    from deepchecks.tabular.datasets.regression.airbnb import load_data, \
-        load_pre_calculated_prediction, load_pre_calculated_feature_importance
+    from deepchecks.tabular.datasets.regression.airbnb import load_data_large
 
-    train_df, _ = load_data(data_format='DataFrame')
+    train_df, ref_predictions = load_data_large(data_format='DataFrame')
     train_df.head(2)
 
 
@@ -173,17 +172,17 @@ to set the reference for the model version.
           <td>yes</td>
         </tr>
         <tr>
-          <th>1</th>
-          <td>1656751617</td>
+          <th>28332</th>
+          <td>1656750911</td>
           <td>Brooklyn</td>
-          <td>Bedford-Stuyvesant</td>
+          <td>Other</td>
           <td>Entire home/apt</td>
-          <td>135</td>
-          <td>2</td>
-          <td>174</td>
-          <td>3.58</td>
+          <td>95</td>
+          <td>7</td>
+          <td>28</td>
+          <td>1.51</td>
           <td>1</td>
-          <td>5</td>
+          <td>19</td>
           <td>yes</td>
         </tr>
       </tbody>
@@ -193,7 +192,7 @@ to set the reference for the model version.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-94
+.. GENERATED FROM PYTHON SOURCE LINES 86-93
 
 So what do we have? Let's note the special columns in our data:
 
@@ -203,7 +202,7 @@ So what do we have? Let's note the special columns in our data:
 All the other columns are features that can be used by our model to predict the price. We note that there are some
 categorical features, and some numeric ones.
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-108
+.. GENERATED FROM PYTHON SOURCE LINES 95-107
 
 Data Schema
 -----------
@@ -218,7 +217,7 @@ In order to create a schema file, the easiest way is to first define a deepcheck
 :doc:`Dataset <deepchecks:user-guide/tabular/dataset_object>` object, which contains the actual data (DataFrame)
 together with metadata about the role of each column.
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-118
+.. GENERATED FROM PYTHON SOURCE LINES 107-117
 
 .. code-block:: default
 
@@ -239,11 +238,11 @@ together with metadata about the role of each column.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-120
+.. GENERATED FROM PYTHON SOURCE LINES 118-119
 
 We'll create the schema file, and print it to show (and validate) the schema that was created.
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-127
+.. GENERATED FROM PYTHON SOURCE LINES 119-126
 
 .. code-block:: default
 
@@ -268,7 +267,7 @@ We'll create the schema file, and print it to show (and validate) the schema tha
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-134
+.. GENERATED FROM PYTHON SOURCE LINES 127-133
 
 .. note::
   For conveniently changing the auto-inferred schema it's recommended to edit the textual file with an app of your
@@ -277,7 +276,7 @@ We'll create the schema file, and print it to show (and validate) the schema tha
   After editing, you can use the :meth:`read_schema <deepchecks_client.tabular.utils.read_schema>`
   function to verify the validity of the syntax in your updated schema.
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-143
+.. GENERATED FROM PYTHON SOURCE LINES 135-142
 
 Feature Importance
 ------------------
@@ -287,7 +286,7 @@ the features to the model's prediction. In this example we'll load pre-calculate
 but these can be easily calculated using :doc:`deepchecks <deepchecks:user-guide/tabular/feature_importance>`,
 or other methods (such as SHAP). Note that the feature importance values should be normalized to sum to 1.
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-147
+.. GENERATED FROM PYTHON SOURCE LINES 142-146
 
 .. code-block:: default
 
@@ -302,7 +301,7 @@ or other methods (such as SHAP). Note that the feature importance values should 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-157
+.. GENERATED FROM PYTHON SOURCE LINES 147-156
 
 Creating a Model Version
 ------------------------
@@ -314,13 +313,10 @@ regression task, so we will set the ``task_type`` argument. Lastly, in order to 
 we must also pass model predictions for the reference data. For classification tasks, not that it's highly recommended
 to also send the predicted probabilities.
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-170
+.. GENERATED FROM PYTHON SOURCE LINES 156-166
 
 .. code-block:: default
 
-
-    from deepchecks.tabular.datasets.regression.airbnb import load_pre_calculated_prediction
-    ref_predictions, _ = load_pre_calculated_prediction()
 
     model_name = 'Rent Prediction - Example'
 
@@ -346,11 +342,11 @@ to also send the predicted probabilities.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-172
+.. GENERATED FROM PYTHON SOURCE LINES 167-168
 
 Now we know our model, model version and reference data where set, and we're ready to start uploading production data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-180
+.. GENERATED FROM PYTHON SOURCE LINES 170-176
 
 Uploading Production Data
 =========================
@@ -359,13 +355,12 @@ Once in production, uploading data can be done either sample by sample, or by ba
 read more, refer to the :doc:`Production Data Guide </user-guide/tabular/tabular-production>`. Here we'll
 show how to use the batch upload method.
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-184
+.. GENERATED FROM PYTHON SOURCE LINES 176-179
 
 .. code-block:: default
 
 
-    _, prod_data = load_data(data_format='DataFrame')
-    _, prod_predictions = load_pre_calculated_prediction()
+    prod_data, prod_predictions = load_data_large(data_format='DataFrame', load_train=False)
 
 
 
@@ -374,11 +369,11 @@ show how to use the batch upload method.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-186
+.. GENERATED FROM PYTHON SOURCE LINES 180-181
 
 We'll change the original timestamps so the samples are recent
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-191
+.. GENERATED FROM PYTHON SOURCE LINES 181-186
 
 .. code-block:: default
 
@@ -394,106 +389,18 @@ We'll change the original timestamps so the samples are recent
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-201
+.. GENERATED FROM PYTHON SOURCE LINES 187-195
 
 Uploading a Batch of Data
 -------------------------
 
-Introducing Some Issues
-~~~~~~~~~~~~~~~~~~~~~~~
-
-The data already has an issue we'll detect in this example - at a certain point in time, the samples belonging to
-the "Harlem" neighborhood have been modified so that some values of room_types are now "None". Let's also
-corrupt these samples, to reflect problematic model performance on these samples by introducing systematic error.
-
-.. GENERATED FROM PYTHON SOURCE LINES 201-204
-
-.. code-block:: default
-
-
-    bad_segment_indices = prod_data[(prod_data['neighbourhood'] == 'Harlem') & (prod_data['room_type'] == 'None')].index
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 205-206
-
-RMSE before systematic error:
-
-.. GENERATED FROM PYTHON SOURCE LINES 206-209
-
-.. code-block:: default
-
-    import numpy as np
-    np.mean((prod_predictions[bad_segment_indices] - prod_data.loc[bad_segment_indices, label_col])**2)**0.5
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    13.539969756639774
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 210-211
-
-Introduce error:
-
-.. GENERATED FROM PYTHON SOURCE LINES 211-214
-
-.. code-block:: default
-
-
-    prod_predictions[bad_segment_indices] = prod_predictions[bad_segment_indices] + 2 + np.random.randn()
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 215-216
-
-RMSE after systematic error:
-
-.. GENERATED FROM PYTHON SOURCE LINES 216-219
-
-.. code-block:: default
-
-
-    np.mean((prod_predictions[bad_segment_indices] - prod_data.loc[bad_segment_indices, label_col])**2)**0.5
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    15.008879454538155
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 220-224
 
 Uploading the First Batch
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let's start by uploading the first part of the dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-237
+.. GENERATED FROM PYTHON SOURCE LINES 195-208
 
 .. code-block:: default
 
@@ -518,27 +425,55 @@ Let's start by uploading the first part of the dataset
 
  .. code-block:: none
 
-    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:653: UserWarning:
+    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:658: UserWarning:
 
     Index of provided "data" dataframe completely matches "sample_ids" array, are you sure that "samples_ids" array is correct and contains unique sample identifiers?
 
     10000 new samples sent.
     10000 new samples sent.
     10000 new samples sent.
-    1668 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    6680 new samples sent.
     Upload finished successfully but might take time to ingest into the system, see http://127.0.0.1:8000/configuration/models for status.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-242
+.. GENERATED FROM PYTHON SOURCE LINES 209-213
 
 Uploading the Second Batch
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now let's upload the second half of the dataset.
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-249
+.. GENERATED FROM PYTHON SOURCE LINES 213-220
 
 .. code-block:: default
 
@@ -557,20 +492,48 @@ Now let's upload the second half of the dataset.
 
  .. code-block:: none
 
-    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:653: UserWarning:
+    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:658: UserWarning:
 
     Index of provided "data" dataframe completely matches "sample_ids" array, are you sure that "samples_ids" array is correct and contains unique sample identifiers?
 
     10000 new samples sent.
     10000 new samples sent.
     10000 new samples sent.
-    1668 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    6680 new samples sent.
     Upload finished successfully but might take time to ingest into the system, see http://127.0.0.1:8000/configuration/models for status.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-341
+.. GENERATED FROM PYTHON SOURCE LINES 221-312
 
 Making Sure Your Data Has Arrived
 ---------------------------------
@@ -664,7 +627,7 @@ Cleaning up
 If you wish to delete this model from your environment, you can do that using the ``delete_model`` function.
 CAUTION: This will delete the model, all model versions, and all associated datasets.
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-344
+.. GENERATED FROM PYTHON SOURCE LINES 312-315
 
 .. code-block:: default
 
@@ -687,7 +650,7 @@ CAUTION: This will delete the model, all model versions, and all associated data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  7.416 seconds)
+   **Total running time of the script:** ( 16 minutes  22.768 seconds)
 
 
 .. _sphx_glr_download_user-guide_auto_demos_plot_rent_prediction.py:
