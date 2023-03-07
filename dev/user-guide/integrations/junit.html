@@ -66,6 +66,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/rtd_sphinx_search.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -339,6 +340,11 @@ Page: user-guide/integrations/junit&labels=labels=chore/documentation" target="_
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
+  <a class="reference internal" href="../general/when_should_you_use.html">
+   When Should You Validate &amp; Built-In Suites
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../general/deepchecks_hierarchy.html">
    Deepchecks Hierarchy
   </a>
@@ -414,22 +420,22 @@ Page: user-guide/integrations/junit&labels=labels=chore/documentation" target="_
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../tabular/auto_quickstarts/plot_quickstart_in_5_minutes.html">
-     Quickstart - Full Suite in 5 Minutes
+     Full Suite Quickstart
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../tabular/auto_quickstarts/plot_quick_model_evaluation.html">
-     Quickstart - Model Evaluation Suite
+     Model Evaluation Suite Quickstart
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../tabular/auto_quickstarts/plot_quick_data_integrity.html">
-     Quickstart - Data Integrity Suite
+     Data Integrity Suite Quickstart
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../tabular/auto_quickstarts/plot_quick_train_test_validation.html">
-     Quickstart - Train-Test Validation Suite
+     Train-Test Validation Suite Quickstart
     </a>
    </li>
   </ul>
@@ -651,34 +657,32 @@ compared to the pytest integration where a developer needs to wrap every test ma
 dataset from scikit-learn, and check whether certain columns contain drift between the training and the test sets.</p>
 <section id="general-structure">
 <h2>General Structure<a class="headerlink" href="#general-structure" title="Permalink to this headline">#</a></h2>
-<p>JUnit comprises of 3 sections:
-1. The test suites sections. This is an optional section, but used with the Deepchecks Junit Serializer since multiple
-suites are used.
-2. The test suite section. This is used to group tests by their domain such as model, data, or evaluation test. A catch
-all ‘checks’ section is also added for custom checks added.
-3. The test case section. This is the atomic unit of the payload and contains the details about a
-<a class="reference internal" href="../../api/generated/deepchecks.core.CheckResult.html#deepchecks.core.CheckResult" title="deepchecks.core.CheckResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepchecks.core.CheckResult</span></code></a>. This can either be a pass, failure, or skip.</p>
-<p>It will output the following formatted string by default, but a XML can also be extracted:</p>
-<dl>
-<dt>&lt;testsuites errors=”0” failures=”9” name=”Full Suite” tests=”54” time=”45”&gt;</dt><dd><dl>
-<dt>&lt;testsuite errors=”0” failures=”3” name=”train_test_validation” tests=”12” time=”1” timestamp=”2022-11-22T05:49:01”&gt;</dt><dd><dl class="simple">
-<dt>&lt;testcase classname=”deepchecks.tabular.checks.train_test_validation.feature_label_correlation_change.FeatureLabelCorrelationChange” name=”Feature Label Correlation Change” time=”0”&gt;</dt><dd><p>&lt;system-out&gt;Passed for 4 relevant columns, Found 2 out of 4 features in train dataset with PPS above threshold: {‘petal width (cm)’: ‘0.91’, ‘petal length (cm)’: ‘0.86’}&lt;/system-out&gt;</p>
-</dd>
-</dl>
-<p>&lt;/testcase&gt;
-…</p>
-</dd>
-</dl>
-<p>&lt;/testsuite&gt;</p>
-</dd>
-</dl>
-<p>&lt;testsuites&gt;</p>
+<p>JUnit comprises of 3 sections:</p>
+<ol class="arabic simple">
+<li><p>The <strong>test suites</strong> sections: This is an optional section, but used with the Deepchecks Junit Serializer since multiple
+suites are used.</p></li>
+<li><p>The <strong>test suite</strong> section: This is used to group tests by their domain such as model, data, or evaluation test.
+A catch all ‘checks’ section is also added for custom checks added.</p></li>
+<li><p>The <strong>test case</strong> section: This is the atomic unit of the payload and contains the details
+about a <a class="reference internal" href="../../api/generated/deepchecks.core.CheckResult.html#deepchecks.core.CheckResult" title="deepchecks.core.CheckResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepchecks.core.CheckResult</span></code></a>. This can either be a pass, failure, or skip.</p></li>
+</ol>
+<p>It will output the following formatted string by default, but an XML can also be extracted:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;testsuites</span><span class="w"> </span><span class="na">errors=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">failures=</span><span class="s">&quot;9&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Full Suite&quot;</span><span class="w"> </span><span class="na">tests=</span><span class="s">&quot;54&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;45&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;testsuite</span><span class="w"> </span><span class="na">errors=</span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="na">failures=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;train_test_validation&quot;</span><span class="w"> </span><span class="na">tests=</span><span class="s">&quot;12&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="na">timestamp=</span><span class="s">&quot;2022-11-22T05:49:01&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;testcase</span><span class="w"> </span><span class="na">classname=</span><span class="s">&quot;deepchecks.tabular.checks.train_test_validation.feature_label_correlation_change.FeatureLabelCorrelationChange&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Feature Label Correlation Change&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;system-out&gt;</span>Passed<span class="w"> </span>for<span class="w"> </span>4<span class="w"> </span>relevant<span class="w"> </span>columns,<span class="w"> </span>Found<span class="w"> </span>2<span class="w"> </span>out<span class="w"> </span>of<span class="w"> </span>4<span class="w"> </span>features<span class="w"> </span>in<span class="w"> </span>train<span class="w"> </span>dataset<span class="w"> </span>with<span class="w"> </span>PPS<span class="w"> </span>above<span class="w"> </span>threshold:<span class="w"> </span>{&#39;petal<span class="w"> </span>width<span class="w"> </span>(cm)&#39;:<span class="w"> </span>&#39;0.91&#39;,<span class="w"> </span>&#39;petal<span class="w"> </span>length<span class="w"> </span>(cm)&#39;:<span class="w"> </span>&#39;0.86&#39;}<span class="nt">&lt;/system-out&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/testcase&gt;</span>
+<span class="w">        </span>...
+<span class="w">    </span><span class="nt">&lt;/testsuite&gt;</span>
+<span class="nt">&lt;testsuites&gt;</span>
+</pre></div>
+</div>
 <p>Failed test cases will return in the following manner:</p>
-<dl class="simple">
-<dt>&lt;testcase classname=”deepchecks.tabular.checks.train_test_validation.date_train_test_leakage_duplicates.DateTrainTestLeakageDuplicates” name=”Date Train Test Leakage Duplicates” time=”0”&gt;</dt><dd><p>&lt;failure message=”Dataset does not contain a datetime” type=”failure”&gt;Check if test dates are present in train data.&lt;/failure&gt;</p>
-</dd>
-</dl>
-<p>&lt;/testcase&gt;</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;testcase</span><span class="w"> </span><span class="na">classname=</span><span class="s">&quot;deepchecks.tabular.checks.train_test_validation.date_train_test_leakage_duplicates.DateTrainTestLeakageDuplicates&quot;</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Date Train Test Leakage Duplicates&quot;</span><span class="w"> </span><span class="na">time=</span><span class="s">&quot;0&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;failure</span><span class="w"> </span><span class="na">message=</span><span class="s">&quot;Dataset does not contain a datetime&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;failure&quot;</span><span class="nt">&gt;</span>Check<span class="w"> </span>if<span class="w"> </span>test<span class="w"> </span>dates<span class="w"> </span>are<span class="w"> </span>present<span class="w"> </span>in<span class="w"> </span>train<span class="w"> </span>data.<span class="nt">&lt;/failure&gt;</span>
+<span class="nt">&lt;/testcase&gt;</span>
+</pre></div>
+</div>
 <p>Failed test cases can also be coerced to skipped to allow the recording of the failed test, but to not put a break into
 a CI/CD system. This is especially helpful when first starting out with deepchecks in CI/CD pipelines.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
