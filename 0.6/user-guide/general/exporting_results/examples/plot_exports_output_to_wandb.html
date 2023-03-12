@@ -1,0 +1,961 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+<!-- Google Tag Manager -->
+<script>(function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NNKXRJQ');</script>
+<!-- End Google Tag Manager -->
+<meta name="title" content="Export Outputs to Weights &amp; Biases (wandb) | Deepchecks Documentation">
+<meta name="description" content="Do you need to know more about Export Outputs to Weights &amp; Biases (wandb)? Read more at Deepchecks Online Documentation">
+<meta name="docsearch:version" content="0.6">
+
+
+<!-- Warning: 
+        The 'shortcut link' type is often seen before icon, but this link type is non-conforming, 
+        ignored and web authors must not use it anymore. 
+        MDN docs https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
+    -->
+<link rel="shortcut icon" href="/_static/favicons/favicon.ico">
+<link rel="canonical" href="https://docs.deepchecks.com/stable/user-guide/general/exporting_results/examples/plot_exports_output_to_wandb.html" />
+
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="32x32">
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="192x192">
+
+<!-- Note: 
+        Apple's iOS does not use this 'link' type, nor the 'sizes' attribute, 
+        like others mobile browsers do, to select a webpage icon for Web Clip 
+        or a start-up placeholder. Instead it uses the non-standard 'apple-touch-icon'.
+        MDN docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types;
+        Safari Web Content Guide: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW4
+    -->
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+
+
+    <title>Export Outputs to Weights &amp; Biases (wandb) &#8212; Deepchecks 8fd0895 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/rtd_sphinx_search.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
+    crossorigin="anonymous"></script>
+
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Export Outputs to JSON" href="plot_export_outputs_to_json.html" />
+    <link rel="prev" title="Export Suite Output to a HTML Report" href="plot_export_suite_results_as_html.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNKXRJQ" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <script>
+        require.config({
+            paths: {
+                "docsearchLib": "https://cdn.jsdelivr.net/npm/@docsearch/js@3?noext"
+            }
+        }
+
+        );
+        require(["docsearchLib"], function (docsearch) {
+            docsearch({
+                appId: "3UQ0BSGJ1N", apiKey: "83d250f88e29e9906a50ddf40a1871ce", indexName: "deepchecks", container: '#algolia-search', debug: false,
+                searchParameters: {
+                    facetFilters: ["version:0.6"]
+                }
+            });
+        });
+    </script>
+    <div style="display:none;" id="dc-submodule">general</div>
+
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../../index.html">
+  <img src="../../../../_static/deepchecks_logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../getting-started/index.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../../index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../checks_gallery/tabular.html">
+  Tabular Checks
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../checks_gallery/vision.html">
+  Vision Checks
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../api/index.html">
+  API Reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.6  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables user-guide/general/exporting_results/examples/plot_exports_output_to_wandb and {'json_url': 'https://docs.deepchecks.com/dev/_static/switcher.json', 'version_match': '0.6', 'url_template': 'https://docs.deepchecks.com/{version}/'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "user-guide/general/exporting_results/examples/plot_exports_output_to_wandb.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://docs.deepchecks.com/dev/_static/switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "user-guide/general/exporting_results/examples/plot_exports_output_to_wandb.html";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.6 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.6") {
+                node.classList.add("active");
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/deepchecks/deepchecks" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://deepcheckscommunity.slack.com/join/shared_invite/zt-y28sjt1v-PBT50S3uoyWui_Deg5L_jg#/shared-invite/email" rel="noopener" target="_blank" title="Slack"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://pypi.org/project/deepchecks/" rel="noopener" target="_blank" title="PyPI"><span><i class="fab fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div id="topright-dropdown-menu" class="dropdown" style="width: fit-content;">
+    <a 
+        class="btn dropdown-toggle" 
+        id="topright-dropdown-menu-link" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"
+        data-offset="-100,10">
+            <i class="fas fa-bars"></i>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="topright-dropdown-menu-link" x-placement="bottom-start">
+        <a class="dropdown-item" href="https://github.com/deepchecks/deepchecks/issues/new?title=[Docs] Documentation contains a mistake.&body=Package Version: 0.6;
+Page: user-guide/general/exporting_results/examples/plot_exports_output_to_wandb&labels=labels=chore/documentation" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-pencil-alt"></i> Report a problem
+        </a>
+        
+            <a 
+                
+                    href="/0.6/_sources/user-guide/general/exporting_results/examples/plot_exports_output_to_wandb.rst.txt"
+                
+                
+                class="dropdown-item" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                <i class="fas fa-code"></i> Show Source
+            </a>
+        
+    </div>
+</div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><div id="algolia-search">
+<!-- <form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form> -->
+</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  General
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../deepchecks_hierarchy.html">
+   Deepchecks Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../customizations/examples/index.html">
+   Customizations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../customizations/examples/plot_create_a_custom_suite.html">
+     Create a Custom Suite
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../customizations/examples/plot_configure_check_conditions.html">
+     Configure Check Conditions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Exporting Results
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_export_suite_results_as_html.html">
+     Export Suite Output to a HTML Report
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Export Outputs to Weights &amp; Biases (wandb)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_export_outputs_to_json.html">
+     Export Outputs to JSON
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tabular
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../tabular/auto_tutorials/index.html">
+   Tabular Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tabular/auto_tutorials/plot_quickstart_in_5_minutes.html">
+     Quickstart in 5 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tabular/auto_tutorials/plot_add_a_custom_check.html">
+     Add a Custom Check
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../tabular/auto_tutorials/plot_phishing_urls.html">
+     Use Cases - Classifying Malicious URLs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../tabular/dataset_object.html">
+   The Dataset Object
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../tabular/supported_models.html">
+   Supported Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../tabular/feature_importance.html">
+   Feature Importance
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Vision
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../vision/auto_tutorials/index.html">
+   Computer Vision Tutorials
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_simple_classification_tutorial.html">
+     Using Deepchecks Vision With a Few Lines of Code
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_extractors_validating.html">
+     Test Your Vision Data Class During Development
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_classification_tutorial.html">
+     Classification Model Validation Tutorial
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_custom_task_tutorial.html">
+     Custom Task Tutorial
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_custom_checks.html">
+     Writing Custom Computer Vision Checks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/auto_tutorials/plot_detection_tutorial.html">
+     Object Detection Tutorial
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../vision/data-classes/index.html">
+   Data Classes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/data-classes/VisionData.html">
+     The Vision Data Class
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/data-classes/ClassificationData.html">
+     The Classification Data Class
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../vision/data-classes/DetectionData.html">
+     The Object Detection Data Class
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../vision/vision_properties.html">
+   Data Properties
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrations
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../integrations/spark_databricks.html">
+   Spark &amp; Databricks
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../integrations/pytest.html">
+   Pytest
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../integrations/h2o.html">
+   H2O
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#load-data">
+   Load Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-a-check">
+   Run a Check
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#observe-checkresult-display-and-value">
+   Observe CheckResult Display and Value
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#export-a-check-s-output-checkresult-to-wandb">
+     Export a Check’s Output (CheckResult) to wandb
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#see-check-to-wandb-options">
+   See Check to_wandb options
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#exporting-a-suite-s-output-suiteresult-to-wandb">
+     Exporting a Suite’s Output (SuiteResult) to wandb
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-suite-and-export-to-wandb">
+   Run Suite and export to wandb
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+            
+          </div>
+          
+
+          
+    
+        
+    
+    <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+        
+        
+            <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-user-guide-general-exporting-results-examples-plot-exports-output-to-wandb-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="export-outputs-to-weights-biases-wandb">
+<span id="sphx-glr-user-guide-general-exporting-results-examples-plot-exports-output-to-wandb-py"></span><h1>Export Outputs to Weights &amp; Biases (wandb)<a class="headerlink" href="#export-outputs-to-weights-biases-wandb" title="Permalink to this headline">#</a></h1>
+<p>In this guide, we will demonstrate how to export the Check’s and the Suite’s output to wandb.</p>
+<p>This enables to view the exported results in wandb and compare the results you
+receive with different parameters or model/data.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#load-data">Load Data</a></p></li>
+<li><p><a class="reference external" href="#run-a-check">Run a Check</a></p></li>
+<li><p><a class="reference external" href="#export-a-check-s-output-checkresult-to-wandb">Export Check to wandb</a></p></li>
+<li><p><a class="reference external" href="#exporting-a-suite-s-output-suiteresult-to-wandb">Export Suite to wandb</a></p></li>
+</ul>
+<section id="load-data">
+<h2>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">iris</span>
+
+<span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span> <span class="o">=</span> <a href="../../../../api/generated/deepchecks.tabular.datasets.classification.iris.load_data.html#deepchecks.tabular.datasets.classification.iris.load_data" title="deepchecks.tabular.datasets.classification.iris.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-iris sphx-glr-backref-type-py-function"><span class="n">iris</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <a href="../../../../api/generated/deepchecks.tabular.datasets.classification.iris.load_fitted_model.html#deepchecks.tabular.datasets.classification.iris.load_fitted_model" title="deepchecks.tabular.datasets.classification.iris.load_fitted_model" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-iris sphx-glr-backref-type-py-function"><span class="n">iris</span><span class="o">.</span><span class="n">load_fitted_model</span></a><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="run-a-check">
+<h2>Run a Check<a class="headerlink" href="#run-a-check" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">WholeDatasetDrift</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">WholeDatasetDrift</span><span class="p">()</span><span class="o">.</span><span class="n">add_condition_overall_drift_value_not_greater_than</span><span class="p">(</span>
+<span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Calculating permutation feature importance. Expected to finish in 1 seconds
+</pre></div>
+</div>
+</section>
+<section id="observe-checkresult-display-and-value">
+<h2>Observe CheckResult Display and Value<a class="headerlink" href="#observe-checkresult-display-and-value" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"
+    integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer">
+</script>
+
+<script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+<script type="text/javascript">if (window.MathJax) {MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>
+<script type="text/javascript">
+    if (typeof require !== 'undefined') {
+        require.undef("plotly");
+        requirejs.config({
+            paths: {'plotly': ['https://cdn.plot.ly/plotly-2.8.3.min']}
+        });
+        require(
+            ['plotly'],
+            function(Plotly) {
+                window._Plotly = Plotly;
+                window.Plotly = Plotly;
+                console.log('Loaded plotly successfully');
+            },
+            function() {console.log('Failed to load plotly')}
+        );
+    } else {
+        console.log('requirejs is not present');
+    }
+</script>
+<h4><b>Whole Dataset Drift</b></h4><p>    Calculate drift between the entire train and test datasets using a model trained to distinguish between them.</p><h5><b>Conditions Summary</b></h5><style type="text/css">
+#T_1c76b table {
+  text-align: left;
+  white-space: pre-wrap;
+}
+#T_1c76b thead {
+  text-align: left;
+  white-space: pre-wrap;
+}
+#T_1c76b tbody {
+  text-align: left;
+  white-space: pre-wrap;
+}
+#T_1c76b th {
+  text-align: left;
+  white-space: pre-wrap;
+}
+#T_1c76b td {
+  text-align: left;
+  white-space: pre-wrap;
+}
+</style>
+<table id="T_1c76b">
+  <thead>
+    <tr>
+      <th id="T_1c76b_level0_col0" class="col_heading level0 col0" >Status</th>
+      <th id="T_1c76b_level0_col1" class="col_heading level0 col1" >Condition</th>
+      <th id="T_1c76b_level0_col2" class="col_heading level0 col2" >More Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_1c76b_row0_col0" class="data row0 col0" ><div style="color: green;text-align: center">✓</div></td>
+      <td id="T_1c76b_row0_col1" class="data row0 col1" >Drift value is not greater than 0.25</td>
+      <td id="T_1c76b_row0_col2" class="data row0 col2" ></td>
+    </tr>
+  </tbody>
+</table>
+<h5><b>Additional Outputs</b></h5><p><b>&#x2713;</b>Nothing to display</p>
+</div>
+<br />
+<br /><p>the value can be observed</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;domain_classifier_auc&#39;: 0.4545454545454546, &#39;domain_classifier_drift_score&#39;: 0, &#39;domain_classifier_feature_importance&#39;: {&#39;petal length (cm)&#39;: 1.0, &#39;sepal length (cm)&#39;: 0.0, &#39;sepal width (cm)&#39;: 0.0, &#39;petal width (cm)&#39;: 0.0}}
+</pre></div>
+</div>
+<section id="export-a-check-s-output-checkresult-to-wandb">
+<h3>Export a Check’s Output (CheckResult) to wandb<a class="headerlink" href="#export-a-check-s-output-checkresult-to-wandb" title="Permalink to this headline">#</a></h3>
+<p>Exporting the output to wandb is possible using the <code class="docutils literal notranslate"><span class="pre">to_wandb</span></code> function. This function
+exports the check outputs to a wandb project.</p>
+<p>The output display that will be export will be a bit different from what you usually
+see. Only the tables and the plots are being exported.</p>
+<p>On default if you export a single check to wandb without a wandb run active it will
+create a project with the name deepchecks and the and the check’s metadata in the
+config and export the results there.</p>
+</section>
+</section>
+<section id="see-check-to-wandb-options">
+<h2>See Check to_wandb options<a class="headerlink" href="#see-check-to-wandb-options" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.core</span> <span class="kn">import</span> <span class="n">CheckResult</span>
+
+<span class="n">help</span><span class="p">(</span><a href="../../../../api/generated/deepchecks.core.CheckResult.to_wandb.html#deepchecks.core.CheckResult.to_wandb" title="deepchecks.core.CheckResult.to_wandb" class="sphx-glr-backref-module-deepchecks-core-CheckResult sphx-glr-backref-type-py-method"><span class="n">CheckResult</span><span class="o">.</span><span class="n">to_wandb</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Help on function to_wandb in module deepchecks.core.check_result:
+
+to_wandb(self, dedicated_run: bool = True, **kwargs: Any)
+    Export check result to wandb.
+
+    Parameters
+    ----------
+    dedicated_run : bool , default: None
+        If to initiate and finish a new wandb run.
+        If None it will be dedicated if wandb.run is None.
+    kwargs: Keyword arguments to pass to wandb.init.
+            Default project name is deepchecks.
+            Default config is the check metadata (params, train/test/ name etc.).
+</pre></div>
+</div>
+<p>To use this function you first need to login to your wandb account</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wandb</span>
+
+<span class="n">wandb</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>False
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">to_wandb</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>wandb: Tracking run with wandb version 0.12.16
+wandb: W&amp;B syncing is set to `offline` in this directory.
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Waiting for W&amp;B process to finish... (success).
+wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb:
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220512_143641-2mm5gmi8
+wandb: Find logs at: ./wandb/offline-run-20220512_143641-2mm5gmi8/logs
+</pre></div>
+</div>
+<section id="exporting-a-suite-s-output-suiteresult-to-wandb">
+<h3>Exporting a Suite’s Output (SuiteResult) to wandb<a class="headerlink" href="#exporting-a-suite-s-output-suiteresult-to-wandb" title="Permalink to this headline">#</a></h3>
+</section>
+</section>
+<section id="run-suite-and-export-to-wandb">
+<h2>Run Suite and export to wandb<a class="headerlink" href="#run-suite-and-export-to-wandb" title="Permalink to this headline">#</a></h2>
+<p>Exporting a suite to wandb is the same as exporting a check. The display in wand
+will have a section per check.</p>
+<p>On default if you export a suite to wandb without a wandb run active it will create
+a project with the name deepchecks and the suite’s name in the config and send the
+results there.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <a href="../../../../api/generated/deepchecks.tabular.suites.full_suite.html#deepchecks.tabular.suites.full_suite" title="deepchecks.tabular.suites.full_suite" class="sphx-glr-backref-module-deepchecks-tabular-suites sphx-glr-backref-type-py-function"><span class="n">full_suite</span></a>
+
+<span class="n">suite</span> <span class="o">=</span> <a href="../../../../api/generated/deepchecks.tabular.suites.full_suite.html#deepchecks.tabular.suites.full_suite" title="deepchecks.tabular.suites.full_suite" class="sphx-glr-backref-module-deepchecks-tabular-suites sphx-glr-backref-type-py-function"><span class="n">full_suite</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">suite_result</span> <span class="o">=</span> <span class="n">suite</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">suite_result</span><span class="o">.</span><span class="n">to_wandb</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s]
+Full Suite:   0%|                                    | 0/36 [00:00&lt;?, ? Check/s, Check=Model Info]
+Full Suite:   3%|#                                   | 1/36 [00:00&lt;00:00, 52.23 Check/s, Check=Columns Info]
+Full Suite:   6%|##                                  | 2/36 [00:00&lt;00:00, 35.12 Check/s, Check=Confusion Matrix Report]
+Full Suite:   8%|###                                 | 3/36 [00:00&lt;00:00, 33.40 Check/s, Check=Performance Report]
+Full Suite:  11%|####                                | 4/36 [00:00&lt;00:02, 14.50 Check/s, Check=Performance Report]
+Full Suite:  11%|####                                | 4/36 [00:00&lt;00:02, 14.50 Check/s, Check=Roc Report]
+Full Suite:  14%|#####                               | 5/36 [00:00&lt;00:02, 14.50 Check/s, Check=Simple Model Comparison]
+Full Suite:  17%|######                              | 6/36 [00:00&lt;00:01, 15.91 Check/s, Check=Simple Model Comparison]
+Full Suite:  17%|######                              | 6/36 [00:00&lt;00:01, 15.91 Check/s, Check=Model Error Analysis]
+Full Suite:  19%|#######                             | 7/36 [00:00&lt;00:01, 15.91 Check/s, Check=Calibration Score]
+Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 13.36 Check/s, Check=Calibration Score]
+Full Suite:  22%|########                            | 8/36 [00:00&lt;00:02, 13.36 Check/s, Check=Regression Systematic Error]
+Full Suite:  25%|#########                           | 9/36 [00:00&lt;00:02, 13.36 Check/s, Check=Regression Error Distribution]
+Full Suite:  28%|##########                          | 10/36 [00:00&lt;00:01, 13.36 Check/s, Check=Boosting Overfit]
+Full Suite:  31%|###########                         | 11/36 [00:00&lt;00:01, 13.36 Check/s, Check=Unused Features]
+Full Suite:  33%|############                        | 12/36 [00:00&lt;00:01, 13.36 Check/s, Check=Model Inference Time]
+Full Suite:  36%|#############                       | 13/36 [00:00&lt;00:01, 13.36 Check/s, Check=Train Test Feature Drift]
+Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 21.30 Check/s, Check=Train Test Feature Drift]
+Full Suite:  39%|##############                      | 14/36 [00:00&lt;00:01, 21.30 Check/s, Check=Train Test Label Drift]
+Full Suite:  42%|###############                     | 15/36 [00:00&lt;00:00, 21.30 Check/s, Check=Whole Dataset Drift]   Calculating permutation feature importance. Expected to finish in 1 seconds
+
+Full Suite:  44%|################                    | 16/36 [00:00&lt;00:00, 21.30 Check/s, Check=Dominant Frequency Change]
+Full Suite:  47%|#################                   | 17/36 [00:00&lt;00:00, 21.30 Check/s, Check=Category Mismatch Train Test]
+Full Suite:  50%|##################                  | 18/36 [00:00&lt;00:00, 21.30 Check/s, Check=New Label Train Test]
+Full Suite:  53%|###################                 | 19/36 [00:00&lt;00:00, 21.30 Check/s, Check=String Mismatch Comparison]
+Full Suite:  56%|####################                | 20/36 [00:00&lt;00:00, 30.36 Check/s, Check=String Mismatch Comparison]
+Full Suite:  56%|####################                | 20/36 [00:00&lt;00:00, 30.36 Check/s, Check=Datasets Size Comparison]
+Full Suite:  58%|#####################               | 21/36 [00:00&lt;00:00, 30.36 Check/s, Check=Date Train Test Leakage Duplicates]
+Full Suite:  61%|######################              | 22/36 [00:00&lt;00:00, 30.36 Check/s, Check=Date Train Test Leakage Overlap]
+Full Suite:  64%|#######################             | 23/36 [00:00&lt;00:00, 30.36 Check/s, Check=Single Feature Contribution Train Test]
+Full Suite:  67%|########################            | 24/36 [00:00&lt;00:00, 30.36 Check/s, Check=Train Test Samples Mix]
+Full Suite:  69%|#########################           | 25/36 [00:00&lt;00:00, 30.36 Check/s, Check=Identifier Leakage]
+Full Suite:  72%|##########################          | 26/36 [00:00&lt;00:00, 30.36 Check/s, Check=Index Train Test Leakage]
+Full Suite:  75%|###########################         | 27/36 [00:00&lt;00:00, 30.36 Check/s, Check=Is Single Value]
+Full Suite:  78%|############################        | 28/36 [00:00&lt;00:00, 30.36 Check/s, Check=Mixed Nulls]
+Full Suite:  81%|#############################       | 29/36 [00:00&lt;00:00, 30.36 Check/s, Check=Mixed Data Types]
+Full Suite:  83%|##############################      | 30/36 [00:00&lt;00:00, 30.36 Check/s, Check=String Mismatch]
+Full Suite:  86%|###############################     | 31/36 [00:00&lt;00:00, 30.36 Check/s, Check=Data Duplicates]
+Full Suite:  89%|################################    | 32/36 [00:00&lt;00:00, 30.36 Check/s, Check=String Length Out Of Bounds]
+Full Suite:  92%|#################################   | 33/36 [00:00&lt;00:00, 30.36 Check/s, Check=Special Characters]
+Full Suite:  94%|##################################  | 34/36 [00:00&lt;00:00, 58.00 Check/s, Check=Special Characters]
+Full Suite:  94%|##################################  | 34/36 [00:00&lt;00:00, 58.00 Check/s, Check=Conflicting Labels]
+Full Suite:  97%|################################### | 35/36 [00:00&lt;00:00, 58.00 Check/s, Check=Outlier Sample Detection]
+
+wandb: Tracking run with wandb version 0.12.16
+wandb: W&amp;B syncing is set to `offline` in this directory.
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Waiting for W&amp;B process to finish... (success).
+wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb:
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220512_143646-owxq9nf8
+wandb: Find logs at: ./wandb/offline-run-20220512_143646-owxq9nf8/logs
+</pre></div>
+</div>
+<p>You can also set all the kwargs the wandb.init will get:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">suite_result</span><span class="o">.</span><span class="n">to_wandb</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="s1">&#39;my-suite-project&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;suite-name&#39;</span><span class="p">:</span> <span class="s1">&#39;full-suite&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>wandb: Tracking run with wandb version 0.12.16
+wandb: W&amp;B syncing is set to `offline` in this directory.
+wandb: Run `wandb online` or set WANDB_MODE=online to enable cloud syncing.
+wandb: Waiting for W&amp;B process to finish... (success).
+wandb: - 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb: \ 0.000 MB of 0.000 MB uploaded (0.000 MB deduped)
+wandb:
+wandb: You can sync this run to the cloud by running:
+wandb: wandb sync /home/runner/work/deepchecks/deepchecks/docs/source/user-guide/general/exporting_results/wandb/offline-run-20220512_143651-2dtzth2j
+wandb: Find logs at: ./wandb/offline-run-20220512_143651-2dtzth2j/logs
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  19.176 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-user-guide-general-exporting-results-examples-plot-exports-output-to-wandb-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../../_downloads/d0e5301684966b091eacb0a58845e2e7/plot_exports_output_to_wandb.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_exports_output_to_wandb.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../../_downloads/516d370ea54dd881b1e4f1969c6ad64e/plot_exports_output_to_wandb.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_exports_output_to_wandb.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </div>
+        
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="plot_export_suite_results_as_html.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Export Suite Output to a HTML Report</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="plot_export_outputs_to_json.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Export Outputs to JSON</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+    </main>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2022, Deepchecks.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.1+/8fd0895.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
