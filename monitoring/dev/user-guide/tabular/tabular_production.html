@@ -485,11 +485,6 @@ prediction value, matching the corresponding sample in the data. <strong>This is
 <li><p><code class="docutils literal notranslate"><span class="pre">prediction_probas</span></code> - A 2D numpy array of probabilities made by the model on the data. This is argument should
 be provided only for classification models, and is used to calculate metrics such as AUC that require probabilities.
 The array must have the same number of rows as the data, and the number of columns must match the number of classes.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">labels</span></code> - A Sequence of labels for each sample. Each item in the sequence must be a single label value,
-matching the corresponding sample in the data.
-<strong>Labels are the only component of the production data that can be updated or provided later on</strong>
-(see the <a class="reference external" href="#updating-labels">Updating Labels</a> section below). To represent missing labels,
-use the <code class="docutils literal notranslate"><span class="pre">None</span></code> value.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">samples_per_send</span></code> - The number of samples to send in each request. This is useful when uploading large batches
 of data, to avoid sending too many samples in a single request. The default value is 10,000, and can be lowered
 if you encounter errors when uploading data with a large number of columns.</p></li>
@@ -517,8 +512,6 @@ the current time will be used (not recommended).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prediction_proba</span></code> - A Sequence (of probabilities made by the model on the sample. This is argument should
 be provided only for classification models, and is used to calculate metrics such as AUC that require probabilities.
 The sequence must have the same number of entries as the number of classes.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">label</span></code> - The label for the sample.
-<strong>Labels are the only component of the production data that can be updated or provided later on</strong></p></li>
 </ul>
 <p>In the following example, we upload a single sample to the a model version we have already created. In this case, the
 sample is contained within a single dictionary, with the dictionary keys serving as the column names, and the values
@@ -530,7 +523,6 @@ not provide the <code class="docutils literal notranslate"><span class="pre">pre
 <span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">values_dict</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">timestamp</span><span class="o">=</span><span class="n">sample_timestamp</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">prediction</span><span class="o">=</span><span class="n">prediction</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="n">sample_label</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
@@ -551,14 +543,29 @@ has not yet been processed, so the data won’t show up in the dashboard and ana
 <h2>Updating Labels<a class="headerlink" href="#updating-labels" title="Permalink to this headline">#</a></h2>
 <p>When building an ML system, it is common for the labels to arrive later than the predictions. In this case, you can
 update the labels for a sample by calling the
-<a class="reference internal" href="../../api/generated/deepchecks_client.core.client.DeepchecksModelVersionClient.update_sample.html#deepchecks_client.core.client.DeepchecksModelVersionClient.update_sample" title="deepchecks_client.core.client.DeepchecksModelVersionClient.update_sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepchecksModelVersionClient.update_sample()</span></code></a>
-method of the <a class="reference internal" href="../../api/generated/deepchecks_client.core.client.DeepchecksModelVersionClient.html#deepchecks_client.core.client.DeepchecksModelVersionClient" title="deepchecks_client.core.client.DeepchecksModelVersionClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span> <span class="pre">Version</span></code></a> object.</p>
-<p>The method is a simple one, receiving only the sample ID and the new label value. For example:</p>
-<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_version</span> <span class="o">=</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">get_model_version</span><span class="p">(</span><span class="s1">&#39;my_model&#39;</span><span class="p">,</span> <span class="s1">&#39;v1&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model_version</span><span class="o">.</span><span class="n">update_sample</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="mi">378</span><span class="p">)</span>  <span class="c1"># &#39;1&#39; is the sample ID, 378 is the new label value</span>
+<a class="reference internal" href="../../api/generated/deepchecks_client.core.client.DeepchecksModelClient.log_label.html#deepchecks_client.core.client.DeepchecksModelClient.log_label" title="deepchecks_client.core.client.DeepchecksModelClient.log_label"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepchecksModelClient.log_label()</span></code></a> or
+<a class="reference internal" href="../../api/generated/deepchecks_client.core.client.DeepchecksModelClient.log_batch_labels.html#deepchecks_client.core.client.DeepchecksModelClient.log_batch_labels" title="deepchecks_client.core.client.DeepchecksModelClient.log_batch_labels"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepchecksModelClient.log_batch_labels()</span></code></a>
+methods of the <a class="reference internal" href="../../api/generated/deepchecks_client.core.client.DeepchecksModelClient.html#deepchecks_client.core.client.DeepchecksModelClient" title="deepchecks_client.core.client.DeepchecksModelClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span> <span class="pre">Client</span></code></a> object.</p>
+<p>The labels are global to the model and not to a specific model version. This means that when you update label by his
+sample id it will affect all the model versions that are using this sample id.</p>
+<p>The methods are simple, receiving only the sample ID and the new label value. For example:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span> <span class="o">=</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">get_or_create_model</span><span class="p">(</span><span class="s1">&#39;my_model&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span><span class="o">.</span><span class="n">log_label</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="mi">378</span><span class="p">)</span>  <span class="c1"># &#39;1&#39; is the sample ID, 378 is the new label value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span><span class="o">.</span><span class="n">log_label</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="mi">320</span><span class="p">)</span>  <span class="c1"># &#39;2&#39; is the sample ID, 320 is the new label value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span><span class="o">.</span><span class="n">send</span><span class="p">()</span>
+<span class="go">2 labels sent.</span>
 </pre></div>
 </div>
-<p>Note that labels are the only component of the production data that can be updated or provided later on.</p>
+<p>It is advised to update the labels in batch for better performance:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span> <span class="o">=</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">get_or_create_model</span><span class="p">(</span><span class="s1">&#39;my_model&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">378</span><span class="p">,</span> <span class="mi">320</span><span class="p">,</span> <span class="mi">451</span><span class="p">,</span> <span class="mi">503</span><span class="p">,</span> <span class="mi">600</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model_client</span><span class="o">.</span><span class="n">log_batch_labels</span><span class="p">(</span><span class="n">sample_ids</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="go">5 labels sent.</span>
+</pre></div>
+</div>
+<p>Note that labels are the only component of the production data that can be updated or provided separately from the rest
+of the data.</p>
 <section id="handling-delayed-labels-in-alerts">
 <h3>Handling Delayed Labels in Alerts<a class="headerlink" href="#handling-delayed-labels-in-alerts" title="Permalink to this headline">#</a></h3>
 <p>Because labels can be updated after the original data and prediction where logged, Deepchecks will by default delay

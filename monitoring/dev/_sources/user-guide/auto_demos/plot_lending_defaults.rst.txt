@@ -417,7 +417,7 @@ and must be sorted alphanumerically.
 
     Model Loan Defaults - Example was successfully created!. Default checks, monitors and alerts added.
     Model version ver_1 was successfully created.
-    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:373: UserWarning:
+    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:366: UserWarning:
 
     Maximum size allowed for reference data is 100,000, applying random sampling
 
@@ -476,21 +476,21 @@ We'll change the original timestamps so the samples are recent
  .. code-block:: none
 
 
-    array(['2020-10-17T12:57:02.012705000', '2020-11-17T12:57:02.012705000',
-           '2020-12-18T12:57:02.012705000', '2021-01-17T12:57:02.012705000',
-           '2021-02-17T12:57:02.012705000', '2021-03-19T12:57:02.012705000',
-           '2021-04-19T12:57:02.012705000', '2021-05-20T12:57:02.012705000',
-           '2021-06-17T12:57:02.012705000', '2021-07-18T12:57:02.012705000',
-           '2021-08-17T12:57:02.012705000', '2021-09-17T12:57:02.012705000',
-           '2021-10-17T12:57:02.012705000', '2021-11-17T12:57:02.012705000',
-           '2021-12-18T12:57:02.012705000', '2022-01-17T12:57:02.012705000',
-           '2022-02-17T12:57:02.012705000', '2022-03-19T12:57:02.012705000',
-           '2022-04-19T12:57:02.012705000', '2022-05-20T12:57:02.012705000',
-           '2022-06-17T12:57:02.012705000', '2022-07-18T12:57:02.012705000',
-           '2022-08-17T12:57:02.012705000', '2022-09-17T12:57:02.012705000',
-           '2022-10-17T12:57:02.012705000', '2022-11-17T12:57:02.012705000',
-           '2022-12-18T12:57:02.012705000', '2023-01-17T12:57:02.012705000',
-           '2023-02-17T12:57:02.012705000', '2023-03-19T12:57:02.012705000'],
+    array(['2020-10-17T14:00:26.510889000', '2020-11-17T14:00:26.510889000',
+           '2020-12-18T14:00:26.510889000', '2021-01-17T14:00:26.510889000',
+           '2021-02-17T14:00:26.510889000', '2021-03-19T14:00:26.510889000',
+           '2021-04-19T14:00:26.510889000', '2021-05-20T14:00:26.510889000',
+           '2021-06-17T14:00:26.510889000', '2021-07-18T14:00:26.510889000',
+           '2021-08-17T14:00:26.510889000', '2021-09-17T14:00:26.510889000',
+           '2021-10-17T14:00:26.510889000', '2021-11-17T14:00:26.510889000',
+           '2021-12-18T14:00:26.510889000', '2022-01-17T14:00:26.510889000',
+           '2022-02-17T14:00:26.510889000', '2022-03-19T14:00:26.510889000',
+           '2022-04-19T14:00:26.510889000', '2022-05-20T14:00:26.510889000',
+           '2022-06-17T14:00:26.510889000', '2022-07-18T14:00:26.510889000',
+           '2022-08-17T14:00:26.510889000', '2022-09-17T14:00:26.510889000',
+           '2022-10-17T14:00:26.510889000', '2022-11-17T14:00:26.510889000',
+           '2022-12-18T14:00:26.510889000', '2023-01-17T14:00:26.510889000',
+           '2023-02-17T14:00:26.510889000', '2023-03-19T14:00:26.510889000'],
           dtype='datetime64[ns]')
 
 
@@ -520,18 +520,16 @@ Uploading a Batch of Data
 We'll also convert out pandas datetime column to int timestamps (seconds since epoch), which is the time format
 expected by deepchecks.
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-225
+.. GENERATED FROM PYTHON SOURCE LINES 216-223
 
 .. code-block:: default
 
 
-    # If labels arrive along with the data it is possible to upload them directly via the labels param.
     model_version.log_batch(sample_ids=prod_data['id'],
                             data=prod_data.drop(['issue_d', 'id', 'loan_status'], axis=1),
                             timestamps=(prod_data['issue_d'].astype(int) // 1e9).astype(int),
                             predictions=prod_predictions,
-                            prediction_probas=prod_prediction_probas,
-                            labels=prod_data['loan_status'])
+                            prediction_probas=prod_prediction_probas)
 
 
 
@@ -556,7 +554,44 @@ expected by deepchecks.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 226-300
+.. GENERATED FROM PYTHON SOURCE LINES 224-228
+
+Uploading The Labels
+--------------------
+The labels are global to the model, and not specific to a version. Therefore, to upload them we need the model client.
+You can do this directly after uploading the predictions, or at any other time.
+
+.. GENERATED FROM PYTHON SOURCE LINES 228-232
+
+.. code-block:: default
+
+
+    model_client = dc_client.get_or_create_model(model_name)
+    model_client.log_batch_labels(sample_ids=prod_data['id'], labels=prod_data['loan_status'])
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    5019 labels sent.
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 233-307
 
 Making Sure Your Data Has Arrived
 ---------------------------------
@@ -633,7 +668,7 @@ that we have just learned of a few loans that where paid in full, then we can up
 following function:
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-308
+.. GENERATED FROM PYTHON SOURCE LINES 307-315
 
 .. code-block:: default
 
@@ -643,7 +678,7 @@ following function:
                         87669, 87608, 87743, 87650, 87587, 87545, 87657, 87702, 87398,
                         87673, 87408, 87685, 92032, 88162, 87515, 87723, 87537, 87710,
                         87761, 87445, 87554, 87463, 87521, 87659, 87569]
-    model_version.update_batch(sample_ids=labels_to_update, labels=[0] * len(labels_to_update))
+    model_client.log_batch_labels(sample_ids=labels_to_update, labels=[0] * len(labels_to_update))
 
 
 
@@ -653,12 +688,12 @@ following function:
 
  .. code-block:: none
 
-    43 updated samples sent.
+    43 labels sent.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 309-314
+.. GENERATED FROM PYTHON SOURCE LINES 316-321
 
 Cleaning up
 ===========
@@ -666,7 +701,7 @@ Cleaning up
 If you wish to delete this model from your environment, you can do that using the ``delete_model`` function.
 CAUTION: This will delete the model, all model versions, and all associated datasets.
 
-.. GENERATED FROM PYTHON SOURCE LINES 315-318
+.. GENERATED FROM PYTHON SOURCE LINES 322-325
 
 .. code-block:: default
 
@@ -689,7 +724,7 @@ CAUTION: This will delete the model, all model versions, and all associated data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 10 minutes  47.390 seconds)
+   **Total running time of the script:** ( 15 minutes  5.731 seconds)
 
 
 .. _sphx_glr_download_user-guide_auto_demos_plot_lending_defaults.py:

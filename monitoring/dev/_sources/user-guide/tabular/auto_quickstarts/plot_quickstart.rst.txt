@@ -200,7 +200,7 @@ Uploading Data and Predictions
 Same as with the reference data, for classification tasks also predicted probabilities can be sent
 enabling computation of probability based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-125
+.. GENERATED FROM PYTHON SOURCE LINES 116-124
 
 .. code-block:: default
 
@@ -208,7 +208,6 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
     timestamp, label_col = 'datestamp', 'price'
     _, prod_data = load_data(data_format='DataFrame')
     _, prod_predictions = load_pre_calculated_prediction()
-    # If labels arrive along with the data it is possible to upload them directly via the labels param.
     model_version.log_batch(sample_ids=prod_data.index,
                             data=prod_data.drop([timestamp, label_col], axis=1),
                             timestamps=prod_data[timestamp], predictions=prod_predictions)
@@ -221,7 +220,7 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
 
  .. code-block:: none
 
-    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:657: UserWarning:
+    /home/runner/work/mon/mon/.venv/lib/python3.9/site-packages/deepchecks_client/tabular/client.py:641: UserWarning:
 
     Index of provided "data" dataframe completely matches "sample_ids" array, are you sure that "samples_ids" array is correct and contains unique sample identifiers?
 
@@ -235,20 +234,21 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-130
+.. GENERATED FROM PYTHON SOURCE LINES 125-130
 
 Updating the Labels
 -------------------
 In many real world scenarios, the labels of the data are only available at a later time. We can update them
 in hindsight using the global sample ids.
+The labels are global to the model, and not specific to a version. Therefore, to upload them we need the model client.
 
 .. GENERATED FROM PYTHON SOURCE LINES 130-134
 
 .. code-block:: default
 
 
-    model_version.update_batch(sample_ids=prod_data.index, labels=prod_data[label_col])
-
+    model_client = dc_client.get_or_create_model(model_name)
+    model_client.log_batch_labels(sample_ids=prod_data.index, labels=prod_data[label_col])
 
 
 
@@ -258,7 +258,11 @@ in hindsight using the global sample ids.
 
  .. code-block:: none
 
-    42225 updated samples sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    2225 labels sent.
 
 
 
@@ -312,7 +316,7 @@ If we wish to remove the model do free up space for new models we can do it in t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  56.719 seconds)
+   **Total running time of the script:** ( 2 minutes  25.371 seconds)
 
 
 .. _sphx_glr_download_user-guide_tabular_auto_quickstarts_plot_quickstart.py:
