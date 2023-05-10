@@ -497,23 +497,6 @@ Page: general/usage/ci_cd&labels=labels=chore/documentation" target="_blank" rel
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#airflow-integration">
-   Airflow Integration
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#airflow-quickstart">
-     Airflow Quickstart
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#airflow-with-deepchecks">
-     Airflow With Deepchecks
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#github-actions-integration">
    GitHub Actions Integration
   </a>
@@ -526,6 +509,23 @@ Page: general/usage/ci_cd&labels=labels=chore/documentation" target="_blank" rel
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#github-actions-with-deepchecks">
      GitHub Actions With Deepchecks
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#airflow-integration">
+   Airflow Integration
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#airflow-quickstart">
+     Airflow Quickstart
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#airflow-with-deepchecks">
+     Airflow With Deepchecks
     </a>
    </li>
   </ul>
@@ -614,6 +614,76 @@ We will use the default suites provided by deepchecks, but it’s possible to cr
 containing hand chosen checks and
 <a class="reference internal" href="customizations/auto_examples/plot_configure_check_conditions.html#configure-check-conditions"><span class="std std-ref">Configure Check Conditions</span></a>
 in order to cater to the specific needs of the project.</p>
+</section>
+<section id="github-actions-integration">
+<h2>GitHub Actions Integration<a class="headerlink" href="#github-actions-integration" title="Permalink to this headline">#</a></h2>
+<section id="github-actions-quickstart">
+<h3>GitHub Actions Quickstart<a class="headerlink" href="#github-actions-quickstart" title="Permalink to this headline">#</a></h3>
+<p>GitHub Actions is a service that allows you to run automated workflows, which can be triggered by events such as
+pushing to a repository or creating a pull request.</p>
+<p>If you are new to GitHub Actions, you can get it up and running quickly with those simplified steps:</p>
+<ol class="arabic simple">
+<li><p>Have your project repository in <code class="docutils literal notranslate"><span class="pre">github.com</span></code></p></li>
+<li><p>Add the python files with your ci/cd logic to the repository</p></li>
+<li><p>Add the yaml below in <cite>.github/workflows</cite> directory and push to github</p></li>
+</ol>
+<p>For a more elaborate explanation about working with GitHub Actions see their
+<a class="reference external" href="https://docs.github.com/en/actions/quickstart">docs</a>.</p>
+</section>
+<section id="github-actions-with-deepchecks">
+<h3>GitHub Actions With Deepchecks<a class="headerlink" href="#github-actions-with-deepchecks" title="Permalink to this headline">#</a></h3>
+<p>We will use the same functions as defined in airflow above with slight changes, and run them in the GitHub Actions
+steps on every push to the <cite>main</cite> branch. Note that we might want to stop the pipeline when a suite fails.
+In this case we can change the methods return types from <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">suite_result.passed()</span></code> to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">suite_result</span><span class="o">.</span><span class="n">passed</span><span class="p">():</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The yaml file for the GitHub Actions workflow is as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Model Training and Validation</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout Repository</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python 3.8</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.8</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="w">          </span><span class="no">pip install deepchecks</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Data</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python validate_data.py</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Train-Test Split</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python validate_train_test_split.py</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Train Model</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python train_model.py</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Model Performance</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python validate_model_performance.py</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Archive Deepchecks Results</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
+<span class="w">        </span><span class="c1"># Always run this step even if previous step failed</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deepchecks results</span>
+<span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="nv">*_validation</span><span class="l l-Scalar l-Scalar-Plain">.html</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="airflow-integration">
 <h2>Airflow Integration<a class="headerlink" href="#airflow-integration" title="Permalink to this headline">#</a></h2>
@@ -749,76 +819,6 @@ We can also add an additional step of deploying the model after the last validat
 </div>
 <p>We can access the result of the pipeline in our S3 bucket:</p>
 <img alt="Airflow DAG example" class="align-center" src="../../_images/s3_suites.png" />
-</section>
-</section>
-<section id="github-actions-integration">
-<h2>GitHub Actions Integration<a class="headerlink" href="#github-actions-integration" title="Permalink to this headline">#</a></h2>
-<section id="github-actions-quickstart">
-<h3>GitHub Actions Quickstart<a class="headerlink" href="#github-actions-quickstart" title="Permalink to this headline">#</a></h3>
-<p>GitHub Actions is a service that allows you to run automated workflows, which can be triggered by events such as
-pushing to a repository or creating a pull request.</p>
-<p>If you are new to GitHub Actions, you can get it up and running quickly with those simplified steps:</p>
-<ol class="arabic simple">
-<li><p>Have your project repository in <code class="docutils literal notranslate"><span class="pre">github.com</span></code></p></li>
-<li><p>Add the python files with your ci/cd logic to the repository</p></li>
-<li><p>Add the yaml below in <cite>.github/workflows</cite> directory and push to github</p></li>
-</ol>
-<p>For a more elaborate explanation about working with GitHub Actions see their
-<a class="reference external" href="https://docs.github.com/en/actions/quickstart">docs</a>.</p>
-</section>
-<section id="github-actions-with-deepchecks">
-<h3>GitHub Actions With Deepchecks<a class="headerlink" href="#github-actions-with-deepchecks" title="Permalink to this headline">#</a></h3>
-<p>We will use the same functions as defined in airflow above with slight changes, and run them in the GitHub Actions
-steps on every push to the <cite>main</cite> branch. Note that we might want to stop the pipeline when a suite fails.
-In this case we can change the methods return types from <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">suite_result.passed()</span></code> to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">suite_result</span><span class="o">.</span><span class="n">passed</span><span class="p">():</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The yaml file for the GitHub Actions workflow is as follows:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Model Training and Validation</span>
-
-<span class="nt">on</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
-<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="nv">main</span><span class="w"> </span><span class="p p-Indicator">]</span>
-
-<span class="nt">jobs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout Repository</span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python 3.8</span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
-<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.8</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
-<span class="w">          </span><span class="no">pip install deepchecks</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Data</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no">python validate_data.py</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Train-Test Split</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no">python validate_train_test_split.py</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Train Model</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no">python train_model.py</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Model Performance</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no">python validate_model_performance.py</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Archive Deepchecks Results</span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
-<span class="w">        </span><span class="c1"># Always run this step even if previous step failed</span>
-<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span>
-<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deepchecks results</span>
-<span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="nv">*_validation</span><span class="l l-Scalar l-Scalar-Plain">.html</span>
-</pre></div>
-</div>
 </section>
 </section>
 </section>
