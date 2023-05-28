@@ -356,6 +356,11 @@ Page: nlp/usage_guides/nlp_properties&labels=labels=chore/documentation" target=
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../auto_tutorials/quickstarts/plot_token_classification.html">
+     Test NLP Token Classification Tasks - Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../auto_tutorials/quickstarts/plot_multi_label_classification.html">
      NLP Multi Label Classification Quickstart
     </a>
@@ -802,8 +807,12 @@ parameters can be passed to the method.</p>
 default properties will be calculated except for <code class="docutils literal notranslate"><span class="pre">Text</span> <span class="pre">Length</span></code> property. Moreover, some properties are not calculated by default, as they may take a
 long time to calculate. In order to use them, pass <code class="docutils literal notranslate"><span class="pre">include_long_calculation_properties</span></code> to the
 <code class="docutils literal notranslate"><span class="pre">calculate_builtin_properties</span></code> method.</p>
-<p>In the following example, we will calculate the properties and include only the long calculation property “Toxicity”:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">text_data</span><span class="o">.</span><span class="n">calculate_builtin_properties</span><span class="p">(</span><span class="n">include_long_calculation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_properties</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Toxicity&#39;</span><span class="p">])</span>
+<p>In the following example, we will calculate the properties and include only the long calculation property “Toxicity”.
+We’ll also pass the <code class="docutils literal notranslate"><span class="pre">device</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">calculate_builtin_properties</span></code> method, in order to use the GPU for
+calculating the properties if it is available:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">text_data</span><span class="o">.</span><span class="n">calculate_builtin_properties</span><span class="p">(</span><span class="n">include_long_calculation_properties</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_properties</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Toxicity&#39;</span><span class="p">],</span>
+                                       <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
