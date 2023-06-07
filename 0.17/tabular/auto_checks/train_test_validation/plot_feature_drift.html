@@ -1,0 +1,1653 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+<!-- Google Tag Manager -->
+<script>(function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NNKXRJQ');</script>
+<!-- End Google Tag Manager -->
+<meta name="title" content="Feature Drift | Deepchecks Documentation">
+<meta name="description" content="Do you need to know more about Feature Drift? Read more at Deepchecks Online Documentation">
+<meta name="docsearch:version" content="0.17">
+
+
+<!-- Warning: 
+        The 'shortcut link' type is often seen before icon, but this link type is non-conforming, 
+        ignored and web authors must not use it anymore. 
+        MDN docs https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
+    -->
+<link rel="shortcut icon" href="/_static/favicons/favicon.ico">
+<link rel="canonical" href="https://docs.deepchecks.com/stable/tabular/auto_checks/train_test_validation/plot_feature_drift.html" />
+
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="32x32">
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="192x192">
+
+<!-- Note: 
+        Apple's iOS does not use this 'link' type, nor the 'sizes' attribute, 
+        like others mobile browsers do, to select a webpage icon for Web Clip 
+        or a start-up placeholder. Instead it uses the non-standard 'apple-touch-icon'.
+        MDN docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types;
+        Safari Web Content Guide: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW4
+    -->
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+
+
+    <title>Feature Drift &#8212; Deepchecks Documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
+    crossorigin="anonymous"></script>
+
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Model Evaluation" href="../model_evaluation/index.html" />
+    <link rel="prev" title="Date Train Test Leakage Duplicates" href="plot_date_train_test_leakage_duplicates.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+
+<body data-spy="scroll" data-target="#bd-toc-nav">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNKXRJQ" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <script>
+        require.config({
+            paths: {
+                "docsearchLib": "https://cdn.jsdelivr.net/npm/@docsearch/js@3?noext",
+                "clipboardjs": "/0.17/_static/clipboard.min"
+            }
+        }
+
+        );
+        require(["docsearchLib"], function (docsearch) {
+            docsearch({
+                appId: "3UQ0BSGJ1N", apiKey: "83d250f88e29e9906a50ddf40a1871ce", indexName: "deepchecks", container: '#algolia-search', debug: false,
+                searchParameters: {
+                    facetFilters: ["version:0.17"]
+                }
+            });
+        });
+        require(["clipboardjs"], function(clipboardJS) {
+            window.ClipboardJS=clipboardJS
+        });
+    </script>
+    <div style="display:none;" id="dc-submodule">general</div>
+    <script data-url_root="/" id="documentation_options" src="/0.17/_static/documentation_options.js"></script>
+    <script src="/0.17/_static/copybutton.js"></script>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../index.html">
+  <img src="../../../_static/deepchecks_logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../getting-started/index.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../general/index.html">
+  General
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  Tabular
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../nlp/index.html">
+  NLP
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../vision/index.html">
+  Vision
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../api/index.html">
+  API Reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.17  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables tabular/auto_checks/train_test_validation/plot_feature_drift and {'json_url': 'https://docs.deepchecks.com/dev/_static/switcher.json', 'version_match': '0.17', 'url_template': 'https://docs.deepchecks.com/{version}/'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "tabular/auto_checks/train_test_validation/plot_feature_drift.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://docs.deepchecks.com/dev/_static/switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "tabular/auto_checks/train_test_validation/plot_feature_drift.html";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.17 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.17") {
+                node.classList.add("active");
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/deepchecks/deepchecks" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://deepcheckscommunity.slack.com/join/shared_invite/zt-y28sjt1v-PBT50S3uoyWui_Deg5L_jg#/shared-invite/email" rel="noopener" target="_blank" title="Slack"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://pypi.org/project/deepchecks/" rel="noopener" target="_blank" title="PyPI"><span><i class="fab fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div id="topright-dropdown-menu" class="dropdown" style="width: fit-content;">
+    <a 
+        class="btn dropdown-toggle" 
+        id="topright-dropdown-menu-link" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"
+        data-offset="-100,10">
+            <i class="fas fa-bars"></i>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="topright-dropdown-menu-link" x-placement="bottom-start">
+        <a class="dropdown-item" href="https://github.com/deepchecks/deepchecks/issues/new?title=[Docs] Documentation contains a mistake.&body=Package Version: 0.17;
+Page: tabular/auto_checks/train_test_validation/plot_feature_drift&labels=labels=chore/documentation" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-pencil-alt"></i> Report a problem
+        </a>
+        
+            <a 
+                
+                    href="/0.17/_sources/tabular/auto_checks/train_test_validation/plot_feature_drift.rst.txt"
+                
+                
+                class="dropdown-item" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                <i class="fas fa-code"></i> Show Source
+            </a>
+        
+    </div>
+</div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><div id="algolia-search">
+<!-- <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form> -->
+</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../auto_tutorials/quickstarts/index.html">
+   Quickstarts
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quickstart_in_5_minutes.html">
+     Full Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_model_evaluation.html">
+     Model Evaluation Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_data_integrity.html">
+     Data Integrity Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_train_test_validation.html">
+     Train-Test Validation Suite Quickstart
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../auto_tutorials/other/plot_phishing_urls.html">
+   Use Cases - Classifying Malicious URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../auto_tutorials/other/plot_add_a_custom_check.html">
+   Creating a Custom Check
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../custom_check_templates.html">
+   Custom Check Templates
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Usage Guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/dataset_object.html">
+   The Dataset Object
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/supported_models.html">
+   Working with Models and Predictions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/feature_importance.html">
+   Feature Importance
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Checks Gallery
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../data_integrity/index.html">
+   Data Integrity
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_mixed_nulls.html">
+     Mixed Nulls
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_percent_of_nulls.html">
+     Percent Of Nulls
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_string_mismatch.html">
+     String Mismatch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_string_length_out_of_bounds.html">
+     String Length Out Of Bounds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_feature_label_correlation.html">
+     Feature Label Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_is_single_value.html">
+     Is Single Value
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_feature_feature_correlation.html">
+     Feature Feature Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_columns_info.html">
+     Columns Info
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_class_imbalance.html">
+     Class Imbalance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_outlier_sample_detection.html">
+     Outlier Sample Detection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_identifier_label_correlation.html">
+     Identifier Label Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_conflicting_labels.html">
+     Conflicting Labels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_data_duplicates.html">
+     Data Duplicates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_special_chars.html">
+     Special Characters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_mixed_data_types.html">
+     Mixed Data Types
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Train Test Validation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_string_mismatch_comparison.html">
+     String Mismatch Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_train_test_samples_mix.html">
+     Train Test Samples Mix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_new_label_train_test.html">
+     New Label
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_datasets_size_comparison.html">
+     Datasets Size Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_new_category_train_test.html">
+     New Category
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_index_leakage.html">
+     Index Leakage
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_feature_label_correlation_change.html">
+     Feature Label Correlation Change
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_multivariate_drift.html">
+     Multivariate Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_label_drift.html">
+     Label Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_date_train_test_leakage_overlap.html">
+     Date Train Test Leakage Overlap
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_date_train_test_leakage_duplicates.html">
+     Date Train Test Leakage Duplicates
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Feature Drift
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../model_evaluation/index.html">
+   Model Evaluation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_model_info.html">
+     Model Info
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_segment_performance.html">
+     Segment Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_unused_features.html">
+     Unused Features
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_performance_bias.html">
+     Performance Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_simple_model_comparison.html">
+     Simple Model Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_model_inference_time.html">
+     Model Inference Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_regression_systematic_error.html">
+     Regression Systematic Error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_single_dataset_performance.html">
+     Single Dataset Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_train_test_performance.html">
+     Train Test Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_roc_report.html">
+     ROC Report
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_regression_error_distribution.html">
+     Regression Error Distribution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_confusion_matrix_report.html">
+     Confusion Matrix Report
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_weak_segments_performance.html">
+     Weak Segments Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_boosting_overfit.html">
+     Boosting Overfit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_prediction_drift.html">
+     Prediction Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_calibration_score.html">
+     Calibration Score
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../model_evaluation/plot_multi_model_performance_report.html">
+     Multi Model Performance Report
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-a-feature-drift">
+   What is a feature drift?
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-deepchecks-detects-feature-drift">
+     How Deepchecks Detects Feature Drift
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#insert-drift-into-test">
+     Insert drift into test:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#training-a-model">
+     Training a model
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#observe-the-check-s-output">
+     Observe the check’s output
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#get-an-aggregated-value">
+   Get an aggregated value
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+            
+          </div>
+          
+
+          
+    
+        
+    
+    <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+        
+            <ul><li><a href='../../../api/generated/deepchecks.tabular.checks.train_test_validation.FeatureDrift.html'>API Reference - FeatureDrift</a></li></ul>
+        
+        
+            <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-tabular-auto-checks-train-test-validation-plot-feature-drift-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="feature-drift">
+<span id="tabular-feature-drift"></span><span id="sphx-glr-tabular-auto-checks-train-test-validation-plot-feature-drift-py"></span><h1>Feature Drift<a class="headerlink" href="#feature-drift" title="Permalink to this headline">#</a></h1>
+<p>This notebooks provides an overview for using and understanding feature drift check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-a-feature-drift">What is a feature drift?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+<li><p><a class="reference external" href="#get-an-aggregated-value">Get an aggregated value</a></p></li>
+</ul>
+<section id="what-is-a-feature-drift">
+<h2>What is a feature drift?<a class="headerlink" href="#what-is-a-feature-drift" title="Permalink to this headline">#</a></h2>
+<p>Drift is simply a change in the distribution of data over time, and it is
+also one of the top reasons why machine learning model’s performance degrades
+over time.</p>
+<p>Feature drift is a data drift that occurs in a single feature in the dataset.</p>
+<p>For more information on drift, please visit our <a class="reference internal" href="../../../general/guides/drift_guide.html#drift-user-guide"><span class="std std-ref">Drift Guide</span></a>.</p>
+<section id="how-deepchecks-detects-feature-drift">
+<h3>How Deepchecks Detects Feature Drift<a class="headerlink" href="#how-deepchecks-detects-feature-drift" title="Permalink to this headline">#</a></h3>
+<p>This check detects feature drift by using <a class="reference internal" href="../../../general/guides/drift_guide.html#drift-detection-by-univariate-measure"><span class="std std-ref">univariate measures</span></a>
+on each feature column separately.
+Another possible method for drift detection is by <a class="reference internal" href="../../../general/guides/drift_guide.html#drift-detection-by-domain-classifier"><span class="std std-ref">a domain classifier</span></a>
+which is used in the <a class="reference internal" href="plot_multivariate_drift.html#tabular-multivariate-drift"><span class="std std-ref">Multivariate Drift check</span></a>.</p>
+</section>
+</section>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
+<p>Let’s generate a mock dataset of 2 categorical and 2 numerical features</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;banana&#39;</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;banana&#39;</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;numeric_without_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical_without_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical_with_drift&#39;</span><span class="p">])</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">df_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s1">&#39;numeric_without_drift&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">})</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">astype</span><span class="p">({</span><span class="s1">&#39;numeric_without_drift&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>numeric_without_drift</th>
+      <th>numeric_with_drift</th>
+      <th>categorical_without_drift</th>
+      <th>categorical_with_drift</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.496714</td>
+      <td>-0.138264</td>
+      <td>apple</td>
+      <td>apple</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.647689</td>
+      <td>1.523030</td>
+      <td>apple</td>
+      <td>apple</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.234153</td>
+      <td>-0.234137</td>
+      <td>banana</td>
+      <td>banana</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.579213</td>
+      <td>0.767435</td>
+      <td>apple</td>
+      <td>banana</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.469474</td>
+      <td>0.542560</td>
+      <td>orange</td>
+      <td>apple</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><section id="insert-drift-into-test">
+<h3>Insert drift into test:<a class="headerlink" href="#insert-drift-into-test" title="Permalink to this headline">#</a></h3>
+<p>Now, we insert a synthetic drift into 2 columns in the dataset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;categorical_with_drift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;banana&#39;</span><span class="p">,</span> <span class="s1">&#39;lemon&#39;</span><span class="p">],</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="training-a-model">
+<h3>Training a model<a class="headerlink" href="#training-a-model" title="Permalink to this headline">#</a></h3>
+<p>Now, we are building a dummy model (the label is just a random numerical
+column). We preprocess our synthetic dataset so categorical features are
+being encoded with an OrdinalEncoder</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OrdinalEncoder</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+
+<span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">Dataset</span></a>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;handle_cat&#39;</span><span class="p">,</span> <span class="n">ColumnTransformer</span><span class="p">(</span>
+        <span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;num&#39;</span><span class="p">,</span> <span class="s1">&#39;passthrough&#39;</span><span class="p">,</span>
+             <span class="p">[</span><span class="s1">&#39;numeric_with_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;numeric_without_drift&#39;</span><span class="p">]),</span>
+            <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span>
+             <span class="n">Pipeline</span><span class="p">([</span>
+                 <span class="p">(</span><span class="s1">&#39;encode&#39;</span><span class="p">,</span> <span class="n">OrdinalEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;use_encoded_value&#39;</span><span class="p">,</span> <span class="n">unknown_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span>
+             <span class="p">]),</span>
+             <span class="p">[</span><span class="s1">&#39;categorical_with_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical_without_drift&#39;</span><span class="p">])</span>
+        <span class="p">]</span>
+    <span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">))]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+<span class="n">cat_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;categorical_without_drift&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical_with_drift&#39;</span><span class="p">]</span>
+<span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+<a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">Dataset</span></a><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="n">cat_features</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.data" title="deepchecks.tabular.Dataset.data" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_dataset</span><span class="o">.</span><span class="n">data</span></a><span class="p">[</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset.features" title="deepchecks.tabular.Dataset.features" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-property"><span class="n">train_dataset</span><span class="o">.</span><span class="n">features</span></a><span class="p">],</span> <span class="n">label</span><span class="p">)</span>
+
+<span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+<a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">Dataset</span></a><span class="p">(</span><span class="n">df_test</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="n">cat_features</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<p>Let’s run deepchecks’ feature drift check and see the results</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck" title="deepchecks.tabular.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">FeatureDrift</span></a>
+
+<span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck" title="deepchecks.tabular.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">FeatureDrift</span></a><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck.run" title="deepchecks.tabular.TrainTestCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2023 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feature Drift</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"version_major": 2, "version_minor": 0, "state": {"558bb07ffeb54e43bebfdd971a65aebb": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_36b327b9f4844da481ab639fae175baa", "IPY_MODEL_a3340a1a185146caa6e9dae9a365aeed", "IPY_MODEL_593e4979876b4b73bdd28e1b4efc16b9", "IPY_MODEL_7387c06e50434ad7bc1c0d87432d6435"], "layout": "IPY_MODEL_90a5bb4ac9a149eeb48e9d8fa63e59af"}}, "36b327b9f4844da481ab639fae175baa": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_4d97f5a5a99d4aaf99053ab9dbfe1956", "style": "IPY_MODEL_7d46044598734c0ead3dde88962e7bb4", "value": "<h4><b>Feature Drift</b></h4>"}}, "4d97f5a5a99d4aaf99053ab9dbfe1956": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "7d46044598734c0ead3dde88962e7bb4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "a3340a1a185146caa6e9dae9a365aeed": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_166eddecaa5d41b4a04841deea3215d1", "style": "IPY_MODEL_004b192f87ab4dd388b60f1679dc93a2", "value": "<p>    Calculate drift between train dataset and test dataset per feature, using statistical measures. <a href=\"https://docs.deepchecks.com/0.17/tabular/auto_checks/train_test_validation/plot_feature_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "166eddecaa5d41b4a04841deea3215d1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "004b192f87ab4dd388b60f1679dc93a2": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "593e4979876b4b73bdd28e1b4efc16b9": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a680b20410354db5b0ad549263cda6b1", "style": "IPY_MODEL_11d132f8d8b94295b3c583561b5f21b4"}}, "a680b20410354db5b0ad549263cda6b1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "11d132f8d8b94295b3c583561b5f21b4": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "7387c06e50434ad7bc1c0d87432d6435": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_41f4cfc1376640e5a9e673f31ac16df7", "IPY_MODEL_ebeea1310639426f97a75ef79c715f6c", "IPY_MODEL_18ff727d8e6d4f6d835a5b34a6b758b4", "IPY_MODEL_bc1fc386c2a6494087d22d3444c51469", "IPY_MODEL_4065daad15b44f488cbf0b7471b3764b", "IPY_MODEL_fcdebc5f021545e2ba34dd5f74be58ad", "IPY_MODEL_93701345fafb4602bd3f3f3eb135e431", "IPY_MODEL_72b72beafb1645779289699fcd4512f9"], "layout": "IPY_MODEL_2b6e8c5f7bd04a7fb3e5d6f3038b9325"}}, "41f4cfc1376640e5a9e673f31ac16df7": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_0fb6f5232f3e462ba8f0094277063890", "style": "IPY_MODEL_cb6d88a1c0fb439aa05a0d6b69527ffd", "value": "<h5><b>Additional Outputs</b></h5>"}}, "0fb6f5232f3e462ba8f0094277063890": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "cb6d88a1c0fb439aa05a0d6b69527ffd": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "ebeea1310639426f97a75ef79c715f6c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_5f98ec649bdd4da5aada653c2c708ed4", "style": "IPY_MODEL_9342ab75331e4434a15e092e41d4b7ac", "value": "<div>\n<span>\nThe Drift score is a measure for the difference between two distributions, in this check - the test\nand train distributions.<br> The check shows the drift score and distributions for the features,\nsorted by the sum of the drift score and the feature importance and showing only the top 5 features,\naccording to the sum of the drift score and the feature importance.\n</span>\n</div>"}}, "5f98ec649bdd4da5aada653c2c708ed4": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "9342ab75331e4434a15e092e41d4b7ac": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "18ff727d8e6d4f6d835a5b34a6b758b4": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_63e92c5958f3439b9b1e46c7d6686945", "style": "IPY_MODEL_227e45ba7e734731bb096d09b672891a", "value": "<div>For discrete distribution plots, showing the top 10 categories with largest difference between train and test.</div>"}}, "63e92c5958f3439b9b1e46c7d6686945": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "227e45ba7e734731bb096d09b672891a": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "bc1fc386c2a6494087d22d3444c51469": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_a09eba138b3046bb85e25d935a2894fc", "style": "IPY_MODEL_59984757dfea4d12bc5d1939a463a42d", "value": "<div>If available, the plot titles also show the feature importance (FI) rank</div>"}}, "a09eba138b3046bb85e25d935a2894fc": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "59984757dfea4d12bc5d1939a463a42d": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "4065daad15b44f488cbf0b7471b3764b": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.14.1", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"base": 0, "marker": {"color": "#01B8AA"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.1], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "4cef7c13-9f7b-40cc-8c88-3deeb04db322"}, {"base": 0.1, "marker": {"color": "#F2C80F"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.1], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "affd5c3e-47b0-4c34-9246-6a923f1d69af"}, {"base": 0.2, "marker": {"color": "#FE9666"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.09999999999999998], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "bacf90fb-7ada-464e-8595-d6418f602814"}, {"base": 0.3, "marker": {"color": "#FD625E"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.3990000000000001], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "26e48db5-6447-4fff-8f63-93c7a5124b37"}, {"fill": "tozeroy", "line": {"color": "#00008b", "shape": "linear"}, "name": "Test Dataset", "x": [-2.9403886346642802, -2.718764792449416, -2.497140950234552, -2.275517108019687, -2.053893265804823, -1.9522394460096473, -1.8322694235899588, -1.6615589392996284, -1.6106455813750946, -1.5029806858785304, -1.3890217391602302, -1.3803173200348469, -1.2481162214068948, -1.167397896945366, -1.129130381230076, -1.0266776772231458, -0.9457740547305018, -0.93815379934108, -0.8579003525004392, -0.7984761969608137, -0.7474921477777441, -0.7241502125156374, -0.6772945894897103, -0.6011966376436214, -0.5480704382650716, -0.5025263703007732, -0.4932276292095767, -0.4301142680349475, -0.3735089549474293, -0.3232243983583615, -0.303807755374735, -0.28338806180795656, -0.280902528085909, -0.22468605075528816, -0.17928677247888014, -0.11908608725458732, -0.05927868587104479, -0.05849581418656411, -0.011678968276559606, -0.005733163465857652, 0.047741808988898, 0.047741808988898, 0.056982148184147645, 0.11646795382050189, 0.16234515634381985, 0.18390795615138109, 0.21818855315277805, 0.2790056549133476, 0.2886118397580669, 0.33072228829686745, 0.38396899855868405, 0.38778229748484644, 0.4275854276244711, 0.4275949465926318, 0.47293576480857014, 0.510120350227489, 0.5659159846146, 0.5670970501705798, 0.6055928407735482, 0.628704842408893, 0.6826838956553363, 0.7516331603456333, 0.7524990239972061, 0.8230642682006, 0.8272166829884124, 0.8953985144339989, 0.9642044459328458, 0.9730927715759433, 1.0488405252032766, 1.0662275531855239, 1.1073187703133764, 1.140421128619949, 1.1978395382807978, 1.2390074032574945, 1.2704643674181413, 1.3494647541824527, 1.3737364999637436, 1.480971102107083, 1.4920882096330055, 1.501546398885663, 1.5873777550732753, 1.677554135964612, 1.6950933580121719, 1.7137120518478697, 1.7742207758610855, 1.84693016008695, 1.8715504167171473, 1.9353358940627339, 1.941993068984651, 2.0267131748094562, 2.107895708909522, 2.156959736277598, 2.1632896757373725, 2.1794221433146435, 2.2709567507472617, 2.3785835784924623, 2.4068880846144673, 2.512055769620731, 2.595100472364528, 2.6002074207073265, 2.678735695029947, 2.762513380478547, 2.762513380478547, 2.779575791784628, 2.8218312629221907, 2.8427777482701817, 2.9340819924380366, 3.040325509518532, 3.0434551051370557, 3.1031715268077535, 3.2030356398684625, 3.26507894735192, 3.2784379466437734, 3.3389618203131866, 3.4315085799413954, 3.486702789566784, 3.5443656413223157, 3.6621240001387116, 3.7083266317816483, 3.744742002928959, 3.8473823263819082, 3.9299504739965125, 3.939851984425977, 4.0363390448695435, 4.151574316211377, 4.152479814842194, 4.3324684159383855, 4.373198158426241, 4.464560454102148, 4.594822000641106, 4.631994625050779, 4.8041082481264175, 4.81644584285597, 4.9702645084171895, 5.038069685070834, 5.188747400317569, 5.259693527285698, 5.420162820651218, 5.481317369500562, 5.702941211715427, 5.703694340290479, 5.924565053930291, 6.146188896145155, 6.176979021411623, 6.367812738360019, 6.589436580574883, 6.8110604227897475, 7.032684265004612, 7.254308107219476, 7.47593194943434, 7.697555791649204, 7.9191796338640685], "xaxis": "x2", "y": {"dtype": "float64", "shape": [152]}, "yaxis": "y2", "type": "scatter", "uid": "b26cac47-9a2b-4a50-8d61-47a4f37ea307"}, {"line": {"color": "#00008b", "dash": "dash"}, "mode": "lines+markers", "name": "Test Mean", "x": [0.056982148184147645, 0.056982148184147645], "xaxis": "x2", "y": [0, 0.3656309524593373], "yaxis": "y2", "type": "scatter", "uid": "3de867cc-f7fd-45c6-a23e-0fb8425f9cf2"}, {"line": {"color": "#00008b"}, "mode": "lines", "name": "Test Median", "x": [0.047741808988898, 0.047741808988898], "xaxis": "x2", "y": [0, 0.3654221825480962], "yaxis": "y2", "type": "scatter", "uid": "3027283a-982e-44d2-bd24-37aaf3674a6d"}, {"fill": "tozeroy", "line": {"color": "#69b3a2", "shape": "linear"}, "name": "Train Dataset", "x": [-2.9403886346642802, -2.718764792449416, -2.497140950234552, -2.275517108019687, -2.053893265804823, -1.9522394460096473, -1.8322694235899588, -1.6615589392996284, -1.6106455813750946, -1.5029806858785304, -1.3890217391602302, -1.3803173200348469, -1.2481162214068948, -1.167397896945366, -1.129130381230076, -1.0266776772231458, -0.9457740547305018, -0.93815379934108, -0.8579003525004392, -0.7984761969608137, -0.7474921477777441, -0.7241502125156374, -0.6772945894897103, -0.6011966376436214, -0.5480704382650716, -0.5025263703007732, -0.4932276292095767, -0.4301142680349475, -0.3735089549474293, -0.3232243983583615, -0.303807755374735, -0.28338806180795656, -0.280902528085909, -0.22468605075528816, -0.17928677247888014, -0.11908608725458732, -0.05927868587104479, -0.05849581418656411, -0.011678968276559606, -0.005733163465857652, 0.047741808988898, 0.047741808988898, 0.056982148184147645, 0.11646795382050189, 0.16234515634381985, 0.18390795615138109, 0.21818855315277805, 0.2790056549133476, 0.2886118397580669, 0.33072228829686745, 0.38396899855868405, 0.38778229748484644, 0.4275854276244711, 0.4275949465926318, 0.47293576480857014, 0.510120350227489, 0.5659159846146, 0.5670970501705798, 0.6055928407735482, 0.628704842408893, 0.6826838956553363, 0.7516331603456333, 0.7524990239972061, 0.8230642682006, 0.8272166829884124, 0.8953985144339989, 0.9642044459328458, 0.9730927715759433, 1.0488405252032766, 1.0662275531855239, 1.1073187703133764, 1.140421128619949, 1.1978395382807978, 1.2390074032574945, 1.2704643674181413, 1.3494647541824527, 1.3737364999637436, 1.480971102107083, 1.4920882096330055, 1.501546398885663, 1.5873777550732753, 1.677554135964612, 1.6950933580121719, 1.7137120518478697, 1.7742207758610855, 1.84693016008695, 1.8715504167171473, 1.9353358940627339, 1.941993068984651, 2.0267131748094562, 2.107895708909522, 2.156959736277598, 2.1632896757373725, 2.1794221433146435, 2.2709567507472617, 2.3785835784924623, 2.4068880846144673, 2.512055769620731, 2.595100472364528, 2.6002074207073265, 2.678735695029947, 2.762513380478547, 2.762513380478547, 2.779575791784628, 2.8218312629221907, 2.8427777482701817, 2.9340819924380366, 3.040325509518532, 3.0434551051370557, 3.1031715268077535, 3.2030356398684625, 3.26507894735192, 3.2784379466437734, 3.3389618203131866, 3.4315085799413954, 3.486702789566784, 3.5443656413223157, 3.6621240001387116, 3.7083266317816483, 3.744742002928959, 3.8473823263819082, 3.9299504739965125, 3.939851984425977, 4.0363390448695435, 4.151574316211377, 4.152479814842194, 4.3324684159383855, 4.373198158426241, 4.464560454102148, 4.594822000641106, 4.631994625050779, 4.8041082481264175, 4.81644584285597, 4.9702645084171895, 5.038069685070834, 5.188747400317569, 5.259693527285698, 5.420162820651218, 5.481317369500562, 5.702941211715427, 5.703694340290479, 5.924565053930291, 6.146188896145155, 6.176979021411623, 6.367812738360019, 6.589436580574883, 6.8110604227897475, 7.032684265004612, 7.254308107219476, 7.47593194943434, 7.697555791649204, 7.9191796338640685], "xaxis": "x2", "y": {"dtype": "float64", "shape": [152]}, "yaxis": "y2", "type": "scatter", "uid": "347a5878-2213-4afe-a789-8c98f58242ff"}, {"line": {"color": "#69b3a2", "dash": "dash"}, "mode": "lines+markers", "name": "Train Mean", "x": [2.779575791784628, 2.779575791784628], "xaxis": "x2", "y": [0, 0.22286834717400214], "yaxis": "y2", "type": "scatter", "uid": "89b189c0-ce40-47c9-8305-29c351b8f62c"}, {"line": {"color": "#69b3a2"}, "mode": "lines", "name": "Train Median", "x": [2.762513380478547, 2.762513380478547], "xaxis": "x2", "y": [0, 0.22266544772620994], "yaxis": "y2", "type": "scatter", "uid": "be1bdf4d-c2ab-4257-9a53-bf156f777280"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Drift Score (Kolmogorov-Smirnov)", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0000000000000002, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Distribution Plot", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.7200000000000001, "yanchor": "bottom", "yref": "paper"}], "bargroupgap": 0, "height": 400, "legend": {"title": {"text": "Legend"}, "y": 0.6, "yanchor": "top"}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "numeric_with_drift (#2 in FI)", "x": 0.5, "xanchor": "center"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "dtick": 0.05, "fixedrange": true, "gridcolor": "black", "linecolor": "black", "range": [0, 0.799], "showgrid": false}, "yaxis": {"anchor": "x", "autorange": true, "color": "black", "domain": [0.9200000000000002, 1.0], "fixedrange": true, "rangemode": "normal", "showgrid": false, "showline": false, "showticklabels": false, "zeroline": false}, "xaxis2": {"anchor": "y2", "domain": [0.0, 1.0], "fixedrange": false, "range": [-1.9522394460096473, 6.176979021411623], "title": {"text": "numeric_with_drift"}}, "yaxis2": {"anchor": "x2", "domain": [0.0, 0.7200000000000001], "fixedrange": true, "title": {"text": "Probability Density"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "twQjl7ezgT9ozEAECe6DPyvs/4EVLIk/p3KbOchfmD8DtzrwKaSnP5xJvaFXf64/BTy4JZ/Ysz81mVfcuC27P4vS1dyedb0/iEd56+8iwT+ANJ2v96PDP1Awgu3U1MM/+dN9b2zSxj9PbzYoGNXIP7MGVnHT28k/DTVf4yjZzD/JsJhy22bPP39U0F+spc8/0zPmuiQe0T8kOX3X4w3SP6mkKHzp0tI/YxcHNpIp0z9oriAGnM/TP4URGD2Cw9Q/lDpQqIRY1T+BFo0nBMnVP5A+afQr3tU/KdnyXtlc1j/xizcPzLTWPz08oE/E7tY/ARo46lIA1z/7YAR4ExDXPyRN7snPEdc/rLuyi5ov1z9NtaQo0zzXP2+r8XxmRdc/0UYwYCpL1z9wM0OVQUvXPygUa0qIUtc/mm+ik8dT1z+eutG4E2PXP5660bgTY9c/vPbNXX9m1z/SifSndYHXP+rYfMsWmtc/vzj4zcql1z+lFD/wGLfXP/HmYFThy9c/C6pSAVbN1z+dcvHAiMvXP/JZUaWnsdc/XllhRaGu1z8WzTi3w4TXP/eCX4/AhNc/31qMxAY91z8LQC/yr+7WP7hqBMqdWdY/eElRXRRW1j93Vct9DNvVP+7tQGKgitU/EA2KD5u/1D86eb2VBqjTPx3aPqlupNM/r5rNHKV90j/yrje9T2zSP+/9xo7QUtE/Aw0tzmE/0D8ii3oPhBzQP+Ms1SlT880/OQRJGb9wzT+Cq/Y8IEDMP+zrvjStTss/mvNoCXm0yT89sSe705XIP0lHDdyfv8c/fjWpEli7xT9N+rJeriPFP2w7Chn9r8I/oXP4jtFywj/T7OyJUj/CP/wslBfFgMA/SbT+nuaUvT/JhZEmLu+8P3ew4GtpQLw/4PwSWlgOuj9fCJDg7HK3P28yi4HgkrY/JAKu0PVVtD9EsgX3CBu0P06xbXbKQ7E/gedUTfyGrT9jajXLQsiqP4oufRvucao/Ry7N0oOaqT/JezNxTlKlP9UTHGtcRKE/alYEe5hXoD+xaGCQQX2aPweSXBcyDpY/V3/3Y4vKlT/HMdHt3tiRP305aL8j9Ys/fTlovyP1iz9Taz3EPYGKP/edC6xAIoc/M4SkMC6YhT/vrcARzAKAPy2kMNk2eXc/t19ECkhIdz9+oLHf2B90Pyx27CdxMXA/zs/AoYBAbD+LzjH/kmVrP6g0E+WLqmc/cafYI1ayYj94q0b5VW9gP7v895G9ll0/MDBiu44vWz9oGLz81UNbP6Xm0XiNcFs/4SgSSfoyWz++xEb74ytZP0Tfg0OBzFg/7tx63GL6Uz+HlckN2s5JP74CKVX1skk/5wLcBXVBMT8hpJ/0CiYpPxL86rlMhRY/O/6rMdXl9j49hOqllITtPjZEh6tPXbc+/rgNcppysz4ZS/6Z8uV5PmN9j4tsz14+Qne0NM3KGT4QsUc4D8P2Pbqgfut646E97CNq5ONdfz1hBuHxESj0PKXKGsqRufM8jMJqHhwpWDw9ebmqaAKrOz/J+3gf6JE7CX7L2Q4p7DpFeLsi/2EbOlAakZtN1Tg59pCxHQwBRTjX4GDgm5FAN3Z0HS8hYSg2qWyXOFi6ADU2w53n0mjFMw=="}, {"encoding": "base64", "path": ["_data", 7, "y", "buffer"], "data": "/rXf3e+b8T6WGwVOCq4UP6NKe1k4jDI/eijv3m/KST9Vx//7SZJcP25YbGGxTGM/TVGU8xpraj/ePaXmUYZzP/BJJgr6vnU/yI2+9VATez+K2g+GQeqAP/jEmUMlM4E/D05kSygMhj/9cCaBnoeJPxpcgWuBVIs/4ZWHbedTkD+EvIcy7bWSP2OvfVzk8pI/+N9zVnGclT+/hnf968aXP8QlBgGix5k/BjRh2H2+mj8IWnu9QMacP6qTKh2lLaA/5hnMRQKKoT/FcjSL4seiP3PF2zEAC6M/gSlB8YDmpD/CsmykZa6mP2kaUSIXWqg/muvaOr8EqT87BUAVabupP4a8XQnd0ak/7xZkF8vZqz9b+vXDW42tP1UnFaBl4a8/BZMRjwQhsT+OV/9ICyWxP2mLTKNLF7I/+Tkw3jo2sj9Lmv6TVU2zP0ua/pNVTbM/yloJSqB9sz/TmK0DtbO0P8ZgeQmIoLU/f7AxKbQOtj9E7FOe7bu2PxiwfT0d6Lc/UohntJMWuD9Hn2kr3964P495REfR07k/mA9lP/7kuT+czrAoWpW6P7N2X8tklbo/5ihRD/hXuz+DPau+3/K7PzyQrXuC1Lw/xhsHwDXZvD/YLsgPBXG9P4R4oroXy70/MplXvKSbvj/bC/Dw7KW/P7MN2XdKqb8/MC09yrBfwD9/j0HLBWjAPxwtCCcb9MA/pTxgRCCJwT/fkEuBBp3BP62y6Co3TcI/BZU0cGJ3wj98GLmKp93CPwkuroqwMsM/6fTrnpXLwz/quQHvHj3EPwSvYh3XlcQ/MNuHsKx6xT/4SfChPsLFP9Hnq3hoAMc/nTm3tDEhxz+/eZ3uAD3HP9kF6TLBM8g/3mn0QugkyT/99B1ex1DJP7Yv1TAUfsk/mGTZKVgHyj97KKQTyZXKP2ZXIwEEwMo/GmV5Jtweyz+jIa7ijCfLP4ylZBX+gss/Azr5/Im8yz/yVyiYwNPLPwHOx1w61ss/M0zFfBHcyz/7lkb7cPPLP4bZiAZkBcw/8LXdplIKzD/ye/SzRyLMP7XGP9MpPcw/R7e1XAg/zD/yo+xm9l3MP1519ydNgMw/XnX3J02AzD9ThDYz84bMP/6WA2E+lsw/yDs0rwCdzD/LIk+yJrHMPxl4/CL9rcw/O0y6JV6tzD+YzxIFHZvMP9WKsG0HYMw/mrr4wOwozD+Neh2JPRvMP2Zveatm1cs/50rWwgZTyz9YiFy+tPjKPyAY9wUckco/q5AbDK+iyT8lJUi8CDzJP85kMbnD58g/XthnNYTrxz/g7piE3BLHP+c4trwx+MY/Q6TcVZLuxT+7LtjKJarEP8dL966Yp8Q/059+2Da4wj8cXQ5Ufk3CP2kHRjYmaME/VkLYO8E6wD86T5rtEtS/P/qGah1wGb0/soLFrcHpvD/NT8xMnqW6P2IWFWhuqbk/UlQx8EBytz9AHPbtHmC2P42d+rKe3rM/4yW4R4bjsj9FncekbKmuP9kObNlgo64/3IEG8PMlqD+IiVN5nsyiPzsw5g9GJqI/5dwx6J4FnT9qK8TN+b6VP9woyaCnFI8/KSNd7wx2hT+XTMjfbo59P6Af4rVDhXQ/ObVTBtwfbD/d7EiD6mRiPw=="}]}, "fcdebc5f021545e2ba34dd5f74be58ad": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.14.1", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"base": 0, "marker": {"color": "#01B8AA"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.05499999999999999], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "c9022470-0867-4d48-9017-271b07e5f4f9"}, {"fill": "tozeroy", "line": {"color": "#00008b", "shape": "linear"}, "name": "Test Dataset", "x": [-3.2412673400690726, -3.1089334561983826, -2.9765995723276926, -2.8442656884570026, -2.711931804586313, -2.579597920715623, -2.447264036844933, -2.314930152974243, -2.182596269103553, -2.0634367503549917, -2.0502623852328634, -1.9943637814531785, -1.9179285013621734, -1.8075901502466243, -1.7855946174914834, -1.6532607336207934, -1.6077891778149989, -1.5522035725096686, -1.5209268497501036, -1.4499106004295303, -1.3988655866356399, -1.3885929658794136, -1.3362833708641455, -1.3057305970261164, -1.2562590820087238, -1.1898673220397977, -1.1836925033021488, -1.1239251981380338, -1.0921240553797904, -1.0710420797320517, -1.0206829655105558, -0.9985137902232182, -0.9915913142673438, -0.9705995065281079, -0.9238248021856529, -0.8644470762916138, -0.8592574303966538, -0.825873941086629, -0.8070377853502847, -0.7467618615829237, -0.744769386331774, -0.7269235465259642, -0.6787958351878047, -0.6741289933632568, -0.6267771845574377, -0.6227279874239562, -0.5945896626552742, -0.5872242440564793, -0.5836787131274913, -0.5410541326897913, -0.5245975396229716, -0.47940095731031646, -0.4762139891662561, -0.46225577878458424, -0.44360577403458273, -0.4169151331100916, -0.36956390191180405, -0.338131683518803, -0.32992189491389423, -0.30050118573816437, -0.25923985981614767, -0.23593898162963994, -0.22547268764358885, -0.19758801104320423, -0.1869526967692865, -0.17836030193267982, -0.14118993880153285, -0.13183521439421758, -0.10120483868253397, -0.08074569759033075, -0.06525412717251422, -0.05648080768757744, -0.05648080768757744, -0.03736613338497881, -0.03469725325327376, -0.014367284466763436, -0.005765389741693144, 0.03318614488733378, 0.03604347321371318, 0.03604347321371318, 0.04487982977057377, 0.06707975669817534, 0.0734225900268487, 0.10311358053767392, 0.10722437883706923, 0.15608222551184814, 0.1673360661579418, 0.19941364056886535, 0.20079173401423325, 0.21747359408149078, 0.24982735036480375, 0.27305164987810393, 0.2910279511292749, 0.3129993900846571, 0.33101818392253557, 0.33174752443955535, 0.37127835766342454, 0.37815352931747065, 0.4311085664142566, 0.46203865157732793, 0.46408140831024536, 0.5019566580461654, 0.5213681695506062, 0.5522396634981296, 0.5767012090107031, 0.5964152921809354, 0.6211534979032097, 0.6325050120887196, 0.6829867038740558, 0.688228528456926, 0.7287491760516249, 0.742721343221082, 0.7432389832943772, 0.8200551706783258, 0.8236197369671377, 0.8610830599223154, 0.8822910252014937, 0.9166856823364512, 0.9764965336280801, 0.9821745928291928, 0.9934169437930049, 1.0366957048700576, 1.0739643042832077, 1.1239847885419982, 1.1257508276636945, 1.1738653431639035, 1.2077668105529495, 1.258084711534385, 1.2658281716968929, 1.3159007484476026, 1.3904185954050745, 1.4473111422290377, 1.4538107038030506, 1.522752479275765, 1.5799588259555912, 1.6433846899371738, 1.6550863631464545, 1.6887345237190015, 1.787420247017144, 1.9197541308878345, 1.9609460118589932, 2.052088014758524, 2.062756074253281, 2.1844218986292145, 2.316755782499904, 2.4490896663705937, 2.581423550241284, 2.7137574341119737, 2.846091317982664, 2.9784252018533537, 3.110759085724044, 3.2430929695947333], "xaxis": "x2", "y": {"dtype": "float64", "shape": [152]}, "yaxis": "y2", "type": "scatter", "uid": "eb9eeeba-6b33-4f2a-bd3b-7968d0f7959f"}, {"line": {"color": "#00008b", "dash": "dash"}, "mode": "lines+markers", "name": "Test Mean", "x": [0.03318614488733378, 0.03318614488733378], "xaxis": "x2", "y": [0, 0.4361798837901429], "yaxis": "y2", "type": "scatter", "uid": "9e6a3597-c2e4-4d71-8a3b-a8dec949c797"}, {"line": {"color": "#00008b"}, "mode": "lines", "name": "Test Median", "x": [0.03604347321371318, 0.03604347321371318], "xaxis": "x2", "y": [0, 0.43628605052940744], "yaxis": "y2", "type": "scatter", "uid": "a904adb2-978b-4728-a8d2-f8747c825045"}, {"fill": "tozeroy", "line": {"color": "#69b3a2", "shape": "linear"}, "name": "Train Dataset", "x": [-3.2412673400690726, -3.1089334561983826, -2.9765995723276926, -2.8442656884570026, -2.711931804586313, -2.579597920715623, -2.447264036844933, -2.314930152974243, -2.182596269103553, -2.0634367503549917, -2.0502623852328634, -1.9943637814531785, -1.9179285013621734, -1.8075901502466243, -1.7855946174914834, -1.6532607336207934, -1.6077891778149989, -1.5522035725096686, -1.5209268497501036, -1.4499106004295303, -1.3988655866356399, -1.3885929658794136, -1.3362833708641455, -1.3057305970261164, -1.2562590820087238, -1.1898673220397977, -1.1836925033021488, -1.1239251981380338, -1.0921240553797904, -1.0710420797320517, -1.0206829655105558, -0.9985137902232182, -0.9915913142673438, -0.9705995065281079, -0.9238248021856529, -0.8644470762916138, -0.8592574303966538, -0.825873941086629, -0.8070377853502847, -0.7467618615829237, -0.744769386331774, -0.7269235465259642, -0.6787958351878047, -0.6741289933632568, -0.6267771845574377, -0.6227279874239562, -0.5945896626552742, -0.5872242440564793, -0.5836787131274913, -0.5410541326897913, -0.5245975396229716, -0.47940095731031646, -0.4762139891662561, -0.46225577878458424, -0.44360577403458273, -0.4169151331100916, -0.36956390191180405, -0.338131683518803, -0.32992189491389423, -0.30050118573816437, -0.25923985981614767, -0.23593898162963994, -0.22547268764358885, -0.19758801104320423, -0.1869526967692865, -0.17836030193267982, -0.14118993880153285, -0.13183521439421758, -0.10120483868253397, -0.08074569759033075, -0.06525412717251422, -0.05648080768757744, -0.05648080768757744, -0.03736613338497881, -0.03469725325327376, -0.014367284466763436, -0.005765389741693144, 0.03318614488733378, 0.03604347321371318, 0.03604347321371318, 0.04487982977057377, 0.06707975669817534, 0.0734225900268487, 0.10311358053767392, 0.10722437883706923, 0.15608222551184814, 0.1673360661579418, 0.19941364056886535, 0.20079173401423325, 0.21747359408149078, 0.24982735036480375, 0.27305164987810393, 0.2910279511292749, 0.3129993900846571, 0.33101818392253557, 0.33174752443955535, 0.37127835766342454, 0.37815352931747065, 0.4311085664142566, 0.46203865157732793, 0.46408140831024536, 0.5019566580461654, 0.5213681695506062, 0.5522396634981296, 0.5767012090107031, 0.5964152921809354, 0.6211534979032097, 0.6325050120887196, 0.6829867038740558, 0.688228528456926, 0.7287491760516249, 0.742721343221082, 0.7432389832943772, 0.8200551706783258, 0.8236197369671377, 0.8610830599223154, 0.8822910252014937, 0.9166856823364512, 0.9764965336280801, 0.9821745928291928, 0.9934169437930049, 1.0366957048700576, 1.0739643042832077, 1.1239847885419982, 1.1257508276636945, 1.1738653431639035, 1.2077668105529495, 1.258084711534385, 1.2658281716968929, 1.3159007484476026, 1.3904185954050745, 1.4473111422290377, 1.4538107038030506, 1.522752479275765, 1.5799588259555912, 1.6433846899371738, 1.6550863631464545, 1.6887345237190015, 1.787420247017144, 1.9197541308878345, 1.9609460118589932, 2.052088014758524, 2.062756074253281, 2.1844218986292145, 2.316755782499904, 2.4490896663705937, 2.581423550241284, 2.7137574341119737, 2.846091317982664, 2.9784252018533537, 3.110759085724044, 3.2430929695947333], "xaxis": "x2", "y": {"dtype": "float64", "shape": [152]}, "yaxis": "y2", "type": "scatter", "uid": "0af1b824-f5ae-4eb8-9632-f8c756b08e52"}, {"line": {"color": "#69b3a2", "dash": "dash"}, "mode": "lines+markers", "name": "Train Mean", "x": [-0.03736613338497881, -0.03736613338497881], "xaxis": "x2", "y": [0, 0.38073055728467187], "yaxis": "y2", "type": "scatter", "uid": "2095a176-0c1b-4a01-88e0-b458b6e7fd0a"}, {"line": {"color": "#69b3a2"}, "mode": "lines", "name": "Train Median", "x": [-0.05648080768757744, -0.05648080768757744], "xaxis": "x2", "y": [0, 0.38096598161354167], "yaxis": "y2", "type": "scatter", "uid": "2ab2e8ee-1680-453b-8620-5d5b031192fa"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Drift Score (Kolmogorov-Smirnov)", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0000000000000002, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Distribution Plot", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.7200000000000001, "yanchor": "bottom", "yref": "paper"}], "bargroupgap": 0, "height": 400, "legend": {"title": {"text": "Legend"}, "y": 0.6, "yanchor": "top"}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "numeric_without_drift (#1 in FI)", "x": 0.5, "xanchor": "center"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "dtick": 0.05, "fixedrange": true, "gridcolor": "black", "linecolor": "black", "range": [0, 0.4], "showgrid": false}, "yaxis": {"anchor": "x", "autorange": true, "color": "black", "domain": [0.9200000000000002, 1.0], "fixedrange": true, "rangemode": "normal", "showgrid": false, "showline": false, "showticklabels": false, "zeroline": false}, "xaxis2": {"anchor": "y2", "domain": [0.0, 1.0], "fixedrange": false, "range": [-2.0634367503549917, 2.062756074253281], "title": {"text": "numeric_without_drift"}}, "yaxis2": {"anchor": "x2", "domain": [0.0, 0.7200000000000001], "fixedrange": true, "title": {"text": "Probability Density"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "rW854PaOYT84/mq5zAhpP6BSOHmz6HQ/yQV5EE4Mgj9/gnsgFIWLP/PKi+WU7JE/fyAB/jYllT+2yRe/6+eYP3JVrZAUAZ8/Qpk24a2boz/f1jWlPyakPxH/zV1QqKY/Nqo6UU6vqj+LD//i3uewP5g822UKtbE/7AoDXI0Ntz+fMc2a3wy5PyaSj0b5krs/UyPxgSMIvT8hFQtr5jnAP43Xa608g8E/M/qYTD/HwT9JbSU1jSvDP9emiy7JA8Q/g9RDStluxT/YgCPzpW3HP7A0upVjnsc/Y97Sjkp/yT9wGaNY9oTKPy9LfVtCNMs/N5Exc+XbzD8SeUS7M5jNP1CLDNsv080/0OZDBYGGzj91cTNvzgvQP3x7tRzOCdE/MYRI0tYf0T96hXkUWqzRPykqMD1k+tE/gh1cbfrq0j840id2ovLSP/+AyNw1NtM/O/yyepPi0z8uujC5d/LTP0gSWzs1i9Q/mApG+4+X1D/bLWshjOrUPybU9NV9/9Q/+PTWnncJ1T8y00h+x3zVP9HqtDaNp9U/qnOsgPsa1j+2uBu9HiPWPzkvURvtRtY//Tmu4Wx31j+ysoNT4b7WP7ZpqARXRtc/Kaxbp9un1z8RxXluZMLXP5nAE1X7JNg/jycR9j+32D+oaWKfvwzZP5/FzfKEM9k/ULfZOPea2T9+c2NJKMLZP789JyiV4dk/1FoBwVtl2j/msrWHBIXaP8JKdfq35to/Iao7kcUh2z8x7WUdj0rbPwS/OFECYNs/BL84UQJg2z9IOGz8SIrbP/+uIaqtj9s/pSacK2602z9EdIHZl8HbP8dPAwhf6ts/Q2OuUxzs2z9DY65THOzbP+t+UE9i8Ns/MhR8cbLz2z/S/7v8r/LbP/cOpWh64ts/bfRgg8Le2z8LXCELTpjbP3ZDVKyOgds/hvn23Zs02z9f8xjw7DDbPxyedt8PAts/lTWzY0Gc2j+Qy04KlkvaP4enXy6OCdo/6FinkVy12T9SukWXAW7ZP+x58c8Ua9k/lL70al/J2D9dAV2ExqzYP6MzlIi5ztc/Asj7djVN1z/98X/AsETXP2rHphrip9Y/3vlEXHhY1j87rnPdldvVP0+QAN/MedU/CRECr6gr1T9PVu6KTsrUP11oRPvZndQ/zBuqpkHZ0z+D4mzP6MTTP4zi3/bDJ9M/k7f6xpXx0j9C/sLTk+/SP7hf9HMYxdE/izf3Lza30T8AgZIAHCXRP5KMqGZD0tA/R2V/nbtL0D+PDDT1BcPOPyIKnsmNls4/Dt8FS4c+zj/q6+jiQezMPxunQAuKyss/NRY/WmdKyj/suAL1+zzKP6Y1fbiq1Mg/RMO4Cobexz8UkQ27toDGP4o8/KXDTMY/muMf0iUKxT/04uXRGlXDP84cqwgpJcI/asZvFKsDwj9wPVPriqnAPwKz3jfbHL8/GT8mmXufvD+LtSyuRyi8P/UVV69Iz7o/yCC92t7dtj/lcdqK7hGyP1jD1go+xrA/ACOER+Z7rD8ulOdlVvGrP0FnKshBSaY/2JR4FTTYoD9Pml21HDWYP1w9ZrpOaJA/dv20wlSvhD9E5hnddX94PyRoGefPaW0/CrFHv0QLYz/3aWy+uldYPw=="}, {"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "lhP26VrpVD+GHj5KYXRiP4RvhmsdH20/Ed5AIilodj8/B8CjNtKBP0frKn2vSI0/IU+pkTDPlz/UAyhCyTyiP2B6HrKQhak/Y+WbavHurz89eSZJU06wPyMazTxKuLE/Et5+1filsz/7HfZZd7i2PxMTrhFLabc/DkcSxAhRvD/f0YK8sE2+P/UzLiosdcA/X8SnaSk7wT84ikDY+BLDP8lmCBECd8Q/Gd0rDEjAxD98eiWt4j3GP7qv2pF8I8c/twZdZReiyD+/CpCZbLjKP46BN+BE68o//TNMCgzgzD8YIC5+q+/NPz9S284Opc4/90tKOyAs0D+LPUdo0YvQP68kA4ygqdA/rE3yULMD0T+mYPFlvcnRP+OA8+CdvNI/qcsQdT3R0j+ihMS1E1PTP9UR5vP0mdM/zTEwbEtv1D9HAJaL9nXUP2j0rqSDsNQ/HEvmU2pD1T8cYbgZx1DVP7JDVZtbz9U/wGVWVmzZ1T9UfKPtIBzWP7HwAaerLNY/yukBHIA01j83AqgUJIzWPxMoRqj0qtY/ox9WzPb31j/8QkrwAv3WP424Q1eVEtc/xyDjxyEu1z8X2lcuSVPXP9ckbz2hj9c/QFEO1FK01z/baSuUf73XP6Sr4Cb83Nc/cUj0KzkF2D86kaSyoxnYP0s4l38xItg/9cox0uQ22D/jb5pr6j3YPz7hghY1Q9g/Aws9FNBV2D/QZErHT1nYP5bMcpsfYdg/1EmhuA1j2D9e9p+UrWLYP/bL+iO/Ydg/9sv6I79h2D+GCAiz413YP7TrqmkmXdg/bi9q+ORV2D8SfYPk9VHYP8t73gTKOdg/u6dT2Jw32D+7p1PYnDfYP7w2UYCKMNg/EHkAOowc2D8VAcDhQxbYPwHJGpyk9dc/Wj5Xdrnw1z835+gAbK/XPzbHkE+6ntc/4ZaI7Sds1z/OLJoF5GnXP0fsxhvpTdc/ejgcnO4U1z8NflNEFOrWPz00Hr3sx9Y/bPoEZSKd1j8Jgl3OQ3nWP8km4JnMd9Y/HiPYjOUm1j/S/btgjRjWPwlQ5rOop9U/G7Fw2eVj1T9qWtutYF/VP05bKAOTCtU/u92chWHe1D8c/t/uD5fUP/rR/92gXdQ/CVFzGrsu1D9iSTA1F/PTP09eL09s19M/eTCrVgVa0z8cFRMOxkzTP5miPtLi5NI/WjMDlXDA0j9exSpNFb/SPysT9yZ58NE/xJGe8pzm0T+QTG9FV33RP4/4A45QQNE/bp7r2N7a0D89sEj5BSLQPwNmZ3fZD9A/OV5wDgrXzz+nyTl0S7bOP1NsNFp+sc0/MATHEDhBzD83qQ4M1zPMP54vyXwXvso/RSU3vx2tyT+9vscJ6AzIPyhoX9sEzMc/M9+jMe4lxj91ZwmDn7XDP/n1bXY26ME/SUwov8O0wT/tEBABM02/P2qcHggsILw/kmC6knveuD/7flgcfky4Px0ivf4wtrY/BqnM1G+Bsj+t0wVYlNqrP8bVtMrRgKk/xIEdRc0YpT+QTcrWo6WkP2AKwN7oS6A/9E1L/1JGmT/nAFkOYQGTP6iwbOpcdYs/lprAwjQghD/rGsr/q2yAP4RmWp2qDX4/gHgG80h/ez/1INl1J1R2Pw=="}]}, "93701345fafb4602bd3f3f3eb135e431": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.14.1", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"base": 0, "marker": {"color": "#01B8AA"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.1], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "1f9ca35e-168b-43b3-aadb-b958968eafce"}, {"base": 0.1, "marker": {"color": "#F2C80F"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.1], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "d2710f82-61ce-47ae-b04c-94c16766830a"}, {"base": 0.2, "marker": {"color": "#FE9666"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.028623222898072842], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "bd103766-1537-49d4-802b-6d7a2f76844c"}, {"marker": {"color": "#00008b"}, "name": "Test Dataset", "x": ["apple", "banana", "lemon", "orange"], "xaxis": "x2", "y": {"dtype": "float64", "shape": [4]}, "yaxis": "y2", "type": "bar", "uid": "9687c3a1-a1b5-4831-b9e4-d260f9091f2e"}, {"marker": {"color": "#69b3a2"}, "name": "Train Dataset", "x": ["apple", "banana", "lemon", "orange"], "xaxis": "x2", "y": {"dtype": "float64", "shape": [4]}, "yaxis": "y2", "type": "bar", "uid": "e0d0ff0a-ff3b-4e60-ac67-d593e23139bc"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Drift Score (Cramer's V)", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0000000000000002, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Distribution Plot", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.7200000000000001, "yanchor": "bottom", "yref": "paper"}], "bargroupgap": 0, "height": 400, "legend": {"title": {"text": "Legend"}, "y": 0.6, "yanchor": "top"}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "categorical_with_drift (#3 in FI)", "x": 0.5, "xanchor": "center"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "dtick": 0.05, "fixedrange": true, "gridcolor": "black", "linecolor": "black", "range": [0, 0.4], "showgrid": false}, "yaxis": {"anchor": "x", "autorange": true, "color": "black", "domain": [0.9200000000000002, 1.0], "fixedrange": true, "rangemode": "normal", "showgrid": false, "showline": false, "showticklabels": false, "zeroline": false}, "xaxis2": {"anchor": "y2", "domain": [0.0, 1.0], "range": [-3, 6], "type": "category"}, "yaxis2": {"anchor": "x2", "autorange": true, "domain": [0.0, 0.7200000000000001], "fixedrange": true, "rangemode": "normal", "title": {"text": "Frequency"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 3, "y", "buffer"], "data": "fT81XrpJ4D/2KFyPwvXIPwAAAAAAAAAAi2zn+6nx0j8="}, {"encoding": "base64", "path": ["_data", 4, "y", "buffer"], "data": "Di2yne+n3j/LoUW28/3EP0Jg5dAi27k//Knx0k1i0D8="}]}, "72b72beafb1645779289699fcd4512f9": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.14.1", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"base": 0, "marker": {"color": "#01B8AA"}, "offsetgroup": "0", "orientation": "h", "showlegend": false, "x": [0.005136700975462043], "xaxis": "x", "y": ["Drift Score"], "yaxis": "y", "type": "bar", "uid": "76caf44f-296c-4e16-b321-30f3662c1da3"}, {"marker": {"color": "#00008b"}, "name": "Test Dataset", "x": ["apple", "banana", "orange"], "xaxis": "x2", "y": {"dtype": "float64", "shape": [3]}, "yaxis": "y2", "type": "bar", "uid": "391fcfdc-7402-4602-be41-135b6d68c9a3"}, {"marker": {"color": "#69b3a2"}, "name": "Train Dataset", "x": ["apple", "banana", "orange"], "xaxis": "x2", "y": {"dtype": "float64", "shape": [3]}, "yaxis": "y2", "type": "bar", "uid": "3ac96d79-774d-4baa-aa86-d8ec9409a2fd"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Drift Score (Cramer's V)", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0000000000000002, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Distribution Plot", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.7200000000000001, "yanchor": "bottom", "yref": "paper"}], "bargroupgap": 0, "height": 400, "legend": {"title": {"text": "Legend"}, "y": 0.6, "yanchor": "top"}, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "categorical_without_drift (#4 in FI)", "x": 0.5, "xanchor": "center"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "dtick": 0.05, "fixedrange": true, "gridcolor": "black", "linecolor": "black", "range": [0, 0.4], "showgrid": false}, "yaxis": {"anchor": "x", "autorange": true, "color": "black", "domain": [0.9200000000000002, 1.0], "fixedrange": true, "rangemode": "normal", "showgrid": false, "showline": false, "showticklabels": false, "zeroline": false}, "xaxis2": {"anchor": "y2", "domain": [0.0, 1.0], "range": [-3, 5], "type": "category"}, "yaxis2": {"anchor": "x2", "autorange": true, "domain": [0.0, 0.7200000000000001], "fixedrange": true, "rangemode": "normal", "title": {"text": "Frequency"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}, "buffers": [{"encoding": "base64", "path": ["_data", 1, "y", "buffer"], "data": "KVyPwvUo4D8CK4cW2c7HPy2yne+nxtM/"}, {"encoding": "base64", "path": ["_data", 2, "y", "buffer"], "data": "SgwCK4cW4T9aZDvfT43HPz81XrpJDNI/"}]}, "2b6e8c5f7bd04a7fb3e5d6f3038b9325": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "90a5bb4ac9a149eeb48e9d8fa63e59af": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "558bb07ffeb54e43bebfdd971a65aebb"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><section id="observe-the-check-s-output">
+<h3>Observe the check’s output<a class="headerlink" href="#observe-the-check-s-output" title="Permalink to this headline">#</a></h3>
+<p>As we see from the results, the check detects and returns the drift score
+per feature. As we expect, the features that were manually manipulated
+to contain a strong drift in them were detected.</p>
+<p>In addition to the graphs, each check returns a value that can be controlled
+in order to define expectations on that value (for example, to define that
+the drift score for every feature must be below 0.05).</p>
+<p>Let’s see the result value for our check</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;numeric_without_drift&#39;: {&#39;Drift score&#39;: 0.05499999999999999, &#39;Method&#39;: &#39;Kolmogorov-Smirnov&#39;, &#39;Importance&#39;: 0.6911764705882353}, &#39;numeric_with_drift&#39;: {&#39;Drift score&#39;: 0.6990000000000001, &#39;Method&#39;: &#39;Kolmogorov-Smirnov&#39;, &#39;Importance&#39;: 0.3088235294117647}, &#39;categorical_without_drift&#39;: {&#39;Drift score&#39;: 0.005136700975462043, &#39;Method&#39;: &quot;Cramer&#39;s V&quot;, &#39;Importance&#39;: 0.0}, &#39;categorical_with_drift&#39;: {&#39;Drift score&#39;: 0.22862322289807285, &#39;Method&#39;: &quot;Cramer&#39;s V&quot;, &#39;Importance&#39;: 0.0}}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>As we can see, we get the drift score for each feature in the dataset, along
+with the feature importance in respect to the model.</p>
+<p>Now, we define a condition that enforce each feature’s drift score must be
+below 0.1. A condition is deepchecks’ way to enforce that results are OK,
+and we don’t have a problem in our data or model!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check_cond</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">add_condition_drift_score_less_than</span><span class="p">(</span><span class="n">max_allowed_categorical_score</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                                       <span class="n">max_allowed_numeric_score</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck.run" title="deepchecks.tabular.TrainTestCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check_cond</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2023 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feature Drift</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed.js" crossorigin="anonymous"></script>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"version_major": 2, "version_minor": 0, "state": {"5953776419444f05805641053764e6da": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_9c9951d7a70243b2be77fcb399fe0f23", "IPY_MODEL_82726363963748bb8d1c078f3afc857b", "IPY_MODEL_f6a69aba4a214584b134e00df6f363e0"], "layout": "IPY_MODEL_7ddaa1949c90417e958dcb48e78d03fe"}}, "9c9951d7a70243b2be77fcb399fe0f23": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_6a92cd813a584cd8a4b9fa6a2461f6c3", "style": "IPY_MODEL_8d527c53114b450eb151c62f5690e0b2", "value": "<h4><b>Feature Drift</b></h4>"}}, "6a92cd813a584cd8a4b9fa6a2461f6c3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "8d527c53114b450eb151c62f5690e0b2": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "82726363963748bb8d1c078f3afc857b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_b7f3527a6b0640f7880851808215c717", "style": "IPY_MODEL_e9da8d59f80248868d10c85c7565da96", "value": "<p>    Calculate drift between train dataset and test dataset per feature, using statistical measures. <a href=\"https://docs.deepchecks.com/0.17/tabular/auto_checks/train_test_validation/plot_feature_drift.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "b7f3527a6b0640f7880851808215c717": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "e9da8d59f80248868d10c85c7565da96": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "f6a69aba4a214584b134e00df6f363e0": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_14980c32f36b44e2a27c283de23fddf7", "style": "IPY_MODEL_c0ad23e47ff94a37a1873b661c45631f", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_1654e_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1654e_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1654e_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1654e_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_1654e_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_1654e_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_1654e_row0_col0\" class=\"data row0 col0\" ><div style=\"color: red;text-align: center\">\u2716</div></td>\n      <td id=\"T_1654e_row0_col1\" class=\"data row0 col1\" >categorical drift score < 0.2 and numerical drift score < 0.1</td>\n      <td id=\"T_1654e_row0_col2\" class=\"data row0 col2\" >Failed for 2 out of 4 columns.\nFound 1 categorical columns with Cramer's V above threshold: {'categorical_with_drift': '0.23'}\nFound 1 numeric columns with Kolmogorov-Smirnov above threshold: {'numeric_with_drift': '0.7'}</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "14980c32f36b44e2a27c283de23fddf7": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}, "c0ad23e47ff94a37a1873b661c45631f": {"model_name": "DescriptionStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "state": {}}, "7ddaa1949c90417e958dcb48e78d03fe": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "state": {}}}}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "5953776419444f05805641053764e6da"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><p>As we see, our condition successfully detects and filters the problematic
+features that contains a drift!</p>
+</section>
+<section id="get-an-aggregated-value">
+<h2>Get an aggregated value<a class="headerlink" href="#get-an-aggregated-value" title="Permalink to this headline">#</a></h2>
+<p>Using the <a class="reference internal" href="../../../api/generated/deepchecks.tabular.checks.train_test_validation.FeatureDrift.reduce_output.html#deepchecks.tabular.checks.train_test_validation.FeatureDrift.reduce_output" title="deepchecks.tabular.checks.train_test_validation.FeatureDrift.reduce_output"><code class="xref py py-func docutils literal notranslate"><span class="pre">reduce_output</span></code></a>
+function we can combine the drift values per feature and get a collective score
+that reflects the effect of the drift on the model, taking into account all the features.
+In scenarios where labels are unavailable (either temporarily of permanently)
+this value can be a good indicator of possible deterioration in the model’s performance.</p>
+<p>We can define the type of aggregation we want to use via the <cite>aggregation_method</cite> parameter. The possible values are:</p>
+<p><code class="docutils literal notranslate"><span class="pre">l3_weighted</span></code>: Default. L3 norm over the ‘per-feature scores’ vector weighted by the feature importance, specifically,
+sum(FI * PER_FEATURE_SCORES^3)^(1/3). This method takes into account the feature importance yet puts more weight on
+the per-feature scores. This method is recommended for most cases.</p>
+<p><code class="docutils literal notranslate"><span class="pre">l5_weighted</span></code>: Similar to ‘l3_weighted’, but with L5 norm. Puts even more emphasis on the per-feature scores and
+specifically on the largest per-feature scores returning a score closer to the maximum among the per-feature scores.</p>
+<p><code class="docutils literal notranslate"><span class="pre">weighted</span></code>: Weighted mean of per-feature scores based on feature importance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">max</span></code>: Maximum of all the per-feature scores.</p>
+<p><code class="docutils literal notranslate"><span class="pre">none</span></code>: No averaging. Return a dict with a per-feature score for each feature.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">check</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck" title="deepchecks.tabular.TrainTestCheck" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class"><span class="n">FeatureDrift</span></a><span class="p">(</span><span class="n">aggregation_method</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.TrainTestCheck.run" title="deepchecks.tabular.TrainTestCheck.run" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="o">=</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">reduce_output</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;Weighted Drift Score&#39;: 0.2538823529411765}
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.326 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tabular-auto-checks-train-test-validation-plot-feature-drift-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/d897db104c9ba26a36c3fb187184b4c7/plot_feature_drift.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_feature_drift.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/1dea4b64bba8d5bc3b8d98ed1b60d570/plot_feature_drift.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_feature_drift.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </div>
+        
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="plot_date_train_test_leakage_duplicates.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Date Train Test Leakage Duplicates</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../model_evaluation/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Model Evaluation</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+    </main>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2023, Deepchecks.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
