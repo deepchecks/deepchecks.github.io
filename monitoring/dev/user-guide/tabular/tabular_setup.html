@@ -377,6 +377,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="reference internal nav-link" href="#schema-file">
      Schema File
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#automatically-generate-a-schema-file">
+       Automatically Generate a Schema File
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#feature-importance">
@@ -445,16 +452,13 @@ place to go also for a more detailed understanding of the options available in t
 <h2>Creating a New Model<a class="headerlink" href="#creating-a-new-model" title="Permalink to this headline">#</a></h2>
 <p>In Deepchecks, a model represents a ML pipeline performing a single task in production. The model groups together
 all the model versions that are performing the same task, e.g. versions representing model retrains.</p>
-<p>Creating a model is our first and simplest step, as it only requires the model name, and a task type. The model name
-is a unique identifier for the model and will be shown in the deepchecks monitoring system and used to later add
-versions, monitors and alerts to that model. Models task types should be set according to the kind of task they perform
-and the type of data they run on. Possible task types are:</p>
+<p>Creating a model is our first and simplest step, as it only requires the model name, and a task type.
+The model name is a unique identifier for the model in the deepchecks monitoring system and used to later add
+versions, monitors and alerts to that model. Possible task types are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code> - Binary classification on tabular data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">multiclass</span></code> - Multiclass classification on tabular data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">regression</span></code> - Regression on tabular data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">vision_classification</span></code> - Classification on image data</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">vision_detection</span></code> - Object detection on image data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary</span></code> - Binary classification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiclass</span></code> - Multiclass classification</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">regression</span></code> - Regression</p></li>
 </ul>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;my_model&#39;</span>  <span class="c1"># Replace with your model name</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">get_or_create_model</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">task_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">)</span>
@@ -499,10 +503,10 @@ Apart from the mandatory <code class="docutils literal notranslate"><span class=
 the <a class="reference external" href="#schema-file">“Schema File” section</a> for more details.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">feature_importance</span></code> (recommended) - A dict or pandas Series containing the feature importance of the model. See
 the <a class="reference external" href="#feature-importance">“Feature Importance” section</a> for more details.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">model_classes</span></code> (recommended) - An alphanumerically sorted list of the names of classes used by the model. This is
-only relevant for classification models. Deepchecks uses this list to know which classes the model was trained on and
-in what order they appear in the model’s predicted probability array. This is mandatory for cases in which not all
-possible labels are present in some window of the production data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_classes</span></code> (recommended for classification tasks) - An alphanumerically sorted list of the names of
+possible label classes known to the model. Deepchecks uses this list to map the model’s predicted probabilities
+array to the correct label classes. This is mandatory in case we wish to supply model probabilities for either
+the reference or production data.</p></li>
 </ul>
 <p>An example of creating a model version (for a regression model, so <code class="docutils literal notranslate"><span class="pre">model_classes</span></code> is not needed):</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_version</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">version</span><span class="p">(</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span> <span class="n">feature_importance</span><span class="o">=</span><span class="n">feature_importance</span><span class="p">)</span>
@@ -527,11 +531,9 @@ using the <a class="reference internal" href="../../api/generated/deepchecks_cli
 </div>
 <p>Essentially the YAML file is a dictionary with two keys: <code class="docutils literal notranslate"><span class="pre">features</span></code> and <code class="docutils literal notranslate"><span class="pre">additional_data</span></code>. The <code class="docutils literal notranslate"><span class="pre">features</span></code> key
 contains a dictionary of the features in the data, and their types. The <code class="docutils literal notranslate"><span class="pre">additional_data</span></code> is the same for columns that
-are not used by the model itself - for e.g. metadata columns (such as user id, ip address, demographic data not
-used as a feature and so on). Columns with special roles, such as the label and
-index columns, should not appear in the schema file. While the data must have a main index that is unique for each row
-and is <strong>not</strong> part of the schema file, the <code class="docutils literal notranslate"><span class="pre">additional_data</span></code> in the schema can denote secondary indices, such as
-a user id.</p>
+are not used by the model itself - for e.g. metadata columns (such as user id, ip address, demographic data, etc…).
+Columns with special roles, such as the label and
+index columns, should not appear in the schema file.</p>
 <p>The column types can be one of the following:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numeric</span></code> - A numeric column - a numeric column with float or integer values</p></li>
@@ -540,6 +542,8 @@ a user id.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">boolean</span></code> - A boolean column (True or False)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">text</span></code> - A text column - usually used to describe a metadata column containing text</p></li>
 </ul>
+<section id="automatically-generate-a-schema-file">
+<h4>Automatically Generate a Schema File<a class="headerlink" href="#automatically-generate-a-schema-file" title="Permalink to this headline">#</a></h4>
 <p>We’ll show an example for using this method on the
 <a class="reference external" href="https://www.kaggle.com/datasets/dgomonov/new-york-city-airbnb-open-data">Airbnb rent regression dataset</a>, in which
 the rent of the Airbnb unit is predicted from a set of features describing the rental unit. We’ll also be using
@@ -591,15 +595,21 @@ the <a class="reference internal" href="../../api/generated/deepchecks_client.ta
 </pre></div>
 </div>
 </section>
+</section>
 <section id="feature-importance">
 <h3>Feature Importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">#</a></h3>
 <p>Deepchecks uses feature importance to prioritize the display of features
-within checks and to weigh the drift of different features among other things. While passing feature importance isn’t
+within checks and to weight the drift of different features among other things. While passing feature importance isn’t
 mandatory, the quality of the displayed results and alerts that can be received will be significantly better if feature
 importance is provided.</p>
 <p>Feature importance can either be a dict of feature names to their importance, or a pandas Series with the feature names
 as the index and the importance as the values. The importance is a positive numeric value, normalized such that the sum
-of the values for all of the features is 1.</p>
+of the values for all of the features is 1. You can set the feature importance for a model version using the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">set_feature_importance</span></code> method:</p>
+<div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">set_feature_importance</span><span class="p">(</span><span class="n">feature_importance</span><span class="p">)</span>
+<span class="go">Feature importance of v1 model version was updated.</span>
+</pre></div>
+</div>
 <p>If you do not have the feature importance for your features ready, you can use deepchecks OSS built-in
 feature importance calculation method:</p>
 <div class="highlight-pycon3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">deepchecks.tabular.feature_importance</span> <span class="kn">import</span> <span class="n">calculate_feature_importance</span>
@@ -613,7 +623,7 @@ feature importance calculation method:</p>
 <section id="uploading-a-reference-dataset">
 <h2>Uploading a Reference Dataset<a class="headerlink" href="#uploading-a-reference-dataset" title="Permalink to this headline">#</a></h2>
 <p>Reference data is a dataset to which we wish to compare our production data stream for a given model version. Providing
-reference data is optional, yet many important <span class="xref std std-ref">checks</span> such as
+reference data is optional, yet many important <a class="reference external" href="https://docs.deepchecks.com/stable/general/concepts/deepchecks_hierarchy.html#general-deepchecks-hierarchy" title="(in Deepchecks v0.17)"><span class="xref std std-ref">checks</span></a> such as
 <a class="reference external" href="https://docs.deepchecks.com/stable/tabular/auto_checks/train_test_validation/plot_feature_drift.html#tabular-feature-drift" title="(in Deepchecks v0.17)"><span class="xref std std-ref">Feature Drift (Tabular Version)</span></a>
 cannot run without it.</p>
 <p>The reference data must be a deepchecks <a class="reference external" href="https://docs.deepchecks.com/stable/tabular/usage_guides/dataset_object.html#tabular-dataset-object" title="(in Deepchecks v0.17)"><span class="xref std std-ref">Dataset</span></a> object. We’ll use
