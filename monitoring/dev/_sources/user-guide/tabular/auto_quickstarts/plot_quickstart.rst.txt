@@ -65,16 +65,14 @@ Preparing the Reference Data
 See :ref:`link <deepchecks:tabular__dataset_object>` for more information on the Dataset object and how
 to create it from different data sources.
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-59
+.. GENERATED FROM PYTHON SOURCE LINES 50-57
 
 .. code-block:: default
 
 
-    from deepchecks.tabular.datasets.regression.airbnb import load_data, \
-        load_pre_calculated_prediction, load_pre_calculated_feature_importance
+    from deepchecks.tabular.datasets.regression.airbnb import load_data_and_predictions, load_pre_calculated_feature_importance
 
-    ref_dataset, _ = load_data(data_format='Dataset')
-    ref_predictions, _ = load_pre_calculated_prediction()
+    ref_dataset, ref_predictions = load_data_and_predictions(data_format='Dataset')
     feature_importance = load_pre_calculated_feature_importance() # Optional
     feature_importance
 
@@ -100,14 +98,14 @@ to create it from different data sources.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-64
+.. GENERATED FROM PYTHON SOURCE LINES 58-62
 
 Creating the Data Schema
 ----------------------------
 Schema file contains the description of the data (features and additional data) associated with a model version.
 **It is highly recommended to review the created schema file before moving forward to creating the model version.**
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-73
+.. GENERATED FROM PYTHON SOURCE LINES 62-71
 
 .. code-block:: default
 
@@ -130,11 +128,11 @@ Schema file contains the description of the data (features and additional data) 
 
     Schema was successfully generated and saved to schema_file.yaml.
 
-    {'additional_data': {}, 'features': {'availability_365': 'integer', 'calculated_host_listings_count': 'integer', 'has_availability': 'categorical', 'minimum_nights': 'integer', 'neighbourhood': 'categorical', 'neighbourhood_group': 'categorical', 'number_of_reviews': 'integer', 'reviews_per_month': 'numeric', 'room_type': 'categorical'}}
+    {'additional_data': {'Unnamed: 0': 'integer'}, 'features': {'availability_365': 'integer', 'calculated_host_listings_count': 'integer', 'has_availability': 'categorical', 'minimum_nights': 'integer', 'neighbourhood': 'categorical', 'neighbourhood_group': 'categorical', 'number_of_reviews': 'integer', 'reviews_per_month': 'numeric', 'room_type': 'categorical'}}
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-91
+.. GENERATED FROM PYTHON SOURCE LINES 72-89
 
 Creating a model version
 ------------------------
@@ -154,7 +152,7 @@ For classification tasks, also predicted probabilities can be sent
 through the `reference_proba` argument, enabling computation of probability
 based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-108
+.. GENERATED FROM PYTHON SOURCE LINES 89-106
 
 .. code-block:: default
 
@@ -190,7 +188,7 @@ based metrics such as AUC, log_loss, brier scorer and more.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-120
+.. GENERATED FROM PYTHON SOURCE LINES 107-118
 
 Uploading Production Data
 =========================
@@ -204,14 +202,13 @@ Uploading Data and Predictions
 Same as with the reference data, for classification tasks also predicted probabilities can be sent
 enabling computation of probability based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-129
+.. GENERATED FROM PYTHON SOURCE LINES 118-126
 
 .. code-block:: default
 
 
     timestamp, label_col = 'timestamp', 'price'
-    _, prod_data = load_data(data_format='DataFrame')
-    _, prod_predictions = load_pre_calculated_prediction()
+    prod_data, prod_predictions = load_data_and_predictions(data_format='DataFrame', load_train=False, data_size=100_000)
     timestamp_col = prod_data[timestamp].astype(int) // 10 ** 9 # Convert to second-based epoch time
     model_version.log_batch(sample_ids=prod_data.index,
                             data=prod_data.drop([timestamp, label_col], axis=1),
@@ -230,13 +227,21 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
     Index of provided "data" dataframe completely matches "sample_ids" array, are you sure that "samples_ids" array is correct and contains unique sample identifiers?
 
     10000 new samples sent.
-    5000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
+    10000 new samples sent.
     Upload finished successfully but might take time to ingest into the system, see http://127.0.0.1:8000/configuration/models for status.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-135
+.. GENERATED FROM PYTHON SOURCE LINES 127-132
 
 Updating the Labels
 -------------------
@@ -244,7 +249,7 @@ In many real world scenarios, the labels of the data are only available at a lat
 in hindsight using the global sample ids.
 The labels are global to the model, and not specific to a version. Therefore, to upload them we need the model client.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-139
+.. GENERATED FROM PYTHON SOURCE LINES 132-136
 
 .. code-block:: default
 
@@ -261,12 +266,20 @@ The labels are global to the model, and not specific to a version. Therefore, to
  .. code-block:: none
 
     10000 labels sent.
-    5000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
+    10000 labels sent.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-163
+.. GENERATED FROM PYTHON SOURCE LINES 137-160
 
 The Application
 ================
@@ -292,7 +305,7 @@ we can go to the `models screen <https://app.deepchecks.com/configuration/models
 
 If we wish to remove the model do free up space for new models we can do it in the following way:
 
-.. GENERATED FROM PYTHON SOURCE LINES 163-167
+.. GENERATED FROM PYTHON SOURCE LINES 160-164
 
 .. code-block:: default
 
@@ -316,7 +329,7 @@ If we wish to remove the model do free up space for new models we can do it in t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  42.639 seconds)
+   **Total running time of the script:** ( 1 minutes  2.885 seconds)
 
 
 .. _sphx_glr_download_user-guide_tabular_auto_quickstarts_plot_quickstart.py:
