@@ -568,6 +568,11 @@ Page: general/guides/drift_guide&labels=labels=chore/documentation" target="_bla
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#text-nlp-data">
+     Text (NLP) Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#computer-vision-data">
      Computer Vision Data
     </a>
@@ -607,6 +612,11 @@ Page: general/guides/drift_guide&labels=labels=chore/documentation" target="_bla
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#text-nlp-checks">
+     Text (NLP) Checks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#computer-vision-checks">
      Computer Vision Checks
     </a>
@@ -638,7 +648,13 @@ Page: general/guides/drift_guide&labels=labels=chore/documentation" target="_bla
 <ul class="simple">
 <li><p><a class="reference external" href="#which-types-of-drift-are-there">Which Types of Drift Are There?</a></p></li>
 <li><p><a class="reference external" href="#how-do-you-detect-drift">How Do You Detect Drift?</a></p></li>
-<li><p><a class="reference external" href="#how-can-i-use-deepchecks-to-detect-drift">How Can I Use Deepchecks to Detect Drift?</a></p></li>
+<li><p><a class="reference external" href="#how-can-i-use-deepchecks-to-detect-drift">How Can I Use Deepchecks to Detect Drift?</a></p>
+<ul>
+<li><p><a class="reference external" href="#tabular-data">Tabular Data</a></p></li>
+<li><p><a class="reference external" href="#text-nlp-data">Text (NLP) Data</a></p></li>
+<li><p><a class="reference external" href="#computer-vision-data">Computer Vision Data</a></p></li>
+</ul>
+</li>
 <li><p><a class="reference external" href="#what-can-you-do-in-case-of-drift">What Can You Do in Case of Drift?</a></p></li>
 <li><p><a class="reference external" href="#code-examples">Code Examples</a></p></li>
 </ul>
@@ -759,11 +775,37 @@ meaning the datasets are significantly different.</p>
 which uses a <a class="reference external" href="#detection-by-domain-classifier">domain classifier</a> in order to detect multivariate drift.</p>
 <p>For drift in your label’s distribution, deepchecks offers the <a class="reference internal" href="../../tabular/auto_checks/train_test_validation/plot_label_drift.html#tabular-label-drift"><span class="std std-ref">Label Drift</span></a>,
 which also uses <a class="reference external" href="#detection-by-univariate-measure">univariate measures</a>.</p>
-<p>In cases where the label is not available, we strongly recommend to also use the <a class="reference internal" href="../../tabular/auto_checks/model_evaluation/plot_prediction_drift.html#tabular-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>,
+<p>In cases where the labels are not available, we strongly recommend to also use the <a class="reference internal" href="../../tabular/auto_checks/model_evaluation/plot_prediction_drift.html#tabular-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>,
 which uses the same methods but on the model’s predictions, and can detect possible changes in the distribution of the label.</p>
 <p>For code examples, see <a class="reference external" href="#tabular-checks">here</a></p>
 <p>All of these checks appear also in the <a class="reference external" href="https://checks-demo.deepchecks.com">deepchecks interactive demo</a>, where you can
 insert corruption into the data and see the checks at work.</p>
+</section>
+<section id="text-nlp-data">
+<h3>Text (NLP) Data<a class="headerlink" href="#text-nlp-data" title="Permalink to this headline">#</a></h3>
+<p>Regarding <a class="reference external" href="#data-drift">data</a> or <a class="reference external" href="#concept-drift">concept drift</a>
+In text data, we can’t measure drift on the text directly, as text is not structured data that can be easily quantified or compared.
+However, we can use different methods to represent the text as a structured variable, and then measure drift on that variable.
+In deepchecks-nlp, we use 2 such methods:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../nlp/usage_guides/nlp_embeddings.html#nlp-embeddings-guide"><span class="std std-ref">Text Embeddings</span></a></p></li>
+<li><p><a class="reference internal" href="../../nlp/usage_guides/nlp_properties.html#nlp-properties-guide"><span class="std std-ref">Text Properties</span></a></p></li>
+</ul>
+<p>Both methods have their pros and cons when used to measure drift: Properties are more explainable, but will not necessarily
+capture all the information in the text. Embeddings are able to find more complex patterns in the text, but these
+patterns may be difficult to explain. Therefore, we recommend to use both methods to detect
+<a class="reference external" href="#data-drift">data</a> or <a class="reference external" href="#concept-drift">concept drift</a>:</p>
+<ol class="arabic simple">
+<li><p>The <a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_embeddings_drift.html#nlp-embeddings-drift"><span class="std std-ref">Text Embeddings Drift Check</span></a> uses embeddings to measure drift using a
+<a class="reference external" href="#detection-by-domain-classifier">domain classifier</a></p></li>
+<li><p>The <a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_property_drift.html#nlp-property-drift"><span class="std std-ref">Text Property Drift Check</span></a> uses properties to measure drift using
+<a class="reference external" href="#detection-by-univariate-measure">univariate measures</a></p></li>
+</ol>
+<p>For drift in your label’s distribution, deepchecks offers the <a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_label_drift.html#nlp-label-drift"><span class="std std-ref">Label Drift</span></a>,
+which uses <a class="reference external" href="#detection-by-univariate-measure">univariate measures</a>.</p>
+<p>In cases where the labels are not available, we strongly recommend to also use the <a class="reference internal" href="../../nlp/auto_checks/model_evaluation/plot_prediction_drift.html#nlp-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>,
+which uses the same methods but on the model’s predictions, and can detect possible changes in the distribution of the label.</p>
+<p>For code examples, see <a class="reference external" href="#text-nlp-checks">here</a></p>
 </section>
 <section id="computer-vision-data">
 <h3>Computer Vision Data<a class="headerlink" href="#computer-vision-data" title="Permalink to this headline">#</a></h3>
@@ -778,7 +820,7 @@ drift, as image data and labels are not simple one-dimensional variables.</p>
 which uses a <a class="reference external" href="#detection-by-domain-classifier">domain classifier</a> in order to detect multivariate drift.</p>
 <p>For drift in your label’s distribution, deepchecks offers the <a class="reference internal" href="../../vision/auto_checks/train_test_validation/plot_label_drift.html#vision-label-drift"><span class="std std-ref">Label Drift</span></a>,
 which also uses <a class="reference external" href="#detection-by-univariate-measure">univariate measures</a>.</p>
-<p>In cases where the label is not available, we strongly recommend to also use the <a class="reference internal" href="../../vision/auto_checks/model_evaluation/plot_prediction_drift.html#vision-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>,
+<p>In cases where the labels are not available, we strongly recommend to also use the <a class="reference internal" href="../../vision/auto_checks/model_evaluation/plot_prediction_drift.html#vision-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>,
 which uses the same methods but on the model’s predictions, and can detect possible changes in the distribution of the label.</p>
 <p>For code examples, see <a class="reference external" href="#computer-vision-checks">here</a></p>
 </section>
@@ -853,11 +895,59 @@ that people are eating more eggs, which are whiter than other foods).</p>
 </pre></div>
 </div>
 </section>
+<section id="text-nlp-checks">
+<h3>Text (NLP) Checks<a class="headerlink" href="#text-nlp-checks" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_embeddings_drift.html#nlp-embeddings-drift"><span class="std std-ref">Embeddings Drift</span></a>:</p>
+<p>In the following code, we load the embeddings from a precalculated file. For more on loading embeddings,
+and additional methods, see the <a class="reference internal" href="../../nlp/usage_guides/nlp_embeddings.html#nlp-embeddings-guide"><span class="std std-ref">NLP Embeddings</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the embeddings from a file:</span>
+<span class="n">train_dataset</span><span class="o">.</span><span class="n">set_embeddings</span><span class="p">(</span><span class="s1">&#39;my_train_embeddings_file.npy&#39;</span><span class="p">)</span>
+<span class="n">test_dataset</span><span class="o">.</span><span class="n">set_embeddings</span><span class="p">(</span><span class="s1">&#39;my_test_embeddings_file.npy&#39;</span><span class="p">)</span>
+
+<span class="c1"># If you do not have a model to extract embeddings from, you can use the deepchecks default embeddings:</span>
+<span class="n">train_dataset</span><span class="o">.</span><span class="n">calculate_default_embeddings</span><span class="p">()</span>
+<span class="n">test_dataset</span><span class="o">.</span><span class="n">calculate_default_embeddings</span><span class="p">()</span>
+
+
+<span class="c1"># Run the check:</span>
+<span class="kn">from</span> <span class="nn">deepchecks.nlp.checks</span> <span class="kn">import</span> <span class="n">TextEmbeddingsDrift</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">TextEmbeddingsDrift</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_property_drift.html#nlp-property-drift"><span class="std std-ref">NLP Property Drift</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># If text properties were not calculated yet:</span>
+<span class="n">train_dataset</span><span class="o">.</span><span class="n">calculate_default_properties</span><span class="p">()</span>
+<span class="n">test_dataset</span><span class="o">.</span><span class="n">calculate_default_properties</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">deepchecks.nlp.checks</span> <span class="kn">import</span> <span class="n">PropertyDrift</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">PropertyDrift</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../../nlp/auto_checks/train_test_validation/plot_label_drift.html#nlp-label-drift"><span class="std std-ref">Label Drift</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.nlp.checks</span> <span class="kn">import</span> <span class="n">LabelDrift</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">LabelDrift</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../../nlp/auto_checks/model_evaluation/plot_prediction_drift.html#nlp-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.nlp.checks</span> <span class="kn">import</span> <span class="n">PredictionDrift</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">PredictionDrift</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+                   <span class="n">train_predictions</span><span class="o">=</span><span class="n">train_predictions</span><span class="p">,</span> <span class="n">test_predictions</span><span class="o">=</span><span class="n">test_predictions</span><span class="p">)</span>
+
+<span class="c1"># For Text Classification tasks, it is recommended to use the probabilities:</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+                   <span class="n">train_probabilities</span><span class="o">=</span><span class="n">train_probabilities</span><span class="p">,</span> <span class="n">test_probabilities</span><span class="o">=</span><span class="n">test_probabilities</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="computer-vision-checks">
 <h3>Computer Vision Checks<a class="headerlink" href="#computer-vision-checks" title="Permalink to this headline">#</a></h3>
 <p><a class="reference internal" href="../../vision/auto_checks/train_test_validation/plot_image_property_drift.html#vision-image-property-drift"><span class="std std-ref">Image Property Drift</span></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks</span> <span class="kn">import</span> <span class="n">ImagePropertyDrift</span>
-<span class="n">check</span> <span class="o">=</span> <span class="n">TrainTestPropertyDrift</span><span class="p">()</span>
+<span class="n">check</span> <span class="o">=</span> <span class="n">ImagePropertyDrift</span><span class="p">()</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -876,7 +966,7 @@ that people are eating more eggs, which are whiter than other foods).</p>
 <p><a class="reference internal" href="../../vision/auto_checks/model_evaluation/plot_prediction_drift.html#vision-prediction-drift"><span class="std std-ref">Prediction Drift</span></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepchecks.vision.checks</span> <span class="kn">import</span> <span class="n">PredictionDrift</span>
 <span class="n">check</span> <span class="o">=</span> <span class="n">PredictionDrift</span><span class="p">()</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">check</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
