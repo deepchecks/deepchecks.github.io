@@ -105,7 +105,7 @@ Creating the Data Schema
 Schema file contains the description of the data (features and additional data) associated with a model version.
 **It is highly recommended to review the created schema file before moving forward to creating the model version.**
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-71
+.. GENERATED FROM PYTHON SOURCE LINES 62-73
 
 .. code-block:: default
 
@@ -115,8 +115,10 @@ Schema file contains the description of the data (features and additional data) 
     schema_file_path = 'schema_file.yaml'
     create_schema(dataset=ref_dataset, schema_output_file=schema_file_path)
     read_schema(schema_file_path)
-    # Note: for conveniently changing the auto-inferred schema it's recommended to edit the textual file with an app of your choice.
-    # After editing, you can use the `read_schema` function to verify the validity of the syntax in your updated schema.
+    # Note: for conveniently changing the auto-inferred schema it's recommended to 
+    # edit the textual file with an app of your choice.
+    # After editing, you can use the `read_schema` function to verify the validity 
+    # of the syntax in your updated schema.
 
 
 
@@ -132,15 +134,15 @@ Schema file contains the description of the data (features and additional data) 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-89
+.. GENERATED FROM PYTHON SOURCE LINES 74-91
 
 Creating a model version
 ------------------------
 In order to create a model version we must first create an organization in the
 `deepchecks app <https://app.deepchecks.com/>`_. If you are using the SaaS version of Deepchecks, you can
 find the app at `https://app.deepchecks.com <https://app.deepchecks.com/>`_ and if you are using deepchecks
-'open-source deployment <https://docs.deepchecks.com/monitoring/stable/installation/self_host.html>'_
-you can find the app at your specified deployment address (`here <https://localhost>`_. by default).
+:ref:`the open-source self-hosted deployment <installation__self_host_deepchecks>`
+you can find the app at your specified deployment address (by default it's http://localhost).
 
 After creating an organization you can generate a personal API token using the application's dashboard.
 
@@ -152,7 +154,7 @@ For classification tasks, also predicted probabilities can be sent
 through the `reference_proba` argument, enabling computation of probability
 based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-106
+.. GENERATED FROM PYTHON SOURCE LINES 91-110
 
 .. code-block:: default
 
@@ -166,12 +168,14 @@ based metrics such as AUC, log_loss, brier scorer and more.
     dc_client = DeepchecksClient(host=host, token=os.getenv('DEEPCHECKS_API_TOKEN'))
 
     model_name = 'Airbnb'
-    model_version = dc_client.create_tabular_model_version(model_name=model_name, version_name='ver_1',
-                                                           schema=schema_file_path,
-                                                           feature_importance=feature_importance,
-                                                           reference_dataset=ref_dataset,
-                                                           reference_predictions=ref_predictions,
-                                                           task_type='regression')
+    model_version = \
+        dc_client.create_tabular_model_version(model_name=model_name, 
+                                               version_name='ver_1',
+                                               schema=schema_file_path,
+                                               feature_importance=feature_importance,
+                                               reference_dataset=ref_dataset,
+                                               reference_predictions=ref_predictions,
+                                               task_type='regression')
 
 
 
@@ -188,7 +192,7 @@ based metrics such as AUC, log_loss, brier scorer and more.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-118
+.. GENERATED FROM PYTHON SOURCE LINES 111-122
 
 Uploading Production Data
 =========================
@@ -202,13 +206,14 @@ Uploading Data and Predictions
 Same as with the reference data, for classification tasks also predicted probabilities can be sent
 enabling computation of probability based metrics such as AUC, log_loss, brier scorer and more.
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-126
+.. GENERATED FROM PYTHON SOURCE LINES 122-131
 
 .. code-block:: default
 
 
     timestamp, label_col = 'timestamp', 'price'
-    prod_data, prod_predictions = load_data_and_predictions(data_format='DataFrame', load_train=False, data_size=100_000)
+    prod_data, prod_predictions = load_data_and_predictions(data_format='DataFrame', 
+                                                            load_train=False, data_size=100_000)
     timestamp_col = prod_data[timestamp].astype(int) // 10 ** 9 # Convert to second-based epoch time
     model_version.log_batch(sample_ids=prod_data.index,
                             data=prod_data.drop([timestamp, label_col], axis=1),
@@ -241,7 +246,7 @@ enabling computation of probability based metrics such as AUC, log_loss, brier s
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-132
+.. GENERATED FROM PYTHON SOURCE LINES 132-137
 
 Updating the Labels
 -------------------
@@ -249,7 +254,7 @@ In many real world scenarios, the labels of the data are only available at a lat
 in hindsight using the global sample ids.
 The labels are global to the model, and not specific to a version. Therefore, to upload them we need the model client.
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-136
+.. GENERATED FROM PYTHON SOURCE LINES 137-141
 
 .. code-block:: default
 
@@ -279,7 +284,7 @@ The labels are global to the model, and not specific to a version. Therefore, to
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-160
+.. GENERATED FROM PYTHON SOURCE LINES 142-165
 
 The Application
 ================
@@ -305,7 +310,7 @@ we can go to the `models screen <https://app.deepchecks.com/configuration/models
 
 If we wish to remove the model do free up space for new models we can do it in the following way:
 
-.. GENERATED FROM PYTHON SOURCE LINES 160-164
+.. GENERATED FROM PYTHON SOURCE LINES 165-169
 
 .. code-block:: default
 
@@ -329,7 +334,7 @@ If we wish to remove the model do free up space for new models we can do it in t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  4.918 seconds)
+   **Total running time of the script:** ( 1 minutes  22.040 seconds)
 
 
 .. _sphx_glr_download_user-guide_tabular_auto_quickstarts_plot_quickstart.py:
