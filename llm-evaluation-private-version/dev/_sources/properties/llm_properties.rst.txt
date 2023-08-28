@@ -40,10 +40,10 @@ Toxicity
 --------
 
 The Toxicity property is a measure of how harmful or offensive a text is. The Toxicity property uses a pre-trained model
-called `unitary/toxic-bert <https://huggingface.co/unitary/toxic-bert>`__ on HuggingFace, which is created and
-maintained by the `Detoxify <https://github.com/unitaryai/detoxify>`__ team, based on the BERT
-architecture and trained on a large corpus of toxic comments. The model assigns a toxicity score to each text,
-ranging from 0 (not toxic) to 1 (very toxic).
+called `SkolkovoInstitute/roberta_toxicity_classifier <https://huggingface.co/s-nlp/roberta_toxicity_classifier>`__
+on HuggingFace, which was created by the `Sokolov Institute <https://www.skoltech.ru/en/>`__ by fine-tuning a RoBERTa
+model on around 2 million samples from the Jigsaw Toxic Comment Classification Challenge datasets. The model produces
+scores ranging from 0 (not toxic) to 1 (very toxic).
 
 `Back to Property List <#properties>`__
 
@@ -53,9 +53,9 @@ Examples
 ================================  ========
 Text                              Toxicity
 ================================  ========
-Hello! How can I help you today?  0.0007
-You have been a bad user!         0.301
-I hate you!                       0.951
+Hello! How can I help you today?  0
+You have been a bad user!         0.09
+I hate you!                       1
 ================================  ========
 
 Fluency
@@ -146,10 +146,37 @@ asked a question about the company's revenue, and the answer is based on the com
 not on external knowledge such as the company's Wikipedia page. In the context of Question Answering, any answer that
 is not grounded in the context can be considered a hallucination.
 
-The property is calculated by identifying key entities and quantities in the LLM output, such as names, places, dates
-and prices, and then identifying the same entities and quantities in the input given to the LLM.
-The property is calculated as the ratio of the number of entities/quantities in the LLM output that are also in the
-input, divided by the total number of entities/quantities in the LLM output.
+The property is calculated using the `WeCheck <https://huggingface.co/nightdessert/WeCheck>`__ model from HuggingFace.
+This model was created by fine-tuning a DeBERTa-v3 model on grounding datasets generated using weak supervision
+by three pre-existing grounding-detection methods: QAFactEval, Summarc and NLI Warmup.
+
+`Back to Property List <#properties>`__
+
+Examples
+~~~~~~~~
+
+======================================================================================================================  ==========================================================  ===================
+LLM Input                                                                                                               LLM Output                                                  Grounded in Context
+======================================================================================================================  ==========================================================  ===================
+Michael Jordan (1963) is an American former professional basketball player and businessman. In what year was he born?   He was born in 1963.                                        0.91
+Michael Jordan (1963) is an American former professional basketball player and businessman. When was Michael born?      Michael Jeffrey Jordan was born in 1963                     0.78
+Michael Jordan (1963) is an American former professional basketball player and businessman. What did he achieve?        He won many NBA championships with the Cleveland Cavaliers  0.06
+======================================================================================================================  ==========================================================  ===================
+
+
+Relevance
+---------
+
+The Relevance property is a measure of how relevant the LLM output is to the input given to it, ranging from 0
+(not relevant) to 1 (very relevant). It is useful mainly for evaluating use-cases such as Question Answering, where
+the LLM is expected to answer given questions.
+
+The property is calculated by passing the user input and the LLM output to a pre-trained cross-encoder model called
+`qnli-electra-base <https://huggingface.co/cross-encoder/qnli-electra-base>`__ on HuggingFace, which was trained on the
+`GLUE QNLI <https://arxiv.org/abs/1804.07461>`__ dataset. This dataset contains pairs
+of questions, and passages from Wikipedia, where the model was trained to predict whether the passage contains the
+answer to the question. Unlike the `Grounded in Context <#grounded-in-context>`__ property, which compares the LLM
+output to the provided context, the Relevance property compares the LLM output to the user input given to the LLM.
 
 `Back to Property List <#properties>`__
 
@@ -157,9 +184,9 @@ Examples
 ~~~~~~~~
 
 ======================================================================================================================  =====================================================  ===================
-LLM Input                                                                                                               LLM Output                                             Grounded in Context
+LLM Input                                                                                                               LLM Output                                             Relevance
 ======================================================================================================================  =====================================================  ===================
-Michael Jordan (1963) is an American former professional basketball player and businessman. In what year was he born?   He was born in 1963.                                   1.0
-Michael Jordan (1963) is an American former professional basketball player and businessman. When was Michael born?      Michael Jeffrey Jordan was born in 1963                0.5
-Michael Jordan (1963) is an American former professional basketball player and businessman. What did he achieve?        He won many NBA championships with the Chicago Bulls   0.0
+What is the color of the sky?                                                                                           The sky is blue                                        0.99
+What is the color of the sky?                                                                                           The sky is red                                         0.99
+What is the color of the sky?                                                                                           The sky is pretty                                      0
 ======================================================================================================================  =====================================================  ===================
