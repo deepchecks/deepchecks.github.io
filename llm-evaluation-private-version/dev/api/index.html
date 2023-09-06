@@ -274,6 +274,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.annotate.html">DeepchecksLLMClient.annotate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.app_name.html">DeepchecksLLMClient.app_name</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.env_type.html">DeepchecksLLMClient.env_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.golden_set.html">DeepchecksLLMClient.golden_set</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.init.html">DeepchecksLLMClient.init</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.log_interaction.html">DeepchecksLLMClient.log_interaction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/deepchecks_llm_client.client.DeepchecksLLMClient.set_tags.html">DeepchecksLLMClient.set_tags</a></li>
@@ -383,7 +384,7 @@ document.write(`
 <span class="c1"># and only print to log. By default, it prints only errors from the &quot;init&quot; phase</span>
 <span class="c1"># If you wish to increase verbosity, use `verbose=True` and `log_level=logging.INFO`</span>
 <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.1&quot;</span>
-<span class="n">env_type</span> <span class="o">=</span> <span class="n">EnvType</span><span class="o">.</span><span class="n">PROD</span>
+<span class="n">env_type</span> <span class="o">=</span> <span class="n">EnvType</span><span class="o">.</span><span class="n">EVAL</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;init deepchecks client, host: </span><span class="si">{</span><span class="n">DEEPCHECKS_LLM_HOST</span><span class="si">}</span><span class="s2">, app: </span><span class="si">{</span><span class="n">DEEPCHECKS_APP_NAME</span><span class="si">}</span><span class="s2">, version: </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">, env: </span><span class="si">{</span><span class="n">env_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">dc_client</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">DEEPCHECKS_LLM_HOST</span><span class="p">,</span>
                <span class="n">api_token</span><span class="o">=</span><span class="n">DEEPCHECKS_LLM_API_KEY</span><span class="p">,</span>
@@ -430,18 +431,7 @@ document.write(`
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenAI Key was not supply, skipping OpenAI demo&quot;</span><span class="p">)</span>
 
-
 <span class="c1"># Step 5: Explicit Logging of data</span>
-
-<span class="c1"># Set different version / env type, to be carried on to the next calls</span>
-<span class="c1"># Usually, in &quot;dev mode&quot;, you will log to &quot;EnvType.EVAL&quot; and use a different version</span>
-<span class="c1"># for each evaluation you make. Check the performance of your LLM application using deepchecks,</span>
-<span class="c1"># and deploy the selected version to production.</span>
-<span class="c1"># From that point on, you will use &quot;EnvType.PROD&quot; with the &quot;production version&quot;</span>
-<span class="n">new_version</span> <span class="o">=</span> <span class="s2">&quot;0.0.2&quot;</span>
-<span class="n">new_env_type</span> <span class="o">=</span> <span class="n">EnvType</span><span class="o">.</span><span class="n">EVAL</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;switching to version: </span><span class="si">{</span><span class="n">new_version</span><span class="si">}</span><span class="s2">, and EnvType: </span><span class="si">{</span><span class="n">new_env_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">dc_client</span><span class="o">.</span><span class="n">version_name</span><span class="p">(</span><span class="s2">&quot;0.0.2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">env_type</span><span class="p">(</span><span class="n">EnvType</span><span class="o">.</span><span class="n">EVAL</span><span class="p">)</span>
 
 <span class="c1"># We can explicitly log interaction</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;log interaction using explicit Deepchecks API: log_interaction()&quot;</span><span class="p">)</span>
@@ -459,6 +449,38 @@ document.write(`
 <span class="n">dc_client</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">ext_id</span><span class="p">,</span> <span class="n">AnnotationType</span><span class="o">.</span><span class="n">GOOD</span><span class="p">)</span>
 
 
+<span class="c1"># Step 6: Creating a new version based on the &quot;0.0.1&quot; golden set</span>
+
+<span class="c1"># Set different version / env type, to be carried on to the next calls</span>
+<span class="c1"># Usually, in &quot;dev mode&quot;, you will log to &quot;EnvType.EVAL&quot; and use a different version</span>
+<span class="c1"># for each evaluation you make. Check the performance of your LLM application using deepchecks,</span>
+<span class="c1"># and deploy the selected version to production, and from that point on,</span>
+<span class="c1"># you will use &quot;EnvType.PROD&quot; with the &quot;production version&quot; to log production data</span>
+<span class="n">new_version</span> <span class="o">=</span> <span class="s2">&quot;0.0.2&quot;</span>
+<span class="n">eval_env_type</span> <span class="o">=</span> <span class="n">EnvType</span><span class="o">.</span><span class="n">EVAL</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;switching to version: </span><span class="si">{</span><span class="n">new_version</span><span class="si">}</span><span class="s2">, and EnvType: </span><span class="si">{</span><span class="n">eval_env_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">dc_client</span><span class="o">.</span><span class="n">version_name</span><span class="p">(</span><span class="n">new_version</span><span class="p">)</span><span class="o">.</span><span class="n">env_type</span><span class="p">(</span><span class="n">eval_env_type</span><span class="p">)</span>
+
+<span class="c1"># Now we have 1 or 2 interactions logged into deepchecks&#39; under version &#39;0.0.1&#39;</span>
+<span class="c1"># We can get the &quot;golden set&quot; out of deepchecks and rerun it against OpenAI while log the</span>
+<span class="c1"># new result to our new version (i.e. - &quot;0.0.2&quot;)</span>
+<span class="k">if</span> <span class="n">OPENAI_API_KEY</span><span class="p">:</span>
+
+    <span class="c1"># golden_set() can get &quot;version_name&quot; as param, if no version_name was supplied</span>
+    <span class="c1"># the latest created version will be taken (this is useful when integrating it in the CI)</span>
+    <span class="k">for</span> <span class="n">interaction</span> <span class="ow">in</span> <span class="n">dc_client</span><span class="o">.</span><span class="n">golden_set</span><span class="p">(</span><span class="n">version_name</span><span class="o">=</span><span class="s2">&quot;0.0.1&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;processing golden set interaction with ext_interaction_id: </span><span class="si">{</span><span class="n">interaction</span><span class="o">.</span><span class="n">ext_interaction_id</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(deepchecks id: </span><span class="si">{</span><span class="n">interaction</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, created_at: </span><span class="si">{</span><span class="n">interaction</span><span class="o">.</span><span class="n">created_at</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="n">dc_client</span><span class="o">.</span><span class="n">set_tags</span><span class="p">({</span><span class="n">Tag</span><span class="o">.</span><span class="n">USER_INPUT</span><span class="p">:</span> <span class="n">interaction</span><span class="o">.</span><span class="n">user_input</span><span class="p">,</span>
+                            <span class="n">Tag</span><span class="o">.</span><span class="n">INFORMATION_RETRIEVAL</span><span class="p">:</span> <span class="n">interaction</span><span class="o">.</span><span class="n">information_retrieval</span><span class="p">})</span>
+
+        <span class="c1"># We run the same OpenAI command, only changing the temperature...</span>
+        <span class="n">chat_completion</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletion</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span>
+                                                       <span class="n">api_key</span><span class="o">=</span><span class="n">OPENAI_API_KEY</span><span class="p">,</span>
+                                                       <span class="n">temperature</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                                       <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                                                           <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Act as a calculator </span><span class="si">{</span><span class="n">interaction</span><span class="o">.</span><span class="n">information_retrieval</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">},</span>
+                                                           <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">interaction</span><span class="o">.</span><span class="n">user_input</span><span class="p">}])</span>
 </pre></div>
 </div>
 </section>
@@ -526,6 +548,16 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="deepchecks_llm_client.data_types.EnvType.__new__">
 <span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deepchecks_llm_client.data_types.EnvType.__new__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deepchecks_llm_client.data_types.GoldenSetInteraction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GoldenSetInteraction</span></span><a class="headerlink" href="#deepchecks_llm_client.data_types.GoldenSetInteraction" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="deepchecks_llm_client.data_types.GoldenSetInteraction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.11)"><span class="pre">UUID</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_interaction_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">information_retrieval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#deepchecks_llm_client.data_types.GoldenSetInteraction.__init__" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -643,6 +675,10 @@ if EXT_INTERACTION_ID was not supplied by the user, deepchecks will try to captu
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.EnvType.PROD"><code class="docutils literal notranslate"><span class="pre">EnvType.PROD</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.EnvType.EVAL"><code class="docutils literal notranslate"><span class="pre">EnvType.EVAL</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.EnvType.__new__"><code class="docutils literal notranslate"><span class="pre">EnvType.__new__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.GoldenSetInteraction"><code class="docutils literal notranslate"><span class="pre">GoldenSetInteraction</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.GoldenSetInteraction.__init__"><code class="docutils literal notranslate"><span class="pre">GoldenSetInteraction.__init__()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deepchecks_llm_client.data_types.Tag"><code class="docutils literal notranslate"><span class="pre">Tag</span></code></a><ul class="nav section-nav flex-column">
