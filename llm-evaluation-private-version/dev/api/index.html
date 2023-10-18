@@ -352,12 +352,12 @@ document.write(`
 <span class="c1"># Step 1: Import necessary modules</span>
 <span class="c1"># Create new venv and install deepchecks&#39; SDK using `pip install deepchecks-llm-client`</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">import</span> <span class="nn">openai</span>
 
 <span class="kn">from</span> <span class="nn">deepchecks_llm_client.client</span> <span class="kn">import</span> <span class="n">dc_client</span>
-<span class="kn">from</span> <span class="nn">deepchecks_llm_client.data_types</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">EnvType</span><span class="p">,</span> <span class="n">AnnotationType</span>
-
+<span class="kn">from</span> <span class="nn">deepchecks_llm_client.data_types</span> <span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">EnvType</span><span class="p">,</span> <span class="n">AnnotationType</span><span class="p">,</span> <span class="n">Step</span><span class="p">,</span> <span class="n">StepType</span>
 
 <span class="c1"># Step 2: Set up configuration</span>
 
@@ -373,7 +373,6 @@ document.write(`
 <span class="c1"># In case you would like to experience with deepchecks auto collect capabilities, please set</span>
 <span class="c1"># Open AI&#39;s key here (as string)</span>
 <span class="n">OPENAI_API_KEY</span> <span class="o">=</span> <span class="s2">&quot;Fill Key Here&quot;</span>
-
 
 <span class="c1"># Step 3: Initialize the SDK</span>
 
@@ -432,7 +431,7 @@ document.write(`
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenAI Key was not supply, skipping OpenAI demo&quot;</span><span class="p">)</span>
 
-<span class="c1"># Step 5: Explicit Logging of data</span>
+<span class="c1"># Step 5: Explicit Logging of data and optionally addition of steps for flow visibility</span>
 
 <span class="c1"># We can explicitly log interaction</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;log interaction using explicit Deepchecks API: log_interaction()&quot;</span><span class="p">)</span>
@@ -442,7 +441,25 @@ document.write(`
                           <span class="n">full_prompt</span><span class="o">=</span><span class="s2">&quot;system part: my user input&quot;</span><span class="p">,</span>
                           <span class="n">information_retrieval</span><span class="o">=</span><span class="s2">&quot;system part: my information retrieval&quot;</span><span class="p">,</span>
                           <span class="n">annotation</span><span class="o">=</span><span class="n">AnnotationType</span><span class="o">.</span><span class="n">BAD</span><span class="p">,</span>
-                          <span class="n">ext_interaction_id</span><span class="o">=</span><span class="n">ext_id</span><span class="p">)</span>
+                          <span class="n">ext_interaction_id</span><span class="o">=</span><span class="n">ext_id</span><span class="p">,</span>
+                          <span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+                              <span class="n">Step</span><span class="p">(</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Information retrival&quot;</span><span class="p">,</span>
+                                  <span class="nb">type</span><span class="o">=</span><span class="n">StepType</span><span class="o">.</span><span class="n">RAG</span><span class="p">,</span>
+                                  <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;dev&quot;</span><span class="p">}),</span>
+                              <span class="n">Step</span><span class="p">(</span>
+                                  <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;my user input + the retried data&quot;</span><span class="p">,</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Information retrival&quot;</span><span class="p">,</span>
+                                  <span class="nb">type</span><span class="o">=</span><span class="n">StepType</span><span class="o">.</span><span class="n">LLM</span><span class="p">,</span>
+                                  <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;dev&quot;</span><span class="p">},</span>
+                                  <span class="n">annotation</span><span class="o">=</span><span class="n">AnnotationType</span><span class="o">.</span><span class="n">BAD</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="s2">&quot;my model response&quot;</span><span class="p">),</span>
+                              <span class="n">Step</span><span class="p">(</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Information retrival&quot;</span><span class="p">,</span>
+                                  <span class="nb">type</span><span class="o">=</span><span class="n">StepType</span><span class="o">.</span><span class="n">TRANSFORMATION</span><span class="p">,</span>
+                                  <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;dev&quot;</span><span class="p">},</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="s2">&quot;my model response after PII removal&quot;</span><span class="p">)</span>
+                          <span class="p">])</span>
 
 <span class="c1"># Notice that we can re-annotate our logged interation in a later phase</span>
 <span class="c1"># using out own external id</span>
