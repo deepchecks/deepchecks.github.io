@@ -533,13 +533,13 @@ Page: general/integrations/pytest&labels=labels=chore/documentation" target="_bl
 framework.
 We will use the <code class="docutils literal notranslate"><span class="pre">diabetes</span></code> dataset from scikit-learn, and check whether certain columns contain drift
 between the training and the test sets.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pytest</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_diabetes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 
-<span class="kn">from</span> <span class="nn">deepchecks</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.checks</span> <span class="kn">import</span> <span class="n">FeatureDrift</span>
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">data_integrity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.checks</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureDrift</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_integrity</span>
 </pre></div>
 </div>
 <section id="defining-pytest-fixtures">
@@ -548,7 +548,7 @@ between the training and the test sets.</p>
 example a database configured with known parameters) or content (such as a dataset).
 In this tutorial we will define a fixture that load the <code class="docutils literal notranslate"><span class="pre">diabetes</span></code> dataset from scikit-learn.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s1">&#39;session&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">diabetes_df</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">diabetes_df</span><span class="p">():</span>
     <span class="n">diabetes</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">frame</span>
     <span class="k">return</span> <span class="n">diabetes</span>
 </pre></div>
@@ -558,7 +558,7 @@ In this tutorial we will define a fixture that load the <code class="docutils li
 <h2>Implementing the Test<a class="headerlink" href="#implementing-the-test" title="Permalink to this headline">#</a></h2>
 <p>Now, we will implement a test that will check if some columns in the dataset have drifted between the train and test datasets.
 the test sets.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_diabetes_drift</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_diabetes_drift</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">):</span>
     <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
     <span class="n">train</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">train_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
     <span class="n">test</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">test_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
@@ -576,7 +576,7 @@ the test sets.</p>
 conditions are met, and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 <p>It’s possible to evaluate the result of a suite of checks, and to get the overall result of the test, by using the
 <a class="reference internal" href="../../api/generated/deepchecks.core.SuiteResult.passed.html#deepchecks.core.SuiteResult.passed" title="deepchecks.core.SuiteResult.passed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deepchecks.core.SuiteResult.passed()</span></code></a> method.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_diabetes_integrity</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_diabetes_integrity</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">):</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">diabetes_df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">])</span>
 
     <span class="n">suite</span> <span class="o">=</span> <span class="n">data_integrity</span><span class="p">()</span>

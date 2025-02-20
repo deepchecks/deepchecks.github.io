@@ -658,7 +658,7 @@ In this case we can change the methods return types from <code class="docutils l
 
 <span class="nt">jobs</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">build</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-22.04</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout Repository</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
@@ -715,12 +715,12 @@ pipelines.</p>
 2 tasks as short circuit tasks, which means the rest of the downstream tasks will be skipped if the return value of
 them is false. This is useful in cases where we want to stop the pipeline if the data validation failed.
 We can also add an additional step of deploying the model after the last validation has passed.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
-<span class="kn">import</span> <span class="nn">joblib</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">airflow.decorators</span> <span class="kn">import</span> <span class="n">dag</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">short_circuit_task</span>
-<span class="kn">from</span> <span class="nn">airflow.providers.amazon.aws.hooks.s3</span> <span class="kn">import</span> <span class="n">S3Hook</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">airflow.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">dag</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">short_circuit_task</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">airflow.providers.amazon.aws.hooks.s3</span><span class="w"> </span><span class="kn">import</span> <span class="n">S3Hook</span>
 
 
 <span class="nd">@dag</span><span class="p">(</span><span class="n">dag_id</span><span class="o">=</span><span class="s1">&#39;model_training_with_deepchecks_validation&#39;</span><span class="p">,</span>
@@ -737,12 +737,12 @@ We can also add an additional step of deploying the model after the last validat
          <span class="s1">&#39;model_path&#39;</span><span class="p">:</span> <span class="s1">&#39;model.joblib&#39;</span>
      <span class="p">},</span>
      <span class="n">catchup</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">model_training_dag</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_training_dag</span><span class="p">():</span>
 
     <span class="nd">@short_circuit_task</span>
-    <span class="k">def</span> <span class="nf">validate_data</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">data_integrity</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_data</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_integrity</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
         <span class="n">hook</span> <span class="o">=</span> <span class="n">S3Hook</span><span class="p">(</span><span class="s1">&#39;aws_connection&#39;</span><span class="p">)</span>
         <span class="n">file_name</span> <span class="o">=</span> <span class="n">hook</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;data_key&#39;</span><span class="p">],</span> <span class="n">bucket_name</span><span class="o">=</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;bucket&#39;</span><span class="p">],</span>
@@ -761,9 +761,9 @@ We can also add an additional step of deploying the model after the last validat
         <span class="k">return</span> <span class="n">suite_result</span><span class="o">.</span><span class="n">passed</span><span class="p">()</span>
 
     <span class="nd">@short_circuit_task</span>
-    <span class="k">def</span> <span class="nf">validate_train_test_split</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">train_test_validation</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_train_test_split</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_validation</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;ti&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">xcom_pull</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">))</span>
         <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">:]</span>
@@ -784,7 +784,7 @@ We can also add an additional step of deploying the model after the last validat
         <span class="k">return</span> <span class="n">suite_result</span><span class="o">.</span><span class="n">passed</span><span class="p">()</span>
 
     <span class="nd">@task</span>
-    <span class="k">def</span> <span class="nf">train_model</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
         <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;train_path&#39;</span><span class="p">])</span>
         <span class="c1"># Train model and upload to s3</span>
         <span class="n">model</span> <span class="o">=</span> <span class="o">...</span>
@@ -799,9 +799,9 @@ We can also add an additional step of deploying the model after the last validat
         <span class="p">)</span>
 
     <span class="nd">@task</span>
-    <span class="k">def</span> <span class="nf">validate_model_performance</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">model_evaluation</span>
-        <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_model_performance</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_evaluation</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
         <span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;train_path&#39;</span><span class="p">])</span>
         <span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;test_path&#39;</span><span class="p">])</span>

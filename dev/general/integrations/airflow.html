@@ -551,15 +551,15 @@ evaluate the Adult dataset from the UCI Machine Learning Repository. The DAG wil
 <a class="reference internal" href="../../api/generated/deepchecks.tabular.suites.data_integrity.html#deepchecks.tabular.suites.data_integrity" title="deepchecks.tabular.suites.data_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_integrity()</span></code></a> and the <a class="reference internal" href="../../api/generated/deepchecks.tabular.suites.model_evaluation.html#deepchecks.tabular.suites.model_evaluation" title="deepchecks.tabular.suites.model_evaluation"><code class="xref py py-func docutils literal notranslate"><span class="pre">model_evaluation()</span></code></a>
 suites on the Adult data and a pre-trained model.</p>
 <img alt="The DAG for this tutorial" class="align-center" src="../../_images/airflow_dag.png" />
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">airflow</span> <span class="kn">import</span> <span class="n">DAG</span>
-<span class="kn">from</span> <span class="nn">airflow.operators.python</span> <span class="kn">import</span> <span class="n">PythonOperator</span>
-<span class="kn">import</span> <span class="nn">joblib</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">airflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">DAG</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">airflow.operators.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">PythonOperator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification</span> <span class="kn">import</span> <span class="n">adult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.datasets.classification</span><span class="w"> </span><span class="kn">import</span> <span class="n">adult</span>
 
 <span class="n">dir_path</span> <span class="o">=</span> <span class="s2">&quot;suite_results&quot;</span>
 <span class="c1"># For demo only. Replace that with a S3/GCS other than local filesystem</span>
@@ -568,7 +568,7 @@ suites on the Adult data and a pre-trained model.</p>
 </div>
 <section id="defining-the-data-model-loading-tasks">
 <h2>Defining the Data &amp; Model Loading Tasks<a class="headerlink" href="#defining-the-data-model-loading-tasks" title="Permalink to this headline">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_adult_dataset</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_adult_dataset</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
     <span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span> <span class="o">=</span> <span class="n">adult</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">data_format</span><span class="o">=</span><span class="s1">&#39;Dataframe&#39;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -584,8 +584,8 @@ suites on the Adult data and a pre-trained model.</p>
         <span class="n">context</span><span class="p">[</span><span class="s2">&quot;ti&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">xcom_push</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;test_path&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;adult_test.csv&quot;</span><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">load_adult_model</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.adult</span> <span class="kn">import</span> <span class="n">load_fitted_model</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_adult_model</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.datasets.classification.adult</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_fitted_model</span>
 
     <span class="n">model</span> <span class="o">=</span> <span class="n">load_fitted_model</span><span class="p">()</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;adult_model.joblib&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -604,10 +604,10 @@ it is recommended to save the data and the model in a S3/GCS/other intermediate 
 <h2>Defining the Integrity Report Task<a class="headerlink" href="#defining-the-integrity-report-task" title="Permalink to this headline">#</a></h2>
 <p>The <a class="reference internal" href="../../api/generated/deepchecks.tabular.suites.data_integrity.html#deepchecks.tabular.suites.data_integrity" title="deepchecks.tabular.suites.data_integrity"><code class="xref py py-func docutils literal notranslate"><span class="pre">data_integrity()</span></code></a> suite will be used to evaluate the train and production
 datasets. It will check for integrity issues and will save the output html reports to the <code class="docutils literal notranslate"><span class="pre">suite_results</span></code> directory.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dataset_integrity_step</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">data_integrity</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.adult</span> <span class="kn">import</span> <span class="n">_CAT_FEATURES</span><span class="p">,</span> <span class="n">_target</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dataset_integrity_step</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">data_integrity</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.datasets.classification.adult</span><span class="w"> </span><span class="kn">import</span> <span class="n">_CAT_FEATURES</span><span class="p">,</span> <span class="n">_target</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
     <span class="n">adult_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ti&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">xcom_pull</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;train_path&quot;</span><span class="p">))</span>
     <span class="n">adult_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ti&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">xcom_pull</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;test_path&quot;</span><span class="p">))</span>
@@ -633,10 +633,10 @@ datasets. It will check for integrity issues and will save the output html repor
 <h2>Defining the Model Evaluation Task<a class="headerlink" href="#defining-the-model-evaluation-task" title="Permalink to this headline">#</a></h2>
 <p>The <a class="reference internal" href="../../api/generated/deepchecks.tabular.suites.model_evaluation.html#deepchecks.tabular.suites.model_evaluation" title="deepchecks.tabular.suites.model_evaluation"><code class="xref py py-func docutils literal notranslate"><span class="pre">model_evaluation()</span></code></a> suite will be used to evaluate the model itself.
 It will check for model performance and overfit issues and will save the report to the <code class="docutils literal notranslate"><span class="pre">suite_results</span></code> directory.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">model_evaluation_step</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular.suites</span> <span class="kn">import</span> <span class="n">model_evaluation</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular.datasets.classification.adult</span> <span class="kn">import</span> <span class="n">_CAT_FEATURES</span><span class="p">,</span> <span class="n">_target</span>
-    <span class="kn">from</span> <span class="nn">deepchecks.tabular</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">model_evaluation_step</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.suites</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_evaluation</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.datasets.classification.adult</span><span class="w"> </span><span class="kn">import</span> <span class="n">_CAT_FEATURES</span><span class="p">,</span> <span class="n">_target</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
     <span class="n">adult_model</span> <span class="o">=</span> <span class="n">joblib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ti&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">xcom_pull</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;adult_model&quot;</span><span class="p">))</span>
     <span class="n">adult_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ti&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">xcom_pull</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;train_path&quot;</span><span class="p">))</span>
