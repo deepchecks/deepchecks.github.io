@@ -1,0 +1,1551 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+<!-- Google Tag Manager -->
+<script>(function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-NNKXRJQ');</script>
+<!-- End Google Tag Manager -->
+<meta name="title" content="Performance Bias | Deepchecks Documentation">
+<meta name="description" content="Do you need to know more about Performance Bias? Read more at Deepchecks Online Documentation">
+<meta name="docsearch:version" content="dev">
+
+
+<!-- Warning: 
+        The 'shortcut link' type is often seen before icon, but this link type is non-conforming, 
+        ignored and web authors must not use it anymore. 
+        MDN docs https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
+    -->
+<link rel="shortcut icon" href="/_static/favicons/favicon.ico">
+<link rel="canonical" href="https://docs.deepchecks.com/stable/tabular/auto_checks/model_evaluation/plot_performance_bias.html" />
+
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="32x32">
+<link rel="icon" href="/_static/favicons/favicon.png" sizes="192x192">
+
+<!-- Note: 
+        Apple's iOS does not use this 'link' type, nor the 'sizes' attribute, 
+        like others mobile browsers do, to select a webpage icon for Web Clip 
+        or a start-up placeholder. Instead it uses the non-standard 'apple-touch-icon'.
+        MDN docs: https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types;
+        Safari Web Content Guide: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW4
+    -->
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/_static/favicons/apple-touch-icon.png" sizes="192x192">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
+
+
+    <title>Performance Bias &#8212; Deepchecks Documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd_sphinx_search.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"
+    crossorigin="anonymous"></script>
+
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Simple Model Comparison" href="plot_simple_model_comparison.html" />
+    <link rel="prev" title="Unused Features" href="plot_unused_features.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+
+<body data-spy="scroll" data-target="#bd-toc-nav">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNKXRJQ" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <script>
+        require.config({
+            paths: {
+                "docsearchLib": "https://cdn.jsdelivr.net/npm/@docsearch/js@3?noext",
+                "clipboardjs": "/dev/_static/clipboard.min"
+            }
+        }
+
+        );
+        require(["docsearchLib"], function (docsearch) {
+            docsearch({
+                appId: "3UQ0BSGJ1N", apiKey: "83d250f88e29e9906a50ddf40a1871ce", indexName: "deepchecks", container: '#algolia-search', debug: false,
+                searchParameters: {
+                    facetFilters: ["version:dev"]
+                }
+            });
+        });
+        require(["clipboardjs"], function(clipboardJS) {
+            window.ClipboardJS=clipboardJS
+        });
+    </script>
+    <div style="display:none;" id="dc-submodule">general</div>
+    <script data-url_root="/" id="documentation_options" src="/dev/_static/documentation_options.js"></script>
+    <script src="/dev/_static/copybutton.js"></script>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+
+<a class="navbar-brand" href="../../../index.html">
+  <img src="../../../_static/deepchecks-testing-logo.svg" class="logo" alt="logo">
+</a>
+
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../getting-started/index.html">
+  Getting Started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../general/index.html">
+  General
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  Tabular
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../nlp/index.html">
+  NLP
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../vision/index.html">
+  Vision
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../api/index.html">
+  API Reference
+ </a>
+</li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://docs.deepchecks.com/monitoring">Monitoring<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+    <li class="nav-item">
+        <a class="nav-link nav-external" href="https://docs.deepchecks.com/stable/general/usage/ci_cd.html">CI<i class="fas fa-external-link-alt"></i></a>
+    </li>
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables tabular/auto_checks/model_evaluation/plot_performance_bias and {'json_url': 'https://docs.deepchecks.com/dev/_static/switcher.json', 'version_match': 'dev', 'url_template': 'https://docs.deepchecks.com/{version}/'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "tabular/auto_checks/model_evaluation/plot_performance_bias.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://docs.deepchecks.com/dev/_static/switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "tabular/auto_checks/model_evaluation/plot_performance_bias.html";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's dev variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "dev") {
+                node.classList.add("active");
+                let btn = document.getElementById("version_switcher_button");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Quick Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/deepchecks/deepchecks" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://deepchecks.com/slack" rel="noopener" target="_blank" title="Slack"><span><i class="fab fa-slack"></i></span>
+            <label class="sr-only">Slack</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://pypi.org/project/deepchecks/" rel="noopener" target="_blank" title="PyPI"><span><i class="fab fa-python"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div id="topright-dropdown-menu" class="dropdown" style="width: fit-content;">
+    <a 
+        class="btn dropdown-toggle" 
+        id="topright-dropdown-menu-link" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"
+        data-offset="-100,10">
+            <i class="fas fa-bars"></i>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="topright-dropdown-menu-link" x-placement="bottom-start">
+        <a class="dropdown-item" href="https://github.com/deepchecks/deepchecks/issues/new?title=[Docs] Documentation contains a mistake.&body=Package Version: dev;
+Page: tabular/auto_checks/model_evaluation/plot_performance_bias&labels=labels=chore/documentation" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-pencil-alt"></i> Report a problem
+        </a>
+        
+            <a 
+                
+                    href="/dev/_sources/tabular/auto_checks/model_evaluation/plot_performance_bias.rst.txt"
+                
+                
+                class="dropdown-item" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                <i class="fas fa-code"></i> Show Source
+            </a>
+        
+    </div>
+</div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><div id="algolia-search">
+<!-- <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form> -->
+</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../auto_tutorials/quickstarts/index.html">
+   Quickstarts
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quickstart_in_5_minutes.html">
+     Full Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_model_evaluation.html">
+     Model Evaluation Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_data_integrity.html">
+     Data Integrity Suite Quickstart
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../auto_tutorials/quickstarts/plot_quick_train_test_validation.html">
+     Train-Test Validation Suite Quickstart
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../auto_tutorials/other/plot_phishing_urls.html">
+   Use Cases - Classifying Malicious URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../auto_tutorials/other/plot_add_a_custom_check.html">
+   Creating a Custom Check
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../custom_check_templates.html">
+   Custom Check Templates
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Usage Guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/dataset_object.html">
+   The Dataset Object
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/supported_models.html">
+   Working with Models and Predictions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../usage_guides/feature_importance.html">
+   Feature Importance
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Checks Gallery
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../data_integrity/index.html">
+   Data Integrity
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_mixed_nulls.html">
+     Mixed Nulls
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_percent_of_nulls.html">
+     Percent Of Nulls
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_string_mismatch.html">
+     String Mismatch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_string_length_out_of_bounds.html">
+     String Length Out Of Bounds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_feature_label_correlation.html">
+     Feature Label Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_feature_feature_correlation.html">
+     Feature Feature Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_is_single_value.html">
+     Is Single Value
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_columns_info.html">
+     Columns Info
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_class_imbalance.html">
+     Class Imbalance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_outlier_sample_detection.html">
+     Outlier Sample Detection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_identifier_label_correlation.html">
+     Identifier Label Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_conflicting_labels.html">
+     Conflicting Labels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_data_duplicates.html">
+     Data Duplicates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_special_chars.html">
+     Special Characters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_integrity/plot_mixed_data_types.html">
+     Mixed Data Types
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../train_test_validation/index.html">
+   Train Test Validation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_string_mismatch_comparison.html">
+     String Mismatch Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_train_test_samples_mix.html">
+     Train Test Samples Mix
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_new_label_train_test.html">
+     New Label
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_datasets_size_comparison.html">
+     Datasets Size Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_new_category_train_test.html">
+     New Category
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_index_leakage.html">
+     Index Leakage
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_feature_label_correlation_change.html">
+     Feature Label Correlation Change
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_multivariate_drift.html">
+     Multivariate Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_label_drift.html">
+     Label Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_date_train_test_leakage_overlap.html">
+     Date Train Test Leakage Overlap
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_date_train_test_leakage_duplicates.html">
+     Date Train Test Leakage Duplicates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../train_test_validation/plot_feature_drift.html">
+     Feature Drift
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Model Evaluation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_model_info.html">
+     Model Info
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_segment_performance.html">
+     Segment Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_unused_features.html">
+     Unused Features
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Performance Bias
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_simple_model_comparison.html">
+     Simple Model Comparison
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_weak_segments_performance.html">
+     Weak Segments Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_model_inference_time.html">
+     Model Inference Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_regression_systematic_error.html">
+     Regression Systematic Error
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_single_dataset_performance.html">
+     Single Dataset Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_train_test_performance.html">
+     Train Test Performance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_roc_report.html">
+     ROC Report
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_regression_error_distribution.html">
+     Regression Error Distribution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_confusion_matrix_report.html">
+     Confusion Matrix Report
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_boosting_overfit.html">
+     Boosting Overfit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_prediction_drift.html">
+     Prediction Drift
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_calibration_score.html">
+     Calibration Score
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_multi_model_performance_report.html">
+     Multi Model Performance Report
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#what-is-the-purpose-of-the-check">
+   What is the purpose of the check?
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-data-model">
+   Generate data &amp; model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#run-the-check">
+   Run the check
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#observe-the-check-s-output">
+     Observe the check’s output
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-condition">
+   Define a condition
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+            
+          </div>
+          
+
+          
+    
+        
+    
+    <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+        
+        
+            <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-tabular-auto-checks-model-evaluation-plot-performance-bias-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="performance-bias">
+<span id="tabular-performance-bias"></span><span id="sphx-glr-tabular-auto-checks-model-evaluation-plot-performance-bias-py"></span><h1>Performance Bias<a class="headerlink" href="#performance-bias" title="Permalink to this headline">#</a></h1>
+<p>This notebook provides an overview for using and understanding the Performance Bias check.</p>
+<p><strong>Structure:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#what-is-the-purpose-of-the-check">What is the purpose of the check?</a></p></li>
+<li><p><a class="reference external" href="#generate-data-model">Generate data &amp; model</a></p></li>
+<li><p><a class="reference external" href="#run-the-check">Run the check</a></p></li>
+<li><p><a class="reference external" href="#define-a-condition">Define a condition</a></p></li>
+</ul>
+<section id="what-is-the-purpose-of-the-check">
+<h2>What is the purpose of the check?<a class="headerlink" href="#what-is-the-purpose-of-the-check" title="Permalink to this headline">#</a></h2>
+<p>The check is designed to help you identify subgroups for which the model has a much lower performance score than its
+baseline score (its overall performance). The subgroups are defined by a chosen <em>protected</em> feature (e.g., “sex”,
+“race”) and you can specify a <em>control</em> feature (e.g., “education”) by which to group the data before computing
+performance differences. This is primarily useful for fairness analyses, but can also be used to identify other types
+of performance disparities.</p>
+<p>Large performance disparities can indicate a problem with the model. The training data may not be sufficient for
+certain subgroups or may contain biases, or the model may need to be re-calibrated when applied to certain subgroups.
+When using appropriate scoring functions, looking at performance disparities can help uncover issues of these kinds.</p>
+<p>Remember that this check relies on labeled data provided in the dataset. As such, it can only assess performance
+disparities to the extent that the labeled data is accurate and representative of the population of interest. Using
+scoring functions that are robust to class imbalance or that are computed for each model class can help mitigate this
+issue.</p>
+</section>
+<section id="generate-data-model">
+<h2>Generate data &amp; model<a class="headerlink" href="#generate-data-model" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.datasets.classification.adult</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_data.html#deepchecks.tabular.datasets.classification.adult.load_data" title="deepchecks.tabular.datasets.classification.adult.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">,</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_fitted_model.html#deepchecks.tabular.datasets.classification.adult.load_fitted_model" title="deepchecks.tabular.datasets.classification.adult.load_fitted_model" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">load_fitted_model</span></a><span class="p">)</span>
+
+<a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataset</span></a><span class="p">,</span> <a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_data.html#deepchecks.tabular.datasets.classification.adult.load_data" title="deepchecks.tabular.datasets.classification.adult.load_data" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">load_data</span></a><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.datasets.classification.adult.load_fitted_model.html#deepchecks.tabular.datasets.classification.adult.load_fitted_model" title="deepchecks.tabular.datasets.classification.adult.load_fitted_model" class="sphx-glr-backref-module-deepchecks-tabular-datasets-classification-adult sphx-glr-backref-type-py-function"><span class="n">load_fitted_model</span></a><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="run-the-check">
+<h2>Run the check<a class="headerlink" href="#run-the-check" title="Permalink to this headline">#</a></h2>
+<p>The check requires the argument <code class="docutils literal notranslate"><span class="pre">protected_feature</span></code> identifying a column that defines the subgroups
+for which performance disparities are assessed. In addition, the check has several optional parameters
+that affect its behavior and output.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">control_feature</span></code>: Column to use to split the data by groups prior to computing performance disparities.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scorer</span></code>: Scoring function to measure performance. Default to “accuracy” for classification tasks
+and “r2” for regression tasks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_subgroups_per_control_cat_to_display</span></code>: Maximum number of subgroups (per <code class="docutils literal notranslate"><span class="pre">control_feature</span></code> category)
+to display.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_control_cat_to_display</span></code>: Maximum number of <code class="docutils literal notranslate"><span class="pre">control_feature</span></code> categories to display.</p></li>
+</ul>
+<p>see <a class="reference internal" href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias"><code class="xref py py-class docutils literal notranslate"><span class="pre">API</span> <span class="pre">reference</span></code></a> for
+more details.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">deepchecks.tabular.checks.model_evaluation</span><span class="w"> </span><span class="kn">import</span> <a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-class"><span class="n">PerformanceBias</span></a>
+
+<a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">check</span></a> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-class"><span class="n">PerformanceBias</span></a><span class="p">(</span>
+   <span class="n">protected_feature</span><span class="o">=</span><span class="s2">&quot;race&quot;</span><span class="p">,</span>
+   <span class="n">control_feature</span><span class="o">=</span><span class="s2">&quot;education&quot;</span><span class="p">,</span>
+   <span class="n">scorer</span><span class="o">=</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+   <span class="n">max_segments</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.run.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias.run" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias.run" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2023 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Performance Bias</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^1.0.1/dist/embed.js" crossorigin="anonymous"></script>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"version_major": 2, "version_minor": 0, "state": {"3b656afaed1148baa32d746a6243ea37": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_291ad955938a4be38eec2e0584d1f83c", "IPY_MODEL_713ef16d6a414d20907fd02dc2c33abc", "IPY_MODEL_bcc840b624b04236a1c788edb832aaf2", "IPY_MODEL_221c4043ced54e6cba6add80de210091"], "layout": "IPY_MODEL_4db6a63b81c9430796dd12d36c5732d1"}}, "291ad955938a4be38eec2e0584d1f83c": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_816468eff4f84badaeaa26be97c9bc5c", "style": "IPY_MODEL_4170cf0d5cb84672af03572439a26086", "value": "<h4><b>Performance Bias</b></h4>"}}, "816468eff4f84badaeaa26be97c9bc5c": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "4170cf0d5cb84672af03572439a26086": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "713ef16d6a414d20907fd02dc2c33abc": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_33c9d6ae6dc548f6961a984a000f69ef", "style": "IPY_MODEL_13d1bc13cd7c423d910bc217274558bd", "value": "<p>    Check for performance differences between subgroups of a feature, optionally accounting for a control variable. <a href=\"https://docs.deepchecks.com/0.18/tabular/auto_checks/model_evaluation/plot_performance_bias.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "33c9d6ae6dc548f6961a984a000f69ef": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "13d1bc13cd7c423d910bc217274558bd": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "bcc840b624b04236a1c788edb832aaf2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_944655db2ab34c74aa6a7f096af20ffb", "style": "IPY_MODEL_34013af4dee944f0a7148bdc015faa63"}}, "944655db2ab34c74aa6a7f096af20ffb": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "34013af4dee944f0a7148bdc015faa63": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "221c4043ced54e6cba6add80de210091": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "children": ["IPY_MODEL_8fec6429e99c4bbfaa9f8f0cb756d7c2", "IPY_MODEL_3a1dc2f8ce1f492a872fbd5c85ccc9c8", "IPY_MODEL_2adf77550b3744c991f9fa0c479e5bf2"], "layout": "IPY_MODEL_732cf5c5bc3b4e09abcdee561b26eccd"}}, "8fec6429e99c4bbfaa9f8f0cb756d7c2": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_d5fa1f739de04125b85e17508a834ff4", "style": "IPY_MODEL_f1f11d3be0af418b91fb751e2f2d771b", "value": "<h5><b>Additional Outputs</b></h5>"}}, "d5fa1f739de04125b85e17508a834ff4": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "f1f11d3be0af418b91fb751e2f2d771b": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "3a1dc2f8ce1f492a872fbd5c85ccc9c8": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_ec39bc9791994986b19ec61f63d44634", "style": "IPY_MODEL_f0f2e431e9214d54885b37b1284be2a6", "value": "<div>\n                The following plot shows the baseline score (black point) and subgroup scores (white point)\n                for each subgroup, faceted by control feature categories, and sorted by the size of the\n                difference in performance. That performance disparity is highlighted by a red line for negative\n                differences and a green line for positive differences. Only the top 3\n                categories of the control feature with the largest performance differences are displayed. Within each\n                control category subplot, the top 3 subgroups with the\n                largest performance differences are displayed.\n            </div>"}}, "ec39bc9791994986b19ec61f63d44634": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "f0f2e431e9214d54885b37b1284be2a6": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "2adf77550b3744c991f9fa0c479e5bf2": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.24.1", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 66)<extra></extra>", "baseline: %{x} (group size: 934)<extra></extra>"], "legendgroup": "Positive differences", "line": {"color": "limegreen", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["limegreen", "limegreen"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.7878787878787878, 0.7708779443254818], "xaxis": "x", "y": ["Others", "Others"], "yaxis": "y", "type": "scatter", "uid": "5c919b6d-5c50-4c27-838b-e5788891927c"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 811)<extra></extra>", "baseline: %{x} (group size: 934)<extra></extra>"], "legendgroup": "Positive differences", "line": {"color": "limegreen", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["limegreen", "limegreen"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.7755856966707768, 0.7708779443254818], "xaxis": "x", "y": [" White", " White"], "yaxis": "y", "type": "scatter", "uid": "3ae418c3-7368-4af3-b127-06f51927942b"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 57)<extra></extra>", "baseline: %{x} (group size: 934)<extra></extra>"], "legendgroup": "Negative differences", "line": {"color": "orangered", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["orangered", "orangered"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.6842105263157895, 0.7708779443254818], "xaxis": "x", "y": [" Black", " Black"], "yaxis": "y", "type": "scatter", "uid": "288cc22b-4ea9-4c67-a423-d87b9ad489f4"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 137)<extra></extra>", "baseline: %{x} (group size: 1501)<extra></extra>"], "legendgroup": "Positive differences", "line": {"color": "limegreen", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["limegreen", "limegreen"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.9708029197080292, 0.9000666222518321], "xaxis": "x2", "y": [" Black", " Black"], "yaxis": "y2", "type": "scatter", "uid": "f6f32a92-f108-4f72-a40a-b76cd9f0e0fd"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 1265)<extra></extra>", "baseline: %{x} (group size: 1501)<extra></extra>"], "legendgroup": "Negative differences", "line": {"color": "orangered", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["orangered", "orangered"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.8964426877470356, 0.9000666222518321], "xaxis": "x2", "y": [" White", " White"], "yaxis": "y2", "type": "scatter", "uid": "5f6df4ce-7d9e-4105-b1a4-b66d07421730"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 99)<extra></extra>", "baseline: %{x} (group size: 1501)<extra></extra>"], "legendgroup": "Negative differences", "line": {"color": "orangered", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["orangered", "orangered"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.8484848484848485, 0.9000666222518321], "xaxis": "x2", "y": ["Others", "Others"], "yaxis": "y2", "type": "scatter", "uid": "77486c19-60e6-419f-a2fa-3c75341b2885"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 53)<extra></extra>", "baseline: %{x} (group size: 679)<extra></extra>"], "legendgroup": "Positive differences", "line": {"color": "limegreen", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["limegreen", "limegreen"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.9622641509433962, 0.8070692194403535], "xaxis": "x3", "y": [" Black", " Black"], "yaxis": "y3", "type": "scatter", "uid": "dd0476ba-7733-4b4d-bb40-53040963dd4a"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 596)<extra></extra>", "baseline: %{x} (group size: 679)<extra></extra>"], "legendgroup": "Negative differences", "line": {"color": "orangered", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["orangered", "orangered"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.7953020134228188, 0.8070692194403535], "xaxis": "x3", "y": [" White", " White"], "yaxis": "y3", "type": "scatter", "uid": "a0a79e5c-7e6d-41fb-a063-f2d8c5035680"}, {"cliponaxis": false, "hovertemplate": ["%{y}: %{x} (group size: 30)<extra></extra>", "baseline: %{x} (group size: 679)<extra></extra>"], "legendgroup": "Negative differences", "line": {"color": "orangered", "width": 8}, "marker": {"color": ["white", "#222222"], "line": {"color": ["orangered", "orangered"], "width": [2, 2]}, "size": 6, "symbol": 0}, "mode": "lines+text+markers", "opacity": 1, "showlegend": false, "x": [0.7666666666666667, 0.8070692194403535], "xaxis": "x3", "y": ["Others", "Others"], "yaxis": "y3", "type": "scatter", "uid": "122fe957-89d8-49fc-bb2f-610d502dab4a"}, {"legendgroup": "Negative differences", "legendgrouptitle": {"text": "Negative differences"}, "marker": {"color": "white", "line": {"color": "orangered", "width": 2}, "size": 6, "symbol": 0}, "mode": "markers", "name": "subgroup score", "x": [null], "y": [null], "type": "scatter", "uid": "43e6f1b4-a907-4bae-973d-e671f21b35bc"}, {"legendgroup": "Negative differences", "legendgrouptitle": {"text": "Negative differences"}, "marker": {"color": "#222222", "line": {"color": "orangered", "width": 2}, "size": 6, "symbol": 0}, "mode": "markers", "name": "baseline score", "x": [null], "y": [null], "type": "scatter", "uid": "773a5365-0d83-4c10-b765-d5d33f491183"}, {"legendgroup": "Positive differences", "legendgrouptitle": {"text": "Positive differences"}, "marker": {"color": "white", "line": {"color": "limegreen", "width": 2}, "size": 6, "symbol": 0}, "mode": "markers", "name": "subgroup score", "x": [null], "y": [null], "type": "scatter", "uid": "d0db9919-885e-46ac-9b43-e86271b83a03"}, {"legendgroup": "Positive differences", "legendgrouptitle": {"text": "Positive differences"}, "marker": {"color": "#222222", "line": {"color": "limegreen", "width": 2}, "size": 6, "symbol": 0}, "mode": "markers", "name": "baseline score", "x": [null], "y": [null], "type": "scatter", "uid": "ae87546b-ba64-416c-8161-1b8176a47750"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_layout": {"annotations": [{"font": {"size": 12}, "showarrow": false, "text": "education= Masters", "x": 0, "xanchor": "left", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 12}, "showarrow": false, "text": "education=Others", "x": 0, "xanchor": "left", "xref": "paper", "y": 0.6217616457296957, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 12}, "showarrow": false, "text": "education= Assoc-voc", "x": 0, "xanchor": "left", "xref": "paper", "y": 0.24352329145939156, "yanchor": "bottom", "yref": "paper"}], "height": 480, "template": {"data": {"barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "choropleth": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "choropleth"}], "contourcarpet": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "contourcarpet"}], "contour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour"}], "heatmapgl": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl"}], "heatmap": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap"}], "histogram2dcontour": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour"}], "histogram2d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d"}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "mesh3d": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "type": "mesh3d"}], "parcoords": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "parcoords"}], "pie": [{"automargin": true, "type": "pie"}], "scatter3d": [{"line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatter3d"}], "scattercarpet": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattercarpet"}], "scattergeo": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergeo"}], "scattergl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattergl"}], "scattermapbox": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scattermapbox"}], "scatterpolargl": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolargl"}], "scatterpolar": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterpolar"}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "scatterternary": [{"marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "type": "scatterternary"}], "surface": [{"colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}]}, "layout": {"annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "autotypenumbers": "strict", "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "geo": {"bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white"}, "hoverlabel": {"align": "left"}, "hovermode": "closest", "mapbox": {"style": "light"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white"}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "ternary": {"aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "bgcolor": "#E5ECF6", "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "title": {"x": 0.05}, "xaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}, "yaxis": {"automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "zerolinewidth": 2}}}, "title": {"text": "Largest performance differences within education categories<br><sup>(Showing 3/3 race categories per subplot and 3/9 education categories)</sup>"}, "xaxis": {"anchor": "y", "domain": [0.0, 1.0], "matches": "x3", "showticklabels": false}, "yaxis": {"anchor": "x", "domain": [0.7564767085406084, 1.0], "tickmode": "linear", "title": {"text": "race"}}, "xaxis2": {"anchor": "y2", "domain": [0.0, 1.0], "matches": "x3", "showticklabels": false}, "yaxis2": {"anchor": "x2", "domain": [0.3782383542703042, 0.6217616457296957], "tickmode": "linear", "title": {"text": "race"}}, "xaxis3": {"anchor": "y3", "domain": [0.0, 1.0], "title": {"text": "accuracy score"}}, "yaxis3": {"anchor": "x3", "domain": [0.0, 0.24352329145939156], "tickmode": "linear", "title": {"text": "race"}}}, "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0}}, "732cf5c5bc3b4e09abcdee561b26eccd": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "4db6a63b81c9430796dd12d36c5732d1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}}}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "3b656afaed1148baa32d746a6243ea37"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><section id="observe-the-check-s-output">
+<h3>Observe the check’s output<a class="headerlink" href="#observe-the-check-s-output" title="Permalink to this headline">#</a></h3>
+<p>We see in the results that the check identified the largest performance disparity for the subgroup
+“Others” within the category of “HS-grad” for the control feature “education”. The model performance
+on this subgroup is 0.095 versus 0.258 for this entire education category.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;scores_df&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>education</th>
+      <th>_scorer</th>
+      <th>_score</th>
+      <th>_baseline</th>
+      <th>_baseline_count</th>
+      <th>_count</th>
+      <th>_diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>12</th>
+      <td>Black</td>
+      <td>Masters</td>
+      <td>accuracy</td>
+      <td>0.684211</td>
+      <td>0.770878</td>
+      <td>934</td>
+      <td>57</td>
+      <td>-0.086667</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>Others</td>
+      <td>Others</td>
+      <td>accuracy</td>
+      <td>0.848485</td>
+      <td>0.900067</td>
+      <td>1501</td>
+      <td>99</td>
+      <td>-0.051582</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Others</td>
+      <td>Assoc-voc</td>
+      <td>accuracy</td>
+      <td>0.766667</td>
+      <td>0.807069</td>
+      <td>679</td>
+      <td>30</td>
+      <td>-0.040403</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /></section>
+</section>
+<section id="define-a-condition">
+<h2>Define a condition<a class="headerlink" href="#define-a-condition" title="Permalink to this headline">#</a></h2>
+<p>We can define on our check a condition that will validate all performance disparities fall within
+a certain threshold. If the condition is not met, the check will fail.</p>
+<p>Let’s add a condition and re-run the check:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.add_condition_bounded_performance_difference.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias.add_condition_bounded_performance_difference" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias.add_condition_bounded_performance_difference" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">add_condition_bounded_performance_difference</span></a><span class="p">(</span><span class="n">lower_bound</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <a href="../../../api/generated/deepchecks.tabular.checks.model_evaluation.PerformanceBias.run.html#deepchecks.tabular.checks.model_evaluation.PerformanceBias.run" title="deepchecks.tabular.checks.model_evaluation.PerformanceBias.run" class="sphx-glr-backref-module-deepchecks-tabular-checks-model_evaluation sphx-glr-backref-type-py-method"><span class="n">check</span><span class="o">.</span><span class="n">run</span></a><span class="p">(</span><a href="../../../api/deepchecks.tabular.html#deepchecks.tabular.Dataset" title="deepchecks.tabular.Dataset" class="sphx-glr-backref-module-deepchecks-tabular sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_dataset</span></a><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_additional_outputs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<!--
+    ~ ----------------------------------------------------------------------------
+    ~ Copyright (C) 2021-2023 Deepchecks (https://www.deepchecks.com)
+    ~
+    ~ This file is part of Deepchecks.
+    ~ Deepchecks is distributed under the terms of the GNU Affero General
+    ~ Public License (version 3 or later).
+    ~ You should have received a copy of the GNU Affero General Public License
+    ~ along with Deepchecks.  If not, see <http://www.gnu.org/licenses/>.
+    ~ ----------------------------------------------------------------------------
+    ~
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Performance Bias</title>
+    <link rel="icon" type="image/x-icon" href="https://deepchecks.com/wp-content/themes/deepchecks/assets/favicons/favicon.ico">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt *,
+        div.nbinput.container div.input_area pre,
+        div.nboutput.container div.output_area pre,
+        div.nbinput.container div.input_area .highlight,
+        div.nboutput.container div.output_area .highlight {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        div.nbinput.container > div[class*=highlight],
+        div.nboutput.container > div[class*=highlight] {
+            margin: 0;
+        }
+
+        div.nbinput.container div.prompt *,
+        div.nboutput.container div.prompt * {
+            background: none;
+        }
+
+        div.nboutput.container div.output_area .highlight,
+        div.nboutput.container div.output_area pre {
+            background: unset;
+        }
+
+        div.nboutput.container div.output_area div.highlight {
+            color: unset;  /* override Pygments text color */
+        }
+
+        /* avoid gaps between output lines */
+        div.nboutput.container div[class*=highlight] pre {
+            line-height: normal;
+        }
+
+        /* input/output containers */
+        div.nbinput.container,
+        div.nboutput.container {
+            display: -webkit-flex;
+            display: flex;
+            align-items: flex-start;
+            margin: 0;
+            width: 100%;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container,
+            div.nboutput.container {
+                flex-direction: column;
+            }
+        }
+
+        /* input container */
+        div.nbinput.container {
+            padding-top: 5px;
+        }
+
+        /* last container */
+        div.nblast.container {
+            padding-bottom: 5px;
+        }
+
+        /* input prompt */
+        div.nbinput.container div.prompt pre {
+            color: #307FC1;
+        }
+
+        /* output prompt */
+        div.nboutput.container div.prompt pre {
+            color: #BF5B3D;
+        }
+
+        /* all prompts */
+        div.nbinput.container div.prompt,
+        div.nboutput.container div.prompt {
+            width: 4.5ex;
+            padding-top: 5px;
+            position: relative;
+            user-select: none;
+        }
+
+        div.nbinput.container div.prompt > div,
+        div.nboutput.container div.prompt > div {
+            position: absolute;
+            right: 0;
+            margin-right: 0.3ex;
+        }
+
+        @media (max-width: 540px) {
+            div.nbinput.container div.prompt,
+            div.nboutput.container div.prompt {
+                width: unset;
+                text-align: left;
+                padding: 0.4em;
+            }
+            div.nboutput.container div.prompt.empty {
+                padding: 0;
+            }
+
+            div.nbinput.container div.prompt > div,
+            div.nboutput.container div.prompt > div {
+                position: unset;
+            }
+        }
+
+        /* disable scrollbars on prompts */
+        div.nbinput.container div.prompt pre,
+        div.nboutput.container div.prompt pre {
+            overflow: hidden;
+        }
+
+        /* input/output area */
+        div.nbinput.container div.input_area,
+        div.nboutput.container div.output_area {
+            -webkit-flex: 1;
+            flex: 1;
+            overflow: auto;
+        }
+        @media (max-width: 540px) {
+            div.nbinput.container div.input_area,
+            div.nboutput.container div.output_area {
+                width: 100%;
+            }
+        }
+
+        /* input area */
+        div.nbinput.container div.input_area {
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            /*background: #f5f5f5;*/
+        }
+
+        /* override MathJax center alignment in output cells */
+        div.nboutput.container div[class*=MathJax] {
+            text-align: left !important;
+        }
+
+        /* override sphinx.ext.imgmath center alignment in output cells */
+        div.nboutput.container div.math p {
+            text-align: left;
+        }
+
+        /* standard error */
+        div.nboutput.container div.output_area.stderr {
+            background: #fdd;
+        }
+
+        /* ANSI colors */
+        .ansi-black-fg { color: #3E424D; }
+        .ansi-black-bg { background-color: #3E424D; }
+        .ansi-black-intense-fg { color: #282C36; }
+        .ansi-black-intense-bg { background-color: #282C36; }
+        .ansi-red-fg { color: #E75C58; }
+        .ansi-red-bg { background-color: #E75C58; }
+        .ansi-red-intense-fg { color: #B22B31; }
+        .ansi-red-intense-bg { background-color: #B22B31; }
+        .ansi-green-fg { color: #00A250; }
+        .ansi-green-bg { background-color: #00A250; }
+        .ansi-green-intense-fg { color: #007427; }
+        .ansi-green-intense-bg { background-color: #007427; }
+        .ansi-yellow-fg { color: #DDB62B; }
+        .ansi-yellow-bg { background-color: #DDB62B; }
+        .ansi-yellow-intense-fg { color: #B27D12; }
+        .ansi-yellow-intense-bg { background-color: #B27D12; }
+        .ansi-blue-fg { color: #208FFB; }
+        .ansi-blue-bg { background-color: #208FFB; }
+        .ansi-blue-intense-fg { color: #0065CA; }
+        .ansi-blue-intense-bg { background-color: #0065CA; }
+        .ansi-magenta-fg { color: #D160C4; }
+        .ansi-magenta-bg { background-color: #D160C4; }
+        .ansi-magenta-intense-fg { color: #A03196; }
+        .ansi-magenta-intense-bg { background-color: #A03196; }
+        .ansi-cyan-fg { color: #60C6C8; }
+        .ansi-cyan-bg { background-color: #60C6C8; }
+        .ansi-cyan-intense-fg { color: #258F8F; }
+        .ansi-cyan-intense-bg { background-color: #258F8F; }
+        .ansi-white-fg { color: #C5C1B4; }
+        .ansi-white-bg { background-color: #C5C1B4; }
+        .ansi-white-intense-fg { color: #A1A6B2; }
+        .ansi-white-intense-bg { background-color: #A1A6B2; }
+
+        .ansi-default-inverse-fg { color: #FFFFFF; }
+        .ansi-default-inverse-bg { background-color: #000000; }
+
+        .ansi-bold { font-weight: bold; }
+        .ansi-underline { text-decoration: underline; }
+
+
+        div.nbinput.container div.input_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight] > pre,
+        div.nboutput.container div.output_area div[class*=highlight].math,
+        div.nboutput.container div.output_area.rendered_html,
+        div.nboutput.container div.output_area > div.output_javascript,
+        div.nboutput.container div.output_area:not(.rendered_html) > img{
+            padding: 5px;
+            margin: 0;
+        }
+
+        /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+        div.nbinput.container div.input_area > div[class^='highlight'],
+        div.nboutput.container div.output_area > div[class^='highlight']{
+            overflow-y: hidden;
+        }
+
+        /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+        .prompt .copybtn {
+            display: none;
+        }
+
+        /* Some additional styling taken form the Jupyter notebook CSS */
+        div.rendered_html table {
+        border: none;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: black;
+        font-size: 12px;
+        table-layout: fixed;
+        }
+        div.rendered_html thead {
+        border-bottom: 1px solid black;
+        vertical-align: bottom;
+        }
+        div.rendered_html tr,
+        div.rendered_html th,
+        div.rendered_html td {
+        text-align: right;
+        vertical-align: middle;
+        padding: 0.5em 0.5em;
+        line-height: normal;
+        white-space: normal;
+        max-width: none;
+        border: none;
+        }
+        div.rendered_html th {
+        font-weight: bold;
+        }
+        div.rendered_html tbody tr:nth-child(odd) {
+        background: #f5f5f5;
+        }
+        div.rendered_html tbody tr:hover {
+        background: rgba(66, 165, 245, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^1.0.1/dist/embed.js" crossorigin="anonymous"></script>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"version_major": 2, "version_minor": 0, "state": {"563f24df4273408789da8ace1d126bb3": {"model_name": "VBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": ["rendered_html", "jp-RenderedHTMLCommon", "jp-RenderedHTML", "jp-OutputArea-output"], "children": ["IPY_MODEL_693b88714f00499189e6090a09a909fb", "IPY_MODEL_ef47d04d395c409a921d701bd6340cad", "IPY_MODEL_2cf204830c78400a812147a5addecc45"], "layout": "IPY_MODEL_12472f36b736477aab09e36a8eeb8a65"}}, "693b88714f00499189e6090a09a909fb": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_cda36759ef3c448d8422f64d99c70c5f", "style": "IPY_MODEL_021582082e524b879261b5f51eea6319", "value": "<h4><b>Performance Bias</b></h4>"}}, "cda36759ef3c448d8422f64d99c70c5f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "021582082e524b879261b5f51eea6319": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "ef47d04d395c409a921d701bd6340cad": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_f97832a4a3d54f7b89d0568fa70a849e", "style": "IPY_MODEL_e94acc4e1da14fb495508ac33f8cad09", "value": "<p>    Check for performance differences between subgroups of a feature, optionally accounting for a control variable. <a href=\"https://docs.deepchecks.com/0.18/tabular/auto_checks/model_evaluation/plot_performance_bias.html?utm_source=display_output&utm_medium=referral&utm_campaign=check_link\" target=\"_blank\">Read More...</a></p>"}}, "f97832a4a3d54f7b89d0568fa70a849e": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "e94acc4e1da14fb495508ac33f8cad09": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "2cf204830c78400a812147a5addecc45": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "layout": "IPY_MODEL_060522a138fc45b09ed28171d17bd6ed", "style": "IPY_MODEL_af4cdf3873eb40e792c55f655e6d90e7", "value": "<h5><b>Conditions Summary</b></h5><style type=\"text/css\">\n#T_d64bd_ table {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d64bd_ thead {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d64bd_ tbody {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d64bd_ th {\n  text-align: left;\n  white-space: pre-wrap;\n}\n#T_d64bd_ td {\n  text-align: left;\n  white-space: pre-wrap;\n}\n</style>\n<table id=\"T_d64bd_\">\n  <thead>\n    <tr>\n      <th class=\"col_heading level0 col0\" >Status</th>\n      <th class=\"col_heading level0 col1\" >Condition</th>\n      <th class=\"col_heading level0 col2\" >More Info</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td id=\"T_d64bd_row0_col0\" class=\"data row0 col0\" ><div style=\"color: green;text-align: center\">\u2713</div></td>\n      <td id=\"T_d64bd_row0_col1\" class=\"data row0 col1\" >Performance differences are bounded between -0.1 and inf.</td>\n      <td id=\"T_d64bd_row0_col2\" class=\"data row0 col2\" >Found 0 subgroups with performance differences outside of the given bounds.</td>\n    </tr>\n  </tbody>\n</table>\n"}}, "060522a138fc45b09ed28171d17bd6ed": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}, "af4cdf3873eb40e792c55f655e6d90e7": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {}}, "12472f36b736477aab09e36a8eeb8a65": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {}}}}
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "563f24df4273408789da8ace1d126bb3"}
+</script>
+
+</body>
+</html>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 6.465 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tabular-auto-checks-model-evaluation-plot-performance-bias-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/8d706aa513c853c8d43ed05c974ad54b/plot_performance_bias.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_performance_bias.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../../_downloads/3f70e44a430e99d7cfa4edd9a919c977/plot_performance_bias.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_performance_bias.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+            </div>
+        
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="plot_unused_features.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Unused Features</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="plot_simple_model_comparison.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Simple Model Comparison</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+    </main>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2023, Deepchecks.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
